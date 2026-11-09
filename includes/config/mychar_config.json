@@ -1,0 +1,7 @@
+{
+    "enable_reset": 1,
+    "enable_unstuck": 1,
+    "show_stats": 0,
+    "show_inventory": 0,
+    "show_pvp_logs": 1
+}

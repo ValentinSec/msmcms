@@ -1,0 +1,57 @@
+{
+    "vote_reward": "500",
+    "vote_currency": "WCoinC",
+    "vote_interval": "24",
+    "links": {
+        "mmohub.com": {
+            "name": "MMOHub",
+            "url": "",
+            "active": 0
+        },
+        "xtremetop100.com": {
+            "name": "XtremeTop100",
+            "url": "",
+            "active": 0
+        },
+        "mtop.site": {
+            "name": "MTop",
+            "url": "",
+            "active": 0
+        },
+        "topg.org": {
+            "name": "TopG",
+            "url": "",
+            "active": 0
+        },
+        "supremetop100.com": {
+            "name": "SupremeTop100",
+            "url": "",
+            "active": 0
+        },
+        "top100arena.com": {
+            "name": "Top100Arena",
+            "url": "",
+            "active": 0
+        },
+        "gtop100.com": {
+            "name": "GTop100",
+            "url": "https:\/\/gtop100.com\/mu-online-private-servers\/INFINITYMU-30-FPS-HD-UNIQUE-FEATURES-45619",
+            "active": 1
+        },
+        "arenatop100.com": {
+            "name": "ArenaTop100",
+            "url": "https:\/\/arenatop100.com\/details\/infinitymu-season3-best-pvp-mmorpg-srv",
+            "active": 1
+        },
+        "mmtop200.com": {
+            "name": "MMTop200",
+            "url": "https:\/\/mmtop200.com\/vote\/3057",
+            "active": 1
+        },
+        "google.com": {
+            "name": "Google",
+            "url": "",
+            "active": 0
+        }
+    }
+}

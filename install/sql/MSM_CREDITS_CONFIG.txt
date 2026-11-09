@@ -1,0 +1,12 @@
+CREATE TABLE [dbo].[{TABLE_PREFIX}CREDITS_CONFIG](
+	[config_id] [int] IDENTITY(1,1) NOT NULL,
+	[config_title] [varchar](50) NOT NULL,
+	[config_database] [varchar](50) NOT NULL,
+	[config_table] [varchar](50) NOT NULL,
+	[config_credits_col] [varchar](50) NOT NULL,
+	[config_user_col] [varchar](50) NOT NULL,
+	[config_user_col_id] [varchar](50) NOT NULL,
+	[config_checkonline] [tinyint] NOT NULL,
+	[config_display] [tinyint] NOT NULL,
+    CONSTRAINT [PK_{TABLE_PREFIX}CREDITS_CONFIG] PRIMARY KEY CLUSTERED ([config_id] ASC)
+) ON [PRIMARY]

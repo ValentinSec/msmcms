@@ -1,0 +1,20 @@
+CREATE PROCEDURE [dbo].[WZ_Custom_AddBossKill]
+    @CharacterName varchar(10),
+    @MonsterIndex int
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    -- Verificamos usando el prefijo de tabla dinámico
+    IF EXISTS (SELECT 1 FROM {TABLE_PREFIX}BOSS_RANKING WHERE CharacterName = @CharacterName AND MonsterIndex = @MonsterIndex)
+    BEGIN
+        UPDATE {TABLE_PREFIX}BOSS_RANKING 
+        SET KillCount = KillCount + 1 
+        WHERE CharacterName = @CharacterName AND MonsterIndex = @MonsterIndex;
+    END
+    ELSE
+    BEGIN
+        INSERT INTO {TABLE_PREFIX}BOSS_RANKING (CharacterName, MonsterIndex, KillCount) 
+        VALUES (@CharacterName, @MonsterIndex, 1);
+    END
+END

@@ -1,0 +1,7 @@
+CREATE TABLE [dbo].[{TABLE_PREFIX}BLOCKED_IP](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[block_ip] [varchar](50) NOT NULL,
+	[block_by] [varchar](25) NOT NULL,
+	[block_date] [varchar](50) NOT NULL,
+    CONSTRAINT [PK_{TABLE_PREFIX}BLOCKED_IP] PRIMARY KEY CLUSTERED ([block_ip] ASC)
+) ON [PRIMARY]

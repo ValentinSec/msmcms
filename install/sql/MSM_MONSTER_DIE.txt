@@ -1,0 +1,11 @@
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[{TABLE_PREFIX}MONSTER_DIE]') AND type in (N'U'))
+BEGIN
+CREATE TABLE [dbo].[{TABLE_PREFIX}MONSTER_DIE](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[Killer] [varchar](10) NOT NULL,
+	[MonsterName] [varchar](50) NOT NULL,
+	[Map] [varchar](50) NULL,
+	[Date] [datetime] DEFAULT GETDATE(),
+ CONSTRAINT [PK_{TABLE_PREFIX}MONSTER_DIE] PRIMARY KEY CLUSTERED ([id] ASC)
+) ON [PRIMARY]
+END

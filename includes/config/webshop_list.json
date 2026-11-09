@@ -1,0 +1,598 @@
+[
+    {
+        "uid": "697b3c3bc8a6c",
+        "group": "15",
+        "id": "0",
+        "name": "Scroll of Poison",
+        "image": "img\/items\/15-0.gif",
+        "level": "0",
+        "option": "0",
+        "luck": "0",
+        "skill": "0",
+        "op380": "0",
+        "harmony": {
+            "val": 0,
+            "name": "Sin Harmony"
+        },
+        "exc_opts": [],
+        "sockets": [
+            {
+                "val": 255,
+                "name": "Sin Socket"
+            },
+            {
+                "val": 255,
+                "name": "Sin Socket"
+            },
+            {
+                "val": 255,
+                "name": "Sin Socket"
+            },
+            {
+                "val": 255,
+                "name": "Sin Socket"
+            },
+            {
+                "val": 255,
+                "name": "Sin Socket"
+            }
+        ],
+        "price": "0",
+        "currency": "WCoinC"
+    },
+    {
+        "uid": "6979a7f06de54",
+        "group": "7",
+        "id": "33",
+        "name": "Sunlight Mask",
+        "image": "img\/items\/7-33.gif",
+        "level": "15",
+        "option": "7",
+        "luck": "1",
+        "skill": "1",
+        "op380": "1",
+        "harmony": {
+            "val": 125,
+            "name": "Damage Decrement +7"
+        },
+        "exc_opts": [
+            {
+                "id": "1",
+                "name": "Defense Success Rate 10%"
+            },
+            {
+                "id": "3",
+                "name": "Damage Decrease 4%"
+            },
+            {
+                "id": "5",
+                "name": "Increase HP 4%"
+            }
+        ],
+        "sockets": [
+            {
+                "val": 255,
+                "name": "Sin Socket"
+            },
+            {
+                "val": 255,
+                "name": "Sin Socket"
+            },
+            {
+                "val": 255,
+                "name": "Sin Socket"
+            },
+            {
+                "val": 255,
+                "name": "Sin Socket"
+            },
+            {
+                "val": 255,
+                "name": "Sin Socket"
+            }
+        ],
+        "price": "700",
+        "currency": "WCoinC"
+    },
+    {
+        "uid": "6979a7eb0007a",
+        "group": "7",
+        "id": "33",
+        "name": "Sunlight Mask",
+        "image": "img\/items\/7-33.gif",
+        "level": "15",
+        "option": "7",
+        "luck": "1",
+        "skill": "1",
+        "op380": "1",
+        "harmony": {
+            "val": 125,
+            "name": "Damage Decrement +7"
+        },
+        "exc_opts": [],
+        "sockets": [
+            {
+                "val": 255,
+                "name": "Sin Socket"
+            },
+            {
+                "val": 255,
+                "name": "Sin Socket"
+            },
+            {
+                "val": 255,
+                "name": "Sin Socket"
+            },
+            {
+                "val": 255,
+                "name": "Sin Socket"
+            },
+            {
+                "val": 255,
+                "name": "Sin Socket"
+            }
+        ],
+        "price": "400",
+        "currency": "WCoinC"
+    },
+    {
+        "uid": "6979a7aaa015d",
+        "group": "8",
+        "id": "30",
+        "name": "Venom Mist Armor",
+        "image": "img\/items\/8-30.gif",
+        "level": "15",
+        "option": "7",
+        "luck": "1",
+        "skill": "1",
+        "op380": "0",
+        "harmony": {
+            "val": 125,
+            "name": "Damage Decrement +7"
+        },
+        "exc_opts": [],
+        "sockets": [
+            {
+                "val": 254,
+                "name": "Ranura Vac\u00eda"
+            },
+            {
+                "val": 254,
+                "name": "Ranura Vac\u00eda"
+            },
+            {
+                "val": 254,
+                "name": "Ranura Vac\u00eda"
+            },
+            {
+                "val": 254,
+                "name": "Ranura Vac\u00eda"
+            },
+            {
+                "val": 254,
+                "name": "Ranura Vac\u00eda"
+            }
+        ],
+        "price": "200",
+        "currency": "WCoinC"
+    },
+    {
+        "uid": "6979a7a003788",
+        "group": "8",
+        "id": "30",
+        "name": "Venom Mist Armor",
+        "image": "img\/items\/8-30.gif",
+        "level": "15",
+        "option": "7",
+        "luck": "1",
+        "skill": "1",
+        "op380": "0",
+        "harmony": {
+            "val": 125,
+            "name": "Damage Decrement +7"
+        },
+        "exc_opts": [],
+        "sockets": [
+            {
+                "val": 255,
+                "name": "Sin Socket"
+            },
+            {
+                "val": 255,
+                "name": "Sin Socket"
+            },
+            {
+                "val": 255,
+                "name": "Sin Socket"
+            },
+            {
+                "val": 255,
+                "name": "Sin Socket"
+            },
+            {
+                "val": 255,
+                "name": "Sin Socket"
+            }
+        ],
+        "price": "200",
+        "currency": "WCoinC"
+    },
+    {
+        "uid": "6979a74e95940",
+        "group": "8",
+        "id": "30",
+        "name": "Venom Mist Armor",
+        "image": "img\/items\/8-30.gif",
+        "level": "15",
+        "option": "7",
+        "luck": "1",
+        "skill": "1",
+        "op380": "0",
+        "harmony": {
+            "val": 125,
+            "name": "Damage Decrement +7"
+        },
+        "exc_opts": [
+            {
+                "id": "1",
+                "name": "Defense Success Rate 10%"
+            },
+            {
+                "id": "3",
+                "name": "Damage Decrease 4%"
+            },
+            {
+                "id": "5",
+                "name": "Increase HP 4%"
+            }
+        ],
+        "sockets": [
+            {
+                "val": 255,
+                "name": "Sin Socket"
+            },
+            {
+                "val": 255,
+                "name": "Sin Socket"
+            },
+            {
+                "val": 255,
+                "name": "Sin Socket"
+            },
+            {
+                "val": 255,
+                "name": "Sin Socket"
+            },
+            {
+                "val": 255,
+                "name": "Sin Socket"
+            }
+        ],
+        "price": "500",
+        "currency": "WCoinC"
+    },
+    {
+        "uid": "6979a741a02ee",
+        "group": "7",
+        "id": "33",
+        "name": "Sunlight Mask",
+        "image": "img\/items\/7-33.gif",
+        "level": "15",
+        "option": "7",
+        "luck": "1",
+        "skill": "1",
+        "op380": "1",
+        "harmony": {
+            "val": 125,
+            "name": "Damage Decrement +7"
+        },
+        "exc_opts": [
+            {
+                "id": "1",
+                "name": "Defense Success Rate 10%"
+            },
+            {
+                "id": "3",
+                "name": "Damage Decrease 4%"
+            },
+            {
+                "id": "5",
+                "name": "Increase HP 4%"
+            }
+        ],
+        "sockets": [
+            {
+                "val": 255,
+                "name": "Sin Socket"
+            },
+            {
+                "val": 255,
+                "name": "Sin Socket"
+            },
+            {
+                "val": 255,
+                "name": "Sin Socket"
+            },
+            {
+                "val": 255,
+                "name": "Sin Socket"
+            },
+            {
+                "val": 255,
+                "name": "Sin Socket"
+            }
+        ],
+        "price": "700",
+        "currency": "WCoinC"
+    },
+    {
+        "uid": "6979a73def5ca",
+        "group": "7",
+        "id": "33",
+        "name": "Sunlight Mask",
+        "image": "img\/items\/7-33.gif",
+        "level": "15",
+        "option": "7",
+        "luck": "1",
+        "skill": "1",
+        "op380": "1",
+        "harmony": {
+            "val": 124,
+            "name": "Damage Decrement +6"
+        },
+        "exc_opts": [
+            {
+                "id": "1",
+                "name": "Defense Success Rate 10%"
+            },
+            {
+                "id": "3",
+                "name": "Damage Decrease 4%"
+            },
+            {
+                "id": "5",
+                "name": "Increase HP 4%"
+            }
+        ],
+        "sockets": [
+            {
+                "val": 255,
+                "name": "Sin Socket"
+            },
+            {
+                "val": 255,
+                "name": "Sin Socket"
+            },
+            {
+                "val": 255,
+                "name": "Sin Socket"
+            },
+            {
+                "val": 255,
+                "name": "Sin Socket"
+            },
+            {
+                "val": 255,
+                "name": "Sin Socket"
+            }
+        ],
+        "price": "700",
+        "currency": "WCoinC"
+    },
+    {
+        "uid": "6979a73a79347",
+        "group": "7",
+        "id": "33",
+        "name": "Sunlight Mask",
+        "image": "img\/items\/7-33.gif",
+        "level": "15",
+        "option": "7",
+        "luck": "1",
+        "skill": "1",
+        "op380": "1",
+        "harmony": {
+            "val": 123,
+            "name": "Damage Decrement +5"
+        },
+        "exc_opts": [
+            {
+                "id": "1",
+                "name": "Defense Success Rate 10%"
+            },
+            {
+                "id": "3",
+                "name": "Damage Decrease 4%"
+            },
+            {
+                "id": "5",
+                "name": "Increase HP 4%"
+            }
+        ],
+        "sockets": [
+            {
+                "val": 255,
+                "name": "Sin Socket"
+            },
+            {
+                "val": 255,
+                "name": "Sin Socket"
+            },
+            {
+                "val": 255,
+                "name": "Sin Socket"
+            },
+            {
+                "val": 255,
+                "name": "Sin Socket"
+            },
+            {
+                "val": 255,
+                "name": "Sin Socket"
+            }
+        ],
+        "price": "700",
+        "currency": "WCoinC"
+    },
+    {
+        "uid": "6979a736e0e67",
+        "group": "7",
+        "id": "33",
+        "name": "Sunlight Mask",
+        "image": "img\/items\/7-33.gif",
+        "level": "15",
+        "option": "7",
+        "luck": "1",
+        "skill": "1",
+        "op380": "1",
+        "harmony": {
+            "val": 122,
+            "name": "Damage Decrement +4"
+        },
+        "exc_opts": [
+            {
+                "id": "1",
+                "name": "Defense Success Rate 10%"
+            },
+            {
+                "id": "3",
+                "name": "Damage Decrease 4%"
+            },
+            {
+                "id": "5",
+                "name": "Increase HP 4%"
+            }
+        ],
+        "sockets": [
+            {
+                "val": 255,
+                "name": "Sin Socket"
+            },
+            {
+                "val": 255,
+                "name": "Sin Socket"
+            },
+            {
+                "val": 255,
+                "name": "Sin Socket"
+            },
+            {
+                "val": 255,
+                "name": "Sin Socket"
+            },
+            {
+                "val": 255,
+                "name": "Sin Socket"
+            }
+        ],
+        "price": "700",
+        "currency": "WCoinC"
+    },
+    {
+        "uid": "6979a732c8eaf",
+        "group": "7",
+        "id": "33",
+        "name": "Sunlight Mask",
+        "image": "img\/items\/7-33.gif",
+        "level": "15",
+        "option": "7",
+        "luck": "1",
+        "skill": "1",
+        "op380": "1",
+        "harmony": {
+            "val": 121,
+            "name": "Damage Decrement +3"
+        },
+        "exc_opts": [
+            {
+                "id": "1",
+                "name": "Defense Success Rate 10%"
+            },
+            {
+                "id": "3",
+                "name": "Damage Decrease 4%"
+            },
+            {
+                "id": "5",
+                "name": "Increase HP 4%"
+            }
+        ],
+        "sockets": [
+            {
+                "val": 255,
+                "name": "Sin Socket"
+            },
+            {
+                "val": 255,
+                "name": "Sin Socket"
+            },
+            {
+                "val": 255,
+                "name": "Sin Socket"
+            },
+            {
+                "val": 255,
+                "name": "Sin Socket"
+            },
+            {
+                "val": 255,
+                "name": "Sin Socket"
+            }
+        ],
+        "price": "700",
+        "currency": "WCoinC"
+    },
+    {
+        "uid": "6979a72c681f2",
+        "group": "7",
+        "id": "33",
+        "name": "Sunlight Mask",
+        "image": "img\/items\/7-33.gif",
+        "level": "15",
+        "option": "7",
+        "luck": "1",
+        "skill": "1",
+        "op380": "1",
+        "harmony": {
+            "val": 141,
+            "name": "SD Ratio Increase +5"
+        },
+        "exc_opts": [
+            {
+                "id": "1",
+                "name": "Defense Success Rate 10%"
+            },
+            {
+                "id": "3",
+                "name": "Damage Decrease 4%"
+            },
+            {
+                "id": "5",
+                "name": "Increase HP 4%"
+            }
+        ],
+        "sockets": [
+            {
+                "val": 255,
+                "name": "Sin Socket"
+            },
+            {
+                "val": 255,
+                "name": "Sin Socket"
+            },
+            {
+                "val": 255,
+                "name": "Sin Socket"
+            },
+            {
+                "val": 255,
+                "name": "Sin Socket"
+            },
+            {
+                "val": 255,
+                "name": "Sin Socket"
+            }
+        ],
+        "price": "700",
+        "currency": "WCoinC"
+    }
+]

@@ -1,0 +1,210 @@
+/* MORPHEUS INFO MODULE - DARK REISSUE */
+
+:root {
+    --info-bg-dark: #0f0f0f;       /* Fondo principal muy oscuro */
+    --info-panel-bg: #141414;      /* Fondo de los paneles/tarjetas */
+    --info-header-bg: #1a1a1a;     /* Fondo de los títulos de sección */
+    --info-border: #2a2a2a;        /* Bordes sutiles */
+    --info-text-main: #c0c0c0;     /* Texto principal gris claro */
+    --info-text-muted: #666666;    /* Texto secundario */
+    --info-accent: #FF8A3B;        /* Naranja Morpheus */
+}
+
+/* --- CONTENEDOR PRINCIPAL --- */
+.info-container {
+    display: flex;
+    gap: 30px;
+    margin-top: 40px;
+    font-family: 'Roboto', sans-serif;
+    color: var(--info-text-main);
+}
+
+/* --- SIDEBAR (Menú Izquierdo) --- */
+.info-sidebar {
+    width: 260px;
+    flex-shrink: 0;
+    background: var(--info-panel-bg);
+    border: 1px solid var(--info-border);
+    border-radius: 4px;
+}
+
+.info-menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.info-menu li {
+    padding: 18px 25px;
+    border-bottom: 1px solid var(--info-border);
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--info-text-muted);
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.info-menu li:last-child {
+    border-bottom: none;
+}
+
+.info-menu li:hover, 
+.info-menu li.active {
+    background: rgba(255, 255, 255, 0.02);
+    color: #fff;
+    border-left: 3px solid var(--info-accent);
+    padding-left: 22px; /* Ajuste visual por el borde */
+}
+
+.info-menu li i {
+    width: 20px;
+    text-align: center;
+    color: #444; /* Iconos apagados */
+    transition: 0.2s;
+}
+
+.info-menu li.active i {
+    color: var(--info-accent);
+}
+
+/* --- ÁREA DE CONTENIDO (Derecha) --- */
+.info-content {
+    flex: 1;
+    width: 100%;
+    background: transparent;
+}
+
+/* Forzamos estilos a las tablas y listas que cargue el PHP */
+.info-content table, 
+.info-content .table {
+    width: 100%;
+    background: var(--info-panel-bg);
+    border: 1px solid var(--info-border);
+    border-radius: 4px;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin-bottom: 25px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+}
+
+/* Cabeceras de Tablas (Simulando "Server", "Eventos" de la foto) */
+.info-content thead th, 
+.info-content th {
+    background: var(--info-header-bg);
+    color: #eee;
+    font-family: 'Cinzel', serif; /* Fuente del título del Server */
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 15px 20px;
+    text-align: left;
+    border-bottom: 1px solid var(--info-border);
+    font-weight: normal;
+}
+
+/* Filas de Información */
+.info-content tbody td, 
+.info-content td {
+    padding: 14px 20px;
+    font-size: 13px;
+    border-bottom: 1px solid var(--info-border);
+    color: var(--info-text-muted); /* Color gris oscuro por defecto */
+}
+
+.info-content tr:last-child td {
+    border-bottom: none;
+}
+
+/* Efecto Cebra muy sutil (opcional, como en la imagen parece plano, lo dejo plano) */
+.info-content tr:hover td {
+    background: rgba(255,255,255,0.01);
+}
+
+/* Estilo para la columna de "Valores" (alineada a la derecha usualmente) */
+.info-content td:last-child {
+    text-align: right;
+    color: var(--info-text-main); /* Valor en blanco/gris claro */
+    font-weight: 500;
+}
+
+/* Estilo para la columna "Etiqueta" (primera columna) */
+.info-content td:first-child {
+    text-align: left;
+    color: #888;
+}
+
+/* --- ESTILO ESPECÍFICO PARA LA TABLA DE SERVICIOS (Imagen 16.1) --- */
+/* Si el PHP genera una tabla de servicios, la estilizamos así */
+.info-content table.services-table th {
+    text-align: center;
+}
+.info-content table.services-table th:first-child {
+    text-align: left;
+}
+.info-content table.services-table td {
+    text-align: center;
+}
+.info-content table.services-table td:first-child {
+    text-align: left;
+    color: #fff; /* Títulos de servicios más brillantes */
+}
+
+/* Iconos de Check y Cruz en tablas */
+.fa-check, .check-icon { color: var(--info-text-main); }
+.fa-times, .cross-icon { color: #333; }
+
+/* --- TÍTULOS (Header) --- */
+.rank-header {
+    margin-bottom: 40px;
+    text-align: center;
+    /* Flexbox para juntarlos perfectamente verticalmente */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.rank-title {
+    font-family: 'Cinzel', serif;
+    font-size: 32px;
+    color: #fff;
+    margin: 0; /* Sin margen para pegarlo al subtítulo */
+    line-height: 1.2;
+    letter-spacing: 2px;
+    text-shadow: 0 0 10px rgba(0,0,0,0.5);
+    padding-bottom: 5px; /* Pequeño espacio visual */
+}
+
+.rank-subtitle {
+    color: #666;
+    font-size: 14px;
+    margin: 0; /* Sin margen */
+    font-family: 'Roboto', sans-serif;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-weight: 400;
+}
+
+/* --- RESPONSIVE --- */
+@media (max-width: 992px) {
+    .info-container {
+        flex-direction: column;
+    }
+    .info-sidebar {
+        width: 100%;
+        margin-bottom: 20px;
+    }
+    .info-menu {
+        display: flex;
+        flex-wrap: wrap;
+    }
+    .info-menu li {
+        flex: 1 1 auto;
+        justify-content: center;
+        border-bottom: none;
+        border-right: 1px solid var(--info-border);
+    }
+}

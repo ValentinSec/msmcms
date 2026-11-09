@@ -1,0 +1,11 @@
+CREATE TABLE [dbo].[{TABLE_PREFIX}MERCADOPAGO_TRANSACTIONS](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[collection_id] [varchar](50) NOT NULL,
+	[user_id] [varchar](50) NOT NULL,
+	[payment_amount] [decimal](10, 2) NOT NULL,
+	[payment_type] [varchar](50) NULL,
+	[transaction_date] [datetime] DEFAULT GETDATE(),
+	[status] [varchar](20) NOT NULL,
+	[external_reference] [varchar](100) NULL,
+    CONSTRAINT [PK_{TABLE_PREFIX}MERCADOPAGO_TRANSACTIONS] PRIMARY KEY CLUSTERED ([collection_id] ASC)
+) ON [PRIMARY]

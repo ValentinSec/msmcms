@@ -1,0 +1,12 @@
+{
+    "recaptcha_active": 0,
+    "site_key": "6Le3dE0sAAAAAIMe0YvT5IvA0wmMlfWUx0cKkGRi",
+    "secret_key": "6Le3dE0sAAAAAPXhEgpH7jUeSISmqDNU4pxwstxh",
+    "analytics_active": 0,
+    "analytics_key": "G-50YBHVP7QX",
+    "analytics_extra": "-",
+    "ddos_active": 1,
+    "ddos_limit": 10,
+    "ddos_response": 500,
+    "blocked_ips": ""
+}

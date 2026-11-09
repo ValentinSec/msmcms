@@ -1,0 +1,10 @@
+Hola, {USERNAME}.<br /><br />
+
+Recibimos una solicitud para cambiar el correo de registro de tu cuenta desde la siguiente dirección IP: <b>{IP_ADDRESS}</b>. Tu nuevo correo de registro será: <b>{NEW_EMAIL}</b> y ya no podrás usar este correo para seguir operando. Si deseas proceder, <b><a href="{LINK}" target="_blank">cliquea aquí</a></b>.<br /><br />
+
+
+<span style="color:red;font-weight:bold;">ADVERTENCIA:<br />
+Si no solicitaste este cambio, por favor ignorá este mail y ponte en contacto con el Administardor.</span><br /><br />
+
+Saludos,<br />
+{SERVER_NAME}.

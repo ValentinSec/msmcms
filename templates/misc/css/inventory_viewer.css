@@ -1,0 +1,100 @@
+/**
+ * MU Caníbal - Inventory Viewer Styling
+ * Ubicación: templates/misc/css/inventory_viewer.css
+ */
+
+/* Contenedor Principal del Tooltip */
+#mu-tooltip {
+    background: rgba(0, 0, 0, 0.92) !important;
+    border: 1px solid #666 !important;
+    padding: 12px !important;
+    font-family: Arial, Helvetica, sans-serif !important;
+    color: #ffffff !important;
+    box-shadow: 0 0 15px #000 !important;
+    text-align: center !important;
+    line-height: 1.5 !important;
+    min-width: 200px !important;
+    border-radius: 0px !important;
+    z-index: 9999 !important;
+    pointer-events: none !important;
+    position: fixed !important;
+    /* Parche para evitar barra negra al final de la web */
+    visibility: hidden;
+    left: -9999px;
+    top: -9999px;
+}
+
+/* Títulos de Items */
+.tt-name-common { 
+    color: #ffffff !important; 
+    font-weight: bold !important; 
+    font-size: 15px !important; 
+    display: block; 
+    margin-bottom: 5px; 
+}
+
+.tt-name-exc { 
+    color: #1bfd6c !important; 
+    font-weight: bold !important; 
+    font-size: 15px !important; 
+    display: block; 
+    margin-bottom: 5px; 
+}
+
+/* Barra Roja de Requisitos (Estética Original) */
+.tt-requirements {
+    background: #a00000 !important; /* Rojo oscuro MU */
+    color: #ffffff !important;
+    padding: 3px 8px !important;
+    margin: 10px auto !important;
+    font-size: 11px !important;
+    border: 1px solid #ff0000 !important;
+    display: inline-block !important;
+    width: 90% !important;
+    font-weight: bold !important;
+    text-transform: uppercase;
+}
+
+/* Opciones Azules (Luck, Add, Excellent) */
+.tt-opt-blue { 
+    color: #7fb2ff !important; 
+    display: block !important; 
+    font-size: 12px !important; 
+}
+
+/* Opciones Grises (Skill, Stats, Durabilidad) */
+.tt-opt-gray { 
+    color: #cccccc !important; 
+    display: block !important; 
+    font-size: 12px !important; 
+}
+
+/* Opciones Amarillas (Harmony) */
+.tt-opt-yellow { 
+    color: #ffcc00 !important; 
+    display: block !important; 
+    font-size: 12px !important; 
+}
+
+/* Estilo para el mapa de equipamiento (por si no carga el style interno) */
+.equipment-map {
+    margin: 0 auto;
+    border: 1px solid rgba(255,255,255,0.1);
+    box-shadow: inset 0 0 20px #000;
+}
+
+.tt-opt-socket {
+    color: #b190ff !important; /* Violeta de sockets */
+    display: block;
+    font-size: 12px;
+    font-style: italic;
+}
+
+.tt-name-acc { 
+    color: #7fb2ff !important; 
+    font-weight: bold !important; 
+    font-size: 15px !important; 
+    display: block; 
+    margin-bottom: 5px;
+    text-shadow: 0 0 5px rgba(127, 178, 255, 0.5);
+}

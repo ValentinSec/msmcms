@@ -1,0 +1,240 @@
+/* --- CONFIGURATION MODULE STYLES --- */
+
+:root {
+    --cfg-bg: #131519;
+    --cfg-card-bg: rgba(0, 0, 0, 0.4);
+    --cfg-border: #2a2e35;
+    --cfg-title: #ffffff;
+    --cfg-text: #a0a0a0;
+    
+    /* Colores de Acento Específicos */
+    --accent-orange: #e67e22;
+    --accent-blue: #3498db;
+    --accent-purple: #9b59b6;
+    --accent-gold: #f1c40f;
+    --accent-red: #e74c3c;
+}
+
+/* --- HEADER PRINCIPAL --- */
+.module-title {
+    text-align: center;
+    margin-bottom: 40px;
+    border-bottom: 1px solid var(--cfg-border);
+    padding-bottom: 20px;
+}
+
+.text-uppercase.fw-bold {
+    font-family: 'Cinzel', serif;
+    font-size: 28px;
+    color: var(--cfg-title);
+    margin-bottom: 5px;
+    letter-spacing: 1px;
+}
+
+.text-color.small {
+    color: var(--cfg-text);
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* --- CONTENEDOR PRINCIPAL --- */
+.donation-main-container {
+    max-width: 800px;
+    margin: 0 auto;
+    background: transparent;
+}
+
+/* --- CAJAS DE FORMULARIO (SETTINGS BOXES) --- */
+.settings-form-box {
+    background: var(--cfg-card-bg);
+    border: 1px solid var(--cfg-border);
+    border-radius: 8px;
+    padding: 25px;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.settings-form-box:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+/* Bordes Superiores de Neón */
+.settings-form-box.border-orange { border-top: 3px solid var(--accent-orange); }
+.settings-form-box.border-blue { border-top: 3px solid var(--accent-blue); }
+.settings-form-box.border-purple { border-top: 3px solid var(--accent-purple); }
+.settings-form-box.border-gold { border-top: 3px solid var(--accent-gold); }
+.settings-form-box.border-red { border-top: 3px solid var(--accent-red); }
+
+/* --- HEADER DE CADA CAJA --- */
+.settings-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.settings-header h5 {
+    font-family: 'Cinzel', serif;
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+/* Cuadrados de Iconos */
+.icon-square {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    font-size: 18px;
+    color: #fff;
+    flex-shrink: 0;
+}
+
+.bg-orange-soft { background: linear-gradient(135deg, #d35400, #e67e22); }
+.bg-blue-soft { background: linear-gradient(135deg, #2980b9, #3498db); }
+.bg-purple-soft { background: linear-gradient(135deg, #8e44ad, #9b59b6); }
+.bg-gold-soft { background: linear-gradient(135deg, #f39c12, #f1c40f); }
+.bg-red-soft { background: linear-gradient(135deg, #c0392b, #e74c3c); }
+
+/* --- ALERTAS Y NOTAS --- */
+.alert-settings-yellow {
+    background: rgba(241, 196, 15, 0.1);
+    border-left: 3px solid var(--accent-gold);
+    color: #f1c40f;
+    padding: 10px 15px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.settings-benefits h6 {
+    color: var(--accent-purple);
+    margin-bottom: 10px;
+}
+
+.settings-benefits ul li {
+    margin-bottom: 5px;
+    color: #ccc;
+    font-size: 12px;
+}
+
+.settings-benefits i {
+    color: #2ecc71; /* Verde Success */
+}
+
+/* --- FORMULARIOS --- */
+.form-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    color: #888 !important;
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+
+.form-control {
+    background: rgba(0, 0, 0, 0.3) !important;
+    border: 1px solid var(--cfg-border) !important;
+    color: #fff !important;
+    font-size: 13px;
+    padding: 10px 12px;
+    border-radius: 4px;
+}
+
+.form-control:focus {
+    border-color: var(--accent-gold) !important;
+    box-shadow: 0 0 8px rgba(241, 196, 15, 0.2) !important;
+    background: rgba(0, 0, 0, 0.5) !important;
+}
+
+/* --- BOTONES DE ACCIÓN --- */
+.btn {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 13px;
+    letter-spacing: 0.5px;
+    border: none;
+    transition: 0.3s;
+}
+
+.btn-primary-orange {
+    background: linear-gradient(to right, #d35400, #e67e22);
+    color: #fff;
+}
+.btn-primary-orange:hover {
+    box-shadow: 0 0 15px rgba(230, 126, 34, 0.4);
+    filter: brightness(1.1);
+}
+
+.btn-blue-action {
+    background: linear-gradient(to right, #2980b9, #3498db);
+    color: #fff;
+}
+.btn-blue-action:hover {
+    box-shadow: 0 0 15px rgba(52, 152, 219, 0.4);
+    filter: brightness(1.1);
+}
+
+.btn-purple-action {
+    background: linear-gradient(to right, #8e44ad, #9b59b6);
+    color: #fff;
+}
+.btn-purple-action:hover {
+    box-shadow: 0 0 15px rgba(155, 89, 182, 0.4);
+    filter: brightness(1.1);
+}
+
+.btn-gold-action {
+    background: linear-gradient(to right, #f39c12, #f1c40f);
+    color: #000;
+}
+.btn-gold-action:hover {
+    box-shadow: 0 0 15px rgba(241, 196, 15, 0.4);
+    filter: brightness(1.1);
+}
+
+.btn-red-action {
+    background: linear-gradient(to right, #c0392b, #e74c3c);
+    color: #fff;
+    border: 1px solid rgba(255,255,255,0.1);
+}
+.btn-red-action:hover {
+    box-shadow: 0 0 15px rgba(231, 76, 60, 0.4);
+    background: #e74c3c;
+}
+
+/* CAJA DE LOGOUT */
+.logout-container-inner h5 {
+    color: #fff;
+}
+.logout-container-inner p {
+    color: #888;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+    .donation-main-container {
+        padding: 10px;
+    }
+    .settings-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    .logout-container-inner > div {
+        flex-direction: column;
+        gap: 15px;
+        align-items: flex-start !important;
+    }
+    .logout-container-inner .btn {
+        width: 100%;
+    }
+}

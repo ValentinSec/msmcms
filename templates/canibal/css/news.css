@@ -1,0 +1,365 @@
+/* --- NEWS MODULE (REPLICA EXACTA DE GUIDES) --- */
+
+:root {
+    /* Paleta exacta de Guides */
+    --news-card-bg: #131519;
+    --news-border: #2a2e35;
+    --news-accent: #f39c12;
+    --news-text: #a0a0a0;
+    --news-title: #ffffff;
+}
+
+.news-container { 
+    padding: 0; 
+    min-height: 500px; 
+    position: relative; 
+    font-family: 'Roboto', sans-serif;
+}
+
+/* --- HEADER --- */
+.news-header { 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    margin-bottom: 25px; 
+    padding-bottom: 15px; 
+    border-bottom: 1px solid var(--news-border); 
+}
+
+.news-h1 { 
+    font-size: 24px; 
+    font-weight: 700; 
+    color: var(--news-title); 
+    text-transform: uppercase; 
+    letter-spacing: 1px; 
+    font-family: 'Cinzel', serif;
+    margin: 0;
+}
+
+.news-h1 i { 
+    color: var(--news-accent); 
+    margin-right: 10px; 
+}
+
+/* --- BUSCADOR (Redondeado) --- */
+.news-search-box { 
+    position: relative; 
+    width: 300px; 
+}
+
+.news-search-input { 
+    width: 100%; 
+    background: rgba(0,0,0,0.3); 
+    border: 1px solid var(--news-border); 
+    color: #fff; 
+    padding: 10px 15px 10px 40px; 
+    border-radius: 50px; /* Redondeado exacto */
+    outline: none; 
+    transition: 0.3s; 
+}
+
+.news-search-input:focus { 
+    border-color: var(--news-accent); 
+    box-shadow: 0 0 10px rgba(243, 156, 18, 0.2); 
+}
+
+.news-search-icon { 
+    position: absolute; 
+    left: 15px; 
+    top: 50%; 
+    transform: translateY(-50%); 
+    color: #666; 
+}
+
+/* --- LAYOUTS --- */
+
+/* 1. CASCADA (Grid) */
+.layout-cascada { 
+    display: grid; 
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
+    gap: 20px; 
+}
+
+.layout-cascada .news-card { 
+    background: var(--news-card-bg); 
+    border: 1px solid var(--news-border); 
+    border-radius: 8px; 
+    overflow: hidden; 
+    transition: transform 0.3s, box-shadow 0.3s; 
+    cursor: pointer; 
+    display: flex; 
+    flex-direction: column; 
+}
+
+.layout-cascada .news-card:hover { 
+    transform: translateY(-5px); 
+    box-shadow: 0 10px 20px rgba(0,0,0,0.4); 
+    border-color: var(--news-accent); 
+}
+
+.layout-cascada .news-img-box { 
+    height: 160px; 
+    overflow: hidden; 
+    position: relative; 
+}
+
+.layout-cascada .news-img { 
+    width: 100%; 
+    height: 100%; 
+    object-fit: cover; 
+    transition: transform 0.5s; 
+}
+
+.layout-cascada .news-card:hover .news-img { 
+    transform: scale(1.1); 
+}
+
+.layout-cascada .news-body { 
+    padding: 15px; 
+    flex: 1; 
+    display: flex; 
+    flex-direction: column; 
+}
+
+.layout-cascada .news-date { 
+    font-size: 11px; 
+    color: var(--news-accent); 
+    margin-bottom: 5px; 
+    font-weight: 600; 
+}
+
+.layout-cascada .news-item-title { 
+    font-size: 16px; 
+    color: #fff; 
+    margin-bottom: 8px; 
+    font-weight: 700; 
+    line-height: 1.3; 
+}
+
+.layout-cascada .news-desc { 
+    font-size: 13px; 
+    color: var(--news-text); 
+    line-height: 1.5; 
+    flex: 1; 
+}
+
+/* 2. FULL (Horizontal) */
+.layout-full { 
+    display: flex; 
+    flex-direction: column; 
+    gap: 30px; 
+}
+
+.layout-full .news-card { 
+    background: var(--news-card-bg); 
+    border: 1px solid var(--news-border); 
+    border-radius: 12px; 
+    overflow: hidden; 
+    display: flex; 
+    flex-direction: row; 
+    height: 250px; 
+    cursor: pointer; 
+    transition: 0.3s; 
+}
+
+.layout-full .news-card:hover { 
+    border-color: var(--news-accent); 
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3); 
+}
+
+.layout-full .news-img-box { 
+    width: 45%; 
+    position: relative; 
+    overflow: hidden; 
+}
+
+.layout-full .news-img { 
+    width: 100%; 
+    height: 100%; 
+    object-fit: cover; 
+    transition: 0.5s; 
+}
+
+.layout-full .news-card:hover .news-img { 
+    transform: scale(1.05); 
+}
+
+.layout-full .news-body { 
+    width: 55%; 
+    padding: 30px; 
+    display: flex; 
+    flex-direction: column; 
+    justify-content: center; 
+}
+
+.layout-full .news-item-title { 
+    font-size: 22px; 
+    margin-bottom: 10px; 
+    color: #fff; 
+    font-weight: 700;
+}
+
+.layout-full .news-desc { 
+    font-size: 14px; 
+    margin-bottom: 20px; 
+    color: var(--news-text);
+}
+
+/* 3. EXPANDIDA (Compacta) */
+.layout-expandida { 
+    display: flex; 
+    flex-direction: column; 
+    gap: 10px; 
+}
+
+.layout-expandida .news-card { 
+    background: #1a1d24; 
+    border: 1px solid var(--news-border); 
+    border-radius: 6px; 
+    padding: 10px 15px; 
+    display: flex; 
+    align-items: center; 
+    cursor: pointer; 
+    transition: 0.2s; 
+}
+
+.layout-expandida .news-card:hover { 
+    background: #20242b; 
+    border-color: #444; 
+    transform: translateX(5px); 
+}
+
+.layout-expandida .news-img-box { 
+    width: 50px; 
+    height: 50px; 
+    border-radius: 4px; 
+    overflow: hidden; 
+    margin-right: 15px; 
+    flex-shrink: 0; 
+}
+
+.layout-expandida .news-img { 
+    width: 100%; 
+    height: 100%; 
+    object-fit: cover; 
+}
+
+.layout-expandida .news-body { 
+    flex: 1; 
+}
+
+.layout-expandida .news-item-title { 
+    font-size: 14px; 
+    margin: 0; 
+    color: #fff; 
+    font-weight: 600; 
+}
+
+.layout-expandida .news-date { 
+    font-size: 11px; 
+    color: #666; 
+    margin-top: 2px; 
+}
+
+/* --- MODAL (Exactamente igual a Guides) --- */
+.news-modal-overlay { 
+    display: none; 
+    position: fixed; 
+    top: 0; 
+    left: 0; 
+    width: 100%; 
+    height: 100%; 
+    background: rgba(0,0,0,0.85); 
+    z-index: 99999; 
+    backdrop-filter: blur(5px); 
+    align-items: center; 
+    justify-content: center; 
+}
+
+.news-modal { 
+    background: #111; 
+    width: 800px; 
+    max-width: 95%; 
+    height: 85vh; 
+    border-radius: 12px; 
+    border: 1px solid #333; 
+    display: flex; 
+    flex-direction: column; 
+    box-shadow: 0 20px 50px rgba(0,0,0,0.8); 
+    animation: modalUp 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+}
+
+@keyframes modalUp { 
+    from { opacity: 0; transform: scale(0.9) translateY(20px); } 
+    to { opacity: 1; transform: scale(1) translateY(0); } 
+}
+
+.nm-header { 
+    padding: 20px 30px; 
+    border-bottom: 1px solid #222; 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    background: #161616; 
+    border-radius: 12px 12px 0 0; 
+}
+
+.nm-title { 
+    font-size: 20px; 
+    font-weight: bold; 
+    color: #fff; 
+    font-family: "Cinzel", serif; 
+}
+
+.nm-close { 
+    color: #666; 
+    cursor: pointer; 
+    font-size: 20px; 
+    transition: 0.2s; 
+}
+
+.nm-close:hover { 
+    color: #fff; 
+}
+
+.nm-content-scroll { 
+    padding: 30px; 
+    overflow-y: auto; 
+    color: #ccc; 
+    font-family: "Roboto", sans-serif; 
+    line-height: 1.8; 
+    font-size: 15px; 
+}
+
+.nm-content-scroll img { 
+    max-width: 100%; 
+    height: auto; 
+    border-radius: 4px; 
+    margin: 10px 0; 
+}
+
+.nm-content-scroll h1, 
+.nm-content-scroll h2, 
+.nm-content-scroll h3 { 
+    color: var(--news-accent); 
+    margin-top: 20px; 
+}
+
+.nm-banner { 
+    width: 100%; 
+    height: 200px; 
+    object-fit: cover; 
+    border-radius: 8px; 
+    margin-bottom: 20px; 
+    border: 1px solid #333; 
+    display: none; 
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+    .layout-full .news-card { flex-direction: column; height: auto; }
+    .layout-full .news-img-box { width: 100%; height: 180px; }
+    .layout-full .news-body { width: 100%; }
+    .news-header { flex-direction: column; gap: 15px; align-items: flex-start; }
+    .news-search-box { width: 100%; }
+}

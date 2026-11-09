@@ -1,0 +1,14 @@
+CREATE TABLE [dbo].[{TABLE_PREFIX}BOSS_RANKING](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[CharacterName] [varchar](10) NOT NULL,
+	[MonsterIndex] [int] NOT NULL,
+	[MonsterName] [varchar](50) NULL,
+	[KillCount] [int] DEFAULT 0 NOT NULL,
+    CONSTRAINT [PK_{TABLE_PREFIX}BOSS_RANKING] PRIMARY KEY CLUSTERED ([id] ASC)
+) ON [PRIMARY];
+
+CREATE NONCLUSTERED INDEX [IX_{TABLE_PREFIX}BossRanking_Char_Mob] ON [dbo].[{TABLE_PREFIX}BOSS_RANKING]
+(
+	[CharacterName] ASC,
+	[MonsterIndex] ASC
+);

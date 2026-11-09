@@ -1,0 +1,6 @@
+Hoia, {USERNAME}.<br /><br />
+
+Gracias y bienvenido a {SERVER_NAME}! Ahora que creaste satisfactoriamente tu cuenta con nosotros, podés descargar el cliente de nuestro servidor en nuestra página. Además, te invitamos a unirte a nuestra comunidad donde vas a poder conversar con otros usuarios y disfrutar muchísimo.<br /><br />
+
+Saludos,<br />
+{SERVER_NAME}.

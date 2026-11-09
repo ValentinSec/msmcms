@@ -1,0 +1,12 @@
+CREATE TABLE [dbo].[{TABLE_PREFIX}FLA](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[username] [varchar](50) NULL,
+	[ip_address] [varchar](50) NULL,
+	[failed_attempts] [int] DEFAULT 0,
+	[unlock_timestamp] [int] DEFAULT 0,
+	[timestamp] [int] DEFAULT 0,
+ CONSTRAINT [PK_{TABLE_PREFIX}FLA] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]

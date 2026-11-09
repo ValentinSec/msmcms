@@ -1,0 +1,188 @@
+/* --- INFO MODULE (HORIZONTAL LAYOUT) --- */
+
+:root {
+    --info-bg: #131519;
+    --info-border: #2a2e35;
+    --info-accent: #f39c12; /* Dorado */
+    --info-text-muted: #888;
+    --info-text-light: #eee;
+}
+
+/* 1. CONTENEDOR PRINCIPAL */
+.info-container {
+    display: flex;
+    flex-direction: column; /* Apila el menú arriba y contenido abajo */
+    gap: 20px;
+    min-height: 500px;
+    position: relative;
+}
+
+/* 2. BARRA DE NAVEGACIÓN (Antes Sidebar) */
+.info-sidebar {
+    width: 100%; /* Ocupa todo el ancho */
+    background: var(--info-bg);
+    border: 1px solid var(--info-border);
+    border-radius: 6px;
+    overflow: hidden; /* Para que los bordes redondeados funcionen */
+}
+
+/* 3. MENÚ HORIZONTAL */
+.info-menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;       /* Alineación Horizontal */
+    flex-wrap: wrap;     /* Permite bajar de línea si no entra en móviles */
+    justify-content: center; /* Centrar los botones (opcional, o flex-start) */
+}
+
+.info-menu li {
+    padding: 15px 25px;
+    color: var(--info-text-muted);
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    border-right: 1px solid rgba(255, 255, 255, 0.05); /* Separador vertical */
+    border-bottom: 3px solid transparent; /* Reserva espacio para el activo */
+    font-family: 'Roboto', sans-serif;
+}
+
+.info-menu li:last-child {
+    border-right: none;
+}
+
+.info-menu li i {
+    font-size: 14px;
+    margin-right: 8px;
+    color: #666;
+    transition: 0.3s;
+}
+
+/* Estado Hover */
+.info-menu li:hover {
+    background: rgba(255, 255, 255, 0.02);
+    color: #fff;
+}
+
+.info-menu li:hover i {
+    color: #fff;
+}
+
+/* Estado Activo (Pestaña Seleccionada) */
+.info-menu li.active {
+    background: linear-gradient(to top, rgba(243, 156, 18, 0.1), transparent);
+    color: var(--info-accent);
+    border-bottom-color: var(--info-accent); /* Línea dorada abajo */
+}
+
+.info-menu li.active i {
+    color: var(--info-accent);
+}
+
+/* 4. ÁREA DE CONTENIDO (ABAJO) */
+#info-load-area {
+    width: 100%;
+    background: var(--info-bg);
+    border: 1px solid var(--info-border);
+    border-radius: 6px;
+    padding: 30px;
+    color: var(--info-text-light);
+    font-size: 14px;
+    line-height: 1.6;
+    min-height: 400px;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* 5. ESTILOS INTERNOS (Tablas, Títulos, etc.) */
+#info-load-area h1, 
+#info-load-area h2, 
+#info-load-area h3 {
+    color: var(--info-accent);
+    font-family: 'Cinzel', serif;
+    font-size: 20px;
+    border-bottom: 1px solid var(--info-border);
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    font-weight: 700;
+}
+
+#info-load-area table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+#info-load-area tr {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+#info-load-area tr:last-child {
+    border-bottom: none;
+}
+
+#info-load-area td {
+    padding: 12px 10px;
+    vertical-align: middle;
+}
+
+/* Labels (Izquierda) */
+#info-load-area td:first-child {
+    color: var(--info-accent);
+    font-weight: 700;
+    width: 40%;
+    text-transform: uppercase;
+    font-size: 12px;
+}
+
+/* Valores (Derecha) */
+#info-load-area td:last-child {
+    color: #fff;
+    text-align: right;
+    font-weight: 500;
+}
+
+/* Header Principal */
+.rank-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.rank-title {
+    font-family: 'Cinzel', serif;
+    color: #fff;
+    font-size: 28px;
+    margin-bottom: 5px;
+}
+
+.rank-subtitle {
+    color: #666;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+    .info-menu {
+        flex-direction: column; /* En celular vuelve a ser vertical para que entre */
+    }
+    .info-menu li {
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .info-menu li.active {
+        border-left: 3px solid var(--info-accent);
+        border-bottom-color: transparent;
+    }
+}

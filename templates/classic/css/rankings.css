@@ -1,0 +1,194 @@
+/* templates/classic/css/rankings.css */
+
+/* --- 1. CONTENEDOR PRINCIPAL Y FONDO --- */
+.rankings-wrapper {
+    font-family: 'Segoe UI', 'Roboto', Helvetica, Arial, sans-serif;
+    padding-bottom: 50px;
+    color: #333;
+}
+
+/* --- 2. CONTENEDOR DE LA TABLA (CARD BLANCA) --- */
+.rank-table-card {
+    background-color: #ffffff !important; /* Fondo Blanco Puro */
+    border-radius: 8px;
+    /* Sombra para que resalte del fondo */
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08) !important;
+    border: 1px solid #e5e5e5 !important;
+    overflow: hidden;
+    position: relative;
+    min-height: 400px;
+}
+
+/* --- 3. OVERRIDE NUCLEAR DE TABLE-DARK (SOLUCIÓN AL FONDO NEGRO) --- */
+/* Forzamos a la tabla oscura a comportarse como clara */
+.rankings-wrapper .table-dark {
+    --bs-table-bg: transparent !important;
+    --bs-table-color: #333 !important;
+    background-color: #ffffff !important;
+    color: #333 !important;
+    margin-bottom: 0;
+}
+
+/* Forzamos que las celdas sean blancas */
+.rankings-wrapper .table-dark td,
+.rankings-wrapper .table-dark th {
+    background-color: #ffffff !important;
+    color: #444 !important;
+    border-color: #f0f0f0 !important;
+    vertical-align: middle;
+}
+
+/* --- 4. CABECERA NEGRA (HEADER) --- */
+/* Apuntamos especificamente al thead para pintarlo de negro */
+.rankings-wrapper .table-dark thead tr,
+.rankings-wrapper .table-dark thead th {
+    background-color: #000000 !important; /* Negro Puro */
+    color: #ffffff !important; /* Texto Blanco */
+    border: none !important;
+    padding: 18px 15px !important;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+}
+
+/* --- 5. CUERPO Y HOVER --- */
+.rankings-wrapper .table-dark tbody tr {
+    transition: all 0.2s ease;
+}
+
+/* Efecto Hover en las filas */
+.rankings-wrapper .table-dark tbody tr:hover td {
+    background-color: #f2f2f2 !important; /* Gris suave al pasar el mouse */
+    color: #000 !important;
+}
+
+.rankings-wrapper .table-dark tbody td {
+    padding: 15px !important;
+    font-weight: 500;
+    font-size: 0.95rem;
+}
+
+/* --- 6. TÍTULOS Y TEXTOS --- */
+.rank-header {
+    margin-bottom: 40px;
+}
+
+.rank-title {
+    color: #111 !important;
+    font-weight: 800 !important;
+    font-size: 3rem !important;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    letter-spacing: -1px;
+}
+
+.rank-subtitle {
+    color: #666 !important;
+    font-size: 1.1rem;
+}
+
+/* --- 7. BOTONES DE NAVEGACIÓN --- */
+.rank-nav-container {
+    gap: 10px;
+    margin-bottom: 30px;
+}
+
+.rank-nav-btn {
+    background-color: #fff !important;
+    color: #555 !important;
+    border: 1px solid #ddd !important;
+    border-radius: 4px !important;
+    padding: 10px 25px !important;
+    font-weight: 700 !important;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    transition: all 0.2s;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.rank-nav-btn:hover, 
+.rank-nav-btn.active {
+    background-color: #000 !important; /* Negro al activar */
+    color: #fff !important;
+    border-color: #000 !important;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+}
+
+/* --- 8. FILTROS DE CLASE (CIRCULITOS) --- */
+.rank-filter-box {
+    margin-bottom: 40px;
+}
+
+.class-filter-item {
+    transition: transform 0.2s;
+}
+.class-filter-item:hover {
+    transform: scale(1.1);
+}
+
+.class-avatar-circle {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 2px solid #e0e0e0;
+    overflow: hidden;
+    background: #fff;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    filter: grayscale(100%);
+    opacity: 0.7;
+    position: relative;
+    z-index: 1;
+}
+
+.class-filter-item.active .class-avatar-circle,
+.class-filter-item:hover .class-avatar-circle {
+    filter: grayscale(0%);
+    opacity: 1;
+    border-color: #000;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+.class-avatar-circle img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* Botón "TODAS" */
+.all-classes {
+    background: #000 !important;
+    color: #fff !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: 800;
+    filter: none !important;
+    opacity: 1 !important;
+    border-color: #000 !important;
+}
+
+/* --- 9. LOADER --- */
+#rank-loader {
+    background: rgba(255,255,255,0.9) !important; /* Fondo blanco casi sólido */
+    backdrop-filter: blur(2px);
+}
+.spinner-border.text-orange {
+    color: #000 !important; /* Spinner negro */
+}
+
+/* Avatar dentro de la tabla */
+.rank-avatar-img {
+    border: 2px solid #eee !important;
+    width: 32px;
+    height: 32px;
+    background-color: #fff;
+}

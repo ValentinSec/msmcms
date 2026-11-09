@@ -1,0 +1,182 @@
+/* RANKINGS - MORPHEUS DARK PREMIUM (FINAL MASK) */
+
+:root {
+    --rank-bg-base: #1a191f;
+    --rank-panel: rgba(22, 27, 34, 0.95);
+    --rank-border: rgba(255, 255, 255, 0.1);
+    --rank-accent: #FF8A3B;
+    --rank-text: #e0e0e0;
+    --rank-text-muted: #8b949e;
+}
+
+/* --- 1. FONDO FULL SCREEN --- */
+body.rankings-mode {
+    background-color: var(--rank-bg-base) !important;
+    background-image: none !important;
+}
+body.rankings-mode::before {
+    content: ''; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: url('../../../img/misc/download-bg.png') no-repeat center top / cover;
+    opacity: 0.15; z-index: -2; pointer-events: none;
+}
+body.rankings-mode::after {
+    content: ''; position: fixed; bottom: 0; left: 0; width: 100%; height: 60%;
+    background: linear-gradient(to bottom, transparent 0%, var(--rank-bg-base) 100%);
+    z-index: -1; pointer-events: none;
+}
+/* Limpieza de contenedores del template */
+body.rankings-mode .morpheus-wrapper,
+body.rankings-mode .main-content-area,
+body.rankings-mode .content-box-internal {
+    background: transparent !important; box-shadow: none !important; border: none !important;
+}
+
+/* --- 2. OCULTAR INTERFAZ VIEJA (MAGIA) --- */
+/* Ocultamos los controles originales de rankings.php pero los dejamos en el DOM para leerlos con JS */
+.rankings-wrapper .rank-header,         /* T¨ªtulo viejo */
+.rankings-wrapper .rank-nav-container,  /* Botones viejos */
+.rankings-wrapper .rank-filter-box {    /* Filtros de clase viejos */
+    display: none !important;
+}
+
+/* --- 3. NUEVA INTERFAZ (INYECTADA) --- */
+.js-rank-hero {
+    text-align: center;
+    padding: 20px 0 20px 0;
+    position: relative;
+    z-index: 5;
+    margin-bottom: 20px;
+}
+.js-rank-subtitle {
+    font-family: 'Roboto', sans-serif;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    color: var(--rank-text-muted);
+    display: block;
+    margin-bottom: 5px;
+}
+.js-rank-title {
+    font-family: 'Cinzel', serif;
+    font-size: 3.5rem;
+    color: #fff;
+    text-shadow: 0 0 30px rgba(0,0,0,0.8);
+    margin: 0;
+    line-height: 1;
+}
+
+/* Toolbar Contenedor */
+.js-rank-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    position: relative;
+    z-index: 5;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+/* Buscador (Izquierda/Centro) */
+.js-search-wrap {
+    position: relative;
+    flex: 1;
+    max-width: 350px;
+}
+.js-rank-input {
+    width: 100%;
+    background: rgba(0,0,0,0.5);
+    border: 1px solid var(--rank-border);
+    color: #fff;
+    padding: 12px 20px 12px 45px;
+    border-radius: 50px;
+    font-size: 14px;
+    outline: none;
+    transition: 0.3s;
+    backdrop-filter: blur(5px);
+}
+.js-rank-input:focus {
+    border-color: var(--rank-accent);
+    background: rgba(0,0,0,0.8);
+    box-shadow: 0 0 20px rgba(255, 138, 59, 0.2);
+}
+.js-search-icon {
+    position: absolute;
+    left: 18px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #666;
+    pointer-events: none;
+}
+
+/* Dropdown (Derecha) */
+.js-dropdown-wrap select {
+    background: var(--rank-panel);
+    border: 1px solid var(--rank-border);
+    color: #ccc;
+    padding: 10px 20px;
+    border-radius: 4px;
+    outline: none;
+    cursor: pointer;
+    font-size: 13px;
+    min-width: 180px;
+    text-transform: uppercase;
+    font-weight: 600;
+    transition: 0.3s;
+}
+.js-dropdown-wrap select:hover {
+    border-color: var(--rank-accent);
+    color: #fff;
+}
+
+/* --- 4. TABLA --- */
+/* Estilizamos la tabla que genera el PHP */
+.rankings-wrapper .rank-table-card {
+    background: var(--rank-panel);
+    border: 1px solid var(--rank-border);
+    border-radius: 6px;
+    overflow: hidden;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+}
+
+.rankings-wrapper table { 
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 0 !important;
+}
+
+.rankings-wrapper table thead th {
+    background: rgba(255,255,255,0.03);
+    color: #888;
+    font-size: 11px;
+    text-transform: uppercase;
+    font-weight: 700;
+    letter-spacing: 1px;
+    padding: 18px;
+    border-bottom: 1px solid var(--rank-border);
+    border-top: none;
+}
+
+.rankings-wrapper table tbody td {
+    padding: 15px 20px;
+    border-bottom: 1px solid var(--rank-border);
+    color: var(--rank-text);
+    font-size: 14px;
+    vertical-align: middle;
+}
+
+.rankings-wrapper table tbody tr:hover td {
+    background: rgba(255,255,255,0.02);
+}
+
+/* Spinner Loader */
+#rank-loader {
+    border-radius: 6px;
+    backdrop-filter: blur(2px);
+}
+
+@media (max-width: 768px) {
+    .js-rank-toolbar { flex-direction: column; align-items: stretch; }
+    .js-search-wrap { max-width: 100%; }
+    .rankings-wrapper table { display: block; overflow-x: auto; }
+}

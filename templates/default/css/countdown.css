@@ -1,0 +1,236 @@
+/* =========================================
+   FLOATING COUNTDOWN (VERSIÓN TITÁN 550px)
+   ========================================= */
+
+/* 1. Contenedor Principal */
+.floating-countdown {
+    position: fixed;
+    top: 15%; /* Altura vertical */
+    right: 0; /* Visible por defecto */
+    z-index: 9999;
+    
+    /* ANCHO MASIVO CORREGIDO */
+    width: 550px !important; 
+    
+    /* Transición suave de la propiedad RIGHT */
+    transition: right 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+    
+    /* Animación de entrada inicial */
+    animation: slideInIntro 1s forwards;
+    font-family: sans-serif;
+}
+
+@keyframes slideInIntro {
+    from { right: -550px; } /* Debe coincidir con el ancho */
+    to { right: 0; }
+}
+
+/* 2. Estado Colapsado */
+/* Se esconde moviéndose a la derecha la misma cantidad que su ancho */
+.floating-countdown.collapsed {
+    right: -550px !important;
+}
+
+/* 3. Botón Toggle (La Flecha) */
+.toggle-btn {
+    position: absolute;
+    top: 50%;
+    /* Se pega a la izquierda del contenedor (fuera de él) */
+    left: -40px; 
+    transform: translateY(-50%);
+    
+    width: 40px;
+    height: 80px; /* Botón grande */
+    
+    background: #111;
+    border: 1px solid rgba(255,255,255,0.2);
+    border-right: none; 
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    color: #cba660; 
+    
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: -2px 0 10px rgba(0,0,0,0.5);
+    z-index: 100;
+    font-size: 20px; /* Icono grande */
+}
+
+/* Rotar flecha al cerrar */
+.floating-countdown.collapsed .toggle-btn i {
+    transform: translateY(-50%) rotate(180deg);
+}
+
+.toggle-btn:hover {
+    background: #333;
+    color: #fff;
+}
+
+/* 4. Wrapper del Diseño */
+.countdown-wrapper {
+    position: relative;
+    padding: 35px 25px;
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-right: none !important;
+    text-align: center;
+    box-shadow: -5px 10px 30px rgba(0,0,0,0.8);
+    background: #111; 
+}
+
+/* =========================================
+   TEXTOS GIGANTES
+   ========================================= */
+
+.event-title { 
+    margin: 0 0 25px 0; 
+    text-transform: uppercase; 
+    letter-spacing: 3px; 
+    line-height: 1.2; 
+    font-size: 32px !important; /* Título */
+}
+
+.timer-flex { 
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    gap: 20px; 
+}
+
+.timer-box { 
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    justify-content: center; 
+    min-width: 90px; 
+}
+
+.time-val { 
+    line-height: 1; 
+    font-size: 65px !important; /* NÚMEROS ENORMES */
+    font-weight: 800;
+}
+
+.time-label { 
+    font-size: 14px !important; 
+    text-transform: uppercase; 
+    margin-top: 10px; 
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+.timer-separator { 
+    font-size: 50px !important; 
+    font-weight: bold; 
+    margin-top: -25px; 
+}
+
+.finish-msg h3 { 
+    margin: 0; font-size: 24px; text-transform: uppercase; 
+    color: #fff; text-shadow: 0 0 10px rgba(255,255,255,0.5); 
+    animation: pulse 2s infinite; 
+}
+@keyframes pulse { 0% { opacity: 0.8; } 50% { opacity: 1; transform: scale(1.05); } 100% { opacity: 0.8; } }
+
+/* =========================================
+   THEMES (Colores)
+   ========================================= */
+
+/* 1. CLASSIC */
+.theme-classic { background: rgba(0, 0, 0, 0.95); border: 3px solid #cba660; border-right: none; }
+.theme-classic .event-title { font-family: 'Cinzel', serif; color: #cba660; font-weight: 700; text-shadow: 0 2px 5px rgba(0,0,0,0.8); }
+.theme-classic .time-val { font-family: 'Cinzel', serif; color: #fff; }
+.theme-classic .time-label { color: #cba660; font-family: 'Cinzel', serif; }
+.theme-classic .timer-separator { color: #666; }
+
+/* 2. MODERN */
+.theme-modern { background: rgba(10, 25, 47, 0.95); border: 2px solid #00f3ff; border-right: none; }
+.theme-modern .event-title { font-family: 'Orbitron', sans-serif; color: #00f3ff; text-shadow: 0 0 15px #00f3ff; }
+.theme-modern .time-val { font-family: 'Orbitron', sans-serif; color: #fff; text-shadow: 0 0 10px #fff; }
+.theme-modern .time-label { color: #00f3ff; font-family: sans-serif; }
+.theme-modern .timer-separator { color: #00f3ff; opacity: 0.8; }
+
+/* 3. FIRE */
+.theme-fire { background: linear-gradient(to bottom, #2b0a0a, #000); border: 2px solid #ff4d4d; border-right: none; }
+.theme-fire .event-title { font-family: 'Cinzel', serif; color: #ff4d4d; text-shadow: 0 0 15px #ff0000; font-weight: 700; }
+.theme-fire .time-val { font-family: 'Cinzel', serif; color: #fff; text-shadow: 0 0 10px #ff4d4d; }
+.theme-fire .time-label { color: #ffae00; }
+.theme-fire .timer-separator { color: #ff4d4d; }
+
+/* 4. ICE */
+.theme-ice { background: rgba(10, 20, 30, 0.95); border: 2px solid #aaddff; border-right: none; backdrop-filter: blur(10px); }
+.theme-ice .event-title { font-family: 'Cinzel', serif; color: #e6f7ff; text-shadow: 0 0 20px #0099ff; font-weight: 700; }
+.theme-ice .time-val { font-family: 'Cinzel', serif; color: #fff; text-shadow: 0 0 15px #00ccff; }
+.theme-ice .time-label { color: #aaddff; }
+.theme-ice .timer-separator { color: #aaddff; }
+
+/* 5. NATURE */
+.theme-nature { background: rgba(18, 41, 19, 0.95); border: 2px solid #4caf50; border-right: none; }
+.theme-nature .event-title { font-family: 'Cinzel', serif; color: #81c784; text-shadow: 0 2px 5px #000; }
+.theme-nature .time-val { font-family: 'Cinzel', serif; color: #fff; }
+.theme-nature .time-label { color: #a5d6a7; }
+.theme-nature .timer-separator { color: #4caf50; }
+
+/* 6. MINIMAL */
+.theme-minimal { background: rgba(0,0,0,0.9); border-bottom: 2px solid rgba(255,255,255,0.3); border-radius: 0; }
+.theme-minimal .event-title { font-family: 'Montserrat', sans-serif; font-weight: 300; letter-spacing: 5px; color: #fff; }
+.theme-minimal .time-val { font-family: 'Montserrat', sans-serif; font-weight: 100; color: #fff; }
+.theme-minimal .time-label { color: #aaa; font-weight: 400; }
+.theme-minimal .timer-separator { color: #666; }
+
+/* 7. CARDS DARK */
+.theme-cards-dark .timer-separator { display: none; }
+.theme-cards-dark .event-title { font-family: 'Rajdhani', sans-serif; color: #eee; font-weight: 700; }
+.theme-cards-dark .timer-box { background: #151515; border: 2px solid #333; padding: 10px; border-radius: 10px; min-width: 90px; }
+.theme-cards-dark .time-val { font-family: 'Rajdhani', sans-serif; color: #fff; font-weight: 700; }
+.theme-cards-dark .time-label { color: #888; font-weight: 600; }
+
+/* 8. CARDS GLASS */
+.theme-cards-glass { background: rgba(0,0,0,0.7); backdrop-filter: blur(15px); border:none; }
+.theme-cards-glass .timer-separator { display: none; }
+.theme-cards-glass .event-title { font-family: 'Montserrat', sans-serif; font-weight: 700; color: #fff; }
+.theme-cards-glass .timer-box { background: rgba(255, 255, 255, 0.15); border: 1px solid rgba(255, 255, 255, 0.3); border-radius: 12px; padding: 10px; min-width: 90px; }
+.theme-cards-glass .time-val { font-family: 'Montserrat', sans-serif; color: #fff; font-weight: 700; }
+.theme-cards-glass .time-label { color: rgba(255,255,255,0.9); }
+
+/* 9. CARDS GOLD */
+.theme-cards-gold .timer-separator { display: none; }
+.theme-cards-gold .event-title { font-family: 'Cinzel', serif; color: #ffdb58; text-shadow: 0 2px 15px #000; font-weight: 700; }
+.theme-cards-gold .timer-box { background: linear-gradient(to bottom, #332812, #1a1408); border: 2px solid #bfa058; border-radius: 8px; padding: 10px; min-width: 90px; }
+.theme-cards-gold .time-val { font-family: 'Cinzel', serif; color: #fff; text-shadow: 0 0 10px #bfa058; }
+.theme-cards-gold .time-label { color: #bfa058; font-size: 10px; }
+
+/* 10. CARDS CYBER */
+.theme-cards-cyber .timer-separator { display: none; }
+.theme-cards-cyber .event-title { font-family: 'Orbitron', sans-serif; color: #fcee0a; letter-spacing: 4px; }
+.theme-cards-cyber .timer-box { background: #000; border: 2px solid #fcee0a; padding: 10px; min-width: 90px; }
+.theme-cards-cyber .time-val { font-family: 'Orbitron', sans-serif; color: #fcee0a; }
+.theme-cards-cyber .time-label { background: #fcee0a; color: #000; width: 100%; font-weight: 800; margin-top: 5px; }
+
+/* RESPONSIVE MÓVIL */
+@media (max-width: 768px) {
+    .floating-countdown {
+        width: 100% !important; /* Forzar 100% en móvil */
+        top: auto; bottom: 0; right: 0;
+        transform: translateY(100%); 
+        animation: slideUp 1s forwards;
+    }
+    .floating-countdown.collapsed {
+        transform: translateY(100%);
+        right: 0 !important;
+    }
+    .countdown-wrapper {
+        border-radius: 0; border: none; border-top: 3px solid #444; padding: 20px;
+    }
+    .toggle-btn {
+        top: -40px; left: 50%; transform: translateX(-50%) rotate(-90deg);
+        border-radius: 10px 10px 0 0; width: 80px; height: 40px;
+        border: 1px solid #444; border-bottom: none;
+    }
+    .time-val { font-size: 32px !important; }
+    @keyframes slideUp { to { transform: translateY(0); } }
+}

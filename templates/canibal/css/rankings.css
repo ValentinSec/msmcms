@@ -1,0 +1,242 @@
+/* --- RANKINGS MODULE (REPLICA ESTÉTICA IMAGEN) --- */
+
+:root {
+    --rank-bg: #131519;
+    --rank-border: #2a2e35;
+    --rank-text-muted: #8a8f9d;
+    --rank-accent-gold: #f39c12;
+    
+    /* Colores Específicos de Botones */
+    --btn-green-bg: rgba(25, 135, 84, 0.2);
+    --btn-green-border: #198754;
+    --btn-green-text: #2ecc71;
+    
+    --btn-blue-bg: rgba(13, 110, 253, 0.2);
+    --btn-blue-border: #0d6efd;
+    --btn-blue-text: #3498db;
+}
+
+.rankings-wrapper {
+    min-height: 600px;
+    font-family: 'Roboto', sans-serif;
+}
+
+/* --- 1. HEADER & TITULO --- */
+.rank-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.rank-title {
+    font-family: 'Cinzel', serif;
+    font-size: 28px;
+    color: #fff;
+    margin-bottom: 5px;
+    text-transform: uppercase;
+}
+
+.rank-subtitle {
+    font-size: 12px;
+    color: var(--rank-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* --- 2. BOTONES DE NAVEGACIÓN (TOP PLAYERS, GUILDS...) --- */
+.rank-nav-container {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+}
+
+.rank-nav-btn {
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: none; /* Según imagen no es uppercase puro */
+    text-decoration: none !important;
+    transition: all 0.3s ease;
+    border: 1px solid transparent;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* Estilo por defecto (Azul - Guilds, Killers, Events...) */
+.rank-nav-btn {
+    background-color: var(--btn-blue-bg);
+    border-color: var(--btn-blue-border);
+    color: #fff; /* Texto blanco según imagen */
+}
+
+.rank-nav-btn:hover {
+    background-color: var(--btn-blue-border);
+    box-shadow: 0 0 10px rgba(13, 110, 253, 0.4);
+}
+
+/* Estilo Activo / General (Verde - TOP Players) */
+.rank-nav-btn.active, 
+.rank-nav-btn[onclick*="general"] { 
+    background-color: var(--btn-green-bg);
+    border-color: var(--btn-green-border);
+    color: #fff;
+}
+
+.rank-nav-btn.active:hover {
+    background-color: var(--btn-green-border);
+    box-shadow: 0 0 10px rgba(25, 135, 84, 0.4);
+}
+
+/* Iconos dentro de botones */
+.rank-nav-btn i { font-size: 12px; }
+
+
+/* --- 3. CAJA DE FILTROS DE CLASE (Avatares Redondos) --- */
+.rank-filter-box {
+    background: transparent;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.class-filter-item {
+    transition: transform 0.2s;
+    opacity: 0.6;
+}
+
+.class-filter-item:hover, 
+.class-filter-item.active {
+    opacity: 1;
+    transform: scale(1.1);
+}
+
+.class-avatar-circle {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 2px solid #444;
+    background: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+}
+
+.class-filter-item.active .class-avatar-circle {
+    border-color: var(--rank-accent-gold);
+    box-shadow: 0 0 10px rgba(243, 156, 18, 0.4);
+}
+
+.class-avatar-circle img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Botón "ALL" */
+.all-classes {
+    background: #222;
+    color: #fff;
+    font-weight: 700;
+    font-size: 11px;
+}
+
+
+/* --- 4. TABLA DE RANKING (Replica Exacta) --- */
+.rank-table-card {
+    background: transparent; /* Fondo transparente como en la imagen */
+    border-radius: 0;
+    overflow: hidden;
+}
+
+.table-dark {
+    width: 100%;
+    border-collapse: collapse;
+    color: #ccc;
+    background-color: transparent;
+}
+
+/* Header de Tabla (Barra Negra) */
+.table-dark thead {
+    background-color: #000 !important; /* Negro puro */
+    border-bottom: none; 
+}
+
+.table-dark th {
+    padding: 12px 15px;
+    font-size: 13px;
+    font-weight: 600; /* Semi-bold */
+    color: #fff; /* Texto blanco */
+    text-transform: none; /* No forzar mayúsculas según imagen */
+    border: none; /* Sin bordes verticales */
+}
+
+/* Alineación específica de columnas */
+.table-dark th:first-child { text-align: center; width: 50px; color: var(--rank-accent-gold); } /* # Symbol */
+.table-dark th:nth-child(2) { text-align: left; } /* Character Name */
+
+/* Badges pequeños ML / MR (Amarillos) */
+/* Nota: Como estos vienen del PHP como texto, usamos CSS para colorear si es posible, 
+   o el PHP debería tener un <span>. Asumiendo texto plano por ahora. */
+
+/* Filas del Body */
+.table-dark tbody tr {
+    background-color: rgba(0, 0, 0, 0.4); /* Fondo semitransparente */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05); /* Línea divisoria muy sutil */
+    transition: background 0.2s;
+}
+
+.table-dark tbody tr:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.table-dark td {
+    padding: 10px 15px;
+    vertical-align: middle;
+    font-size: 13px;
+    border: none;
+    color: #a0a0a0;
+}
+
+/* Destacar Nombres */
+.table-dark td:nth-child(2) {
+    color: #fff;
+    font-weight: 600;
+}
+
+/* Ranking #1, #2, #3 Colores */
+.rank-pos-1 { color: #ffd700; text-shadow: 0 0 10px rgba(255, 215, 0, 0.6); font-weight: bold; font-size: 14px; }
+.rank-pos-2 { color: #c0c0c0; text-shadow: 0 0 10px rgba(192, 192, 192, 0.6); font-weight: bold; font-size: 14px; }
+.rank-pos-3 { color: #cd7f32; text-shadow: 0 0 10px rgba(205, 127, 50, 0.6); font-weight: bold; font-size: 14px; }
+
+/* Mensaje "No hay datos" */
+.table-dark tbody tr td[colspan] {
+    text-align: center;
+    padding: 40px;
+    color: #666;
+    font-style: italic;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+    .rank-nav-container {
+        gap: 5px;
+    }
+    .rank-nav-btn {
+        font-size: 11px;
+        padding: 6px 10px;
+    }
+    .table-dark th, .table-dark td {
+        padding: 8px 5px;
+        font-size: 11px;
+    }
+    /* Ocultar columnas menos importantes en móvil */
+    .table-dark th:nth-child(n+6), 
+    .table-dark td:nth-child(n+6) {
+        display: none; 
+    }
+}

@@ -1,0 +1,104 @@
+{
+    "module_active": 0,
+    "exchange_rates": {
+        "ars": 1000,
+        "pen": 3.75
+    },
+    "methods": {
+        "mp": {
+            "active": 1,
+            "name": "MercadoPago",
+            "token": "APP_USR-6617176564711638-060220-e81b7a6e7e315a375334b794d436c7b8-159749601",
+            "currency": "ARS",
+            "symbol": "$",
+            "packages": [
+                {
+                    "id": "6973e0efc0d0e",
+                    "coins": 1,
+                    "price_usd": 1,
+                    "image": "Pack1.png",
+                    "badge": "wc",
+                    "bonus": "",
+                    "coin_type": "WCoinC"
+                },
+                {
+                    "id": "6973e0fdc0c3f",
+                    "coins": 3,
+                    "price_usd": 3,
+                    "image": "Pack1.png",
+                    "badge": "gp",
+                    "bonus": "",
+                    "coin_type": "GoblinPoint"
+                },
+                {
+                    "id": "6973ea8ef0aae",
+                    "coins": 2,
+                    "price_usd": 2,
+                    "image": "Pack1.png",
+                    "badge": "",
+                    "bonus": "",
+                    "coin_type": "WCoinC"
+                },
+                {
+                    "id": "6973ea943774d",
+                    "coins": 1,
+                    "price_usd": 1,
+                    "image": "Pack1.png",
+                    "badge": "",
+                    "bonus": "",
+                    "coin_type": "WCoinP"
+                },
+                {
+                    "id": "6973ea992d87a",
+                    "coins": 2,
+                    "price_usd": 2,
+                    "image": "Pack1.png",
+                    "badge": "",
+                    "bonus": "",
+                    "coin_type": "WCoinP"
+                }
+            ]
+        },
+        "paypal": {
+            "active": 1,
+            "name": "PayPal",
+            "email": "jonisecuel@gmail.com",
+            "currency": "USD",
+            "symbol": "$",
+            "packages": []
+        },
+        "binance": {
+            "active": 1,
+            "name": "Binance Pay",
+            "api_key": "",
+            "currency": "USDT",
+            "symbol": "$",
+            "packages": []
+        },
+        "yape": {
+            "active": 1,
+            "name": "Yape",
+            "number": "",
+            "holder": "",
+            "currency": "PEN",
+            "symbol": "S\/",
+            "packages": []
+        },
+        "bank": {
+            "active": 1,
+            "name": "Transferencia",
+            "details": "",
+            "currency": "ARS",
+            "symbol": "$",
+            "packages": []
+        }
+    },
+    "packages": [
+        {
+            "id": "696c131ca84a5",
+            "coins": 1,
+            "price_usd": 1,
+            "image": "Pack1.png"
+        }
+    ]
+}

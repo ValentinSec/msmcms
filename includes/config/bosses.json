@@ -1,0 +1,37 @@
+{
+    "80": {
+        "name": "Golden Lizard King",
+        "reward_img": "k4.webp",
+        "custom_image": "",
+        "show_reward": true,
+        "active": true
+    },
+    "78": {
+        "name": "Golden Dragon",
+        "reward_img": "k1.webp",
+        "custom_image": "",
+        "show_reward": true,
+        "active": true
+    },
+    "81": {
+        "name": "Golden Vepar",
+        "reward_img": "box_gm.webp",
+        "custom_image": "",
+        "show_reward": true,
+        "active": true
+    },
+    "53": {
+        "name": "Golden Titan",
+        "reward_img": "box_gm.webp",
+        "custom_image": "",
+        "show_reward": true,
+        "active": true
+    },
+    "79": {
+        "name": "Golden Custom",
+        "reward_img": "box_gm.webp",
+        "custom_image": "",
+        "show_reward": true,
+        "active": true
+    }
+}

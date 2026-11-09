@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<settings>
+	<active>1</active>
+	<register_enable_recaptcha>0</register_enable_recaptcha>
+	<register_recaptcha_site_key>admin</register_recaptcha_site_key>
+	<register_recaptcha_secret_key>admin</register_recaptcha_secret_key>
+	<send_welcome_email>0</send_welcome_email>
+	<verify_email>0</verify_email>
+	<register_verify_email>1</register_verify_email>
+	<register_enable_idcode>1</register_enable_idcode>
+	<register_multi_account>0</register_multi_account>
+	<register_coins_amount>300</register_coins_amount>
+	<register_coins_column>WCoinC</register_coins_column>
+	<register_coins_table>CashShopData</register_coins_table>
+	<register_vip_days>5</register_vip_days>
+	<register_vip_type>3</register_vip_type>
+<referral_active>0</referral_active><referral_reward_coin>WCoinC</referral_reward_coin><referral_reward_amount>777</referral_reward_amount><referral_condition>5</referral_condition><register_same_email>1</register_same_email></settings>

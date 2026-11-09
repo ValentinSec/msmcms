@@ -1,0 +1,42 @@
+[
+    {
+        "id": "697919a8177f2",
+        "title": "Guía de prueba",
+        "content": "<p>Texto de prueba<\/p>",
+        "date": "2026-01-27",
+        "image": "",
+        "slug": "gu-a-de-prueba"
+    },
+    {
+        "id": "6978584a5df54",
+        "title": "[GUÍA] Eventos",
+        "content": "<p><br><\/p>",
+        "date": "2026-01-27",
+        "image": "",
+        "slug": "-gu-a-eventos"
+    },
+    {
+        "id": "69785843e0f02",
+        "title": "[GUÍA] Custom Jewel",
+        "content": "<p><br><\/p>",
+        "date": "2026-01-27",
+        "image": "",
+        "slug": "-gu-a-custom-jewel"
+    },
+    {
+        "id": "697858385e58c",
+        "title": "[GUÍA] Crywolf",
+        "content": "<p><br><\/p>",
+        "date": "2026-01-27",
+        "image": "",
+        "slug": "-gu-a-crywolf"
+    },
+    {
+        "id": "697852b55aebb",
+        "title": "[GUÍA] Pick",
+        "content": "<p>Hola, holitas, holi, hole.<\/p>",
+        "date": "2026-01-27",
+        "image": "img\/guides\/697852b55aebb_Main_TrGe4uU4iG.png",
+        "slug": "-gu-a-pick"
+    }
+]

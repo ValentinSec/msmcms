@@ -1,0 +1,35 @@
+IF OBJECT_ID('dbo.{TABLE_PREFIX}MARKET_SELL', 'U') IS NOT NULL 
+  DROP TABLE dbo.{TABLE_PREFIX}MARKET_SELL; 
+
+CREATE TABLE [dbo].[{TABLE_PREFIX}MARKET_SELL](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[seller_account] [varchar](10) NOT NULL,
+	[item_hex] [varbinary](max) NOT NULL,
+	[item_name] [varchar](255) NULL,
+	[item_img] [varchar](255) NULL,
+	[price] [int] DEFAULT ((0)),
+	[currency] [varchar](20) DEFAULT 'Coins',
+	[date_posted] [datetime] DEFAULT GETDATE(),
+ CONSTRAINT [PK_{TABLE_PREFIX}MARKET_SELL] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY];
+
+IF OBJECT_ID('dbo.{TABLE_PREFIX}MARKET_BUY', 'U') IS NOT NULL 
+  DROP TABLE dbo.{TABLE_PREFIX}MARKET_BUY; 
+
+CREATE TABLE [dbo].[{TABLE_PREFIX}MARKET_BUY](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[buyer_account] [varchar](10) NOT NULL,
+	[seller_account] [varchar](10) NOT NULL,
+	[item_hex] [varbinary](max) NOT NULL,
+	[item_name] [varchar](255) NULL,
+	[price_paid] [int] DEFAULT ((0)),
+	[currency] [varchar](20) DEFAULT 'Coins',
+	[transaction_date] [datetime] DEFAULT GETDATE(),
+ CONSTRAINT [PK_{TABLE_PREFIX}MARKET_BUY] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY];

@@ -1,0 +1,13 @@
+{
+    "active": 0,
+    "title": "¡BIENVENIDOS A MU ANCCIENT!",
+    "subtitle": "No te pierdas esta aventura. ",
+    "body": "Este 20 de Febrero de 2026, 21:00hs Argentina, vas a poder disfrutar de MU Anccient. \r\n\r\n¡Traé a tus amigos!",
+    "image": "popup_bg_1769218880.png",
+    "btn1_active": 1,
+    "btn1_text": "Registrate",
+    "btn1_link": "https:\/\/test.mualba.com\/register",
+    "btn2_active": 1,
+    "btn2_text": "Discord",
+    "btn2_network": "social_discord"
+}

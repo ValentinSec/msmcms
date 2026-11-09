@@ -1,0 +1,17 @@
+{
+    "general": {
+        "data": []
+    },
+    "Drop": {
+        "config": {
+            "icon": "fas fa-skull"
+        },
+        "data": [
+            {
+                "id": "698b9641f208c",
+                "title": "Joyas",
+                "desc": "Teest"
+            }
+        ]
+    }
+}

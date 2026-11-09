@@ -1,0 +1,183 @@
+/* --- STREAM WIDGET STYLES (RIGHT POSITION) --- */
+:root {
+    --radius: 6px;
+    --bunker-900: #1A0F10;
+    --gold-100: #E6D6C6;
+}
+
+/* El Bot��n Flotante (Derecha) */
+.stream-float-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px; /* CAMBIO: Derecha */
+    left: auto;  /* Asegurar que no tome izquierda */
+    z-index: 9990;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: rgb(26, 15, 16);
+    color: var(--gold-100);
+    padding: 0.75rem 1rem;
+    border-radius: var(--radius);
+    border: 1px solid rgb(61, 77, 103);
+    box-shadow: 0 10px 15px -3px rgba(0,0,0,0.3);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: inherit;
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.stream-float-btn:hover {
+    background-color: rgb(43, 29, 29);
+    border-color: #C8A165;
+}
+
+/* El Panel Expandido (Derecha) */
+.stream-panel-container {
+    position: fixed;
+    bottom: 4rem; 
+    right: 20px; /* CAMBIO: Derecha */
+    left: auto;
+    z-index: 9991;
+    width: 320px;
+    max-height: 400px;
+    background-color: rgba(0, 0, 0, 0.95);
+    border: 1px solid rgb(54, 66, 86, 0.5);
+    border-radius: var(--radius);
+    box-shadow: 0 0 20px rgba(0,0,0,0.5);
+    backdrop-filter: blur(4px);
+    display: none; 
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.stream-panel-header {
+    padding: 0.75rem;
+    border-bottom: 1px solid #2b1d1d;
+    color: var(--gold-100);
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.stream-list {
+    overflow-y: auto;
+    max-height: 350px;
+}
+
+.stream-item {
+    padding: 0;
+    border-bottom: 1px solid #2b1d1d;
+}
+
+.stream-embed-responsive {
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 ratio */
+    height: 0;
+    overflow: hidden;
+    background: #000;
+}
+
+.stream-embed-responsive iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+}
+
+.stream-user-label {
+    padding: 5px 10px;
+    font-size: 12px;
+    color: #ccc;
+    background: #111;
+    display: flex;
+    justify-content: space-between;
+}
+
+/* =========================================
+   NEWS MODAL (READER)
+   ========================================= */
+.news-modal-overlay {
+    display: none; /* Hidden by default */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(5px);
+    z-index: 10000;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.news-modal {
+    background-color: var(--bunker-900);
+    width: 100%;
+    max-width: 800px;
+    max-height: 90vh;
+    border-radius: var(--radius);
+    border: 1px solid var(--gold-500);
+    box-shadow: 0 0 50px rgba(0,0,0,0.8);
+    display: flex;
+    flex-direction: column;
+    animation: modalFadeIn 0.3s ease-out;
+}
+
+@keyframes modalFadeIn {
+    from { opacity: 0; transform: scale(0.9); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+.nm-header {
+    padding: 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: linear-gradient(to right, rgba(200, 161, 101, 0.1), transparent);
+}
+
+.nm-title {
+    font-size: 1.4rem;
+    color: var(--gold-100);
+    font-weight: 700;
+}
+
+.nm-close {
+    cursor: pointer;
+    font-size: 1.5rem;
+    color: var(--gold-500);
+    transition: 0.2s;
+}
+
+.nm-close:hover {
+    color: #fff;
+    transform: rotate(90deg);
+}
+
+.nm-content-scroll {
+    padding: 2rem;
+    overflow-y: auto;
+    color: #ddd;
+    line-height: 1.6;
+}
+
+.nm-banner {
+    width: 100%;
+    height: auto;
+    max-height: 350px;
+    object-fit: cover;
+    border-radius: var(--radius);
+    margin-bottom: 1.5rem;
+    border: 1px solid var(--border-color);
+}
+
+#nmBody p {
+    margin-bottom: 1rem;
+}

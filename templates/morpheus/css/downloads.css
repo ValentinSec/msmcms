@@ -1,0 +1,315 @@
+/* DOWNLOADS - PREMIUM FULLSCREEN EDITION */
+
+:root {
+    --dl-base-bg: #1a191f;       /* Color base pedido */
+    --dl-panel: rgba(22, 27, 34, 0.85); /* Paneles con transparencia */
+    --dl-border: rgba(255, 255, 255, 0.08);
+    --dl-accent: #FF8A3B;        /* Naranja */
+    --dl-text: #e0e0e0;
+    --dl-text-muted: #8b949e;
+}
+
+/* --- 1. FONDO FULL SCREEN (Se activa con JS en el body) --- */
+body.downloads-mode {
+    background-color: var(--dl-base-bg) !important;
+    background-image: none !important; /* Quitamos fondo del template original */
+}
+
+/* Capa 1: La imagen de fondo (Opacidad baja) */
+body.downloads-mode::before {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    /* Ruta relativa desde css/ a img/ */
+    background: url('../../../img/misc/download-bg.png') no-repeat center top / cover;
+    opacity: 0.15; /* Baja opacidad para no molestar */
+    z-index: -2;
+    pointer-events: none;
+}
+
+/* Capa 2: El Overlay degradado (Fundido hacia abajo) */
+body.downloads-mode::after {
+    content: '';
+    position: fixed;
+    bottom: 0; left: 0; width: 100%; height: 50%;
+    background: linear-gradient(to bottom, transparent 0%, var(--dl-base-bg) 100%);
+    z-index: -1;
+    pointer-events: none;
+}
+
+/* Hacer transparentes los contenedores del template para ver el fondo */
+body.downloads-mode .morpheus-wrapper,
+body.downloads-mode .main-content-area,
+body.downloads-mode .content-box-internal,
+body.downloads-mode #downloads-page-balduneta {
+    background: transparent !important;
+    box-shadow: none !important;
+    border: none !important;
+}
+
+/* --- ESTILOS DEL CONTENIDO --- */
+
+#downloads-page-balduneta {
+    font-family: 'Roboto', sans-serif;
+    color: var(--dl-text);
+    padding-bottom: 60px;
+}
+
+/* Forzar ancho completo de las columnas en filas */
+#downloads-page-balduneta .row.g-4 > .col-md-6,
+#downloads-page-balduneta .row.g-4 > .col-12 {
+    width: 100% !important;
+    flex: 0 0 100%;
+    max-width: 100%;
+    margin-bottom: 25px;
+}
+
+/* Cajas contenedoras (Estilo Tabla) */
+#downloads-page-balduneta .dl-box-standalone {
+    background: var(--dl-panel) !important;
+    border: 1px solid var(--dl-border) !important;
+    border-radius: 6px !important;
+    padding: 0 !important;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.4) !important; /* Sombra profunda */
+    overflow: hidden;
+    backdrop-filter: blur(5px); /* Efecto vidrio sutil */
+}
+
+/* Títulos de Sección (Headers) */
+#downloads-page-balduneta h2, 
+#downloads-page-balduneta h3 {
+    background: rgba(255,255,255,0.03);
+    margin: 0 !important;
+    padding: 20px 25px !important;
+    font-family: 'Cinzel', serif;
+    font-size: 15px !important;
+    font-weight: 700 !important;
+    text-transform: uppercase;
+    color: #fff !important;
+    border-bottom: 1px solid var(--dl-border);
+    letter-spacing: 1.5px;
+    text-align: left !important;
+}
+
+/* Ocultar elementos viejos */
+#downloads-page-balduneta .badge-new-yellow,
+#downloads-page-balduneta .icon-square { display: none !important; }
+
+/* --- FILAS DE DESCARGA (Mirrors & Tools) --- */
+#downloads-page-balduneta .download-links-stack {
+    padding: 0;
+}
+
+#downloads-page-balduneta .btn-dl-gradient {
+    display: grid !important;
+    grid-template-columns: 1fr 1.5fr 100px 50px; /* Estructura rígida de tabla */
+    align-items: center;
+    gap: 15px;
+    background: transparent !important;
+    border: none !important;
+    border-bottom: 1px solid var(--dl-border) !important;
+    border-radius: 0 !important;
+    padding: 18px 25px !important;
+    margin: 0 !important;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+#downloads-page-balduneta .btn-dl-gradient:hover {
+    background: rgba(255, 138, 59, 0.05) !important;
+}
+
+#downloads-page-balduneta .btn-dl-gradient:last-child {
+    border-bottom: none !important;
+}
+
+/* Textos */
+#downloads-page-balduneta .btn-dl-gradient span {
+    color: var(--dl-text);
+    font-size: 14px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+/* Icono del host */
+#downloads-page-balduneta .btn-dl-gradient span i {
+    color: var(--dl-accent);
+    width: 20px;
+    text-align: center;
+}
+
+/* Descripción (Versión/Info) */
+#downloads-page-balduneta .btn-dl-gradient small {
+    color: var(--dl-text-muted);
+    font-size: 13px;
+    text-align: left;
+}
+
+/* Botón de descarga simulado a la derecha */
+#downloads-page-balduneta .btn-dl-gradient::after {
+    content: '\f019'; /* FontAwesome Download */
+    font-family: 'Font Awesome 6 Free';
+    font-weight: 900;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    background: #222;
+    border: 1px solid #333;
+    border-radius: 4px;
+    color: #666;
+    transition: 0.3s;
+    justify-self: end;
+}
+
+#downloads-page-balduneta .btn-dl-gradient:hover::after {
+    background: var(--dl-accent);
+    border-color: var(--dl-accent);
+    color: #111;
+    box-shadow: 0 0 10px rgba(255, 138, 59, 0.4);
+}
+
+/* --- TABLA REQUERIMIENTOS --- */
+#downloads-page-balduneta .requirements-table { padding: 0 !important; }
+
+#downloads-page-balduneta .requirements-table .row {
+    margin: 0 !important;
+    padding: 15px 25px !important;
+    border-bottom: 1px solid var(--dl-border) !important;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    align-items: center;
+}
+
+#downloads-page-balduneta .requirements-table .row:last-child {
+    border-bottom: none !important;
+}
+
+#downloads-page-balduneta .requirements-table .row:first-child {
+    background: rgba(255,255,255,0.02);
+    font-family: 'Cinzel', serif;
+    font-size: 12px;
+    text-transform: uppercase;
+    color: #fff;
+    letter-spacing: 1px;
+}
+
+#downloads-page-balduneta .requirements-table .col-4 {
+    width: auto !important;
+    text-align: center !important;
+    font-size: 13px;
+    color: var(--dl-text-muted);
+}
+
+#downloads-page-balduneta .requirements-table .col-4:first-child {
+    text-align: left !important;
+    color: var(--dl-text);
+    font-weight: 600;
+}
+
+/* --- SECCIÓN "POR QUÉ ELEGIR" --- */
+/* Forzamos que se muestre como una lista limpia dentro de la caja */
+#downloads-page-balduneta .dl-features {
+    display: block !important;
+    padding: 25px !important;
+    margin: 0 !important;
+}
+
+#downloads-page-balduneta .dl-features li {
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    color: var(--dl-text-muted);
+    font-size: 14px;
+    border-bottom: 1px dashed rgba(255,255,255,0.05);
+    padding-bottom: 15px;
+}
+
+#downloads-page-balduneta .dl-features li:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+#downloads-page-balduneta .dl-features li i {
+    color: var(--dl-accent) !important;
+    font-size: 16px !important;
+    width: 35px;
+    text-align: center;
+    margin-right: 15px;
+    background: rgba(255, 138, 59, 0.1);
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+}
+
+/* --- HERO INYECTADO --- */
+.dl-injected-hero {
+    text-align: center;
+    padding: 40px 0 60px 0;
+    position: relative;
+    z-index: 5;
+}
+
+.dl-injected-title {
+    font-family: 'Cinzel', serif;
+    font-size: 3.5rem;
+    color: #fff;
+    margin-bottom: 35px;
+    text-shadow: 0 0 30px rgba(0,0,0,0.7);
+    letter-spacing: 2px;
+}
+
+.dl-injected-btn {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(180deg, #25252b 0%, #15151a 100%);
+    border: 1px solid rgba(255,255,255,0.15);
+    padding: 20px 80px;
+    border-radius: 8px;
+    text-decoration: none;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    min-width: 300px;
+}
+
+.dl-injected-btn:hover {
+    transform: translateY(-5px);
+    border-color: var(--dl-accent);
+    box-shadow: 0 15px 50px rgba(255, 138, 59, 0.15);
+}
+
+.dl-big-text {
+    font-family: 'Cinzel', serif;
+    font-size: 1.5rem;
+    color: #e0e0e0;
+    margin-bottom: 5px;
+    text-transform: uppercase;
+}
+
+.dl-small-text {
+    font-size: 0.9rem;
+    color: #888;
+}
+
+/* Ocultar header original del template */
+#downloads-page-balduneta .rank-header { display: none; }
+
+/* Responsive */
+@media (max-width: 768px) {
+    #downloads-page-balduneta .btn-dl-gradient {
+        grid-template-columns: 1fr 50px;
+    }
+    #downloads-page-balduneta .btn-dl-gradient small,
+    #downloads-page-balduneta .col-size { display: none; }
+    
+    .dl-injected-title { font-size: 2.2rem; }
+    .dl-injected-btn { width: 100%; padding: 20px; }
+}

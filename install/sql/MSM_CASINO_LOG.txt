@@ -1,0 +1,13 @@
+CREATE TABLE [dbo].[{TABLE_PREFIX}CASINO_LOG](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[account_id] [varchar](10) NOT NULL,
+	[box_name] [varchar](50) NULL,
+	[cost_amount] [int] DEFAULT ((0)),
+	[currency_type] [varchar](20) NULL,
+	[prize_name] [varchar](100) NULL,
+	[play_date] [datetime] DEFAULT GETDATE(),
+ CONSTRAINT [PK_{TABLE_PREFIX}CASINO_LOG] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]

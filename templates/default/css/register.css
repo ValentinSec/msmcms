@@ -1,0 +1,124 @@
+/* --- ESTILOS DE REGISTRO BALDUNETA MU --- */
+
+#register-page-balduneta {
+    display: flex;
+    justify-content: center;
+    padding: 50px 0;
+}
+
+.rank-title {
+    font-family: 'Cinzel', serif;
+    color: #ff6600;
+    font-size: 3rem;
+    letter-spacing: 4px;
+    text-shadow: 0 0 20px rgba(255, 102, 0, 0.4);
+    margin-bottom: 10px;
+}
+
+.register-main-container {
+    background: #0d0d0f; /* Fondo oscuro sólido */
+    border: 1px solid rgba(255, 102, 0, 0.15); /* Borde naranja sutil */
+    border-radius: 20px;
+    width: 100%;
+    max-width: 650px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+}
+
+.register-label {
+    display: block;
+    color: #e2e2e2;
+    font-size: 11px;
+    font-weight: 800;
+    margin-bottom: 8px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+}
+
+/* INPUTS CON ICONOS */
+.input-container {
+    position: relative;
+    width: 100%;
+}
+
+.input-icon {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #ff6600;
+    font-size: 14px;
+}
+
+.form-control-balduneta {
+    background: #08080a !important;
+    border: 1px solid rgba(255, 255, 255, 0.05) !important;
+    border-radius: 8px !important;
+    color: #fff !important;
+    padding: 12px 45px !important;
+    font-size: 13px;
+    width: 100%;
+    transition: 0.3s ease;
+}
+
+.form-control-balduneta:focus {
+    border-color: #ff6600 !important;
+    box-shadow: 0 0 10px rgba(255, 102, 0, 0.2) !important;
+    outline: none;
+}
+
+/* OJO CONTRASEÑA */
+.toggle-password {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #444;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+/* CHECKBOX PERSONALIZADO */
+.checkbox-container {
+    background: rgba(255, 255, 255, 0.02);
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+.custom-checkbox {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    font-size: 13px;
+    color: #888;
+}
+
+.custom-checkbox a {
+    color: #ff6600;
+    text-decoration: none;
+    margin-left: 5px;
+}
+
+/* BOTÓN REGISTRARSE GRADIENTE */
+.btn-register-balduneta {
+    background: linear-gradient(90deg, #ff8844 0%, #ff4400 100%);
+    border: none;
+    color: #fff;
+    width: 100%;
+    padding: 15px;
+    border-radius: 10px;
+    font-weight: 900;
+    font-size: 16px;
+    letter-spacing: 2px;
+    margin-top: 20px;
+    box-shadow: 0 5px 20px rgba(255, 68, 0, 0.3);
+    transition: 0.3s;
+}
+
+.btn-register-balduneta:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(255, 68, 0, 0.5);
+    filter: brightness(1.1);
+}
+
+.text-orange { color: #ff6600 !important; text-decoration: none; }

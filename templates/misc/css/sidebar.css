@@ -1,0 +1,167 @@
+/* --- CONTENEDOR PRINCIPAL --- */
+#global-sidebar {
+    position: fixed;
+    right: 0;
+    top: 30%;
+    width: 70px;
+    background: rgba(10, 10, 12, 0.9);
+    border-left: 2px solid #ff6600;
+    z-index: 99999;
+    transition: transform 0.4s ease;
+    padding: 15px 0;
+    border-radius: 15px 0 0 15px;
+}
+
+/* ESTADOS DEL SIDEBAR */
+.sidebar-closed { transform: translateX(100%); }
+.sidebar-open { transform: translateX(0); }
+
+/* --- GATILLO (FLECHA) --- */
+#sidebar-toggle {
+    position: absolute;
+    left: -40px; /* Ancho de la pestaña visible */
+    top: 0;
+    width: 40px;
+    height: 40px;
+    background: #0a0a0c;
+    border: 2px solid #ff6600;
+    border-right: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 5px 0 0 5px;
+}
+
+#toggle-icon { width: 20px; transition: 0.3s; }
+
+/* --- BURBUJAS --- */
+.sidebar-bubbles { 
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    gap: 15px; 
+}
+
+.stat-bubble {
+    width: 45px; 
+    height: 45px;
+    border-radius: 50%;
+    border: 2px solid #ff6600;
+    background: #111;
+    color: #ff6600;
+    display: flex; 
+    align-items: center; 
+    justify-content: center;
+    cursor: pointer; 
+    transition: 0.3s;
+}
+
+.stat-bubble:hover { 
+    background: #ff6600; 
+    color: #000; 
+    box-shadow: 0 0 10px #ff6600; 
+}
+
+/* --- MODAL / POPUP --- */
+#global-modal-overlay {
+    position: fixed;
+    inset: 0; /* Reemplaza top, left, width, height: 100% */
+    background: rgba(0, 0, 0, 0.9);
+    display: none; 
+    justify-content: center;
+    align-items: center;
+    z-index: 1000000 !important; 
+    backdrop-filter: blur(8px);
+}
+
+.stat-modal-content {
+    background: #0a0a0c;
+    border: 2px solid #ff6600;
+    padding: 30px;
+    border-radius: 15px;
+    width: 95%;
+    max-width: 450px;
+    box-shadow: 0 0 50px rgba(255, 102, 0, 0.2);
+}
+
+/* FILAS DE DATOS DENTRO DEL MODAL */
+.stat-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    border-bottom: 1px solid rgba(255,102,0,0.1);
+    color: #fff;
+}
+
+.stat-row span:first-child { 
+    color: #ff6600; 
+    font-weight: bold; 
+}
+
+/* Botón naranja principal */
+.btn-orange {
+    background-color: #ff6600;
+    border-color: #ff6600;
+    color: #000;
+    transition: 0.3s;
+}
+.btn-orange:hover {
+    background-color: #e65c00;
+    color: #fff;
+    box-shadow: 0 0 15px rgba(255, 102, 0, 0.4);
+}
+
+/* Botón de borde naranja (Ver más info) */
+.btn-outline-orange {
+    color: #ff6600;
+    border: 1px solid #ff6600;
+    background: transparent;
+}
+.btn-outline-orange:hover {
+    background: rgba(255, 102, 0, 0.1);
+    color: #ff6600;
+}
+
+/* Ajuste para los textos pequeños de los botones inferiores */
+.small {
+    font-size: 0.85rem;
+}
+/* --- GATILLO (FLECHA CSS REFORZADA) --- */
+#sidebar-toggle {
+    position: absolute;
+    left: -40px;
+    top: 0;
+    width: 40px;
+    height: 48px;
+    background: #0a0a0c;
+    border: 2px solid #ff6600;
+    border-right: none;
+    cursor: pointer;
+    border-radius: 8px 0 0 8px;
+    display: block !important; /* Cambiamos a block para control posicional */
+}
+
+/* El dibujo de la flecha */
+#sidebar-toggle::after {
+    content: ""; /* Obligatorio para que se vea */
+    position: absolute;
+    top: 50%;
+    left: 55%;
+    width: 12px;
+    height: 12px;
+    border-top: 3px solid #ff6600;
+    border-left: 3px solid #ff6600;
+    transform: translate(-50%, -50%) rotate(-45deg); /* Centrado y rotado */
+    transition: all 0.4s ease;
+}
+
+/* Animación al abrir */
+.sidebar-open #sidebar-toggle::after {
+    left: 45%;
+    transform: translate(-50%, -50%) rotate(135deg);
+}
+
+#sidebar-toggle:hover::after {
+    border-color: #fff;
+}

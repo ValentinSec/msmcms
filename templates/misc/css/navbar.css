@@ -1,0 +1,190 @@
+/* templates/misc/css/navbar.css */
+
+/* --- ESTILOS ORIGINALES (BASE) --- */
+
+/* Contenedor Principal Adaptable */
+.balduneta-navbar-fluid {
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.7) 100%) !important;
+    backdrop-filter: blur(12px) saturate(180%);
+    -webkit-backdrop-filter: blur(12px) saturate(180%);
+    border-bottom: 1px solid rgba(215, 73, 33, 0.2);
+    padding: 0.75rem 0;
+    transition: all 0.4s ease;
+}
+
+/* Tipografía Roboto con Sombra de Lectura */
+.balduneta-navbar-fluid .nav-link {
+    font-family: 'Roboto', sans-serif !important;
+    color: #E6D6C6 !important; /* --guide-text-primary */
+    font-size: 13.5px;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.5); /* Garantiza lectura en fondos claros */
+    padding: 0.5rem 1.25rem !important;
+}
+
+.balduneta-navbar-fluid .nav-link:hover {
+    color: #FF8A3B !important; /* --guide-fire-primary */
+}
+
+/* Botón Primario Adaptable (ESTILO VIEJO) */
+.btn-balduneta-primary {
+    font-family: 'Roboto', sans-serif !important;
+    background: rgba(215, 73, 33, 0.15);
+    border: 1px solid rgba(215, 73, 33, 0.4);
+    color: #E6D6C6 !important;
+    padding: 8px 18px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 700;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-balduneta-primary:hover {
+    background: #D74921; /* --guide-fire-secondary */
+    box-shadow: 0 0 15px rgba(215, 73, 33, 0.3);
+    color: #fff !important;
+}
+
+/* Logo */
+.nav-logo {
+    height: 48px;
+    width: auto;
+    object-fit: contain;
+    transition: transform 0.3s ease;
+}
+
+.nav-logo:hover {
+    transform: scale(1.05);
+}
+
+/* Responsive Action Group */
+.nav-actions-group {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+@media (max-width: 991px) {
+    .balduneta-navbar-fluid .navbar-collapse {
+        background: #0E0A0A; /* --guide-bg-tertiary */
+        margin-top: 1rem;
+        padding: 1.5rem;
+        border-radius: 12px;
+        border: 1px solid rgba(215, 73, 33, 0.2);
+    }
+}
+
+.btn-admincp-nav {
+    background: #222 !important;
+    border: 1px solid #FF8A3B !important;
+    color: #FF8A3B !important;
+    font-size: 11px !important;
+    font-weight: bold !important;
+    padding: 5px 12px !important;
+    transition: all 0.3s ease !important;
+}
+
+.btn-admincp-nav:hover {
+    background: #FF8A3B !important;
+    color: #fff !important;
+    box-shadow: 0 0 10px rgba(255, 138, 59, 0.4);
+}
+
+/* --- ESTILOS ESPECÍFICOS TEMPLATE CLASSIC --- */
+
+/* 1. Botón REGISTRARSE (Naranja Gradiente) */
+.btn-register-nav {
+    background: linear-gradient(135deg, #ff7700 0%, #cc4400 100%) !important;
+    border: none !important;
+    color: #fff !important;
+    font-size: 14px;
+    font-weight: 700;
+    padding: 8px 22px;
+    border-radius: 6px;
+    box-shadow: 0 4px 15px rgba(255, 102, 0, 0.3);
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    text-decoration: none;
+    display: inline-block;
+    line-height: 1.5;
+    vertical-align: middle;
+}
+
+.btn-register-nav:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 102, 0, 0.5);
+    color: #fff !important;
+    background: linear-gradient(135deg, #ff8800 0%, #dd5500 100%) !important;
+}
+
+/* 2. Botón INICIAR SESIÓN (Transparente con Borde) */
+.btn-login-nav {
+    background: transparent !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    color: #fff !important;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 8px 18px;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-block;
+    line-height: 1.5;
+    vertical-align: middle;
+    margin-right: 10px;
+}
+
+.btn-login-nav:hover {
+    background: rgba(255, 255, 255, 0.1) !important;
+    border-color: rgba(255, 255, 255, 0.5) !important;
+    color: #fff !important;
+}
+
+.btn-login-nav i {
+    margin-right: 5px;
+}
+
+/* 3. Botón PANEL DE USUARIO (Nuevo: Blanco Puro) */
+.btn-panel {
+    background: transparent !important;
+    border: 1px solid #ffffff !important;
+    color: #ffffff !important;
+    font-size: 13px !important;
+    font-weight: 700 !important;
+    padding: 8px 18px !important;
+    border-radius: 6px;
+    text-transform: uppercase;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+}
+
+.btn-panel:hover {
+    background: rgba(255, 255, 255, 0.15) !important; /* Fondo blanco sutil al pasar mouse */
+    color: #ffffff !important;
+    box-shadow: 0 0 12px rgba(255, 255, 255, 0.4);
+    transform: translateY(-1px);
+}
+
+.btn-panel i {
+    font-size: 14px;
+}
+
+/* Ajuste responsive */
+@media (max-width: 991px) {
+    .btn-register-nav, .btn-login-nav, .btn-panel {
+        display: block;
+        width: 100%;
+        margin-bottom: 10px;
+        text-align: center;
+    }
+    .btn-login-nav { margin-right: 0; }
+}

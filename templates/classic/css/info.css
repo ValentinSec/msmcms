@@ -1,0 +1,217 @@
+/* templates/classic/css/info.css */
+
+/* --- FUENTES --- */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Cinzel:wght@400;700;900&display=swap');
+
+/* --- CONTENEDOR PRINCIPAL --- */
+.info-container {
+    display: flex;
+    gap: 30px;
+    min-height: 600px;
+    color: #ccc;
+    font-family: 'Poppins', sans-serif;
+    position: relative;
+    align-items: flex-start;
+}
+
+/* --- SIDEBAR (MENÚ IZQUIERDO) --- */
+.info-sidebar {
+    width: 280px;
+    background: #111; /* Fondo oscuro sólido */
+    border-radius: 8px;
+    padding: 20px;
+    border: 1px solid #333;
+    flex-shrink: 0;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+.info-menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.info-menu li {
+    padding: 15px 20px;
+    margin-bottom: 8px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+    background: transparent;
+    border-left: 3px solid transparent;
+    color: #888;
+    font-weight: 500;
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.info-menu li i {
+    width: 20px;
+    text-align: center;
+    transition: 0.3s;
+}
+
+.info-menu li:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: #fff;
+    padding-left: 25px; /* Efecto de deslizamiento */
+}
+
+.info-menu li.active {
+    background: linear-gradient(90deg, rgba(255, 138, 59, 0.1) 0%, transparent 100%);
+    border-left: 3px solid #FF8A3B; /* Naranja/Dorado */
+    color: #FF8A3B;
+    font-weight: 700;
+    text-shadow: 0 0 10px rgba(255, 138, 59, 0.2);
+}
+
+.info-menu li.active i {
+    color: #FF8A3B;
+}
+
+/* --- ÁREA DE CONTENIDO (DERECHA) --- */
+.info-content {
+    flex-grow: 1;
+    background: rgba(10, 10, 10, 0.85); /* Fondo semitransparente oscuro */
+    border-radius: 8px;
+    padding: 40px;
+    border: 1px solid #333;
+    min-height: 500px;
+    position: relative;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+/* --- TABLAS DE INFORMACIÓN (General y Custom) --- */
+.info-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 10px; /* Separación entre filas */
+}
+
+.info-table tr {
+    transition: 0.2s;
+}
+
+.info-table tr:hover td {
+    background: rgba(255, 255, 255, 0.03);
+    transform: translateX(5px);
+}
+
+.info-table td {
+    padding: 15px 20px;
+    border: none;
+    border-bottom: 1px solid #222;
+}
+
+/* Primera columna (Labels): Fuente Cinzel, Color Dorado */
+.info-table td:first-child {
+    color: #FF8A3B;
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    width: 40%;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    letter-spacing: 0.5px;
+    border-left: 2px solid transparent;
+}
+
+.info-table tr:hover td:first-child {
+    border-left: 2px solid #FF8A3B;
+}
+
+/* Segunda columna (Valores) */
+.info-table td:last-child {
+    color: #eee;
+    text-align: right;
+    font-weight: 500;
+}
+
+/* --- ESTILOS PARA INVASIONES (Si retorna una tabla) --- */
+.invasion-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.invasion-table th {
+    text-align: left;
+    padding: 15px;
+    background: #1a1a1a;
+    color: #FF8A3B;
+    font-family: 'Cinzel', serif;
+    border-bottom: 2px solid #333;
+}
+
+.invasion-table td {
+    padding: 15px;
+    border-bottom: 1px solid #222;
+    color: #ccc;
+}
+
+.invasion-name {
+    font-weight: 700;
+    color: #fff;
+}
+
+.invasion-time {
+    font-family: 'Courier New', monospace;
+    font-weight: bold;
+    background: #222;
+    padding: 5px 10px;
+    border-radius: 4px;
+    color: #2ecc71; /* Verde online */
+}
+
+.invasion-time.offline {
+    color: #e74c3c; /* Rojo offline */
+}
+
+/* --- RESPONSIVE --- */
+@media (max-width: 991px) {
+    .info-container {
+        flex-direction: column;
+    }
+    
+    .info-sidebar {
+        width: 100%;
+    }
+    
+    .info-menu {
+        display: flex;
+        overflow-x: auto;
+        padding-bottom: 10px;
+        gap: 10px;
+    }
+    
+    .info-menu li {
+        white-space: nowrap;
+        margin: 0;
+        border-left: none;
+        border-bottom: 3px solid transparent;
+    }
+    
+    .info-menu li.active {
+        border-left: none;
+        border-bottom: 3px solid #FF8A3B;
+        background: rgba(0,0,0,0.2);
+    }
+    
+    .info-table td {
+        display: block;
+        width: 100%;
+        text-align: left;
+        padding: 5px 10px;
+    }
+    
+    .info-table td:first-child {
+        margin-top: 10px;
+        color: #FF8A3B;
+    }
+    
+    .info-table td:last-child {
+        text-align: left;
+        padding-bottom: 15px;
+        border-bottom: 1px solid #333;
+    }
+}

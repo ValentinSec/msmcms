@@ -1,0 +1,211 @@
+/* --- CONTENEDORES --- */
+.profile-card {
+    background: rgba(10, 10, 12, 0.95);
+    border: 1px solid rgba(255, 102, 0, 0.2);
+    border-radius: 8px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    transition: border-color 0.3s ease;
+}
+
+.profile-card:hover {
+    border-color: rgba(255, 102, 0, 0.5);
+}
+
+.section-title {
+    border-bottom: 1px solid rgba(255, 102, 0, 0.2);
+    padding-bottom: 10px;
+    margin-bottom: 25px;
+    font-size: 1.2rem;
+}
+
+.profile-wrapper { 
+    font-family: 'Cinzel', serif; 
+    color: #fff; 
+}
+
+/* --- TIPOGRAFÍAS --- */
+.trajan-title { 
+    font-family: 'Trajan Pro', serif; 
+    color: #ff6600; 
+    text-transform: uppercase; 
+    letter-spacing: 1px; 
+}
+
+.cinzel-text { 
+    font-family: 'Cinzel', serif; 
+    color: #ffffff; 
+}
+
+/* --- ESTADÍSTICAS --- */
+.stats-header-box {
+    gap: 20px;
+}
+
+.class-avatar-img {
+    width: 85px;
+    height: 85px;
+    border: 1px solid #ff6600;
+    border-radius: 4px;
+    object-fit: cover;
+}
+
+/* SEPARACIÓN DE COLUMNAS */
+.col-6:first-child {
+    padding-right: 25px !important; 
+    border-right: 1px solid rgba(255, 102, 0, 0.3); /* Línea naranja divisoria */
+}
+
+.col-6:last-child {
+    padding-left: 25px !important;
+}
+
+/* Limpiamos el estilo anterior */
+.stat-line {
+    display: flex;
+    justify-content: space-between; /* Nombre a la izquierda, número a la derecha */
+    align-items: center;
+    padding: 2px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    font-family: 'Cinzel', serif;
+}
+
+.stat-line span:first-child {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.75rem;
+    font-weight: normal;
+}
+
+.stat-line span.text-orange {
+    color: #ff6600 !important;
+    font-weight: bold;
+    font-size: 0.9rem;
+    text-align: right;
+}
+
+/* Para que las columnas no estén pegadas */
+.stats-container .col-6 {
+    padding: 0 10px;
+}
+
+.stat-avatar img {
+    box-shadow: 0 0 10px rgba(0, 150, 255, 0.2);
+}
+
+/* --- EQUIPAMIENTO e INVENTARIO --- */
+.equipment-map {
+    width: 100%;
+    max-width: 320px;
+    height: 380px;
+    background: url('<?php echo __BASE_URL__; ?>img/equipment.png') no-repeat center;
+    background-size: contain;
+    position: relative;
+    margin: 0 auto;
+}
+
+.equipment-display-area {
+    height: 380px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+    margin-top: 10px;
+}
+
+.inventory-grid-1x3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    padding: 10px;
+}
+
+.inv-slot {
+    aspect-ratio: 1/1;
+    background: #050505;
+    border: 1px solid #222;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.inv-slot.active {
+    border-color: #ff6600;
+    box-shadow: inset 0 0 10px rgba(255, 102, 0, 0.15);
+}
+
+/* --- DIVISORES Y BARRAS --- */
+hr.border-orange {
+    border-top: 1px solid #ff6600 !important;
+    opacity: 0.3;
+}
+
+.profile-divider {
+    border-color: #ff6600 !important;
+    opacity: 0.2;
+    margin: 35px 0;
+}
+
+.exp-bar-bg { height: 6px; background: #1a1a1a; border-radius: 3px; overflow: hidden; }
+.exp-bar-fill { height: 100%; background: #ff6600; box-shadow: 0 0 8px #ff6600; }
+
+.exp-bar-container { height: 4px; background: #111; margin-top: 10px; border-radius: 2px; overflow: hidden; }
+.exp-bar-progress { width: 75%; height: 100%; background: #ff6600; box-shadow: 0 0 10px #ff6600; }
+
+/* --- LOG DE ACTIVIDAD --- */
+.activity-log {
+    overflow-y: auto;
+    max-height: 500px;
+    padding-right: 10px;
+}
+
+.activity-log::-webkit-scrollbar { width: 3px; }
+.activity-log::-webkit-scrollbar-thumb { background: #ff6600; }
+
+.log-scroll {
+    max-height: 450px;
+    overflow-y: auto;
+    padding-right: 10px;
+}
+
+.log-entry {
+    padding: 10px;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    font-size: 0.85rem;
+}
+
+/* --- OTROS --- */
+.name-display { font-size: 2rem; margin-top: 15px; }
+
+.activity-log i {
+    font-style: normal;
+    color: #aaa;
+    font-size: 0.8rem;
+    display: inline-block;
+    margin-left: 4px;
+}
+
+.time-relative {
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 0.8rem;
+    margin-left: 5px;
+    font-style: italic;
+}
+
+.log-item b {
+    color: #ff6600; /* Opcional: poner los nombres en naranja para que resalten */
+    font-weight: 600;
+}
+
+.exp-bar-container {
+    height: 8px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 102, 0, 0.2);
+}
+
+.exp-bar-progress {
+    height: 100%;
+    background: linear-gradient(90deg, #ff6600, #ffcc00);
+    box-shadow: 0 0 10px rgba(255, 102, 0, 0.5);
+    transition: width 0.5s ease-in-out;
+}

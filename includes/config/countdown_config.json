@@ -1,0 +1,9 @@
+{
+    "active": 0,
+    "event_name": "APERTURA DEL SERVIDOR",
+    "target_date": "2026-02-27T17:00",
+    "theme": "classic",
+    "finish_action": "message",
+    "finish_text": "¡El servidor está online!",
+    "finish_url": ""
+}

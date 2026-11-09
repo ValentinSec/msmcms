@@ -1,0 +1,325 @@
+/* templates/classic/css/register.css */
+
+/* --- IMPORTACIÓN DE FUENTES --- */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+/* Cinzel se asume cargada globalmente */
+
+/* --- 1. CONTENEDOR PRINCIPAL --- */
+#downloads-page-balduneta, 
+#register-page-balduneta {
+    background-color: #f9f9f9;
+    position: relative;
+    padding-bottom: 80px;
+    min-height: 850px;
+    overflow-x: hidden;
+    font-family: 'Poppins', sans-serif !important;
+    color: #333;
+}
+
+/* --- 2. IMAGEN LATERAL --- */
+#register-page-balduneta::before {
+    content: '';
+    position: absolute;
+    top: 50px;
+    right: 5%;
+    width: 700px;
+    height: 800px;
+    background-image: url('/img/misc/register-classic.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: top center;
+    z-index: 0;
+    pointer-events: none;
+}
+
+/* --- 3. HEADER (Título Premium) --- */
+.rank-header {
+    text-align: left !important;
+    max-width: 600px;
+    margin-left: 10%;
+    margin-bottom: 40px !important; /* Un poco más de espacio */
+    padding-top: 60px;
+    position: relative;
+    z-index: 2;
+}
+
+/* EFECTO DE METAL OSCURO PARA EL TÍTULO */
+.rank-title {
+    font-family: 'Cinzel', serif !important;
+    font-size: 4rem !important; /* Un poco más grande */
+    font-weight: 900 !important; /* Bien grueso para que se note el efecto */
+    text-transform: uppercase !important; /* Mayúsculas quedan mejor en Cinzel */
+    margin-bottom: 10px;
+    letter-spacing: -1px;
+    line-height: 1;
+
+    /* El Truco del Degradado Metálico */
+    background: linear-gradient(
+        135deg, 
+        #444444 0%,   /* Gris medio */
+        #000000 40%,   /* Negro puro (punto focal) */
+        #222222 70%,   /* Gris oscuro */
+        #555555 100%   /* Reflejo final */
+    );
+    
+    /* Recortar el fondo con la forma del texto */
+    -webkit-background-clip: text;
+    background-clip: text;
+    
+    /* Hacer el texto transparente para ver el fondo */
+    -webkit-text-fill-color: transparent;
+    color: transparent !important;
+
+    /* Sombra suave para profundidad */
+    filter: drop-shadow(0px 4px 3px rgba(0,0,0,0.2));
+}
+
+.rank-subtitle {
+    font-family: 'Poppins', sans-serif !important;
+    color: #777 !important;
+    font-size: 1.1rem !important;
+    max-width: 500px;
+    line-height: 1.6;
+    font-weight: 500;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 20px;
+}
+
+/* --- 4. CONTENEDOR DEL FORMULARIO --- */
+.register-main-container {
+    max-width: 650px;
+    margin-left: 10%;
+    padding: 0 !important;
+    position: relative;
+    z-index: 2;
+}
+
+/* --- 5. ALERTA VIOLETA --- */
+.alert-info, .alert-warning {
+    font-family: 'Poppins', sans-serif !important;
+    background-color: #f3e5f5 !important;
+    border: 1px solid #e1bee7 !important;
+    color: #7b1fa2 !important;
+    border-radius: 8px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-bottom: 30px;
+    box-shadow: 0 5px 15px rgba(123, 31, 162, 0.1); /* Sombra sutil violeta */
+}
+
+.alert i {
+    font-size: 1.4rem;
+    color: #8e24aa;
+}
+
+/* --- 6. GRILLA DEL FORMULARIO --- */
+.register-form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 30px;
+    row-gap: 5px;
+}
+
+.form-group {
+    margin-bottom: 15px !important;
+}
+
+.checkbox-container,
+.g-recaptcha,
+.btn-register-balduneta,
+.alert {
+    grid-column: span 2;
+}
+
+/* --- 7. INPUTS --- */
+.register-label {
+    font-family: 'Poppins', sans-serif !important;
+    display: block;
+    font-size: 0.85rem;
+    color: #555;
+    margin-bottom: 8px;
+    font-weight: 700; /* Etiquetas más gruesas */
+    text-align: left;
+    text-transform: uppercase; /* Etiquetas en mayúsculas */
+    letter-spacing: 0.5px;
+}
+
+.input-icon { display: none !important; }
+.input-container { width: 100%; }
+
+.form-control-balduneta {
+    font-family: 'Poppins', sans-serif !important;
+    width: 100%;
+    height: 50px; /* Un poco más altos */
+    padding: 10px 15px;
+    background-color: #fff;
+    border: 2px solid #eee; /* Borde más grueso y claro */
+    border-radius: 6px;
+    font-size: 0.95rem;
+    color: #333;
+    transition: all 0.3s;
+    font-weight: 500;
+}
+
+.form-control-balduneta:focus {
+    border-color: #000;
+    background-color: #fff;
+    outline: none;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+}
+.form-control-balduneta::placeholder { color: #aaa; font-weight: 400; }
+
+/* --- 8. CHECKBOX --- */
+.custom-checkbox {
+    font-family: 'Poppins', sans-serif !important;
+    display: flex;
+    align-items: center;
+    font-size: 0.95rem;
+    color: #444;
+    cursor: pointer;
+    margin-top: 15px;
+    font-weight: 500;
+}
+
+.custom-checkbox input {
+    width: 20px;
+    height: 20px;
+    margin-right: 12px;
+    accent-color: #000;
+    border: 2px solid #ccc;
+    cursor: pointer;
+}
+
+.custom-checkbox a {
+    color: #000;
+    font-weight: 700;
+    text-decoration: none;
+    margin-left: 5px;
+    border-bottom: 2px solid #000; /* Subrayado grueso */
+}
+
+/* --- 9. BOTÓN "CREAR CUENTA" --- */
+.btn-register-balduneta {
+    font-family: 'Poppins', sans-serif !important;
+    background-color: #000;
+    color: #fff;
+    border: none;
+    padding: 16px 40px; /* Botón más grande */
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    width: auto;
+    justify-self: start;
+    margin-top: 20px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.btn-register-balduneta:hover {
+    background-color: #222;
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+}
+
+/* --- 10. RESPONSIVE --- */
+@media (max-width: 1200px) {
+    #register-page-balduneta::before {
+        opacity: 0.1;
+        right: -200px;
+    }
+}
+
+@media (max-width: 991px) {
+    .register-form { grid-template-columns: 1fr; }
+    .checkbox-container, .btn-register-balduneta { grid-column: span 1; }
+    
+    .rank-header, .register-main-container {
+        margin-left: 0;
+        max-width: 100%;
+        padding: 0 25px !important;
+        text-align: center !important;
+    }
+    
+    .rank-header { text-align: center !important; }
+    .rank-subtitle { margin: 0 auto; }
+    .register-label { text-align: center; }
+    
+    .btn-register-balduneta {
+        width: 100%;
+        justify-self: center;
+    }
+    
+    #register-page-balduneta::before { display: none; }
+}
+
+/* --- 7. INPUTS (Estilo Clean - Poppins) --- */
+.register-label {
+    font-family: 'Poppins', sans-serif !important;
+    display: block;
+    font-size: 0.85rem;
+    color: #555;
+    margin-bottom: 8px;
+    font-weight: 700;
+    text-align: left;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.input-container, 
+.input-group-balduneta { /* Agregamos la clase del grupo ID code */
+    width: 100%;
+    position: relative; 
+}
+
+/* Estilo del Ícono "Botón" */
+/* Usamos !important en left y width para vencer los estilos inline del PHP */
+.input-icon,
+.input-group-balduneta .input-icon {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    left: 0 !important; /* Forzamos a la izquierda pegada */
+    top: 0;
+    height: 100%;
+    width: 50px !important; /* Ancho fijo */
+    color: #666;
+    z-index: 10;
+    pointer-events: none;
+    border-right: 2px solid #eee; /* La línea separadora */
+    font-size: 1rem;
+    background: transparent;
+}
+
+.form-control-balduneta {
+    font-family: 'Poppins', sans-serif !important;
+    width: 100%;
+    height: 50px;
+    /* IMPORTANTE: 60px !important para empujar el texto y que no pise el ícono */
+    padding: 10px 15px 10px 60px !important; 
+    background-color: #fff;
+    border: 2px solid #eee;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    color: #333;
+    transition: all 0.2s;
+    font-weight: 500;
+}
+
+.form-control-balduneta:focus {
+    border-color: #000;
+    background-color: #fff;
+    outline: none;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+}
+
+.form-control-balduneta::placeholder { 
+    color: #aaa; 
+    font-weight: 400; 
+}

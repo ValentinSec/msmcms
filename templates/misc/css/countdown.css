@@ -1,0 +1,222 @@
+/* =========================================
+   FLOATING COUNTDOWN STYLES
+   ========================================= */
+
+/* Contenedor Principal Flotante */
+.floating-countdown {
+    position: fixed;
+    top: 20%; /* Ajustar altura vertical */
+    right: 0;
+    z-index: 9999;
+    width: 320px; /* Ancho fijo para el widget */
+    transform: translateX(120%); /* Empieza escondido a la derecha */
+    animation: slideInRight 1s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
+    animation-delay: 1s; /* Espera 1 seg para no molestar la carga inicial */
+    font-family: sans-serif; /* Fallback font */
+}
+
+/* Animación de Entrada */
+@keyframes slideInRight {
+    to { transform: translateX(0); }
+}
+
+/* Wrapper del Diseño */
+.countdown-wrapper {
+    position: relative;
+    padding: 20px 15px;
+    border-top-left-radius: 15px;
+    border-bottom-left-radius: 15px;
+    /* En modo sidebar, quitamos el borde derecho y radius derecho para que pegue al borde */
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-right: none !important;
+    text-align: center;
+    transition: all 0.4s ease;
+    box-shadow: -5px 5px 20px rgba(0,0,0,0.5);
+}
+
+/* Estado Colapsado (Minimizado) */
+.floating-countdown.collapsed .countdown-wrapper {
+    transform: translateX(100%); /* Se esconde */
+}
+
+.floating-countdown.collapsed .toggle-btn {
+    left: -40px; /* El botón se mueve para quedar visible */
+    background: #ffae00; /* Color llamativo cuando está cerrado */
+    color: #000;
+}
+.floating-countdown.collapsed .toggle-btn i {
+    transform: rotate(180deg);
+}
+
+/* Botón de Toggle (Abrir/Cerrar) */
+.toggle-btn {
+    position: absolute;
+    top: 50%;
+    left: -15px; /* Sobresale un poco a la izquierda */
+    transform: translateY(-50%);
+    width: 30px;
+    height: 60px;
+    background: rgba(0,0,0,0.8);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-right: none;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 10;
+    transition: all 0.3s ease;
+}
+.toggle-btn:hover {
+    background: #333;
+    left: -20px; /* Efecto hover */
+}
+
+/* Ajustes de Texto para el Widget */
+.event-title { 
+    margin: 0 0 15px 0; 
+    text-transform: uppercase; 
+    letter-spacing: 1px; 
+    line-height: 1.2; 
+    font-size: 18px !important; /* Texto más chico para el widget */
+}
+
+.timer-flex { 
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    gap: 8px; 
+}
+
+.timer-box { 
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    justify-content: center; 
+    min-width: 50px; 
+}
+
+.time-val { 
+    line-height: 1; 
+    font-size: 24px !important; /* Números más chicos */
+}
+
+.time-label { 
+    font-size: 8px !important; 
+    text-transform: uppercase; 
+    margin-top: 3px; 
+}
+
+.timer-separator { 
+    font-size: 20px !important; 
+    font-weight: bold; 
+    margin-top: -10px; 
+}
+
+/* MENSAJE FINAL */
+.finish-msg h3 { 
+    margin: 0; font-size: 18px; text-transform: uppercase; 
+    color: #fff; text-shadow: 0 0 10px rgba(255,255,255,0.5); 
+    animation: pulse 2s infinite;
+}
+@keyframes pulse { 0% { opacity: 0.8; } 50% { opacity: 1; transform: scale(1.05); } 100% { opacity: 0.8; } }
+
+/* =========================================
+   THEMES (Adaptados para Sidebar)
+   ========================================= */
+
+/* 1. CLASSIC */
+.theme-classic { background: rgba(0, 0, 0, 0.9); border: 2px solid #cba660; border-right: none; }
+.theme-classic .event-title { font-family: 'Cinzel', serif; color: #cba660; font-weight: 700; text-shadow: 0 2px 5px rgba(0,0,0,0.8); }
+.theme-classic .time-val { font-family: 'Cinzel', serif; color: #fff; }
+.theme-classic .time-label { color: #cba660; font-family: 'Cinzel', serif; }
+.theme-classic .timer-separator { color: #666; }
+
+/* 2. MODERN */
+.theme-modern { background: rgba(10, 25, 47, 0.95); border: 1px solid #00f3ff; border-right: none; }
+.theme-modern .event-title { font-family: 'Orbitron', sans-serif; color: #00f3ff; text-shadow: 0 0 10px #00f3ff; }
+.theme-modern .time-val { font-family: 'Orbitron', sans-serif; color: #fff; text-shadow: 0 0 5px #fff; }
+.theme-modern .time-label { color: #00f3ff; font-family: sans-serif; }
+.theme-modern .timer-separator { color: #00f3ff; opacity: 0.5; }
+
+/* 3. FIRE */
+.theme-fire { background: linear-gradient(to bottom, #2b0a0a, #000); border: 2px solid #ff4d4d; border-right: none; }
+.theme-fire .event-title { font-family: 'Cinzel', serif; color: #ff4d4d; text-shadow: 0 0 10px #ff0000; font-weight: 700; }
+.theme-fire .time-val { font-family: 'Cinzel', serif; color: #fff; text-shadow: 0 0 5px #ff4d4d; }
+.theme-fire .time-label { color: #ffae00; }
+.theme-fire .timer-separator { color: #ff4d4d; }
+
+/* 4. ICE */
+.theme-ice { background: rgba(10, 20, 30, 0.9); border: 1px solid #aaddff; border-right: none; backdrop-filter: blur(5px); }
+.theme-ice .event-title { font-family: 'Cinzel', serif; color: #e6f7ff; text-shadow: 0 0 15px #0099ff; font-weight: 700; }
+.theme-ice .time-val { font-family: 'Cinzel', serif; color: #fff; text-shadow: 0 0 10px #00ccff; }
+.theme-ice .time-label { color: #aaddff; }
+.theme-ice .timer-separator { color: #aaddff; }
+
+/* 5. NATURE */
+.theme-nature { background: rgba(18, 41, 19, 0.95); border: 2px solid #4caf50; border-right: none; }
+.theme-nature .event-title { font-family: 'Cinzel', serif; color: #81c784; text-shadow: 0 2px 5px #000; }
+.theme-nature .time-val { font-family: 'Cinzel', serif; color: #fff; }
+.theme-nature .time-label { color: #a5d6a7; }
+.theme-nature .timer-separator { color: #4caf50; }
+
+/* 6. MINIMAL */
+.theme-minimal { background: rgba(0,0,0,0.8); border-bottom: 1px solid rgba(255,255,255,0.2); border-radius: 0; }
+.theme-minimal .event-title { font-family: 'Montserrat', sans-serif; font-weight: 300; letter-spacing: 3px; color: #fff; }
+.theme-minimal .time-val { font-family: 'Montserrat', sans-serif; font-weight: 100; color: #fff; }
+.theme-minimal .time-label { color: #888; font-weight: 400; }
+.theme-minimal .timer-separator { color: #444; }
+
+/* 7. CARDS DARK */
+.theme-cards-dark .timer-separator { display: none; }
+.theme-cards-dark .event-title { font-family: 'Rajdhani', sans-serif; color: #eee; font-weight: 700; }
+.theme-cards-dark .timer-box { background: #151515; border: 1px solid #333; padding: 5px; border-radius: 6px; min-width: 55px; }
+.theme-cards-dark .time-val { font-family: 'Rajdhani', sans-serif; color: #fff; font-weight: 700; }
+.theme-cards-dark .time-label { color: #666; font-weight: 600; }
+
+/* 8. CARDS GLASS */
+.theme-cards-glass { background: rgba(0,0,0,0.6); backdrop-filter: blur(10px); border:none; }
+.theme-cards-glass .timer-separator { display: none; }
+.theme-cards-glass .event-title { font-family: 'Montserrat', sans-serif; font-weight: 700; color: #fff; }
+.theme-cards-glass .timer-box { background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 8px; padding: 5px; min-width: 55px; }
+.theme-cards-glass .time-val { font-family: 'Montserrat', sans-serif; color: #fff; font-weight: 700; }
+.theme-cards-glass .time-label { color: rgba(255,255,255,0.7); }
+
+/* 9. CARDS GOLD */
+.theme-cards-gold .timer-separator { display: none; }
+.theme-cards-gold .event-title { font-family: 'Cinzel', serif; color: #ffdb58; text-shadow: 0 2px 10px #000; font-weight: 700; }
+.theme-cards-gold .timer-box { background: linear-gradient(to bottom, #332812, #1a1408); border: 1px solid #bfa058; border-radius: 4px; padding: 5px; min-width: 55px; }
+.theme-cards-gold .time-val { font-family: 'Cinzel', serif; color: #fff; text-shadow: 0 0 5px #bfa058; }
+.theme-cards-gold .time-label { color: #bfa058; font-size: 8px; }
+
+/* 10. CARDS CYBER */
+.theme-cards-cyber .timer-separator { display: none; }
+.theme-cards-cyber .event-title { font-family: 'Orbitron', sans-serif; color: #fcee0a; }
+.theme-cards-cyber .timer-box { background: #000; border: 1px solid #fcee0a; padding: 5px; min-width: 55px; }
+.theme-cards-cyber .time-val { font-family: 'Orbitron', sans-serif; color: #fcee0a; }
+.theme-cards-cyber .time-label { background: #fcee0a; color: #000; width: 100%; font-weight: 800; margin-top: 3px; }
+
+/* RESPONSIVE: En móviles se va abajo o se achica */
+@media (max-width: 768px) {
+    .floating-countdown {
+        width: 100%;
+        top: auto; bottom: 0; right: 0;
+        transform: translateY(100%);
+        animation: slideUp 1s forwards;
+    }
+    .countdown-wrapper {
+        border-radius: 0; border: none; border-top: 2px solid #444;
+        padding: 10px;
+    }
+    .toggle-btn {
+        top: -30px; left: 50%; transform: translateX(-50%) rotate(-90deg);
+        border-radius: 5px 5px 0 0; width: 50px; height: 30px;
+    }
+    .floating-countdown.collapsed .countdown-wrapper {
+        transform: translateY(100%);
+    }
+    @keyframes slideUp { to { transform: translateY(0); } }
+}

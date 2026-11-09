@@ -1,0 +1,270 @@
+/* =============================================
+   RANKINGS ESTILO BALDUNETA - COMPLETO
+   ============================================= */
+
+.rankings-wrapper {
+    width: 100%;
+    margin: 0 auto;
+    padding: 20px 0;
+}
+
+/* T赤tulos */
+.rank-title {
+    font-family: 'Cinzel', serif;
+    color: #ff6600;
+    font-size: clamp(2.5rem, 6vw, 3.5rem);
+    letter-spacing: 4px;
+    text-shadow: 0 0 20px rgba(255, 102, 0, 0.4);
+    margin-bottom: 5px;
+    text-align: center;
+}
+
+.rank-subtitle {
+    color: #8a8f9d;
+    font-size: 1.1rem;
+    margin-bottom: 40px;
+    text-align: center;
+}
+
+/* Navegaci車n de Botones */
+.rank-nav-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 50px;
+}
+
+.rank-nav-btn {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 102, 0, 0.2);
+    color: #8a8f9d;
+    padding: 12px 24px;
+    border-radius: 8px;
+    text-decoration: none !important;
+    font-size: 13px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+}
+
+.rank-nav-btn i {
+    margin-right: 10px;
+    color: #ff6600;
+}
+
+.rank-nav-btn:hover, .rank-nav-btn.active {
+    background: linear-gradient(135deg, #ff7700 0%, #ff4400 100%);
+    border-color: transparent;
+    color: #fff !important;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 20px rgba(255, 102, 0, 0.4);
+}
+
+.rank-nav-btn:hover i, .rank-nav-btn.active i {
+    color: #fff;
+}
+
+/* Contenedor de la Tabla */
+.rank-table-card {
+    background: rgba(13, 12, 17, 0.9);
+    border: 1px solid rgba(255, 102, 0, 0.25);
+    border-radius: 15px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7);
+    padding: 10px;
+    overflow: hidden;
+    position: relative;
+}
+
+/* Estructura de la Tabla */
+.custom-balduneta-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0;
+}
+
+/* Encabezados */
+.custom-balduneta-table thead th {
+    font-family: 'Cinzel', serif;
+    color: #8a8f9d;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    padding: 20px 10px;
+    border-bottom: 2px solid #1a1a1a;
+    text-align: center;
+}
+
+/* Alineaci車n de la columna de Jugador */
+.custom-balduneta-table th:nth-child(2),
+.custom-balduneta-table td:nth-child(2) {
+    text-align: left !important;
+    padding-left: 10px !important; /* Espacio m赤nimo para eliminar el hueco */
+}
+
+/* Celdas del cuerpo */
+.custom-balduneta-table tbody td {
+    padding: 15px 10px;
+    vertical-align: middle;
+    text-align: center;
+    color: #eee;
+    font-size: 14px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.02);
+}
+
+/* Medallas de Posici車n */
+.rank-pos {
+    width: 32px;
+    height: 32px;
+    margin: 0 auto;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #8a8f9d;
+}
+
+/* Colores Top 3 */
+tr:nth-child(1) .rank-pos { border-color: #ffcc00; color: #ffcc00; box-shadow: 0 0 10px rgba(255, 204, 0, 0.3); background: rgba(255, 204, 0, 0.05); }
+tr:nth-child(2) .rank-pos { border-color: #c0c0c0; color: #c0c0c0; background: rgba(192, 192, 192, 0.05); }
+tr:nth-child(3) .rank-pos { border-color: #cd7f32; color: #cd7f32; background: rgba(205, 127, 50, 0.05); }
+
+/* Estilo del Nombre de Jugador */
+.char-column {
+    font-weight: 700;
+    color: #fff;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.text-orange {
+    color: #ff6600 !important;
+}
+
+/* Ajuste del Loader */
+.spinner-border.text-orange {
+    color: #ff6600 !important;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .rank-title { font-size: 2rem; }
+    .rank-nav-btn { padding: 8px 15px; font-size: 12px; }
+    .custom-balduneta-table tbody td { font-size: 12px; padding: 10px 5px; }
+}
+
+.class-avatar-circle {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 102, 0, 0.2);
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.class-avatar-circle img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: grayscale(40%);
+}
+
+.class-filter-item.active .class-avatar-circle {
+    border-color: #ff6600;
+    box-shadow: 0 0 20px rgba(255, 102, 0, 0.6);
+    transform: scale(1.1);
+}
+
+.class-filter-item.active .class-avatar-circle img {
+    filter: grayscale(0%);
+}
+
+
+/* Contenedor principal de los filtros (El recuadro) */
+.rank-filter-box {
+    background: rgba(13, 12, 17, 0.7);
+    border: 1px solid rgba(255, 102, 0, 0.15);
+    border-radius: 20px;
+    padding: 20px 20px;  /* <--- 1. Reduce el relleno interno (ej: 15px 10px) */
+    box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5);
+    margin: 0 auto;
+    max-width: 600px;    /* <--- 2. Reduce este valor para hacerlo más angosto (ej: 700px) */
+}
+
+/* Estilo de los círculos de clase */
+.class-avatar-circle {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.05);
+    background: #000;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.class-avatar-circle img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.6;
+    transition: all 0.3s ease;
+}
+
+/* Estado Activo (Brillo naranja) */
+.class-filter-item.active .class-avatar-circle {
+    border-color: #ff6600;
+    box-shadow: 0 0 25px rgba(255, 102, 0, 0.5);
+    transform: scale(1.15);
+}
+
+/* Botón "TODAS" */
+.all-classes {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-weight: 800;
+    font-size: 11px;
+    padding: 3px; 
+    background: linear-gradient(135deg, rgb(255, 138, 59) 0%, rgb(215, 73, 33) 100%); 
+    box-shadow: rgba(255, 138, 59, 0.6) 0px 0px 20px, rgba(215, 73, 33, 0.3) 0px 0px 40px;
+    opacity: 1; 
+    transition: all 0.3s ease;
+    border-radius: 50%;
+    z-index: 2;
+}
+
+.class-filter-item.active .class-avatar-circle img {
+    opacity: 0.8;
+}
+
+.class-filter-item.active .all-classes {
+    opacity: 1;
+}
+
+.rank-char-link {
+    color: #ffffff !important;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.rank-char-link:hover {
+    color: #ffaa00 !important; /* El color naranja de tu ranking al pasar el mouse */
+    text-decoration: underline;
+}

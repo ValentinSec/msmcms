@@ -1,0 +1,1158 @@
+{
+    "asset" : {
+        "generator" : "Khronos glTF Blender I/O v3.4.50",
+        "version" : "2.0"
+    },
+    "scene" : 0,
+    "scenes" : [
+        {
+            "name" : "HelmMale03",
+            "nodes" : [
+                52
+            ]
+        }
+    ],
+    "nodes" : [
+        {
+            "mesh" : 0,
+            "name" : "CW_PantMale02"
+        },
+        {
+            "name" : "Bip01 Footsteps",
+            "rotation" : [
+                0,
+                0,
+                0.7071062922477722,
+                0.7071073651313782
+            ],
+            "translation" : [
+                0,
+                0,
+                -109.958251953125
+            ]
+        },
+        {
+            "name" : "Bip01 L Toe02",
+            "rotation" : [
+                -7.363033793783558e-15,
+                5.0118925936509795e-14,
+                -1.1519105981572242e-14,
+                1
+            ],
+            "translation" : [
+                4.161463260650635,
+                -9.837131074164063e-07,
+                -1.60240040258941e-06
+            ]
+        },
+        {
+            "children" : [
+                2
+            ],
+            "name" : "Bip01 L Toe01",
+            "rotation" : [
+                5.610712632345138e-13,
+                -1.7725460042892355e-13,
+                -1.8624480823130514e-14,
+                1
+            ],
+            "scale" : [
+                1,
+                0.9999998807907104,
+                1
+            ],
+            "translation" : [
+                4.161464214324951,
+                -1.3709532140637748e-06,
+                -1.8455024246577523e-06
+            ]
+        },
+        {
+            "children" : [
+                3
+            ],
+            "name" : "Bip01 L Toe0",
+            "rotation" : [
+                1.0669275241070864e-07,
+                -4.6890636440366507e-07,
+                0.707108199596405,
+                0.7071053385734558
+            ],
+            "translation" : [
+                11.591136932373047,
+                14.908282279968262,
+                7.189673851826228e-06
+            ]
+        },
+        {
+            "children" : [
+                4
+            ],
+            "name" : "Bip01 L Foot",
+            "rotation" : [
+                -2.629357993555459e-07,
+                -6.860490884719184e-06,
+                0.049974020570516586,
+                0.998750627040863
+            ],
+            "scale" : [
+                0.9999999403953552,
+                1,
+                1
+            ],
+            "translation" : [
+                49.430458068847656,
+                -0.0003081978065893054,
+                0.0006743981502950191
+            ]
+        },
+        {
+            "children" : [
+                5
+            ],
+            "name" : "Bip01 L Calf",
+            "rotation" : [
+                5.539596941162017e-07,
+                9.978385605791118e-06,
+                -0.09982938319444656,
+                0.9950045943260193
+            ],
+            "translation" : [
+                49.43047332763672,
+                9.528447117190808e-05,
+                -0.00030901035643182695
+            ]
+        },
+        {
+            "children" : [
+                6
+            ],
+            "name" : "Bip01 L Thigh",
+            "rotation" : [
+                0.04997805133461952,
+                0.9987503290176392,
+                -1.9442441612227412e-07,
+                3.885333626385545e-06
+            ],
+            "scale" : [
+                1.0000001192092896,
+                0.9999996423721313,
+                1
+            ],
+            "translation" : [
+                -1.480936862208182e-05,
+                1.8417835235595703e-05,
+                10.281535148620605
+            ]
+        },
+        {
+            "name" : "Bip01 R Toe02",
+            "rotation" : [
+                -7.363033793783558e-15,
+                5.0118925936509795e-14,
+                -1.1519105981572242e-14,
+                1
+            ],
+            "translation" : [
+                4.1614603996276855,
+                -9.8373038781574e-07,
+                -1.6023078615035047e-06
+            ]
+        },
+        {
+            "children" : [
+                8
+            ],
+            "name" : "Bip01 R Toe01",
+            "rotation" : [
+                5.610712632345138e-13,
+                -1.7725460042892355e-13,
+                -1.8624480823130514e-14,
+                1
+            ],
+            "scale" : [
+                1,
+                0.9999998807907104,
+                1
+            ],
+            "translation" : [
+                4.161463260650635,
+                -1.3709877748624422e-06,
+                -1.8454080645824433e-06
+            ]
+        },
+        {
+            "children" : [
+                9
+            ],
+            "name" : "Bip01 R Toe0",
+            "rotation" : [
+                1.0669275241070864e-07,
+                -4.6890636440366507e-07,
+                0.707108199596405,
+                0.7071053385734558
+            ],
+            "translation" : [
+                11.591137886047363,
+                14.908281326293945,
+                7.189774350990774e-06
+            ]
+        },
+        {
+            "children" : [
+                10
+            ],
+            "name" : "Bip01 R Foot",
+            "rotation" : [
+                -2.629357993555459e-07,
+                -6.860490884719184e-06,
+                0.049974020570516586,
+                0.998750627040863
+            ],
+            "scale" : [
+                0.9999999403953552,
+                1,
+                1
+            ],
+            "translation" : [
+                49.430458068847656,
+                -0.00030761677771806717,
+                0.0006753514753654599
+            ]
+        },
+        {
+            "children" : [
+                11
+            ],
+            "name" : "Bip01 R Calf",
+            "rotation" : [
+                5.539596941162017e-07,
+                9.978385605791118e-06,
+                -0.09982938319444656,
+                0.9950045943260193
+            ],
+            "translation" : [
+                49.430477142333984,
+                9.497321298113093e-05,
+                -0.00030805639107711613
+            ]
+        },
+        {
+            "children" : [
+                12
+            ],
+            "name" : "Bip01 R Thigh",
+            "rotation" : [
+                0.04997805133461952,
+                0.9987503290176392,
+                -1.9442441612227412e-07,
+                3.885333626385545e-06
+            ],
+            "scale" : [
+                1.0000001192092896,
+                0.9999996423721313,
+                1
+            ],
+            "translation" : [
+                1.480936862208182e-05,
+                -8.553265615773853e-06,
+                -10.281535148620605
+            ]
+        },
+        {
+            "name" : "Bip01 Ponytail11",
+            "rotation" : [
+                5.7800914277095217e-08,
+                6.152390596980695e-07,
+                -0.10942381620407104,
+                0.9939952492713928
+            ],
+            "scale" : [
+                0.9999999403953552,
+                1,
+                1
+            ],
+            "translation" : [
+                15.458333015441895,
+                -0.012906074523925781,
+                -1.4027073120814748e-06
+            ]
+        },
+        {
+            "children" : [
+                14
+            ],
+            "name" : "Bip01 Ponytail1",
+            "rotation" : [
+                -3.855667785046535e-08,
+                2.540100467740558e-06,
+                -0.9808181524276733,
+                0.1949249804019928
+            ],
+            "scale" : [
+                0.9999994039535522,
+                1,
+                1
+            ],
+            "translation" : [
+                6.888308048248291,
+                -6.881620407104492,
+                -1.8960046872962266e-05
+            ]
+        },
+        {
+            "children" : [
+                15
+            ],
+            "name" : "Bip01 Head",
+            "rotation" : [
+                4.2496764440791424e-10,
+                -2.2858117176838277e-08,
+                -0.015405183658003807,
+                0.9998813271522522
+            ],
+            "translation" : [
+                5.140782833099365,
+                -7.686026947339997e-05,
+                2.6486088700039545e-07
+            ]
+        },
+        {
+            "name" : "Bip01 R Finger02",
+            "rotation" : [
+                -8.07540345704183e-09,
+                -2.0372684095271154e-10,
+                -5.070417614660983e-07,
+                1
+            ],
+            "scale" : [
+                1,
+                1,
+                0.9999999403953552
+            ],
+            "translation" : [
+                3.6242527961730957,
+                3.228051355108619e-05,
+                -2.4586915969848633e-05
+            ]
+        },
+        {
+            "children" : [
+                17
+            ],
+            "name" : "Bip01 R Finger01",
+            "rotation" : [
+                -7.084736353135668e-08,
+                4.089088179171085e-09,
+                1.01043929134903e-06,
+                1
+            ],
+            "translation" : [
+                3.6242477893829346,
+                2.5971565264626406e-05,
+                -2.4810433387756348e-05
+            ]
+        },
+        {
+            "children" : [
+                18
+            ],
+            "name" : "Bip01 R Finger0",
+            "rotation" : [
+                0.0004374277195893228,
+                -3.6831197576248087e-06,
+                -4.028400780953234e-06,
+                1
+            ],
+            "translation" : [
+                10.423900604248047,
+                -1.8095703125,
+                -0.02977725863456726
+            ]
+        },
+        {
+            "name" : "knife_gdf",
+            "rotation" : [
+                -0.3942221403121948,
+                -0.4970628619194031,
+                0.5866513252258301,
+                0.5033464431762695
+            ],
+            "scale" : [
+                0.9999998211860657,
+                0.9999998807907104,
+                0.9999997615814209
+            ],
+            "translation" : [
+                9.026141166687012,
+                3.6667749881744385,
+                0.2584397792816162
+            ]
+        },
+        {
+            "children" : [
+                19,
+                20
+            ],
+            "name" : "Bip01 R Hand",
+            "rotation" : [
+                0.7067980766296387,
+                -4.134267896915844e-07,
+                -4.0840490100890747e-07,
+                0.7074154019355774
+            ],
+            "translation" : [
+                27.473613739013672,
+                -4.622340202331543e-05,
+                5.064174729341175e-06
+            ]
+        },
+        {
+            "children" : [
+                21
+            ],
+            "name" : "Bip01 R Forearm",
+            "rotation" : [
+                -2.018000031966949e-06,
+                1.628476731241335e-08,
+                -0.01273221243172884,
+                0.9999189376831055
+            ],
+            "scale" : [
+                1,
+                0.9999999403953552,
+                1
+            ],
+            "translation" : [
+                37.630435943603516,
+                7.361170446529286e-06,
+                1.9073586372542195e-06
+            ]
+        },
+        {
+            "children" : [
+                22
+            ],
+            "name" : "Bip01 R UpperArm",
+            "rotation" : [
+                7.723032240392058e-07,
+                -0.5578267574310303,
+                6.968047046029824e-07,
+                0.8299574255943298
+            ],
+            "scale" : [
+                0.9999998807907104,
+                0.9999998807907104,
+                0.9999998807907104
+            ],
+            "translation" : [
+                13.400157928466797,
+                3.7849092677788576e-06,
+                -1.4305127479019575e-05
+            ]
+        },
+        {
+            "children" : [
+                23
+            ],
+            "name" : "Bip01 R Clavicle",
+            "rotation" : [
+                -0.6329061388969421,
+                0.00974989589303732,
+                0.7740752696990967,
+                0.011926989071071148
+            ],
+            "scale" : [
+                1.0000003576278687,
+                1,
+                1
+            ],
+            "translation" : [
+                -5.339434210327454e-06,
+                0.004110017325729132,
+                -6.477366924285889
+            ]
+        },
+        {
+            "name" : "Bip01 L Finger02",
+            "rotation" : [
+                -7.711861371717532e-09,
+                -1.2078089639544487e-09,
+                -2.5012909077304357e-07,
+                1
+            ],
+            "scale" : [
+                1,
+                1.0000001192092896,
+                1
+            ],
+            "translation" : [
+                3.6242482662200928,
+                2.8991769795538858e-05,
+                2.656877040863037e-05
+            ]
+        },
+        {
+            "children" : [
+                25
+            ],
+            "name" : "Bip01 L Finger01",
+            "rotation" : [
+                7.93332333159924e-09,
+                7.42147565624407e-10,
+                7.599535933877632e-07,
+                1
+            ],
+            "scale" : [
+                1.0000001192092896,
+                1.0000001192092896,
+                1
+            ],
+            "translation" : [
+                3.6242499351501465,
+                2.0354880689410493e-05,
+                2.6658177375793457e-05
+            ]
+        },
+        {
+            "children" : [
+                26
+            ],
+            "name" : "Bip01 L Finger0",
+            "rotation" : [
+                -0.0004374557174742222,
+                2.4211915388150373e-06,
+                -4.032587185065495e-06,
+                0.9999999403953552
+            ],
+            "scale" : [
+                1,
+                0.9999999403953552,
+                1
+            ],
+            "translation" : [
+                10.42389965057373,
+                -1.8095704317092896,
+                0.029809191823005676
+            ]
+        },
+        {
+            "name" : "hand_bofdgne01",
+            "rotation" : [
+                0.5866525769233704,
+                -0.5033462047576904,
+                -0.39422184228897095,
+                0.4970618188381195
+            ],
+            "scale" : [
+                1,
+                1.0000001192092896,
+                1
+            ],
+            "translation" : [
+                9.000597953796387,
+                3.7699315547943115,
+                0.5314046740531921
+            ]
+        },
+        {
+            "children" : [
+                27,
+                28
+            ],
+            "name" : "Bip01 L Hand",
+            "rotation" : [
+                -0.7067979574203491,
+                4.32812839790131e-06,
+                -4.315414116717875e-06,
+                0.7074155211448669
+            ],
+            "scale" : [
+                1.0000001192092896,
+                1,
+                1
+            ],
+            "translation" : [
+                27.473594665527344,
+                -0.00026729702949523926,
+                -5.4666525102220476e-06
+            ]
+        },
+        {
+            "children" : [
+                29
+            ],
+            "name" : "Bip01 L Forearm",
+            "rotation" : [
+                -8.971107190447469e-10,
+                -5.0775184945450746e-08,
+                -0.01272817887365818,
+                0.9999189972877502
+            ],
+            "translation" : [
+                37.63043212890625,
+                8.73207682161592e-06,
+                -1.1444102710811421e-05
+            ]
+        },
+        {
+            "children" : [
+                30
+            ],
+            "name" : "Bip01 L UpperArm",
+            "rotation" : [
+                7.723031103523681e-07,
+                0.5578266978263855,
+                -6.968047614464012e-07,
+                0.8299574851989746
+            ],
+            "scale" : [
+                0.9999999403953552,
+                0.9999998807907104,
+                0.9999999403953552
+            ],
+            "translation" : [
+                13.400156021118164,
+                -2.6822081053978764e-06,
+                2.384246329256712e-07
+            ]
+        },
+        {
+            "children" : [
+                31
+            ],
+            "name" : "Bip01 L Clavicle",
+            "rotation" : [
+                0.6329060196876526,
+                -0.009752239100635052,
+                0.7740753889083862,
+                0.011925077997148037
+            ],
+            "scale" : [
+                1.0000003576278687,
+                1.0000001192092896,
+                1
+            ],
+            "translation" : [
+                -9.311335816164501e-06,
+                0.004076496697962284,
+                6.477367877960205
+            ]
+        },
+        {
+            "children" : [
+                16,
+                24,
+                32
+            ],
+            "name" : "Bip01 Neck",
+            "rotation" : [
+                -3.289965206931811e-07,
+                -2.188003963965457e-05,
+                0.015001384541392326,
+                0.9998874664306641
+            ],
+            "scale" : [
+                1,
+                0.9999999403953552,
+                1
+            ],
+            "translation" : [
+                26.009624481201172,
+                -0.004378024954348803,
+                0.001139652100391686
+            ]
+        },
+        {
+            "children" : [
+                33
+            ],
+            "name" : "Bip01 Spine1",
+            "rotation" : [
+                -1.1250023135289666e-10,
+                3.301132164779119e-05,
+                8.073016942944378e-06,
+                1
+            ],
+            "translation" : [
+                19.80146598815918,
+                -0.02060895413160324,
+                -0.00043971356353722513
+            ]
+        },
+        {
+            "name" : "Bone04",
+            "rotation" : [
+                3.725281416677717e-09,
+                -1.4210854715202004e-14,
+                3.895550548804749e-12,
+                1
+            ],
+            "translation" : [
+                2.0532634152914397e-06,
+                -0.6065750122070312,
+                -26.480514526367188
+            ]
+        },
+        {
+            "children" : [
+                35
+            ],
+            "name" : "Bone03",
+            "rotation" : [
+                -0.05957595631480217,
+                -1.8955957636901388e-10,
+                -2.3805761806272585e-09,
+                0.9982237815856934
+            ],
+            "scale" : [
+                1,
+                0.9999999403953552,
+                1
+            ],
+            "translation" : [
+                1.8035816538031213e-06,
+                -3.63852596282959,
+                -20.011993408203125
+            ]
+        },
+        {
+            "children" : [
+                36
+            ],
+            "name" : "Bone02",
+            "rotation" : [
+                -0.010156411677598953,
+                7.755033060163896e-09,
+                -3.4537128712486265e-10,
+                0.9999484419822693
+            ],
+            "translation" : [
+                7.966718840179965e-08,
+                -0.6064257621765137,
+                -3.2342681884765625
+            ]
+        },
+        {
+            "children" : [
+                37
+            ],
+            "name" : "Bone01",
+            "rotation" : [
+                0.7071146965026855,
+                -0.0002797135093715042,
+                0.7070987820625305,
+                0.0002797198249027133
+            ],
+            "scale" : [
+                1,
+                1,
+                0.9999999403953552
+            ],
+            "translation" : [
+                15.15498161315918,
+                10.590225219726562,
+                -0.00031253311317414045
+            ]
+        },
+        {
+            "name" : "Bone08",
+            "rotation" : [
+                -2.0182342268526554e-06,
+                -3.26405569239796e-14,
+                -3.860689545831519e-12,
+                1
+            ],
+            "scale" : [
+                1,
+                0.9999999403953552,
+                1
+            ],
+            "translation" : [
+                2.1202449715929106e-06,
+                2.627917766571045,
+                -27.89548110961914
+            ]
+        },
+        {
+            "children" : [
+                39
+            ],
+            "name" : "Bone07",
+            "rotation" : [
+                0.05977260693907738,
+                1.4859513619569498e-10,
+                2.3892809952741345e-09,
+                0.9982120394706726
+            ],
+            "scale" : [
+                1,
+                0.9999998807907104,
+                1
+            ],
+            "translation" : [
+                6.768509592802729e-07,
+                5.457756042480469,
+                -16.979888916015625
+            ]
+        },
+        {
+            "children" : [
+                40
+            ],
+            "name" : "Bone06",
+            "rotation" : [
+                -0.06143072620034218,
+                2.580708979849078e-08,
+                -8.462829326205679e-10,
+                0.998111367225647
+            ],
+            "scale" : [
+                1,
+                0.9999999403953552,
+                1
+            ],
+            "translation" : [
+                -3.113109414698556e-08,
+                -1.3507201401807833e-06,
+                -2.627838134765625
+            ]
+        },
+        {
+            "children" : [
+                41
+            ],
+            "name" : "Bone05",
+            "rotation" : [
+                0.7071146965026855,
+                -0.0002797135093715042,
+                0.7070987820625305,
+                0.0002797198249027133
+            ],
+            "scale" : [
+                1,
+                1,
+                0.9999999403953552
+            ],
+            "translation" : [
+                16.351993560791016,
+                -9.42272663116455,
+                -0.0003851141664199531
+            ]
+        },
+        {
+            "children" : [
+                34,
+                38,
+                42
+            ],
+            "name" : "Bip01 Spine",
+            "rotation" : [
+                -1.9942488052038243e-06,
+                -1.1582004844967742e-05,
+                0.000395578914321959,
+                0.9999999403953552
+            ],
+            "translation" : [
+                3.5985488891601562,
+                -0.015760958194732666,
+                4.8415754463349e-06
+            ]
+        },
+        {
+            "children" : [
+                7,
+                13,
+                43
+            ],
+            "name" : "Bip01 Pelvis",
+            "rotation" : [
+                -0.4999997019767761,
+                -0.5000003576278687,
+                -0.49999967217445374,
+                0.5000002980232239
+            ],
+            "scale" : [
+                1,
+                0.9999999403953552,
+                1
+            ]
+        },
+        {
+            "children" : [
+                1,
+                44
+            ],
+            "name" : "Bip01",
+            "rotation" : [
+                -0.5000003576278687,
+                -0.49999964237213135,
+                -0.49999964237213135,
+                0.5000003576278687
+            ],
+            "translation" : [
+                0,
+                109.950927734375,
+                0
+            ]
+        },
+        {
+            "name" : "Null 9",
+            "rotation" : [
+                -0.7071068286895752,
+                0,
+                0,
+                0.7071068286895752
+            ]
+        },
+        {
+            "name" : "Null 16",
+            "rotation" : [
+                -0.7071068286895752,
+                0,
+                0,
+                0.7071068286895752
+            ]
+        },
+        {
+            "name" : "Null 21",
+            "rotation" : [
+                -0.7071068286895752,
+                0,
+                0,
+                0.7071068286895752
+            ]
+        },
+        {
+            "name" : "Null 24",
+            "rotation" : [
+                -0.7071068286895752,
+                0,
+                0,
+                0.7071068286895752
+            ]
+        },
+        {
+            "name" : "Null 32",
+            "rotation" : [
+                -0.7071068286895752,
+                0,
+                0,
+                0.7071068286895752
+            ]
+        },
+        {
+            "name" : "Null 41",
+            "rotation" : [
+                -0.7071068286895752,
+                0,
+                0,
+                0.7071068286895752
+            ]
+        },
+        {
+            "children" : [
+                0,
+                45,
+                46,
+                47,
+                48,
+                49,
+                50,
+                51
+            ],
+            "name" : "CW_PantMale02_skeleton"
+        }
+    ],
+    "materials" : [
+        {
+            "doubleSided" : true,
+            "name" : "richlower.jpg",
+            "pbrMetallicRoughness" : {
+                "baseColorTexture" : {
+                    "index" : 0
+                },
+                "metallicFactor" : 0,
+                "roughnessFactor" : 0.5
+            }
+        }
+    ],
+    "meshes" : [
+        {
+            "name" : "CW_PantMale02",
+            "primitives" : [
+                {
+                    "attributes" : {
+                        "POSITION" : 0,
+                        "TEXCOORD_0" : 1,
+                        "NORMAL" : 2
+                    },
+                    "indices" : 3,
+                    "material" : 0
+                }
+            ]
+        }
+    ],
+    "textures" : [
+        {
+            "sampler" : 0,
+            "source" : 0
+        }
+    ],
+    "images" : [
+        {
+            "bufferView" : 4,
+            "mimeType" : "image/jpeg",
+            "name" : "richlower"
+        }
+    ],
+    "skins" : [
+        {
+            "inverseBindMatrices" : 4,
+            "joints" : [
+                45,
+                1,
+                44,
+                7,
+                6,
+                5,
+                4,
+                3,
+                2,
+                13,
+                12,
+                11,
+                10,
+                9,
+                8,
+                43,
+                34,
+                33,
+                16,
+                15,
+                14,
+                24,
+                23,
+                22,
+                21,
+                19,
+                18,
+                17,
+                20,
+                32,
+                31,
+                30,
+                29,
+                27,
+                26,
+                25,
+                28,
+                38,
+                37,
+                36,
+                35,
+                42,
+                41,
+                40,
+                39,
+                46,
+                47,
+                48,
+                49,
+                50,
+                51
+            ],
+            "name" : "CW_PantMale02_skeleton"
+        }
+    ],
+    "accessors" : [
+        {
+            "bufferView" : 0,
+            "componentType" : 5126,
+            "count" : 221,
+            "max" : [
+                30.37630844116211,
+                123.97808074951172,
+                22.818504333496094
+            ],
+            "min" : [
+                -32.30485153198242,
+                50.82899475097656,
+                -32.25022506713867
+            ],
+            "type" : "VEC3"
+        },
+        {
+            "bufferView" : 1,
+            "componentType" : 5126,
+            "count" : 221,
+            "type" : "VEC2"
+        },
+        {
+            "bufferView" : 2,
+            "componentType" : 5126,
+            "count" : 221,
+            "type" : "VEC3"
+        },
+        {
+            "bufferView" : 3,
+            "componentType" : 5123,
+            "count" : 654,
+            "type" : "SCALAR"
+        },
+        {
+            "bufferView" : 5,
+            "componentType" : 5126,
+            "count" : 51,
+            "type" : "MAT4"
+        }
+    ],
+    "bufferViews" : [
+        {
+            "buffer" : 0,
+            "byteLength" : 2652,
+            "byteOffset" : 0,
+            "target" : 34962
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 1768,
+            "byteOffset" : 2652,
+            "target" : 34962
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 2652,
+            "byteOffset" : 4420,
+            "target" : 34962
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 1308,
+            "byteOffset" : 7072,
+            "target" : 34963
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 10562,
+            "byteOffset" : 8380
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 3264,
+            "byteOffset" : 18944
+        }
+    ],
+    "samplers" : [
+        {
+            "magFilter" : 9729,
+            "minFilter" : 9987
+        }
+    ],
+    "buffers" : [
+        {
+            "byteLength" : 22208,
+            "uri" : "data:application/octet-stream;base64,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FwAdAB0AFQAUABQAFgAcABwAGAAUABUAIQAiACEAIwAkACQAIgAhACQAIwAbACAAGQAYABgAGwAgAAUAFQAiACIAAAAFAAAAIgAkACQAEgAAACQAGwAaABoAEgAkAB0AHwAhACEAFQAdACEAHwAjACMAHwAgACAAGwAjAA0AFgAFABYADQAMAAwAHAAWABwADAATABMAGgAcAAMAJQAGAAYAJQAJACYAKQAwADAAAwAmABAAMQABACYAAwABAAEAMQAmADQAMQAQADkANAAPAA8AOgA5AA8ANAAQAAsAPwA6AAsAOgAPADAAJQADACcAMwAvADIANQAqADYAOAAsAEAAQgBEAEIAQABFAEcASAA8AEgARwBJAEoATABOAEwASgBPAEkAQgBFAEIASQBHAEgASgA9AEoASABPAFAARQBRAEUAUABSAFMAVABQAFQAUwBVAEwATwBWAFYAVABXAFQAVgBYAEQATABAAEwARABOAFkAWgBbAFoAXABbAFAAWQBTAFkAUABRAFAAWABSAFgAUABUAFEAXQBeAF4AXwBgAF8AXgBdAF8AVwBgAFwAVABVAFQAXABXAEUAXQBRAF0ARQBAAEAAXwBdAF8AQABMAF8AVgBXAFYAXwBMAFkAXgBaAF4AWQBRAF4AYABaAGAAXABaAFwAYABXAEkARQBSAFIASABJAEgAUgBYAFgATwBIAE8AWABWAEEARgAlAAgARgA7AEYACAAlAGEAMAAoADAAYQBBAE0AQwBjAGEAQwBBAEMAYQBjAGYATQBjADkASwBmAEsAOQA6AEsATQBmAD4ASwA6ADAAQQAlAGIALQBkAGUALgBoAGcAKwA3AGkAagBrAGkAbABtAG0AbgBpAGoAaQBuAG4AbwBqAHAAcgBrAGsAagBwAHAAcwB0AHQAdwBwAGoAbwBzAHMAcABqAHIAcAB2AHUAeABxAGwAaQB5AHkAegBsAGkAawB5AHsAfAB9AH8AfACAAIIAewB9AH4AhgCDAIEAhwCJAIUAigCIAIgAhACFAH8AiwCMAIwAfAB/AHwAjAB9AI0AjgCPAI0AkACRAJAAjQCSAI8AkgCNAJIAjwCTAJQAjgCVAI4AlACPAJQAlwCYAJcAlACZAI8AmACTAJgAjwCUAJUAmgCUAJsAlgCcAJEAnQCNAJ0AkQCeAI0AnQCOAJ8AoACiAKMA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"
+        }
+    ]
+}

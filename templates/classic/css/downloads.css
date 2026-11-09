@@ -1,0 +1,229 @@
+/* templates/classic/css/downloads.css */
+
+/* --- FUENTES --- */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Cinzel:wght@400;700;900&display=swap');
+
+/* --- CONTENEDOR PRINCIPAL --- */
+#downloads-page-balduneta {
+    font-family: 'Poppins', sans-serif;
+    width: 100%;
+}
+
+/* HEADER DEL MÓDULO (Sobre fondo blanco) */
+.rank-header {
+    margin-bottom: 3rem;
+}
+
+.rank-title {
+    font-family: 'Cinzel', serif;
+    font-size: 2.8rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    color: #222; /* Texto oscuro para el fondo blanco */
+    margin-bottom: 0.5rem;
+    letter-spacing: 1px;
+    background: linear-gradient(135deg, #333 0%, #000 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0px 2px 2px rgba(0,0,0,0.1));
+}
+
+.rank-subtitle {
+    font-family: 'Poppins', sans-serif;
+    color: #666;
+    font-size: 1.1rem;
+}
+
+/* --- TARJETAS DE DESCARGA (CAJAS OSCURAS) --- */
+/* Esta es la clave: Convertimos el contenedor en una tarjeta oscura */
+.dl-box-standalone {
+    background: linear-gradient(145deg, #1a1a1a 0%, #0d0d0d 100%);
+    border: 1px solid #333;
+    border-radius: 12px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+    height: 100%;
+    /* Forzamos el color de texto base a claro */
+    color: #e2e8f0; 
+}
+
+.dl-box-standalone:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+    border-color: #444;
+}
+
+/* Corrección de color para textos 'muted' dentro de la caja oscura */
+.dl-box-standalone .text-muted {
+    color: #94a3b8 !important;
+}
+
+/* --- BORDES Y ACENTOS --- */
+.border-purple-glow {
+    border-top: 3px solid #8b5cf6;
+}
+.border-orange-glow {
+    border-top: 3px solid #f97316;
+}
+
+/* --- BADGES --- */
+.badge-new-yellow {
+    background: linear-gradient(90deg, #FFD700, #e6ac00);
+    color: #000;
+    font-size: 0.75rem;
+    font-weight: 800;
+    padding: 6px 12px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    display: inline-block;
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.4);
+    margin-bottom: 10px;
+}
+
+/* --- ICONOS --- */
+.icon-square {
+    width: 50px;
+    height: 50px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    flex-shrink: 0;
+    box-shadow: inset 0 0 15px rgba(0,0,0,0.5);
+}
+
+.bg-purple-soft {
+    background: rgba(139, 92, 246, 0.15);
+    color: #a78bfa;
+    border: 1px solid rgba(139, 92, 246, 0.3);
+}
+
+.bg-orange-soft {
+    background: rgba(249, 115, 22, 0.15);
+    color: #fb923c;
+    border: 1px solid rgba(249, 115, 22, 0.3);
+}
+
+/* --- TÍTULOS DENTRO DE CAJAS --- */
+.dl-box-standalone h2.text-white {
+    font-family: 'Cinzel', serif;
+    letter-spacing: 1px;
+    font-size: 1.5rem;
+    text-shadow: 0 2px 5px rgba(0,0,0,0.5);
+    color: #fff !important;
+}
+
+.text-orange-title {
+    color: #FF8A3B;
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    letter-spacing: 1px;
+    font-size: 1.4rem;
+    border-bottom: 1px solid rgba(255, 138, 59, 0.2);
+    padding-bottom: 15px;
+}
+
+/* --- BOTONES DE DESCARGA --- */
+.download-links-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 25px;
+}
+
+.btn-dl-gradient {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 20px;
+    border-radius: 8px;
+    text-decoration: none !important;
+    color: #fff !important;
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1px solid rgba(255,255,255,0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-dl-gradient small {
+    opacity: 0.8;
+    font-weight: 400;
+    font-size: 0.85em;
+    background: rgba(0,0,0,0.2);
+    padding: 2px 6px;
+    border-radius: 4px;
+}
+
+/* Botón Violeta */
+.btn-dl-gradient.purple {
+    background: linear-gradient(90deg, #5b21b6 0%, #7c3aed 100%);
+    box-shadow: 0 4px 10px rgba(124, 58, 237, 0.2);
+}
+.btn-dl-gradient.purple:hover {
+    background: linear-gradient(90deg, #4c1d95 0%, #6d28d9 100%);
+    transform: translateX(5px);
+    border-color: #a78bfa;
+}
+
+/* Botón Naranja */
+.btn-dl-gradient.orange {
+    background: linear-gradient(90deg, #c2410c 0%, #f97316 100%);
+    box-shadow: 0 4px 10px rgba(249, 115, 22, 0.2);
+}
+.btn-dl-gradient.orange:hover {
+    background: linear-gradient(90deg, #9a3412 0%, #ea580c 100%);
+    transform: translateX(5px);
+    border-color: #fdba74;
+}
+
+/* --- LISTAS Y TABLAS --- */
+.dl-features li {
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    font-size: 0.95rem;
+    color: #cbd5e1;
+}
+.dl-features li:last-child { border-bottom: none; }
+
+.requirements-table {
+    background: rgba(0,0,0,0.3);
+    border-radius: 8px;
+    padding: 20px;
+    border: 1px solid rgba(255,255,255,0.05);
+}
+
+.requirements-table .row {
+    padding: 8px 0;
+}
+
+.requirements-table .col-4.text-white {
+    color: #e2e8f0 !important; /* Asegura visibilidad */
+}
+
+.text-orange {
+    color: #FF8A3B !important;
+}
+
+/* --- RESPONSIVE --- */
+@media (max-width: 768px) {
+    .dl-box-standalone {
+        padding: 20px !important;
+    }
+    .rank-title {
+        font-size: 2rem;
+    }
+    .btn-dl-gradient {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+    }
+    .btn-dl-gradient small {
+        align-self: flex-end;
+    }
+}

@@ -1,0 +1,7 @@
+CREATE TABLE [dbo].[{TABLE_PREFIX}PASSCHANGE_REQUEST](
+	[user_id] [int] NOT NULL,
+	[new_password] [varchar](200) NOT NULL,
+	[auth_code] [varchar](50) NOT NULL,
+	[request_date] [varchar](50) NOT NULL,
+    CONSTRAINT [PK_{TABLE_PREFIX}PASSCHANGE_REQUEST] PRIMARY KEY CLUSTERED ([user_id] ASC)
+) ON [PRIMARY]

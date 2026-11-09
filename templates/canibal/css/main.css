@@ -1,0 +1,640 @@
+/* --- CORE --- */
+:root {
+    --primary-color: #0f0;
+    --gold: #c8a165;
+    --dark-bg: #0b0c10;
+    --glass-bg: rgba(13, 17, 23, 0.85);
+    --border-color: rgba(255, 255, 255, 0.1);
+    
+    /* Variables Nuevas */
+    --bs-border-radius-xxl: 2rem;
+    --n1: 255, 255, 255;
+    --bs-success: #198754;
+    --card-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    
+    /* Color Cyan específico de la imagen 3 */
+    --cyan-glow: #78eff5;
+}
+
+body {
+    background-color: #000;
+    color: #ccc;
+    font-family: 'Roboto', sans-serif;
+    overflow-x: hidden;
+    min-height: 100vh;
+}
+
+a {
+    text-decoration: none !important;
+}
+
+/* --- BACKGROUND SYSTEM --- */
+.bg-layer { position: fixed; left: 0; width: 100%; z-index: -5; pointer-events: none; }
+
+.bg-top { 
+    top: 0; height: 60vh; 
+    background: url('../img/bg-top.jpg') no-repeat center top; 
+    background-size: cover;
+    -webkit-mask-image: linear-gradient(to bottom, black 50%, transparent 100%);
+    mask-image: linear-gradient(to bottom, black 50%, transparent 100%);
+}
+
+.bg-bottom { 
+    bottom: 0; height: 50vh; 
+    background: url('../img/bg-bottom.jpg') no-repeat center bottom; 
+    background-size: cover;
+    -webkit-mask-image: linear-gradient(to top, black 50%, transparent 100%);
+    mask-image: linear-gradient(to top, black 50%, transparent 100%);
+}
+
+.bg-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.2); z-index: -4; pointer-events: none; }
+
+.main-wrapper { position: relative; z-index: 1; }
+
+/* --- NAVBAR STRUCTURE (FLEXIBLE & RESPONSIVE) --- */
+.canibal-navbar-structure {
+    /* Ocupa todo el ancho disponible del padre, hasta un máximo de 1460px */
+    width: 100%;
+    max-width: 947px; 
+    height: 60px;
+    margin: 0 auto;
+    
+    position: absolute; 
+    top: -70px; 
+    left: 0; 
+    right: 0;
+    
+    z-index: 9999 !important;
+    
+    background: transparent;
+    border: none;
+    backdrop-filter: none;
+    
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0; /* Sin padding para aprovechar todo el ancho */
+}
+
+.canibal-nav-links {
+    display: flex;
+    width: 100%; /* Fuerza a ocupar el 100% del navbar */
+    gap: 10px;   /* Espacio entre botones */
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* Botón Individual "Elástico" */
+.nav-btn-custom {
+    /* FLEX 1: La clave. Hace que crezcan/achiquen para llenar el espacio */
+    flex: 1;
+    
+    background-color: rgba(233, 228, 228, 0.11); 
+    border: 2px solid #666565;
+    height: 33px;
+    
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Centrado perfecto del texto */
+    
+    color: #fff;
+    text-decoration: none;
+    text-transform: uppercase;
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    font-size: 11px;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+    
+    /* Seguridad de texto: No romperse nunca */
+    white-space: nowrap;
+    overflow: hidden;
+    padding: 0 5px; /* Padding mínimo para que no toque los bordes si se achica mucho */
+}
+
+.nav-btn-custom i {
+    margin-right: 8px;
+    font-size: 13px;
+}
+
+.nav-btn-custom:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    border-color: #fff;
+    color: #fff;
+    box-shadow: 0 0 10px rgba(255,255,255,0.3);
+    /* Al hacer hover, un pequeño scale para feedback */
+    transform: translateY(-2px);
+}
+
+/* --- ESTRUCTURA PRINCIPAL --- */
+
+/* Contenedor Madre (962px) */
+.canibal-container {
+    width: 962px;
+    min-height: 1189px;
+    margin: 390px auto 0 auto;
+    display: flex;
+    justify-content: center; 
+    gap: 9px;
+    position: relative;
+    z-index: 10;
+}
+
+/* Columna Izquierda (679px) */
+.main-column {
+    width: 679px;
+    flex-shrink: 0; 
+    min-height: 810px;
+    padding: 24px 18px;
+    background: var(--glass-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    box-sizing: border-box; 
+}
+
+/* Columna Derecha / Sidebar (260px) */
+.sidebar-column {
+    width: 260px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 30px !important;
+    position: relative;
+    z-index: 10;
+}
+
+/* --- ESTILOS SIDEBAR --- */
+
+/* Cajas Genéricas Sidebar */
+.sidebar-box-login, .sidebar-box-search, .sidebar-box-generic {
+    width: 100%; 
+    padding: 20px;
+    background: rgba(10, 12, 16, 0.9);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+    margin-bottom: 0 !important; 
+}
+
+.sidebar-title {
+    font-family: 'Cinzel', serif;
+    font-size: 16px;
+    color: #fff;
+    text-align: center;
+    margin-bottom: 15px;
+    font-weight: 700;
+    text-transform: uppercase;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    padding-bottom: 8px;
+}
+
+/* Inputs Claros */
+.login-input {
+    background: #e9ecef;
+    border: 1px solid #ced4da;
+    color: #333;
+    border-radius: 4px;
+    padding: 8px 12px;
+    width: 100%;
+    margin-bottom: 10px;
+    font-size: 13px;
+    font-weight: 500;
+}
+.login-input:focus { 
+    outline: none; 
+    border-color: var(--cyan-glow); 
+    background: #fff;
+    box-shadow: 0 0 5px rgba(120, 239, 245, 0.5);
+}
+
+/* Botón "INGRESAR >" */
+.btn-login-custom {
+    background-color: rgba(13, 20, 26, 0.8);
+    border: 2px solid var(--cyan-glow);
+    color: #fff;
+    width: 100%;
+    height: 38px;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 5px;
+}
+
+.btn-login-custom:hover {
+    background-color: var(--cyan-glow);
+    color: #000;
+    box-shadow: 0 0 15px var(--cyan-glow);
+}
+
+/* Links */
+.forgot-link { 
+    font-size: 11px; color: #aaa; text-decoration: none; 
+    display: block; text-align: center; margin-top: 8px; 
+}
+.forgot-link:hover { color: #fff; text-decoration: none; }
+
+.create-acc-link {
+    font-size: 12px; color: #ffc107; font-weight: bold; 
+    text-decoration: none; display: block; text-align: center; margin-top: 5px;
+}
+.create-acc-link:hover { color: #ffe69c; text-decoration: none; }
+
+/* Home Content Styles */
+.home-wrapper.fade-in { animation: fadeIn 0.5s ease-out; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+/* News Box */
+.last-news-box { background: var(--glass-bg); border: 1px solid var(--border-color); border-radius: 10px; padding: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+.news-badge-title { font-family: 'Cinzel', serif; color: #fff; font-weight: 700; text-transform: uppercase; margin-bottom: 15px; display: flex; align-items: center; justify-content: center; }
+.news-item-row { background: rgba(0,0,0,0.3); padding: 10px 15px; border-radius: 6px; display: flex; justify-content: space-between; font-size: 14px; border-left: 3px solid var(--gold); }
+
+/* Castle Siege Box */
+.cs-home-box { background: url('../img/cs_bg.jpg') no-repeat center; background-size: cover; position: relative; border-radius: 10px; overflow: hidden; border: 1px solid #444; padding: 20px; color: #e2e2e2; }
+.cs-home-box::before { content: ''; position: absolute; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.85); z-index: 0; }
+.cs-title, .cs-content-flex, .btn-cs-info { position: relative; z-index: 1; }
+.cs-title { text-align: center; font-family: 'Cinzel', serif; font-size: 24px; color: #fff; margin-bottom: 20px; text-shadow: 0 2px 10px rgba(0,0,0,0.8); }
+.cs-content-flex { display: flex; align-items: center; justify-content: space-between; gap: 15px; }
+.cs-guild-mark-placeholder { width: 80px; height: 80px; background: #000; border: 1px solid #555; }
+.cs-info-grid, .cs-status-grid { display: flex; flex-direction: column; font-size: 13px; }
+.text-gold { color: var(--gold) !important; }
+.btn-cs-info { display: block; background: rgba(200, 161, 101, 0.2); border: 1px solid var(--gold); color: var(--gold); text-align: center; padding: 8px; border-radius: 4px; margin-top: 20px; font-size: 12px; font-weight: 700; text-transform: uppercase; }
+.btn-cs-info:hover { background: var(--gold); color: #000; }
+
+/* Estilos legacy */
+.card-area {
+    border-radius: var(--bs-border-radius-xxl) !important;
+    padding: 2rem 1.5rem !important;
+    margin-bottom: 2.5rem !important;
+    border: 1px solid rgba(var(--n1), 0.2);
+    background: rgba(var(--n1), 0.1); 
+    text-shadow: var(--card-shadow);
+    backdrop-filter: blur(10px); 
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    transition: transform 0.3s ease;
+}
+.card-area h6 { color: rgb(var(--n1)); font-family: 'Cinzel', serif; font-weight: 700; text-transform: uppercase; margin: 0; font-size: 1.1rem; text-align: center; }
+.hr-line { height: 1px; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent); width: 100%; margin: 15px 0; }
+.custom-input { background-color: rgba(0, 0, 0, 0.5) !important; border: 1px solid rgba(255, 255, 255, 0.1) !important; color: #fff !important; border-radius: 8px; padding: 10px 15px; font-size: 14px; width: 100%; }
+.custom-input:focus { background-color: rgba(0, 0, 0, 0.7) !important; border-color: var(--gold) !important; box-shadow: 0 0 10px rgba(200, 161, 101, 0.2); outline:none; }
+
+/* ... (Tus estilos previos de CORE, BACKGROUND y NAVBAR se mantienen igual) ... */
+
+/* --- HERO ONLINE WIDGET (ESTILOS NUEVOS) --- */
+.hero-online-widget {
+    width: 300px; /* Ancho del widget */
+    height: auto;
+    
+    position: absolute;
+    /* Ajustamos la posición vertical para que suba más */
+    top: -280px; 
+    /* Lo pegamos a la derecha con un margen */
+    right: 0px;
+    /* Reseteamos propiedades de centrado anterior */
+    left: auto;
+    margin: 0;
+    
+    z-index: 50;
+    
+    text-align: center;
+    background: rgba(0, 0, 0, 0.4);
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid rgba(43, 223, 73, 0.1);
+    backdrop-filter: blur(2px);
+}
+
+.online-info-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+    font-family: 'Roboto', sans-serif;
+}
+
+.online-label {
+    font-weight: 700;
+    font-size: 13px;
+    color: #fff;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+}
+
+.online-value {
+    font-size: 15px;
+    font-weight: bold;
+    color: var(--online-green);
+    text-shadow: 0 0 10px rgba(43, 223, 73, 0.6);
+}
+
+/* Pista de la barra (Fondo oscuro) */
+.hero-progress-track {
+    width: 100%;
+    height: 10px;
+    background-color: #1a1a1a;
+    border: 1px solid #333;
+    border-radius: 5px;
+    overflow: hidden;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.8);
+    margin-bottom: 8px;
+}
+
+/* Relleno Verde-Amarillo */
+.hero-progress-fill {
+    height: 100%;
+    /* Degradado Verde a Amarillo Neón */
+    background: linear-gradient(90deg, #4caf50, #c6ff00);
+    /* Resplandor Amarillo-Verdoso */
+    box-shadow: 0 0 15px rgba(198, 255, 0, 0.6); 
+    border-radius: 5px;
+    transition: width 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden; /* Importante para que la animación no se salga */
+}
+
+/* Efecto de Rayas Animadas (Candy Cane) */
+.hero-progress-fill::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; bottom: 0; right: 0;
+    
+    /* Patrón de rayas diagonales */
+    background-image: linear-gradient(
+        45deg,
+        rgba(255, 255, 255, 0.3) 25%,
+        transparent 25%,
+        transparent 50%,
+        rgba(255, 255, 255, 0.3) 50%,
+        rgba(255, 255, 255, 0.3) 75%,
+        transparent 75%,
+        transparent
+    );
+    
+    /* Tamaño del patrón */
+    background-size: 20px 20px;
+    
+    /* ANIMACIÓN INFINITA */
+    animation: move-stripes 1s linear infinite;
+    
+    opacity: 0.8;
+}
+
+/* Definición de la animación */
+@keyframes move-stripes {
+    0% {
+        background-position: 0 0;
+    }
+    100% {
+        background-position: 20px 0; /* Debe coincidir con el background-size */
+    }
+}
+
+.online-sub-info {
+    font-size: 11px;
+    color: #aaa;
+    letter-spacing: 0.5px;
+}
+
+.text-online-green {
+    color: var(--online-green);
+    font-weight: bold;
+}
+
+/* --- EVENTOS SIDEBAR STYLES --- */
+.sb-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px;
+    background: rgba(10, 12, 16, 0.9);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.sb-title {
+    font-family: 'Cinzel', serif;
+    font-size: 14px;
+    color: #fff;
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    justify-content: center;
+}
+
+.sb-icon {
+    color: var(--gold);
+    font-size: 14px;
+}
+
+.form-control-dark {
+    background-color: #111 !important;
+    border: 1px solid #333 !important;
+    color: #aaa !important;
+    border-radius: 4px;
+}
+
+.events-list {
+    max-height: 400px;
+    overflow-y: auto;
+    padding: 5px 0;
+}
+
+/* Scrollbar personalizado para la lista de eventos */
+.events-list::-webkit-scrollbar { width: 4px; }
+.events-list::-webkit-scrollbar-track { background: transparent; }
+.events-list::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 10px; }
+
+.event-row {
+    display: flex;
+    align-items: center;
+    padding: 10px 15px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.02);
+    transition: background 0.3s;
+}
+
+.event-row:hover {
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.event-row:last-child { border-bottom: none; }
+
+.ev-status {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-right: 12px;
+    flex-shrink: 0;
+}
+
+/* Estado Offline: Rojo/Apagado */
+.ev-status.offline {
+    background-color: #ff4d4d;
+    box-shadow: 0 0 5px #ff4d4d;
+}
+
+/* Estado Online: Verde Neón */
+.ev-status.online {
+    background-color: var(--online-green);
+    box-shadow: 0 0 8px var(--online-green);
+    animation: pulse-green 2s infinite;
+}
+
+@keyframes pulse-green {
+    0% { opacity: 1; }
+    50% { opacity: 0.5; }
+    100% { opacity: 1; }
+}
+
+.ev-name {
+    flex-grow: 1;
+    font-size: 12px;
+    color: #eee;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-right: 10px;
+}
+
+.ev-timer {
+    background: rgba(0, 0, 0, 0.3);
+    padding: 2px 6px;
+    border-radius: 3px;
+    border: 1px solid rgba(200, 161, 101, 0.2);
+}
+
+/* ==========================================================================
+   MODULE: CHARACTERS (CANIBAL FIX & STYLES)
+   ========================================================================== */
+
+/* 1. REPARAR EL GRID (Anulamos el efecto negativo de donate.css en esta pestaña) */
+#pane-characters .donation-main-container .row {
+    display: flex !important;
+    flex-wrap: wrap !important;
+}
+#pane-characters .donation-main-container .col-md-6 {
+    display: block !important;
+    width: 50% !important;
+    flex: 0 0 50% !important;
+}
+
+@media (max-width: 768px) {
+    #pane-characters .donation-main-container .col-md-6 {
+        width: 100% !important;
+        flex: 0 0 100% !important;
+    }
+}
+
+/* 2. ESTILOS DE LA TARJETA DEL PERSONAJE (Faltaban en el PHP) */
+.char-card-premium {
+    background-color: #15171c !important;
+    border: 1px solid #2d323e !important;
+    border-radius: 12px !important;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3) !important;
+    transition: transform 0.3s ease, border-color 0.3s ease !important;
+    height: 100% !important;
+}
+
+.char-card-premium:hover {
+    transform: translateY(-5px) !important;
+    border-color: #c8a165 !important;
+    box-shadow: 0 10px 30px rgba(200, 161, 101, 0.2) !important;
+}
+
+/* 3. AVATAR Y NIVEL */
+.char-avatar-container {
+    position: relative !important;
+    width: 80px !important;
+    height: 80px !important;
+    border-radius: 8px !important;
+    border: 2px solid #2d323e !important;
+    background: #0b0d10 !important;
+    padding: 3px !important;
+    flex-shrink: 0 !important; /* Evita que el avatar se aplaste */
+}
+
+.char-img-rank {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    border-radius: 4px !important;
+}
+
+.char-level-badge {
+    position: absolute !important;
+    bottom: -10px !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    background: #c8a165 !important;
+    color: #000 !important;
+    font-size: 11px !important;
+    font-weight: 800 !important;
+    padding: 2px 10px !important;
+    border-radius: 10px !important;
+    white-space: nowrap !important;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.5) !important;
+}
+
+/* 4. TEXTOS DEL HEADER (Nombre, Clase, Resets) */
+.char-info-header h4 {
+    font-family: 'Cinzel', serif !important;
+    color: #fff !important;
+    font-size: 20px !important;
+    margin-bottom: 2px !important;
+    letter-spacing: 1px !important;
+}
+
+.char-info-header p {
+    color: #8b949e !important;
+    font-size: 13px !important;
+    margin-bottom: 8px !important;
+    text-transform: uppercase !important;
+}
+
+.badge-resets {
+    display: inline-block !important;
+    background: rgba(52, 152, 219, 0.1) !important;
+    color: #3498db !important;
+    border: 1px solid rgba(52, 152, 219, 0.3) !important;
+    padding: 3px 10px !important;
+    border-radius: 4px !important;
+    font-size: 11px !important;
+    font-weight: bold !important;
+    text-transform: uppercase !important;
+}
+
+/* 5. FIX Z-INDEX PARA LOS MODALES DE ACCIÓN (Desatascar / Reset) */
+#charActionModal {
+    z-index: 2147483647 !important;
+    backdrop-filter: blur(5px) !important;
+}
+
+#charActionModal .modal-action-content {
+    background-color: #111418 !important;
+    border: 1px solid #c8a165 !important;
+    box-shadow: 0 0 40px rgba(0,0,0,0.8), 0 0 15px rgba(200, 161, 101, 0.2) !important;
+}
+
+#charActionModal .modal-title {
+    color: #c8a165 !important;
+}
+
+/* ==========================================================================
+   PERFIL DE PERSONAJE - PRELOADER (ANTI-FLICKER)
+   ========================================================================== */
+.profile-wrapper {
+    opacity: 0 !important;
+    visibility: hidden !important;
+}
+
+.profile-wrapper.c-ready {
+    opacity: 1 !important;
+    visibility: visible !important;
+    transition: opacity 0.5s ease-in-out !important; /* Fundido suave de medio segundo */
+}

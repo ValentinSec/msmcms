@@ -1,0 +1,7 @@
+Hola, {USERNAME}.<br /><br />
+
+Muchísimas gracias por registrar tu cuenta en {SERVER_NAME}. Antes de que puedas loggearte en el server, necesitamos verificar tu correo electrónico haciendo click aquí:<br />
+<a href="{LINK}" target="_blank">{LINK}</a><br /><br />
+
+Saludos,<br />
+{SERVER_NAME}.

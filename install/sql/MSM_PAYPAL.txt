@@ -1,0 +1,11 @@
+CREATE TABLE [dbo].[{TABLE_PREFIX}PAYPAL_TRANSACTIONS](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[transaction_id] [varchar](50) NOT NULL,
+	[user_id] [int] NOT NULL,
+	[payment_amount] [varchar](50) NOT NULL,
+	[paypal_email] [varchar](200) NOT NULL,
+	[transaction_date] [varchar](50) NOT NULL,
+	[transaction_status] [int] NOT NULL,
+	[order_id] [varchar](50) NOT NULL,
+    CONSTRAINT [PK_{TABLE_PREFIX}PAYPAL_TRANSACTIONS] PRIMARY KEY CLUSTERED ([transaction_id] ASC)
+) ON [PRIMARY]

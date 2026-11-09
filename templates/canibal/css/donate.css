@@ -1,0 +1,239 @@
+/* --- DONATION MODULE: REPLICA EXACTA (SELECTOR HORIZONTAL + TARJETAS NORMALES) --- */
+
+:root {
+    --don-header-bg: #0b172a;      /* Azul muy oscuro (Fondo barra) */
+    --don-active-blue: #0091ea;    /* Azul eléctrico (Tab activo) */
+    --don-card-bg: #2b3035;        /* Gris oscuro (Cartas) */
+    --don-btn-green: #5cb85c;      /* Verde (Botón comprar) */
+    --don-text-gold: #ffc107;      /* Dorado */
+}
+
+/* 1. LAYOUT (Reset de Columnas para poner Barra Arriba y Paquetes Abajo) */
+.donation-main-container .row {
+    display: block !important; /* Desactiva el flex row de bootstrap */
+}
+
+.donation-main-container .col-md-4, 
+.donation-main-container .col-md-8 {
+    display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    flex: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+/* Ocultar títulos viejos */
+.section-label-small { display: none !important; }
+
+/* 2. BARRA DE MÉTODOS DE PAGO (HORIZONTAL) */
+#donationMethods {
+    display: flex !important;       /* Flexbox para poner items en fila */
+    flex-direction: row !important; /* Dirección horizontal explícita */
+    background-color: var(--don-header-bg) !important;
+    border-radius: 4px !important;
+    margin-bottom: 20px !important;
+    overflow: hidden !important;
+    border: 1px solid #1e3a5a !important;
+    width: 100% !important;         /* Asegura ancho completo */
+}
+
+.payment-card-premium {
+    flex: 1 !important;             /* Distribuir espacio equitativamente */
+    background: transparent !important;
+    border: none !important;
+    border-right: 1px solid rgba(255,255,255,0.1) !important;
+    border-radius: 0 !important;
+    margin: 0 !important;
+    padding: 15px 5px !important;
+    cursor: pointer !important;
+    position: relative !important;
+    transition: all 0.2s !important;
+    display: flex !important;       /* Centrar contenido del botón */
+    align-items: center !important;
+    justify-content: center !important;
+    min-height: 60px !important;
+    text-align: center !important;
+}
+
+.payment-card-premium:last-child { border-right: none !important; }
+
+/* Icono y Texto */
+.payment-icon-box { margin-right: 8px !important; }
+.payment-icon-box i { font-size: 20px !important; color: #fff !important; }
+
+.payment-text { text-align: left !important; line-height: 1.2 !important; }
+.payment-text h5 { 
+    color: #fff !important; 
+    font-size: 13px !important; 
+    font-weight: 700 !important; 
+    margin: 0 !important; 
+    text-transform: uppercase !important;
+}
+.payment-text small { 
+    display: none !important; /* Ocultamos 'Local' para limpiar */
+}
+
+/* Check mark verde */
+.check-badge { 
+    display: none !important; /* Ocultamos check por defecto */
+}
+
+/* ESTADO ACTIVO (FONDO AZUL CLARO) */
+.payment-card-premium.active {
+    background-color: var(--don-active-blue) !important;
+    box-shadow: inset 0 -3px 0 rgba(0,0,0,0.2) !important;
+}
+/* Borde inferior verde del activo */
+.payment-card-premium.active::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; width: 100%;
+    height: 3px;
+    background-color: #00e676; 
+}
+
+/* 3. FILTROS DE MONEDA (BOTONES AZULES) */
+.nav-pills-coins {
+    display: flex !important;
+    gap: 10px !important;
+    margin-bottom: 25px !important;
+    justify-content: center !important; /* Centrado opcional */
+}
+
+.btn-filter-coin {
+    background-color: #0d6efd !important;
+    color: #fff !important;
+    border: none !important;
+    border-radius: 4px !important;
+    font-weight: 600 !important;
+    padding: 8px 20px !important;
+    font-size: 13px !important;
+}
+
+/* 4. TARJETAS DE PAQUETES (FIX TAMAÑO & ALINEACIÓN) */
+.donation-grid {
+    display: grid !important;
+    /* Usamos auto-fit y minmax de 200px para que se alineen horizontalmente */
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)) !important;
+    gap: 20px !important;
+    width: 100% !important;
+    justify-content: center !important;
+}
+
+.donation-pack-btn {
+    background-color: var(--don-card-bg) !important;
+    border: 1px solid #3c4046 !important;
+    border-radius: 8px !important;
+    padding: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center !important;
+    min-height: 320px !important;
+    position: relative !important;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2) !important;
+    overflow: hidden !important;
+    cursor: pointer !important;
+    
+    /* FIX DE TAMAÑO: Limitamos ancho máximo y centramos */
+    width: 100% !important;
+    max-width: 280px !important; 
+    margin: 0 auto !important; 
+}
+
+/* Efecto Hover */
+.donation-pack-btn:hover {
+    transform: translateY(-5px) !important;
+    border-color: #666 !important;
+    background-color: #32383e !important;
+}
+
+/* ESTADO SELECCIONADO (Borde Verde Brillante) */
+.donation-pack-btn.selected-pack {
+    border: 2px solid #00e676 !important;
+    box-shadow: 0 0 15px rgba(0, 230, 118, 0.2) !important;
+    background-color: #2b3035 !important;
+}
+/* Triangulito de selección */
+.donation-pack-btn.selected-pack::after {
+    content: '\f00c'; /* Check icon */
+    font-family: 'FontAwesome';
+    position: absolute;
+    top: 10px; right: 10px;
+    color: #fff;
+    background: #00e676;
+    width: 25px; height: 25px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px;
+}
+
+/* Imagen del Pack */
+.pack-icon-area {
+    width: 100% !important;
+    height: 160px !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    margin-top: 10px !important;
+    background: transparent !important;
+}
+.pack-icon-area img { 
+    height: 130px !important; 
+    width: auto !important;
+    filter: drop-shadow(0 0 10px rgba(0,0,0,0.5)) !important;
+}
+
+/* Detalles (Texto) */
+.pack-details {
+    padding: 10px 20px !important;
+    width: 100% !important;
+    text-align: center !important;
+}
+
+.bc-amount {
+    color: var(--don-text-gold) !important;
+    font-size: 24px !important;
+    font-weight: 700 !important;
+    margin-bottom: 5px !important;
+}
+
+.fiat-amount {
+    color: #ccc !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    text-transform: uppercase !important;
+}
+
+/* 5. BOTÓN PROCEDER AL PAGO (REAL) */
+.btn-proceed-payment {
+    display: block !important;
+    width: 100% !important;
+    max-width: 400px !important;
+    margin: 30px auto 0 auto !important;
+    background-color: #5cb85c !important;
+    color: white !important;
+    padding: 15px !important;
+    font-size: 18px !important;
+    font-weight: bold !important;
+    text-transform: uppercase !important;
+    border: none !important;
+    border-radius: 6px !important;
+    transition: 0.2s !important;
+}
+
+.btn-proceed-payment:disabled {
+    background-color: #444 !important;
+    color: #888 !important;
+    cursor: not-allowed !important;
+    opacity: 0.7 !important;
+}
+
+.btn-proceed-payment:not(:disabled):hover {
+    background-color: #4cae4c !important;
+    transform: scale(1.02);
+    box-shadow: 0 0 20px rgba(92, 184, 92, 0.4) !important;
+}
+
+.pack-check { display: none !important; }

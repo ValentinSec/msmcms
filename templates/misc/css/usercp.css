@@ -1,0 +1,1209 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap');
+@font-face {
+    font-family: 'Trajan Pro';
+    src: url('../fonts/TrajanPro-Regular.woff2') format('woff2'),
+         url('../fonts/TrajanPro-Regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+
+:root {
+    --bg-dark-panel: #120a08;
+    --sidebar-bg: #140a09;
+    --accent-orange: #ff6600;
+    --primary-orange: #ff6600;
+    --gold: #ffcc00;
+    --blue: #3366ff;
+    --green: #00cc66;
+    --glass-bg: rgba(255, 255, 255, 0.03);
+    --glass-border: rgba(255, 255, 255, 0.07);
+    --text-main: #e2e2e2;
+    --text-dim: #666666;
+    --glow-orange: 0 0 20px rgba(255, 102, 0, 0.25);
+}
+
+body.usercp-body {
+    background-color: var(--bg-dark-panel) !important;
+    color: var(--text-main);
+    font-family: 'Inter', 'Segoe UI', sans-serif;
+    margin: 0;
+    overflow-x: hidden;
+}
+
+/* SIDEBAR LAYOUT */
+.usercp-sidebar {
+    background: var(--sidebar-bg);
+    border-right: 1px solid rgba(255, 102, 0, 0.05);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar-divider {
+    height: 1px;
+    background: rgba(255, 255, 255, 0.1);
+    margin: 20px 0;
+    width: 100%;
+}
+
+.user-profile-header {
+    padding: 40px 25px 20px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.user-avatar {
+    width: 75px;
+    height: 75px;
+    background: linear-gradient(135deg, #ff8c42 0%, #ff6600 100%);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 0 25px rgba(255, 102, 0, 0.35);
+}
+
+.user-avatar i { font-size: 30px; color: white; }
+
+.header-info .account-label {
+    font-size: 11px;
+    color: #00ff88;
+    text-transform: capitalize;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.header-info h3 {
+    margin: 5px 0 0;
+    font-family: 'Cinzel', serif;
+    font-size: 1.3rem;
+    color: var(--accent-orange);
+    letter-spacing: 1.5px;
+    font-weight: 800;
+}
+
+/* QUICK ACCESS BUTTONS */
+.quick-access-buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    padding: 0 20px 30px;
+}
+
+.btn-quick {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 10px;
+    padding: 15px 5px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.btn-quick i { color: var(--accent-orange); font-size: 1.2rem; margin-bottom: 5px; display: block; }
+.btn-quick span { font-size: 11px; color: var(--text-dim); text-transform: uppercase; }
+
+/* NAVEGACIÓN PANEL */
+.usercp-nav-menu {
+    padding: 0 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.nav-card {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    text-align: left !important;
+    padding: 18px !important;
+    background: transparent !important;
+    border: 1px solid transparent !important;
+    border-radius: 12px !important;
+    text-decoration: none !important;
+    transition: all 0.3s ease;
+    width: 100%;
+}
+
+.nav-card .icon-box {
+    width: 45px;
+    height: 45px;
+    background: rgba(255, 255, 255, 0.04);
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 15px;
+    color: var(--text-dim);
+    flex-shrink: 0;
+}
+
+.nav-card .text-box {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.nav-card .text-box h4 {
+    margin: 0;
+    color: #fff;
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.nav-card .text-box p {
+    margin: 2px 0 0;
+    color: var(--text-dim);
+    font-size: 11px;
+}
+
+.nav-card.active {
+    background: linear-gradient(90deg, rgba(255, 102, 0, 0.08) 0%, transparent 100%) !important;
+    border: 1px solid rgba(255, 102, 0, 0.2) !important;
+    border-left: 3px solid var(--accent-orange) !important;
+    box-shadow: var(--glow-orange) !important;
+}
+
+.nav-card.active .icon-box {
+    background: rgba(255, 102, 0, 0.15);
+    color: var(--accent-orange);
+}
+
+.nav-card.active .text-box h4 {
+    color: var(--accent-orange);
+    text-transform: uppercase;
+}
+
+.nav-card .arrow-icon {
+    margin-left: auto;
+    color: var(--accent-orange);
+    opacity: 0;
+    transform: translateX(-10px);
+    transition: 0.3s;
+}
+
+.nav-card.active .arrow-icon {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+/* --- NUEVAS CLASES PARA REPLICAR IMAGEN 1 --- */
+
+/* Account Details Banner */
+.account-details-banner {
+    background: linear-gradient(135deg, rgba(255, 73, 0, 0.08) 0%, rgba(20, 10, 9, 0.6) 100%);
+    border: 1px solid rgba(255, 102, 0, 0.15);
+    border-radius: 15px;
+}
+
+.icon-box-shield {
+    width: 55px;
+    height: 55px;
+    background: rgba(255, 102, 0, 0.15);
+    border: 1px solid rgba(255, 102, 0, 0.3);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--accent-orange);
+    font-size: 22px;
+}
+
+.status-badge-disconnected {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #888;
+    padding: 6px 15px;
+    border-radius: 20px;
+    font-size: 12px;
+}
+
+.account-email-box {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.03);
+    color: var(--text-dim);
+}
+
+/* Balance Cards Replica */
+.balance-card {
+    background: rgba(20, 20, 25, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.03);
+    border-radius: 12px;
+    padding: 25px;
+    position: relative;
+    overflow: hidden;
+}
+
+.balance-tag {
+    background: rgba(0, 0, 0, 0.4);
+    color: #888;
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 10px;
+    text-transform: uppercase;
+}
+
+.balance-card .value {
+    font-size: 32px;
+    font-weight: bold;
+    color: #fff;
+    margin-top: 5px;
+    display: block;
+}
+
+.progress-line {
+    width: 100%;
+    height: 2px;
+    background: rgba(255, 255, 255, 0.05);
+    margin-top: 15px;
+    position: relative;
+}
+
+.progress-line::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 35%;
+}
+
+.b-gold .progress-line::after { background: var(--gold); box-shadow: 0 0 10px var(--gold); }
+.b-blue .progress-line::after { background: var(--blue); box-shadow: 0 0 10px var(--blue); }
+.b-green .progress-line::after { background: var(--green); box-shadow: 0 0 10px var(--green); }
+
+/* VIP Status Container */
+.vip-status-container {
+    position: relative; /* Equivale a relative */
+    overflow: hidden; /* Equivale a overflow-hidden */
+    padding: 2rem; /* Equivale a p-8 (8 * 0.25rem) */
+    border-radius: 1rem; /* Equivale a rounded-2xl (16px) */
+    
+    /* Degradado grisáceo sutil */
+    background: linear-gradient(135deg, rgba(107, 114, 128, 0.15) 0%, rgba(75, 85, 99, 0.08) 100%);
+    
+    /* Borde de 2px con tono gris medio */
+    border: 2px solid rgba(107, 114, 128, 0.3);
+}
+
+.vip-icon-box {
+    width: 50px;
+    height: 50px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #888;
+    font-size: 20px;
+}
+
+/* LOGOUT */
+.logout-section { padding: 20px; margin-top: auto; }
+.btn-logout-custom {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    padding: 16px;
+    background: rgba(255, 50, 50, 0.04);
+    border: 1px solid rgba(255, 50, 50, 0.1);
+    color: #ff5555;
+    border-radius: 12px;
+    text-decoration: none;
+    font-weight: 700;
+}
+
+.btn-logout-custom:hover { background: rgba(255, 50, 50, 0.1); color: #ff7777; }
+
+/* MISC */
+.title-underline {
+    height: 4px; /* Equivale a h-1 */
+    width: 96px; /* Equivale a w-24 (24 * 4px) */
+    margin-top: 1rem; /* Equivale a mt-4 */
+    border-radius: 9999px; /* Equivale a rounded-full */
+    background: linear-gradient(90deg, rgb(215, 73, 33) 0%, transparent 100%);
+}
+
+.text-orange { color: var(--accent-orange); }
+
+/* SCROLLBAR */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #050505; }
+::-webkit-scrollbar-thumb { background: #222; border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: var(--primary-orange); }
+
+/* --- ESTÉTICA DE TARJETAS DE PERSONAJE --- */
+/* Contenedor principal de la tarjeta del personaje */
+.char-card-premium {
+    position: relative;
+    overflow: hidden;
+    /* Estilo base de la tarjeta (puedes ajustar según tu diseño previo) */
+    background: rgba(13, 12, 17, 0.6);
+    border: 1px solid rgba(215, 73, 33, 0.1);
+    border-radius: 1rem;
+    transition: transform 0.3s ease, border-color 0.3s ease;
+    z-index: 1;
+}
+
+/* El efecto de degradado radial que se activa al pasar el mouse */
+.char-card-premium::before {
+    content: "";
+    position: absolute;
+    inset: 0; /* Ocupa todo el contenedor */
+    opacity: 0; /* Oculto por defecto */
+    background: radial-gradient(circle at 50% 0%, rgba(215, 73, 33, 0.15) 0%, transparent 70%);
+    transition: opacity 0.5s ease; /* duration-500 */
+    pointer-events: none; /* No interfiere con los clics en botones */
+    z-index: -1; /* Se dibuja detrás del texto pero sobre el fondo */
+}
+
+/* Activación del brillo al hacer hover */
+.char-card-premium:hover::before {
+    opacity: 1;
+}
+
+/* Opcional: un sutil levantamiento de la tarjeta */
+.char-card-premium:hover {
+    border-color: rgba(215, 73, 33, 0.4);
+    transform: translateY(-5px);
+}
+
+.char-avatar-container {
+    position: relative;
+    width: 70px;
+    height: 70px;
+}
+
+.char-img-rank {
+    width: 100%;
+    border-radius: 8px;
+    border: 2px solid var(--accent-orange);
+}
+
+.char-level-badge {
+    position: absolute;
+    bottom: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--accent-orange);
+    color: white;
+    font-size: 10px;
+    font-weight: bold;
+    padding: 2px 8px;
+    border-radius: 4px;
+    white-space: nowrap;
+}
+
+.badge-resets {
+    background: rgba(0, 0, 0, 0.3);
+    color: #ffcc00;
+    font-size: 11px;
+    padding: 4px 10px;
+    border-radius: 6px;
+    display: inline-block;
+}
+
+/* Cajas de Estadísticas */
+.stat-box-small {
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 8px;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.stat-box-small.b-red { border-left: 3px solid #ff4444; }
+.stat-box-small.b-green { border-left: 3px solid #00ff88; }
+.stat-box-small.b-blue { border-left: 3px solid #3366ff; }
+.stat-box-small.b-purple { border-left: 3px solid #aa66ff; }
+
+.stat-content small {
+    display: block;
+    font-size: 10px;
+    color: #888;
+    text-transform: uppercase;
+}
+
+.stat-content strong {
+    color: #fff;
+    font-size: 14px;
+}
+
+/* Botones */
+.btn-orange-action {
+    background: linear-gradient(90deg, #ff7700, #ff4400);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 10px;
+    font-weight: bold;
+    text-align: center;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.btn-dark-action {
+    background: #2a2a32;
+    color: #ff8844;
+    border: 1px solid rgba(255, 136, 68, 0.2);
+    border-radius: 8px;
+    padding: 10px 15px;
+    transition: 0.3s;
+}
+
+.btn-orange-action:hover { box-shadow: 0 0 15px rgba(255, 102, 0, 0.4); color: #fff; }
+
+/* --- ESTÉTICA PREMIUM DE PERSONAJES (REPLICA) --- */
+.char-card-premium {
+    background: #1a1a20; /* Fondo oscuro de la referencia */
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    transition: 0.3s;
+}
+
+.char-avatar-container {
+    position: relative;
+    width: 70px;
+    height: 70px;
+    flex-shrink: 0;
+}
+
+.char-img-rank {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 2px solid var(--accent-orange);
+}
+
+.char-level-badge {
+    position: absolute;
+    bottom: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--accent-orange);
+    color: white;
+    font-size: 10px;
+    font-weight: bold;
+    padding: 2px 8px;
+    border-radius: 4px;
+    white-space: nowrap;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+}
+
+.char-info-header {
+    flex-grow: 1;
+}
+
+.badge-resets {
+    background: rgba(0, 0, 0, 0.3);
+    color: #ffcc00;
+    font-size: 11px;
+    padding: 4px 10px;
+    border-radius: 6px;
+    display: inline-block;
+}
+
+.stat-content {
+    text-align: left;
+}
+
+.stat-content small {
+    display: block;
+    font-size: 10px;
+    color: #666;
+    text-transform: uppercase;
+    line-height: 1;
+    margin-bottom: 2px;
+}
+
+.stat-content strong {
+    color: #fff;
+    font-size: 14px;
+    display: block;
+}
+
+/* Botones de Acción */
+.btn-orange-action {
+    background: linear-gradient(90deg, #ff7700, #ff4400);
+    color: white !important;
+    border: none;
+    border-radius: 8px;
+    padding: 10px;
+    font-weight: bold;
+    text-align: center;
+    text-decoration: none;
+    font-size: 13px;
+}
+
+.btn-dark-action {
+    background: #2a2a32;
+    color: #ff8844 !important;
+    border: 1px solid rgba(255, 136, 68, 0.2);
+    border-radius: 8px;
+    padding: 10px 15px;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.btn-orange-action:hover {
+    box-shadow: 0 0 15px rgba(255, 102, 0, 0.4);
+    transform: translateY(-1px);
+}
+
+/* DISEÑO DE PAQUETES DE DONACIÓN */
+.pack-card {
+    background: rgba(255, 255, 255, 0.02);
+    transition: 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.05) !important;
+}
+
+.pack-card:hover {
+    background: rgba(255, 102, 0, 0.04);
+    border-color: rgba(255, 102, 0, 0.2) !important;
+    transform: translateY(-5px);
+}
+
+.payment-item.active {
+    background: rgba(255, 102, 0, 0.1) !important;
+    border: 1px solid rgba(255, 102, 0, 0.3) !important;
+    color: #fff !important;
+}
+
+.badge.bg-orange {
+    background-color: var(--accent-orange);
+    color: #fff;
+    font-size: 9px;
+    text-transform: uppercase;
+}
+
+/* --- ESTÉTICA DE DONACIONES PREMIUM --- */
+
+.alert-donation-top {
+    background: rgba(255, 102, 0, 0.03);
+    border: 1px solid rgba(255, 102, 0, 0.15);
+    border-radius: 12px;
+}
+
+.section-label-small {
+    font-family: 'Cinzel', serif;
+    font-size: 14px;
+    color: #fff;
+    letter-spacing: 1px;
+}
+
+.payment-card-premium {
+    background: #1a1a20 !important;
+    border: 1px solid rgba(255, 255, 255, 0.05) !important;
+    border-radius: 12px !important;
+    padding: 15px !important;
+    transition: all 0.3s ease;
+    color: inherit;
+    position: relative;
+}
+
+.payment-icon-box {
+    width: 45px;
+    height: 45px;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ff8844;
+    font-size: 18px;
+    flex-shrink: 0;
+}
+
+.payment-text h5 {
+    color: #ccc;
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 2px;
+}
+
+.payment-text small {
+    color: #666;
+    font-size: 11px;
+}
+
+/* ESTADO ACTIVO: Borde dorado y check mark */
+.payment-card-premium.active {
+    border: 1px solid rgba(255, 204, 0, 0.6) !important;
+    background: linear-gradient(90deg, rgba(255, 102, 0, 0.08) 0%, transparent 100%) !important;
+    box-shadow: 0 0 15px rgba(255, 204, 0, 0.1);
+}
+
+.payment-card-premium.active .payment-text h5 {
+    color: #ffcc00;
+}
+
+.payment-card-premium.active .payment-icon-box {
+    background: rgba(255, 204, 0, 0.2);
+    color: #ffcc00;
+}
+
+/* Ocultar el tick por defecto */
+.check-badge {
+    display: none !important; /* Oculto inicialmente */
+    width: 20px;
+    height: 20px;
+    background: #ffcc00;
+    border-radius: 50%;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    color: #000;
+    box-shadow: 0 0 10px rgba(255, 204, 0, 0.4);
+    flex-shrink: 0;
+}
+
+/* Mostrar el tick solo cuando el botón tiene la clase .active */
+.payment-card-premium.active .check-badge {
+    display: flex !important;
+}
+
+/* Alineación extra para asegurar que el check no mueva el texto */
+.payment-card-premium .d-flex {
+    min-height: 45px;
+}
+
+/* --- ESTILO PANEL VACÍO DONACIÓN --- */
+
+.donation-packages-wrapper {
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px dashed rgba(255, 102, 0, 0.15) !important; /* Borde punteado naranja sutil */
+    border-radius: 15px;
+    min-height: 450px;
+    display: flex;
+    flex-direction: column;
+}
+
+.empty-wallet-icon {
+    width: 100px;
+    height: 100px;
+    background: rgba(255, 102, 0, 0.03);
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(255, 102, 0, 0.1);
+}
+
+.donation-packages-wrapper .tab-pane {
+    width: 100%;
+}
+
+/* Asegurar que el contenido ocupe el alto si está vacío */
+.donation-packages-wrapper .tab-pane.active {
+    display: block;
+}
+
+/* --- CONTENEDOR MAESTRO DE DONACIÓN --- */
+.donation-main-container {
+    padding: 1.5rem; /* Equivale a p-6 */
+    border-radius: 0.75rem; /* Equivale a rounded-xl (12px) */
+    background: linear-gradient(135deg, rgba(26, 15, 16, 0.6) 0%, rgba(18, 9, 9, 0.4) 100%);
+    border: 1px solid rgba(215, 73, 33, 0.2);
+    box-shadow: rgba(0, 0, 0, 0.3) 0px 10px 40px;
+}
+
+/* --- ESTÉTICA DE DONACIONES PREMIUM --- */
+.alert-donation-top {
+    background: rgba(255, 102, 0, 0.03);
+    border: 1px solid rgba(255, 102, 0, 0.15);
+    border-radius: 12px;
+}
+
+.section-label-small {
+    font-family: 'Cinzel', serif;
+    font-size: 14px;
+    color: #fff;
+    letter-spacing: 1px;
+}
+
+.payment-card-premium {
+    background: #1a1a20 !important;
+    border: 1px solid rgba(255, 255, 255, 0.05) !important;
+    border-radius: 12px !important;
+    padding: 15px !important;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+/* Lógica del Check dinámico */
+.check-badge {
+    display: none !important; /* Oculto por defecto */
+    width: 22px;
+    height: 22px;
+    background: var(--gold);
+    border-radius: 50%;
+    align-items: center;
+    justify-content: center;
+    color: #000;
+    font-size: 10px;
+    box-shadow: 0 0 10px rgba(255, 204, 0, 0.4);
+    flex-shrink: 0;
+}
+
+/* Mostrar check solo en la opción activa */
+.payment-card-premium.active {
+    border: 1px solid rgba(255, 204, 0, 0.6) !important;
+    background: linear-gradient(90deg, rgba(255, 102, 0, 0.08) 0%, transparent 100%) !important;
+    box-shadow: 0 0 15px rgba(255, 204, 0, 0.1);
+}
+
+.payment-card-premium.active .check-badge {
+    display: flex !important;
+}
+
+.payment-icon-box {
+    width: 45px;
+    height: 45px;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ff8844;
+    font-size: 18px;
+}
+
+/* --- ÁREA DE PAQUETES (DERECHA) --- */
+.donation-packages-wrapper {
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px dashed rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    min-height: 450px;
+}
+
+.empty-wallet-icon {
+    width: 90px;
+    height: 90px;
+    background: rgba(255, 102, 0, 0.03);
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(255, 102, 0, 0.1);
+}
+
+/* --- ESTILOS ESPECÍFICOS DE CONFIGURACIÓN (ANCHO UNIFICADO) --- */
+
+.settings-form-box {
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    padding: 25px;
+    /* Ancho unificado para todos los contenedores */
+    max-width: 750px; 
+    margin: 0 auto;
+    width: 100%;
+}
+
+.settings-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.icon-square {
+    width: 40px; 
+    height: 40px;
+    border-radius: 8px;
+    display: flex; 
+    align-items: center; 
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+}
+
+/* Colores de cajas y botones */
+.border-orange { border-left: 4px solid var(--accent-orange); }
+.bg-orange-soft { background: rgba(255, 102, 0, 0.1); color: var(--accent-orange); }
+
+.border-blue { border-left: 4px solid #3366ff; }
+.bg-blue-soft { background: rgba(51, 102, 255, 0.1); color: #3366ff; }
+.btn-blue-action { background: #3366ff; color: #fff; border: none; box-shadow: 0 0 15px rgba(51, 102, 255, 0.3); width: 100%; font-weight: bold; }
+
+.border-purple { border-left: 4px solid #aa66ff; }
+.bg-purple-soft { background: rgba(170, 102, 255, 0.1); color: #aa66ff; }
+.btn-purple-action { background: #aa66ff; color: #fff; border: none; box-shadow: 0 0 15px rgba(170, 102, 255, 0.3); width: 100%; font-weight: bold; }
+
+.border-gold { border-left: 4px solid var(--gold); }
+.bg-gold-soft { background: rgba(255, 204, 0, 0.1); color: var(--gold); }
+.btn-gold-action { background: var(--gold); color: #000; font-weight: bold; border: none; width: 100%; }
+
+.border-red { border-left: 4px solid #ff4444; }
+.bg-red-soft { background: rgba(255, 68, 68, 0.1); color: #ff4444; }
+
+/* Botón de Cerrar Sesión (Tamaño de la referencia) */
+.btn-red-action { 
+    background: #ff4444; 
+    color: #fff; 
+    border: none; 
+    box-shadow: 0 0 15px rgba(255, 68, 68, 0.4); 
+    font-weight: bold;
+    padding: 10px 25px;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+/* Alertas internas */
+.alert-settings-yellow {
+    background: rgba(255, 204, 0, 0.05);
+    border: 1px solid rgba(255, 204, 0, 0.2);
+    border-radius: 8px;
+    padding: 12px;
+    color: var(--gold);
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.text-purple { color: #aa66ff; }
+
+/* Ajuste inputs */
+.settings-form-box .form-control {
+    background: rgba(255, 255, 255, 0.02) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    padding: 10px;
+    color: #fff !important;
+}
+
+/* Efectos Hover */
+.settings-form-box .btn:hover {
+    filter: brightness(1.2);
+    transform: translateY(-1px);
+    transition: 0.2s;
+}
+
+.btn-red-action:hover {
+    color: #fff;
+    box-shadow: 0 0 20px rgba(255, 68, 68, 0.6);
+}
+/* 1. Base General: Todo en Roboto por defecto */
+.usercp-body {
+    font-family: 'Roboto', sans-serif !important;
+}
+
+/* 2. Títulos y Etiquetas: Forzar Trajan Pro / Cinzel */
+.module-title h2, 
+.user-profile-header h3, 
+.header-info h3,
+.section-label, 
+.nav-card h4, 
+.account-details-banner h4,
+.payment-card-premium h5 {
+    font-family: 'Trajan Pro', 'Cinzel', serif !important;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* 3. Datos y Descripciones: Forzar Roboto */
+.module-title p,
+.nav-card p,
+.balance-card .value,
+.stat-content strong,
+.text-white,
+.form-label,
+.form-control {
+    font-family: 'Roboto', sans-serif !important;
+    text-transform: none; /* Evita que hereden mayúsculas */
+    letter-spacing: 0;
+}
+
+.text-color {
+    color: #C8A165;
+}
+
+/* --- CONTENEDOR PRINCIPAL --- */
+.donation-packages-wrapper {
+    background: rgba(0,0,0,0.2);
+    border-radius: 15px;
+    border: 1px solid rgba(255,255,255,0.05);
+    min-height: 450px;
+    position: relative; /* Necesario para el flujo de los paneles */
+}
+
+/* --- ESTADOS DE LOS PANELES (TABS) --- */
+/* Ocultamos todos los paneles que no están activos para que no ocupen espacio */
+#donationPacks .tab-pane {
+    display: none; 
+}
+
+/* Solo el panel activo se muestra y arranca desde arriba */
+#donationPacks .tab-pane.active {
+    display: block;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+/* Centrado del estado vacío */
+.empty-state-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 350px;
+}
+
+/* --- GRILLA DE PAQUETES --- */
+.donation-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 25px;
+    margin-bottom: 30px;
+}
+
+/* --- ESTÉTICA DE LA TARJETA --- */
+.donation-pack-btn {
+    position: relative;
+    background: linear-gradient(rgba(25, 28, 35, 0.95) 0%, rgba(15, 18, 23, 0.98) 100%);
+    border: 2px solid rgba(251, 191, 36, 0.1);
+    border-radius: 1rem;
+    padding: 0;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    width: 100%; /* Asegura que ocupe su celda en la grilla */
+}
+
+.donation-pack-btn:hover {
+    transform: translateY(-5px);
+    border-color: rgba(251, 191, 36, 0.5);
+}
+
+.donation-pack-btn.selected {
+    border: 3px solid rgb(251, 191, 36);
+    box-shadow: rgba(251, 191, 36, 0.4) 0px 0px 30px 2px;
+}
+
+/* Áreas internas de la tarjeta */
+.pack-icon-area {
+    background: #15171c; /* Fondo oscuro base */
+    width: 100%;
+    height: 160px; /* Altura fija para uniformidad */
+    padding: 0 !important; /* IMPORTANTE: Sin relleno */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden; /* Corta lo que sobre de la imagen */
+    position: relative;
+    border-radius: 8px 8px 0 0; /* Opcional: redondea bordes superiores */
+}
+
+.pack-icon-area img {
+    width: 100% !important;
+    height: 100% !important;
+    max-width: none !important; /* Permite que la imagen sea más ancha que el contenedor si es necesario */
+    object-fit: cover; /* CLAVE: Rellena todo el espacio recortando los bordes si hace falta */
+    object-position: center;
+    display: block;
+    filter: drop-shadow(rgba(251, 191, 36, 0.3) 0px 0px 15px);
+    transition: transform 0.3s ease;
+}
+
+/* Efecto opcional: Zoom suave al pasar el mouse */
+.donation-pack-btn:hover .pack-icon-area img {
+    transform: scale(1.1);
+}
+
+.pack-details {
+    padding: 20px;
+    text-align: left;
+    background: rgba(0,0,0,0.3);
+}
+
+/* Esto reemplaza el small que está dentro de .pack-details */
+.pack-details small.text-orange {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: rgba(243, 156, 18, 0.9);
+    color: #000;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 9px !important;
+    z-index: 4;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.5);
+    /* Quitamos margins porque ahora flota */
+    margin: 0; 
+}
+
+.bc-amount {
+    font-size: 1.5rem;
+    font-weight: 900;
+    font-family: 'Cinzel', serif;
+    background: linear-gradient(135deg, rgb(253, 224, 71) 0%, rgb(251, 191, 36) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.fiat-amount {
+    color: rgb(230, 214, 198);
+    font-weight: bold;
+}
+
+/* --- BOTÓN PROCEDER AL PAGO --- */
+.btn-proceed-payment {
+    width: 100%;
+    height: 65px;
+    border-radius: 8px;
+    border: none;
+    font-size: 1.2rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    color: white;
+    background: linear-gradient(135deg, rgb(34, 197, 94) 0%, rgb(22, 163, 74) 100%);
+    box-shadow: rgba(34, 197, 94, 0.4) 0px 8px 32px;
+    transition: all 0.3s;
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+.btn-proceed-payment:not(:disabled) {
+    opacity: 1;
+    cursor: pointer;
+}
+
+/* --- BADGES Y DECORACIÓN --- */
+.bonus-badge {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 4px 12px;
+    font-size: 0.7rem;
+    font-weight: bold;
+    color: #fff;
+    background: linear-gradient(135deg, rgb(34, 197, 94) 0%, rgb(22, 163, 74) 100%);
+    clip-path: polygon(0px 0px, 100% 0px, 100% 100%, 15% 100%);
+    z-index: 5;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.pack-check {
+    display: none;
+    position: absolute;
+    top: 15px; right: 15px;
+    width: 25px; height: 25px;
+    background: #22c55e;
+    border-radius: 50%;
+    color: white;
+    align-items: center; 
+    justify-content: center;
+    border: 2px solid white;
+}
+
+.donation-pack-btn.selected .pack-check { 
+    display: flex; 
+}
+
+/* Animación de entrada */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Pestañas de Monedas (Sub-tabs) */
+.nav-pills-coins {
+    background: #15171c;
+    padding: 5px;
+    border-radius: 8px;
+    display: inline-flex;
+    gap: 5px;
+    border: 1px solid #2d323e;
+}
+
+.nav-pills-coins .nav-link {
+    color: #8a8d93;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    padding: 6px 15px;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+}
+
+.nav-pills-coins .nav-link:hover {
+    color: #fff;
+    background: rgba(255,255,255,0.05);
+}
+
+.nav-pills-coins .nav-link.active {
+    background: #f39c12; /* Tu color naranja */
+    color: #111;
+}
+
+/* Estilos del Modal */
+    .modal-vip-content { background: #15171c; border: 1px solid #2d323e; color: #fff; border-radius: 8px; box-shadow: 0 0 50px rgba(0,0,0,0.8); }
+    .modal-vip-header { border-bottom: 1px solid #2d323e; padding: 20px; background: rgba(0,0,0,0.2); }
+    .modal-vip-body { padding: 0; background: #0f1217; min-height: 400px; }
+
+    /* Tabs de Navegación */
+    .vip-tabs {
+        border-bottom: 1px solid #2d323e;
+        background: #111318;
+        padding: 0 20px;
+        display: flex;
+        gap: 5px;
+        overflow-x: auto; /* Por si hay muchos métodos */
+    }
+    .vip-tab-link {
+        background: transparent;
+        border: none;
+        color: #888;
+        padding: 15px 20px;
+        font-weight: bold;
+        text-transform: uppercase;
+        font-size: 12px;
+        cursor: pointer;
+        border-bottom: 3px solid transparent;
+        transition: all 0.3s;
+        white-space: nowrap;
+    }
+    .vip-tab-link:hover { color: #fff; background: rgba(255,255,255,0.02); }
+    .vip-tab-link.active {
+        color: #f39c12;
+        border-bottom-color: #f39c12;
+        background: linear-gradient(to top, rgba(243, 156, 18, 0.1), transparent);
+    }
+
+    /* Contenido de los Tabs */
+    .vip-tab-pane { display: none; padding: 30px; animation: fadeIn 0.4s ease; }
+    .vip-tab-pane.active { display: block; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* Cards */
+    .vip-pack-card {
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 10px;
+        padding: 20px;
+        text-align: center;
+        transition: all 0.3s ease;
+        position: relative;
+        margin-bottom: 20px;
+        height: 100%;
+        display: flex; flex-direction: column; justify-content: space-between;
+    }
+    .vip-pack-card:hover {
+        background: rgba(255, 255, 255, 0.06);
+        border-color: rgba(255, 255, 255, 0.2);
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+    }
+    
+    .pack-badge { font-size: 11px; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; padding: 4px 8px; border-radius: 4px; display: inline-block; margin-bottom: 10px; color: #000; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+    .pack-days { font-size: 28px; font-weight: bold; color: #fff; line-height: 1; margin-bottom: 10px; }
+    .pack-days span { font-size: 12px; color: #888; display: block; text-transform: uppercase; font-weight: normal; margin-top: 5px; }
+    .pack-price { font-size: 22px; color: #f39c12; font-weight: bold; margin: 15px 0; font-family: 'Cinzel', serif; }
+
+    .btn-pack-buy { width: 100%; padding: 10px; border: none; border-radius: 6px; font-weight: bold; text-transform: uppercase; color: #fff; background: #2d323e; transition: 0.3s; cursor: pointer; font-size: 13px; }
+    .btn-pack-buy:hover { background: #f39c12; color: #000; box-shadow: 0 0 15px rgba(243, 156, 18, 0.4); }

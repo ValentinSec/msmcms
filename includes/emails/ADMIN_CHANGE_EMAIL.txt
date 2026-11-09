@@ -1,0 +1,6 @@
+Hola, {USERNAME}.<br /><br />
+
+El Administrador actualizó el correo de registro de tu cuenta a: <b>{NEW_EMAIL}</b>.<br /><br />
+
+Saludos,<br />
+{SERVER_NAME}.

@@ -1,0 +1,147 @@
+[2026-01-21 20:35:16] Acceso detectado. Params: Array
+(
+    [id] => 37484458311
+    [topic] => merchant_order
+)
+
+[2026-01-21 20:35:17] Acceso detectado. Params: Array
+(
+    [data_id] => 142330514999
+    [type] => payment
+)
+
+[2026-01-21 20:35:17] Verificando pago ID: 142330514999 en API de MP...
+[2026-01-21 20:35:17] Acceso detectado. Params: Array
+(
+    [id] => 142330514999
+    [topic] => payment
+)
+
+[2026-01-21 20:35:17] Verificando pago ID: 142330514999 en API de MP...
+[2026-01-21 20:35:17] Respuesta API: Estado=approved | Ref=TXN_697162ad1359e
+[2026-01-21 20:35:17] Respuesta API: Estado=approved | Ref=TXN_697162ad1359e
+[2026-01-21 20:35:17] Acceso detectado. Params: Array
+(
+    [id] => 37484458311
+    [topic] => merchant_order
+)
+
+[2026-01-21 20:35:32] Acceso detectado. Params: Array
+(
+    [id] => 142999350736
+    [topic] => payment
+)
+
+[2026-01-21 20:35:32] Verificando pago ID: 142999350736 en API de MP...
+[2026-01-21 20:35:32] Respuesta API: Estado=approved | Ref=TXN_69715e497f79e
+[2026-01-21 20:35:33] Acceso detectado. Params: Array
+(
+    [id] => 142327765371
+    [topic] => payment
+)
+
+[2026-01-21 20:35:33] Verificando pago ID: 142327765371 en API de MP...
+[2026-01-21 20:35:33] Respuesta API: Estado=approved | Ref=TXN_69715df5017fb
+[2026-01-21 20:36:03] Acceso detectado. Params: Array
+(
+    [data_id] => 142327765371
+    [type] => payment
+)
+
+[2026-01-21 20:36:03] Verificando pago ID: 142327765371 en API de MP...
+[2026-01-21 20:36:03] Respuesta API: Estado=approved | Ref=TXN_69715df5017fb
+[2026-01-21 20:36:18] Acceso detectado. Params: Array
+(
+    [id] => 142330514999
+    [topic] => payment
+)
+
+[2026-01-21 20:36:18] Verificando pago ID: 142330514999 en API de MP...
+[2026-01-21 20:36:18] Acceso detectado. Params: Array
+(
+    [data_id] => 142330514999
+    [type] => payment
+)
+
+[2026-01-21 20:36:18] Verificando pago ID: 142330514999 en API de MP...
+[2026-01-21 20:36:18] Respuesta API: Estado=approved | Ref=TXN_697162ad1359e
+[2026-01-21 20:36:18] Respuesta API: Estado=approved | Ref=TXN_697162ad1359e
+[2026-01-21 20:36:19] Acceso detectado. Params: Array
+(
+    [data_id] => 142330514999
+    [type] => payment
+)
+
+[2026-01-21 20:36:19] Verificando pago ID: 142330514999 en API de MP...
+[2026-01-21 20:36:19] Acceso detectado. Params: Array
+(
+    [id] => 142330514999
+    [topic] => payment
+)
+
+[2026-01-21 20:36:19] Verificando pago ID: 142330514999 en API de MP...
+[2026-01-21 20:36:19] Respuesta API: Estado=approved | Ref=TXN_697162ad1359e
+[2026-01-21 20:36:19] Respuesta API: Estado=approved | Ref=TXN_697162ad1359e
+[2026-01-21 20:36:21] Acceso detectado. Params: Array
+(
+    [data_id] => 142999350736
+    [type] => payment
+)
+
+[2026-01-21 20:36:21] Verificando pago ID: 142999350736 en API de MP...
+[2026-01-21 20:36:21] Respuesta API: Estado=approved | Ref=TXN_69715e497f79e
+[2026-01-21 20:45:42] Acceso detectado. Params: Array
+(
+    [data_id] => 142995808210
+    [type] => payment
+)
+
+[2026-01-21 20:45:42] Verificando pago ID: 142995808210 en API de MP...
+[2026-01-21 20:45:42] Respuesta API: Estado=approved | Ref=TXN_697157ff5cee1
+[2026-01-21 20:45:47] Acceso detectado. Params: Array
+(
+    [id] => 142995943814
+    [topic] => payment
+)
+
+[2026-01-21 20:45:47] Verificando pago ID: 142995943814 en API de MP...
+[2026-01-21 20:45:47] Respuesta API: Estado=approved | Ref=TXN_697158acb3cdb
+[2026-01-21 20:45:57] Acceso detectado. Params: Array
+(
+    [data_id] => 142995943814
+    [type] => payment
+)
+
+[2026-01-21 20:45:57] Verificando pago ID: 142995943814 en API de MP...
+[2026-01-21 20:45:57] Respuesta API: Estado=approved | Ref=TXN_697158acb3cdb
+[2026-01-21 20:45:58] Acceso detectado. Params: Array
+(
+    [id] => 142995808210
+    [topic] => payment
+)
+
+[2026-01-21 20:45:58] Verificando pago ID: 142995808210 en API de MP...
+[2026-01-21 20:45:58] Respuesta API: Estado=approved | Ref=TXN_697157ff5cee1
+[2026-01-21 20:55:13] Verificando ID: 142330514999 ...
+[2026-01-21 20:55:13] API MP Responde: Estado=approved | Ref=TXN_697162ad1359e
+[2026-01-21 20:55:18] Verificando ID: 142330514999 ...
+[2026-01-21 20:55:18] API MP Responde: Estado=approved | Ref=TXN_697162ad1359e
+[2026-01-21 23:55:20] AVISO: Transacción TXN_697162ad1359e ya estaba completada. Ignorando.
+[2026-01-21 21:10:45] Verificando ID: 142999350736 ...
+[2026-01-21 21:10:45] API MP Responde: Estado=approved | Ref=TXN_69715e497f79e
+[2026-01-21 21:10:47] Verificando ID: 142327765371 ...
+[2026-01-21 21:10:47] API MP Responde: Estado=approved | Ref=TXN_69715df5017fb
+[2026-01-21 21:11:23] Verificando ID: 142327765371 ...
+[2026-01-21 21:11:23] API MP Responde: Estado=approved | Ref=TXN_69715df5017fb
+[2026-01-22 00:11:24] AVISO: Transacción TXN_69715df5017fb ya estaba completada. Ignorando.
+[2026-01-21 21:11:24] Verificando ID: 142999350736 ...
+[2026-01-21 21:11:24] API MP Responde: Estado=approved | Ref=TXN_69715e497f79e
+[2026-01-22 00:11:25] AVISO: Transacción TXN_69715e497f79e ya estaba completada. Ignorando.
+[2026-01-21 21:14:02] Verificando ID: 143006913494 ...
+[2026-01-21 21:14:02] Verificando ID: 143006913494 ...
+[2026-01-21 21:14:02] API MP Responde: Estado=approved | Ref=TXN_69716bb19dbe5
+[2026-01-21 21:14:02] API MP Responde: Estado=approved | Ref=TXN_69716bb19dbe5
+[2026-01-21 21:16:35] Verificando ID: 143007388152 ...
+[2026-01-21 21:16:35] Verificando ID: 143007388152 ...
+[2026-01-21 21:16:35] API MP Responde: Estado=approved | Ref=TXN_69716c5b4005a
+[2026-01-21 21:16:35] API MP Responde: Estado=approved | Ref=TXN_69716c5b4005a

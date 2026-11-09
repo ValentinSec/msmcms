@@ -1,0 +1,9 @@
+IF NOT EXISTS (SELECT * FROM sys.columns WHERE object_id = OBJECT_ID(N'[dbo].[MEMB_INFO]') AND name = 'referral_by')
+BEGIN
+    ALTER TABLE [dbo].[MEMB_INFO] ADD [referral_by] varchar(10) NULL;
+END;
+
+IF NOT EXISTS (SELECT * FROM sys.columns WHERE object_id = OBJECT_ID(N'[dbo].[MEMB_INFO]') AND name = 'referral_claimed')
+BEGIN
+    ALTER TABLE [dbo].[MEMB_INFO] ADD [referral_claimed] int DEFAULT 0 NOT NULL;
+END;

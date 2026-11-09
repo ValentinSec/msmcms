@@ -1,0 +1,1063 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh; 
+}
+
+body {
+    background: linear-gradient(180deg, #0f0909 0%, #0e0a09 100%) !important;
+    background-attachment: fixed !important;
+    color: #E6D6C6; 
+    font-family: 'Roboto', sans-serif;
+    -webkit-font-smoothing: antialiased;
+}
+
+.content-section, 
+.usercp-wrapper, 
+main {
+    background-color: linear-gradient(180deg, #0f0909 0%, #0e0a09 100%) !important;
+}
+
+:root {
+    --primary-orange: #ff6600;
+    --primary-gold: #ffcc00;
+    --dark-bg: #050505;
+    --glass-panel: rgba(15, 15, 20, 0.85);
+    --glass-border: rgba(255, 102, 0, 0.2);
+    --text-muted: #8a8f9d;
+}
+
+body {
+    background-color: var(--dark-bg);
+    background-image: url('../img/bg_main.jpg');
+    background-attachment: fixed;
+    background-size: cover;
+    background-position: top center;
+    color: #eeeeee;
+    font-family: 'PT Sans', sans-serif;
+    margin: 0;
+    overflow-x: hidden;
+}
+
+.main-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.8) 100%);
+    z-index: -1;
+}
+
+.navbar-custom {
+    background: rgba(0, 0, 0, 0.9);
+    border-bottom: 1px solid var(--glass-border);
+    backdrop-filter: blur(10px);
+    padding: 10px 0;
+}
+
+.navbar-custom .nav-link {
+    color: #fff !important;
+    font-family: 'Cinzel', serif;
+    font-size: 13px;
+    letter-spacing: 1px;
+    font-weight: 700;
+    transition: 0.3s;
+}
+
+.navbar-custom .nav-link:hover {
+    color: var(--primary-orange) !important;
+}
+
+/* NUEVOS BOTONES NAVBAR */
+.btn-login-nav {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 8px 18px;
+    border-radius: 6px;
+    transition: 0.3s;
+}
+
+.btn-login-nav:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: var(--primary-orange);
+    color: #fff;
+}
+
+.btn-register-nav {
+    background: linear-gradient(135deg, #ff7700 0%, #cc4400 100%);
+    border: none;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 700;
+    padding: 8px 22px;
+    border-radius: 6px;
+    box-shadow: 0 4px 15px rgba(255, 102, 0, 0.3);
+    transition: 0.3s;
+}
+
+.btn-register-nav:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 102, 0, 0.5);
+    color: #fff;
+}
+
+.btn-panel {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #fff;
+    font-weight: bold;
+    padding: 6px 20px;
+    border-radius: 4px;
+}
+
+/* Ajustes para el Hero con Video */
+.hero {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    min-height: 700px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #000;
+}
+
+.hero-logo {
+    max-width: 480px;
+    margin-bottom: 30px;
+    filter: drop-shadow(0 0 25px rgba(255, 102, 0, 0.4));
+}
+
+.hero-title {
+    font-family: 'Cinzel', serif;
+    color: var(--primary-gold);
+    font-size: 26px;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.9);
+    margin-bottom: 40px;
+}
+
+.stat-card {
+    background: rgba(13, 12, 17, 0.75); /* Oscurece un poco el fondo del botón */
+    backdrop-filter: blur(5px); /* Efecto de cristal para que resalte sobre el video */
+    border: 1px solid rgba(215, 73, 33, 0.3);
+    padding: 15px;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+}
+
+.stat-card:hover {
+    background: rgba(215, 73, 33, 0.2);
+    border-color: #D74921;
+    transform: translateY(-5px);
+}
+
+.stat-card span {
+    font-size: 13px;
+    color: var(--text-muted);
+    font-family: 'PT Sans', sans-serif;
+    margin-bottom: 5px;
+    display: block;
+}
+
+.stat-card strong {
+    font-size: 18px;
+    color: #fff;
+    font-family: 'PT Sans', sans-serif;
+}
+
+.stat-card-link {
+    text-decoration: none !important;
+    display: block;
+    height: 100%;
+}
+
+.stat-card.clickable {
+    cursor: pointer;
+    border-color: rgba(255, 102, 0, 0.4);
+}
+
+.stat-card.clickable:hover {
+    background: rgba(255, 102, 0, 0.1);
+    border-color: var(--primary-orange);
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(255, 102, 0, 0.2);
+}
+
+.stat-card.clickable:hover strong {
+    color: var(--primary-orange);
+}
+
+.stat-icon {
+    color: var(--primary-orange);
+    font-size: 24px;
+    margin-bottom: 12px;
+    display: block;
+    filter: drop-shadow(0 0 5px var(--primary-orange));
+}
+
+.online-dot {
+    color: #00ff88 !important;
+}
+
+.online-dot::before {
+    content: "•";
+    margin-right: 5px;
+}
+
+.hero-actions .btn-download {
+    background: linear-gradient(135deg, #ff7700 0%, #cc4400 100%);
+    border: none;
+    color: #fff;
+    padding: 15px 40px;
+    font-weight: 800;
+    box-shadow: 0 5px 20px rgba(200, 50, 0, 0.4);
+    margin-right: 15px;
+}
+
+.hero-actions .btn-discord {
+    background: rgba(88, 101, 242, 0.15);
+    border: 1px solid #5865f2;
+    color: #fff;
+    padding: 15px 40px;
+    font-weight: 700;
+}
+
+/* Contenedor principal */
+.scroll-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: absolute; /* O 'fixed' si quieres que siempre se vea al bajar */
+    bottom: -150px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+}
+
+/* Texto superior */
+.scroll-text {
+    font-family: 'Cinzel', serif; /* O la fuente que uses en tu web */
+    color: #8b7a5a; /* Color dorado similar a la imagen */
+    font-size: 14px;
+    letter-spacing: 3px;
+    margin-bottom: 10px;
+    text-shadow: 0 0 5px rgba(0,0,0,0.5);
+}
+
+/* Cuerpo del mouse */
+.mouse-icon {
+    width: 26px;
+    height: 42px;
+    border: 2px solid #8b7a5a;
+    border-radius: 20px;
+    position: relative;
+}
+
+/* La ruedita que se mueve */
+.wheel {
+    width: 4px;
+    height: 8px;
+    background-color: #d18d3c; /* Color naranja de la imagen */
+    border-radius: 2px;
+    position: absolute;
+    top: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    animation: scroll-move 2s infinite ease-in-out;
+}
+
+/* Animación de arriba hacia abajo */
+@keyframes scroll-move {
+    0% {
+        top: 8px;
+        opacity: 0;
+    }
+    30% {
+        opacity: 1;
+    }
+    100% {
+        top: 25px;
+        opacity: 0;
+    }
+}
+
+.content-section {
+    position: relative;
+    z-index: 5;
+}
+
+.section-title {
+    font-family: 'Cinzel', serif;
+    color: var(--primary-orange);
+    font-size: 32px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+.rank-card {
+    background: var(--glass-panel);
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+    padding: 0;
+    overflow: hidden;
+    transition: 0.4s;
+    height: 100%;
+}
+
+.card-header-icon {
+    padding: 12px;
+    font-weight: bold;
+    font-size: 14px;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.rank-body {
+    padding: 25px;
+}
+
+.gold-glow { border-color: rgba(255, 204, 0, 0.3); }
+.gold-glow .card-header-icon { background: rgba(255, 204, 0, 0.15); color: #ffcc00; }
+.gold-glow:hover { box-shadow: 0 0 20px rgba(255, 204, 0, 0.2); border-color: #ffcc00; }
+
+.orange-glow { border-color: rgba(255, 102, 0, 0.3); }
+.orange-glow .card-header-icon { background: rgba(255, 102, 0, 0.15); color: #ff6600; }
+.orange-glow:hover { box-shadow: 0 0 20px rgba(255, 102, 0, 0.2); border-color: #ff6600; }
+
+.purple-glow { border-color: rgba(163, 71, 255, 0.3); }
+.purple-glow .card-header-icon { background: rgba(163, 71, 255, 0.15); color: #a347ff; }
+.purple-glow:hover { box-shadow: 0 0 20px rgba(163, 71, 255, 0.2); border-color: #a347ff; }
+
+.rank-avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: 2px solid var(--glass-border);
+}
+
+.player-name {
+    font-size: 20px;
+    font-weight: bold;
+    color: #fff;
+}
+
+.rank-stats small {
+    color: var(--text-muted);
+    text-transform: uppercase;
+    font-size: 10px;
+}
+
+.rank-stats strong {
+    color: var(--primary-gold);
+    font-size: 16px;
+}
+
+.section-subtitle {
+    font-family: 'Cinzel', serif;
+    color: #fff;
+    font-size: 38px;
+    font-weight: 700;
+}
+
+.title-divider {
+    width: 100px;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--primary-orange), transparent);
+    margin: 15px auto;
+}
+
+.feature-box {
+    padding: 30px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 15px;
+    height: 100%;
+    transition: 0.3s;
+}
+
+.feature-box:hover {
+    background: rgba(255, 255, 255, 0.04);
+    border-color: var(--primary-orange);
+}
+
+.feature-icon-circle {
+    width: 80px;
+    height: 80px;
+    line-height: 80px;
+    border-radius: 50%;
+    margin: 0 auto 25px;
+    font-size: 30px;
+    color: #fff;
+    box-shadow: 0 0 20px rgba(255, 102, 0, 0.3);
+}
+
+.bg-orange-grad {
+    background: linear-gradient(135deg, #ff7700, #cc4400);
+}
+
+.feature-title {
+    font-family: 'Cinzel', serif;
+    color: var(--primary-gold);
+    font-size: 18px;
+    margin-bottom: 15px;
+    letter-spacing: 1px;
+}
+
+.feature-text {
+    font-size: 14px;
+    color: var(--text-muted);
+    line-height: 1.7;
+}
+
+.btn-register-now {
+    background: linear-gradient(90deg, #ff7700, #ff4400);
+    color: #fff;
+    font-weight: 800;
+    padding: 18px 50px;
+    border-radius: 8px;
+    font-size: 16px;
+    text-transform: uppercase;
+    box-shadow: 0 10px 30px rgba(255, 68, 0, 0.3);
+    transition: 0.3s;
+    border: none;
+}
+
+.btn-register-now:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 40px rgba(255, 68, 0, 0.5);
+    color: #fff;
+}
+
+.footer-main {
+    background: rgba(0, 0, 0, 0.95);
+    border-top: 2px solid #111;
+    padding: 60px 0 30px 0;
+    margin-top: 80px;
+}
+
+.footer-logo {
+    max-width: 180px;
+    margin-bottom: 20px;
+}
+
+.footer-desc {
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.6;
+}
+
+.footer-title {
+    color: var(--primary-orange);
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 25px;
+    letter-spacing: 1px;
+}
+
+.status-badge {
+    display: inline-block;
+    background: #000;
+    border: 1px solid #00ff88;
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-size: 11px;
+    color: #00ff88;
+    font-weight: bold;
+}
+
+.status-badge .dot {
+    height: 8px;
+    width: 8px;
+    background-color: #00ff88;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 5px;
+    box-shadow: 0 0 8px #00ff88;
+}
+
+.footer-links, .footer-social {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-links li, .footer-social li {
+    margin-bottom: 12px;
+}
+
+.footer-links a, .footer-social a {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 13px;
+    transition: 0.3s;
+}
+
+.footer-links a i {
+    font-size: 10px;
+    margin-right: 8px;
+    color: var(--primary-orange);
+}
+
+.footer-links a:hover, .footer-social a:hover {
+    color: #fff;
+    padding-left: 5px;
+}
+
+.info-box p {
+    font-size: 13px;
+    margin-bottom: 10px;
+    color: var(--text-muted);
+}
+
+.info-box i {
+    color: var(--primary-orange);
+    margin-right: 8px;
+}
+
+.server-tag {
+    background: #0a0a0a;
+    border: 1px solid #333;
+    padding: 15px;
+    border-radius: 5px;
+    margin-top: 20px;
+}
+
+.server-tag span {
+    display: block;
+    color: var(--primary-orange);
+    font-size: 11px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.server-tag small {
+    display: block;
+    color: #fff;
+}
+
+.footer-hr {
+    border-color: #222;
+    margin: 40px 0 20px 0;
+}
+
+.footer-bottom {
+    font-size: 12px;
+    color: #555;
+}
+
+.footer-bottom a {
+    color: #555;
+    text-decoration: none;
+    margin: 0 5px;
+}
+
+.bg-dark-opacity {
+    background: rgba(0, 0, 0, 0.4);
+}
+
+@media (max-width: 768px) {
+    .hero-logo { max-width: 80%; }
+    .hero-actions .btn-download { margin-right: 0; margin-bottom: 15px; width: 100%; }
+    .hero-actions .btn-discord { width: 100%; }
+    .footer-main { text-align: center; }
+    .footer-title { margin-top: 30px; }
+}
+
+/* USERCP WRAPPER */
+.usercp-main-container {
+    background: #080808;
+    min-height: 100vh;
+    border-top: 1px solid var(--glass-border);
+}
+
+.usercp-sidebar-aside {
+    background: #0d0d0d;
+    border-right: 1px solid rgba(255,255,255,0.05);
+}
+
+.user-avatar-glow {
+    position: absolute;
+    width: 90px;
+    height: 90px;
+    background: var(--primary-orange);
+    filter: blur(20px);
+    opacity: 0.3;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.status-indicator.online { color: #00ff88; font-size: 11px; }
+
+/* Ajuste global para evitar que el contenido quede bajo el navbar fixed */
+body:has(.navbar-custom.fixed-top) .content-section,
+body:has(.navbar-custom.fixed-top) #usercp-main-container {
+    margin-top: 100px !important;
+}
+
+/* Si usas WebEngine, el contenedor del UserCP suele tener clases específicas */
+.usercp-wrapper {
+    padding-top: 140px; 
+}
+
+/* Navbar Unificado Estilo Épico */
+.unified-navbar {
+    background: rgba(13, 12, 17, 0.95) !important;
+    border-bottom: 1px solid rgba(215, 73, 33, 0.3);
+    padding: 15px 0;
+    backdrop-filter: blur(10px);
+}
+
+/* Tipografía de los enlaces */
+.unified-navbar .nav-link {
+    font-family: 'Trajan Pro', 'Cinzel', serif !important;
+    color: #E6D6C6 !important;
+    font-size: 14px;
+    letter-spacing: 2px;
+    transition: color 0.3s ease;
+}
+
+.unified-navbar .nav-link:hover {
+    color: #FF8A3B !important;
+}
+
+/* Logo Centrado Absoluto */
+.navbar-brand-centered {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+}
+
+.navbar-brand-centered img {
+    height: 50px;
+    filter: drop-shadow(0 0 10px rgba(0,0,0,0.5));
+}
+
+/* Botón Panel/Login Estilizado */
+.btn-panel-unified {
+    font-family: 'Trajan Pro', 'Cinzel', serif !important;
+    background: rgba(215, 73, 33, 0.1);
+    border: 1px solid rgba(215, 73, 33, 0.5);
+    color: #FF8A3B !important;
+    padding: 8px 20px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+}
+
+.btn-panel-unified:hover {
+    background: rgba(215, 73, 33, 0.3);
+    box-shadow: 0 0 15px rgba(215, 73, 33, 0.2);
+}
+
+/* Ajuste para móviles */
+@media (max-width: 991px) {
+    .navbar-brand-centered {
+        position: static;
+        transform: none;
+        margin-bottom: 15px;
+    }
+    .unified-navbar .navbar-collapse {
+        background: rgba(13, 12, 17, 1);
+        padding: 20px;
+        margin-top: 15px;
+    }
+}
+
+
+
+/* Contenedor del iframe para cubrir todo el fondo */
+.video-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    pointer-events: none; /* Evita interacciones con el video */
+}
+
+.video-background-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+.video-background iframe {
+    width: 100vw;
+    height: 56.25vw; /* Proporción 16:9 */
+    min-height: 100vh;
+    min-width: 177.77vh; /* Mantiene el video cubriendo el alto */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.vimeo-video-full {
+    width: 100vw;
+    height: 100vh;
+    min-width: 177.77vh; /* Ratio 16:9 para no dejar franjas negras */
+    min-height: 56.25vw; /* Ratio 16:9 */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* Centrado perfecto del video */
+    pointer-events: none;
+}
+
+/* Capa oscura para que el texto blanco se lea perfecto */
+.hero-video-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.7) 100%);
+    z-index: 2;
+}
+
+/* Asegura que el contenido esté por encima del video */
+.hero-content {
+    position: relative;
+    z-index: 3;
+}
+
+.hero-content-wrapper {
+    position: relative;
+    z-index: 3;
+    width: 100%;
+}
+
+.rank-card {
+    background: rgba(26, 15, 16, 0.6);
+    border: 1px solid rgba(215, 73, 33, 0.2);
+    border-radius: 15px;
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.gold-glow {
+    border-color: rgba(200, 161, 101, 0.4) !important;
+    box-shadow: 0 0 20px rgba(200, 161, 101, 0.1);
+}
+
+.rank-avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: 2px solid #D74921;
+    object-fit: cover;
+}
+
+.card-header-icon {
+    font-family: 'Trajan Pro', serif;
+    font-size: 12px;
+    color: #B1957B;
+    margin-bottom: 15px;
+    letter-spacing: 1px;
+}
+
+.player-name {
+    font-size: 18px;
+}
+
+/* Contenedor de la barra reducido al 50% */
+.online-progress-wrapper {
+    width: 100%;
+    /* El max-width de 300px en el HTML controla el largo final */
+}
+
+/* Fondo de la barra */
+.custom-progress-bg {
+    background-color: rgba(0, 0, 0, 0.6) !important;
+    height: 8px !important; /* Un poco más delgada para mantener la proporción */
+    border-radius: 4px !important;
+    border: 1px solid rgba(255, 138, 59, 0.3);
+    overflow: hidden !important;
+}
+
+/* Relleno con degradado ajustado al nuevo tamaño */
+.progress-fill-gradient {
+    /* Ajustamos el background-size para que el degradado se complete en 300px */
+    background: linear-gradient(90deg, #FFD700 0%, #FF8A3B 50%, #FF0000 100%) !important;
+    background-size: 300px 100% !important; 
+    border-radius: 4px;
+    box-shadow: 0 0 10px rgba(255, 138, 59, 0.4);
+    transition: width 2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* --- SECCIÓN NOTICIAS COMPRIMIDAS (GRID) --- */
+
+/* Forzamos que el contenedor de la noticia sea el punto de referencia */
+.news-container .group {
+    position: relative !important;
+    overflow: hidden;
+    display: block; /* Cambiamos a block para control total de hijos absolutos */
+    border-radius: 20px;
+    border: 1px solid rgba(215, 73, 33, 0.2);
+    transition: all 0.4s ease;
+    text-decoration: none !important;
+}
+
+/* TAMAÑOS */
+.news-container .group.lg\:col-span-2 { height: 500px !important; }
+.news-container .flex-col .group { height: 238px !important; }
+
+/* IMAGEN: Ocupa todo el fondo */
+.news-container .group img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover;
+    z-index: 1;
+    transition: transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* OVERLAY: Capa oscura intermedia */
+.news-container .group .absolute.inset-0 {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.4) 50%, rgba(0,0,0,0.1) 100%) !important;
+    z-index: 2;
+}
+
+/* TEXTO: FORZADO ABAJO A LA IZQUIERDA */
+.news-container .group.lg\:col-span-2 .absolute.bottom-0,
+.news-container .group .p-5 {
+    position: absolute !important; /* Lo desprendemos del flujo */
+    bottom: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    padding: 27px !important; /* Tus 27px sagrados */
+    z-index: 10 !important;
+    background: transparent !important;
+    text-align: left !important;
+    box-sizing: border-box !important;
+}
+
+/* COLORES Y HOVERS */
+.news-container h3 {
+    font-family: 'Cinzel', serif;
+    color: rgb(230, 214, 198) !important;
+    margin: 0 0 10px 0 !important;
+}
+
+.news-container .group:hover h3 { color: #FF8A3B !important; }
+
+.news-container .text-sm, 
+.news-container .text-xs,
+.news-container p,
+.news-container span {
+    color: #ffffff !important;
+    display: block;
+}
+
+/* EFECTOS */
+.news-container .group:hover img { transform: scale(1.1); }
+.news-container .group:hover {
+    border-color: rgba(215, 73, 33, 0.6) !important;
+    box-shadow: 0 15px 45px rgba(0, 0, 0, 0.7);
+}
+
+.line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* Esto asegura que tanto en la grande como en las pequeñas el texto flote abajo a la izquierda */
+.news-container .group .absolute.bottom-0,
+.news-container .group .p-5 {
+    position: absolute !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    padding: 27px !important;
+    z-index: 10 !important;
+    text-align: left !important;
+    box-sizing: border-box !important;
+}
+
+/* --- GRID FORZADO POR CSS --- */
+.news-grid-custom {
+    display: grid !important;
+    grid-template-columns: 2fr 1fr !important; /* La grande ocupa 2 partes, la pequeña 1 */
+    grid-template-rows: 1fr 1fr !important;    /* Dos filas para las pequeñas */
+    gap: 20px !important;
+    height: 500px !important; /* Altura total del bloque */
+    margin-bottom: 50px;
+}
+
+/* Posicionamiento de la tarjeta GRANDE */
+.news-card.card-big {
+    grid-row: 1 / span 2 !important; /* Ocupa las dos filas de alto */
+    grid-column: 1 !important;
+}
+
+/* Posicionamiento de las tarjetas PEQUEÑAS */
+.news-card.card-small {
+    grid-column: 2 !important;
+}
+
+/* Estilo Base de las Tarjetas */
+.news-card {
+    position: relative !important;
+    overflow: hidden !important;
+    border-radius: 20px !important;
+    border: 1px solid rgba(215, 73, 33, 0.2) !important;
+    text-decoration: none !important;
+}
+
+/* Imagen de fondo ocupando TODO */
+.news-card .bg-img {
+    position: absolute !important;
+    top: 0; left: 0;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    z-index: 1 !important;
+    transition: transform 0.6s ease;
+}
+
+.news-card:hover .bg-img { transform: scale(1.1); }
+
+/* Capa oscura */
+.news-card .overlay-dark {
+    position: absolute !important;
+    inset: 0 !important;
+    background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.3) 100%) !important;
+    z-index: 2 !important;
+}
+
+/* Contenido de texto alineado ABAJO a la IZQUIERDA con 27px */
+.news-card .card-content {
+    position: absolute !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    padding: 27px !important; /* Espaciado fijo */
+    z-index: 10 !important;
+    box-sizing: border-box !important;
+}
+
+/* Estilos de Texto */
+.news-card .card-title {
+    font-family: 'Cinzel', serif !important;
+    color: #e6d6c6 !important;
+    margin: 5px 0 !important;
+    font-size: 1.2rem;
+}
+.news-card.card-big .card-title { font-size: 2rem; }
+
+.news-card .card-date, .news-card .card-desc, .news-card .card-link {
+    color: #ffffff !important;
+    font-size: 0.85rem;
+    margin-bottom: 5px;
+}
+
+.news-card .badge-destacado {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 50px;
+    background: linear-gradient(135deg, rgb(215, 73, 33) 0%, rgb(255, 138, 59) 100%);
+    margin-bottom: 10px;
+}
+
+/* Ajuste para celulares */
+@media (max-width: 991px) {
+    .news-grid-custom {
+        grid-template-columns: 1fr !important;
+        grid-template-rows: auto !important;
+        height: auto !important;
+    }
+    .news-card.card-big { grid-row: auto !important; }
+}
+
+/* --- AJUSTE FINAL CABECERA (EXTREMOS OPUESTOS) --- */
+
+.news-header-container {
+    display: flex !important;
+    flex-direction: row !important; /* Asegura que estén en línea */
+    justify-content: space-between !important; /* ESTO es lo que los separa */
+    align-items: center !important;
+    width: 100% !important; /* Ocupa todo el ancho del bloque de noticias */
+    max-width: 100% !important;
+    margin-bottom: 30px !important;
+    padding: 0 10px !important; /* Un poco de margen para que no toquen el borde físico */
+    box-sizing: border-box !important;
+}
+
+.news-header-title {
+    text-align: left !important;
+    margin: 0 !important;
+    flex-shrink: 0 !important; /* Evita que el título se achique */
+    font-family: 'Cinzel', serif;
+}
+
+/* --- ESTILO DEL BOTÓN (VER TODAS LAS NOTICIAS) --- */
+
+.news-header-button {
+    /* Mantenemos la estructura de posicionamiento */
+    flex-shrink: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    white-space: nowrap !important;
+    text-decoration: none !important;
+
+    /* Aplicamos los estilos de tu referencia */
+    color: rgb(200, 161, 101) !important; /* guide-gold-primary */
+    border: 1px solid rgba(200, 161, 101, 0.3) !important; /* guide-border-light */
+    border-radius: var(--radius, 8px) !important;
+    padding: 8px 16px !important;
+    
+    /* Tipografía y suavizado */
+    font-family: Roboto, Open Sans, -apple-system, sans-serif !important;
+    font-size: .875rem !important;
+    font-weight: 500 !important;
+    line-height: 1.25rem !important;
+    -webkit-font-smoothing: antialiased !important;
+
+    /* Transiciones */
+    transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, transform !important;
+    transition-timing-function: cubic-bezier(.4, 0, .2, 1) !important;
+    transition-duration: .15s !important;
+}
+
+/* Efecto Hover basado en tu estilo */
+.news-header-button:hover {
+    background-color: rgba(200, 161, 101, 0.1) !important;
+    border-color: rgb(255, 138, 59) !important; /* guide-fire-primary */
+    color: rgb(255, 138, 59) !important;
+}
+
+/* Animación de la flecha interna */
+.news-header-button i {
+    transition: transform 0.3s ease !important;
+}
+
+.news-header-button:hover i {
+    transform: translateX(4px) !important;
+}
+

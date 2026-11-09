@@ -1,0 +1,15 @@
+Options -Indexes
+ServerSignature Off
+
+RewriteEngine On
+RewriteRule "(^|/)\.(?!well-known/)" - [F,L]
+
+<FilesMatch "\.(bak|old|orig|save|swp|tmp|zip|rar|7z|tar|gz|sql|log|ini|conf|env)$">
+    Require all denied
+</FilesMatch>
+
+<IfModule mod_headers.c>
+    Header set X-Content-Type-Options "nosniff"
+    Header set X-Frame-Options "DENY"
+    Header set Referrer-Policy "same-origin"
+</IfModule>

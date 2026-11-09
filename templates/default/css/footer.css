@@ -1,0 +1,69 @@
+.footer-main {
+    position: relative;
+    background-color: #0b0606; /* Fondo bien oscuro */
+    padding: 80px 0 40px;
+    overflow: hidden;
+    color: #E6D6C6 !important; /* Color crema claro para visibilidad */
+}
+
+.footer-texture {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    opacity: 0.08;
+    z-index: 1;
+    pointer-events: none;
+    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23FF8A3B' fill-opacity='0.4'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+
+.footer-content {
+    position: relative;
+    z-index: 2;
+}
+
+/* Colores de títulos y textos */
+.footer-title {
+    color: #FF8A3B; /* Naranja para resaltar títulos */
+    font-family: 'Trajan Pro', serif;
+    font-size: 1.1rem;
+    margin-bottom: 25px;
+    letter-spacing: 1px;
+}
+
+.footer-desc, .info-box p, .footer-bottom p {
+    color: #E6D6C6; /* Color crema */
+    opacity: 0.9;
+}
+
+/* Enlaces */
+.footer-links, .footer-social {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-links li a, .footer-social li a {
+    color: #b1957b; /* Un dorado suave */
+    text-decoration: none;
+    transition: 0.3s;
+    font-size: 0.9rem;
+}
+
+.footer-links li a:hover, .footer-social li a:hover {
+    color: #FF8A3B;
+    padding-left: 5px;
+}
+
+.footer-hr {
+    border-top: 1px solid rgba(255, 138, 59, 0.2);
+    margin: 40px 0 20px;
+}
+
+/* Badge de Estado */
+.status-badge {
+    display: inline-block;
+    color: #00ff88;
+    background: rgba(0, 255, 136, 0.1);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    border: 1px solid rgba(0, 255, 136, 0.2);
+}

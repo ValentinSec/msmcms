@@ -1,0 +1,161 @@
+/* ==========================================================================
+   CASINO GOBLIN - CANIBAL THEME INTEGRATION
+   (Basado estrictamente en las clases de tu PHP)
+   ========================================================================== */
+
+/* 1. CONTENEDOR PRINCIPAL Y PORTADA */
+.casino-container {
+    background-color: #111418 !important; /* Fondo Oscuro Canibal */
+    border: 1px solid #2d323e !important;
+    box-shadow: 0 0 50px rgba(0,0,0,0.5) !important;
+    margin-bottom: 30px;
+}
+
+.casino-intro h2 {
+    color: #c8a165 !important; /* Dorado */
+    text-transform: uppercase;
+    text-shadow: 0 0 10px rgba(200, 161, 101, 0.3);
+}
+
+.ornamental-frame {
+    border-color: #c8a165 !important; /* Borde dorado para la foto */
+    box-shadow: inset 0 0 30px #000 !important;
+}
+
+.ornament-corner {
+    border-color: #c8a165 !important;
+    box-shadow: 0 0 10px rgba(200, 161, 101, 0.5);
+}
+
+/* 2. TARJETAS DE CAJAS (LOOT BOXES) */
+.loot-box-card {
+    background-color: #15171c !important;
+    border: 1px solid #2d323e !important;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3) !important;
+    transition: all 0.3s ease !important;
+}
+
+.loot-box-card:hover {
+    transform: translateY(-5px) !important;
+    border-color: #c8a165 !important;
+    box-shadow: 0 0 25px rgba(200, 161, 101, 0.2) !important;
+}
+
+.lb-title {
+    font-family: 'Cinzel', serif !important;
+    color: #fff !important;
+    font-size: 16px !important;
+    margin-bottom: 5px !important;
+    text-transform: uppercase !important;
+}
+
+.lb-cost {
+    background-color: rgba(200, 161, 101, 0.15) !important;
+    color: #c8a165 !important;
+    border: 1px solid rgba(200, 161, 101, 0.3) !important;
+    font-size: 11px !important;
+    padding: 3px 10px !important;
+}
+
+/* 3. RULETA (JUEGO) */
+.roulette-container {
+    border: 2px solid #c8a165 !important;
+    box-shadow: 0 0 20px rgba(200, 161, 101, 0.2), inset 0 0 50px #000 !important;
+    background: #000 !important;
+}
+
+.roulette-marker {
+    background: #ff0000 !important;
+    box-shadow: 0 0 15px #ff0000 !important;
+    width: 2px !important;
+}
+
+.roulette-item {
+    background-color: #0b0d10 !important;
+    border-right: 1px solid #222 !important;
+}
+
+.btn-spin-action {
+    background: linear-gradient(180deg, #c8a165 0%, #a07e45 100%) !important;
+    color: #000 !important;
+    border: 1px solid #c8a165 !important;
+    box-shadow: 0 0 20px rgba(200, 161, 101, 0.4) !important;
+}
+
+.btn-spin-action:hover {
+    filter: brightness(1.2) !important;
+    transform: scale(1.02) !important;
+}
+
+/* 4. MODALES (LA SOLUCIÓN AL BLOQUEO) */
+/* Esto fuerza a los modales a estar POR ENCIMA de todo */
+
+.confirm-modal, 
+.generic-modal,
+.winner-overlay {
+    z-index: 2147483647 !important; /* El valor más alto posible en CSS */
+    background-color: rgba(0, 0, 0, 0.9) !important;
+    backdrop-filter: blur(5px) !important;
+}
+
+/* Cajas de los modales */
+.cm-box, .gm-box, .winner-card {
+    background-color: #111418 !important;
+    border: 1px solid #c8a165 !important;
+    box-shadow: 0 0 50px rgba(0,0,0,0.9), 0 0 15px rgba(200, 161, 101, 0.2) !important;
+    color: #fff !important;
+}
+
+/* Títulos de Modales */
+.cm-box h4, .gm-title, .win-title {
+    color: #c8a165 !important;
+    font-family: 'Cinzel', serif !important;
+    text-transform: uppercase !important;
+    border-bottom: 1px solid #2d323e !important;
+    padding-bottom: 10px !important;
+    margin-bottom: 15px !important;
+}
+
+/* Botones de Modales */
+.cm-btn-yes, .btn-claim {
+    background: linear-gradient(180deg, #238636, #1a6328) !important;
+    border: 1px solid #238636 !important;
+    color: #fff !important;
+    text-transform: uppercase !important;
+    font-size: 12px !important;
+    padding: 10px 25px !important;
+}
+
+.cm-btn-no, .btn-keep {
+    background: transparent !important;
+    border: 1px solid #444 !important;
+    color: #aaa !important;
+    text-transform: uppercase !important;
+    font-size: 12px !important;
+    padding: 10px 25px !important;
+}
+
+.cm-btn-yes:hover, .btn-claim:hover {
+    box-shadow: 0 0 15px rgba(46, 204, 113, 0.3) !important;
+}
+
+.cm-btn-no:hover, .btn-keep:hover {
+    border-color: #c8a165 !important;
+    color: #fff !important;
+}
+
+/* 5. RESPONSIVE FIX (Para que la portada no rompa el móvil) */
+@media (max-width: 991px) {
+    .casino-container {
+        flex-direction: column !important;
+    }
+    .casino-cover {
+        flex: 0 0 200px !important;
+        width: 100% !important;
+        margin-bottom: 20px !important;
+    }
+    .ornamental-frame {
+        min-height: 200px !important;
+        background-position: top center !important;
+    }
+}

@@ -1,0 +1,49 @@
+[
+    {
+        "id": "697a9b57281f1",
+        "name": "Cofre Alas S1",
+        "cost": 1000,
+        "currency": "WCoinC",
+        "img": "img\/boxes\/LootBox1.png",
+        "rewards": []
+    },
+    {
+        "id": "697a9c0680b65",
+        "name": "Cofre Alas S2",
+        "cost": 2000,
+        "currency": "WCoinC",
+        "img": "img\/boxes\/LootBox2.png",
+        "rewards": [
+            {
+                "id": "697b36998e053",
+                "name": "Brave Pants",
+                "group": 9,
+                "item_id": 46,
+                "level": 15,
+                "skill": 0,
+                "luck": 1,
+                "option": 7,
+                "exc_opts": [
+                    1,
+                    2,
+                    4,
+                    8,
+                    16,
+                    32
+                ],
+                "opt_380": 0,
+                "harmony_full": 0,
+                "harmony_type": 0,
+                "harmony_level": 0,
+                "sockets": [
+                    254,
+                    254,
+                    254,
+                    254,
+                    254
+                ],
+                "chance": 100
+            }
+        ]
+    }
+]

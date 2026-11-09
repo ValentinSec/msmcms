@@ -1,0 +1,15 @@
+CREATE TABLE [dbo].[{TABLE_PREFIX}WEBSHOP_LOG](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[account_id] [varchar](10) NOT NULL,
+	[item_name] [varchar](255) NULL,
+	[item_uid] [varchar](64) NOT NULL,
+	[price] [int] DEFAULT ((0)),
+	[currency] [varchar](50) NOT NULL,
+	[balance_before] [int] DEFAULT ((0)),
+	[balance_after] [int] DEFAULT ((0)),
+	[purchase_date] [smalldatetime] DEFAULT GETDATE(),
+ CONSTRAINT [PK_{TABLE_PREFIX}WEBSHOP_LOG] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]

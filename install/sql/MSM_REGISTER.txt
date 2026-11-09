@@ -1,0 +1,9 @@
+CREATE TABLE [dbo].[{TABLE_PREFIX}REGISTER_ACCOUNT](
+	[registration_account] [varchar](50) NOT NULL,
+	[registration_password] [varchar](50) NOT NULL,
+	[registration_email] [varchar](50) NOT NULL,
+	[registration_date] [varchar](50) NOT NULL,
+	[registration_ip] [varchar](50) NOT NULL,
+	[registration_key] [varchar](50) NOT NULL,
+    CONSTRAINT [PK_{TABLE_PREFIX}REGISTER_ACCOUNT] PRIMARY KEY CLUSTERED ([registration_account] ASC)
+) ON [PRIMARY]
