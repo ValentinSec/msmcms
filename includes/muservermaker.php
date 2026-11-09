@@ -154,7 +154,6 @@ foreach(array('database_errors.log', 'php_errors.log') as $__logFile) {
     if(!file_exists($__logPath)) { @file_put_contents($__logPath, ''); }
 }
 unset($__logFile, $__logPath);
-
 ini_set('log_errors', 1);
 ini_set('error_log', MUSERVERMAKER_PHP_ERRORLOG);
 
@@ -187,6 +186,7 @@ if(!@include_once(__PATH_CLASSES__ . 'paypal/PaypalIPN.php')) throw new Exceptio
 
 if(!@include_once(__PATH_INCLUDES__ . 'functions.php')) throw new Exception('Could not load functions.');
 if(!@include_once(__PATH_INCLUDES__ . 'template.functions.php')) throw new Exception('Could not load template functions.');
+
 $config = muservermakerConfigs();
 
 if(!isset($config['muservermaker_cms_installed']) || $config['muservermaker_cms_installed'] !== true) {

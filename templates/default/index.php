@@ -231,15 +231,6 @@ if (file_exists($secConfigFile)) {
     }
 }
 
-/* LÓGICA DE CONFIGURACIÓN Y DATOS OBLIGATORIA */
-function custom_config($key) {
-    $configPath = __DIR__ . '/../../includes/config/custom_settings.json';
-    if(!file_exists($configPath)) return "";
-    $configData = @file_get_contents($configPath);
-    $settings = json_decode($configData, true);
-    return isset($settings[$key]) ? $settings[$key] : "";
-}
-
 // --- FIX LECTURA DE CACHÉ ---
 // Intentamos leer manualmente el archivo json generado por el cron nuevo
 $cacheFilePath = __PATH_INCLUDES__ . 'cache/server_info.cache';
