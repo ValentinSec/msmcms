@@ -14,7 +14,7 @@
 define('_TBL_MI_', 'MEMB_INFO');
 	define('_CLMN_USERNM_', 'memb___id');
 	define('_CLMN_PASSWD_', 'memb__pwd');
-	define('_CLMN_MEMBID_', 'memb_guid');
+	define('_CLMN_MEMBID_', 'memb___id');
 	define('_CLMN_EMAIL_', 'mail_addr');
 	define('_CLMN_BLOCCODE_', 'bloc_code');
 	define('_CLMN_SNONUMBER_', 'sno__numb');
