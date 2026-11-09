@@ -1,0 +1,32 @@
+Options -MultiViews
+ServerSignature Off
+
+RewriteEngine On
+RewriteBase /
+
+# --- SEGURIDAD ---
+# Bloquear acceso a archivos ocultos (.git, .env, etc.) salvo .well-known
+RewriteRule "(^|/)\.(?!well-known/)" - [F,L]
+
+# Bloquear descarga de archivos sensibles
+<FilesMatch "\.(bak|old|orig|save|swp|tmp|zip|rar|7z|tar|gz|sql|log|ini|conf|env)$">
+    Require all denied
+</FilesMatch>
+
+# Cabeceras de seguridad
+<IfModule mod_headers.c>
+    Header set X-Content-Type-Options "nosniff"
+    Header set X-Frame-Options "DENY"
+    Header set Referrer-Policy "same-origin"
+    Header set Permissions-Policy "geolocation=(), microphone=(), camera=()"
+</IfModule>
+
+# --- RUTEO DEL CMS (el suyo, que funciona) ---
+# No reescribir si apunta a un archivo o carpeta real (admincp/, install/, api/...)
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+RewriteRule ^([a-zA-Z0-9]+)/([a-zA-Z0-9]+)/([a-zA-Z0-9-_\/]+)/?$ index.php?page=$1&subpage=$2&request=$3 [QSA]
+RewriteRule ^([a-zA-Z0-9]+)/([a-zA-Z0-9]+)/?$ index.php?page=$1&subpage=$2 [QSA]
+RewriteRule ^([a-zA-Z0-9]+)/?$ index.php?page=$1 [QSA]

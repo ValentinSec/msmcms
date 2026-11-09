@@ -4,9 +4,6 @@
  * PREPARED FOR OBFUSCATION (Pure PHP Version)
  * Versión Final: Incluye Kick y Visor de Personajes
  */
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-
 if (!defined("access") or !access) die();
 
 // --------------------------------------------------------------------

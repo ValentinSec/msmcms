@@ -1,0 +1,12 @@
+# Logs (se crean solos en el servidor)
+*.log
+includes/logs/
+api/logs/
+api/error_log
+
+# Configuración con credenciales (NO debe ir a un repo público)
+includes/config/muservermaker.json
+includes/config/custom_settings.json
+
+# Caché
+includes/cache/

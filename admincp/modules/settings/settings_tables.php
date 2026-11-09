@@ -4,9 +4,6 @@
  * Pure PHP Version (Concatenation Safe)
  */
 
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-
 // 1. Ruta al archivo de configuración
 $configPath = __DIR__ . '/../../../includes/config/custom_settings.json';
 

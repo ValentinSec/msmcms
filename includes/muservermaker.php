@@ -147,6 +147,13 @@ define('__PATH_OFFLINE_STATUS__', __PATH_IMG__.'offline.png');
 define('MUSERVERMAKER_DATABASE_ERRORLOG', __PATH_LOGS__.'database_errors.log');
 define('MUSERVERMAKER_WRITABLE_PATHS', __PATH_CONFIGS__.'writable.paths.json');
 define('MUSERVERMAKER_PHP_ERRORLOG', __PATH_LOGS__.'php_errors.log');
+// Crear carpeta y archivos de log si no existen (evita el error "Not Found / re-upload file")
+if(!is_dir(__PATH_LOGS__)) { @mkdir(__PATH_LOGS__, 0755, true); }
+foreach(array('database_errors.log', 'php_errors.log') as $__logFile) {
+    $__logPath = __PATH_LOGS__ . $__logFile;
+    if(!file_exists($__logPath)) { @file_put_contents($__logPath, ''); }
+}
+unset($__logFile, $__logPath);
 
 ini_set('log_errors', 1);
 ini_set('error_log', MUSERVERMAKER_PHP_ERRORLOG);
