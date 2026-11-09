@@ -273,8 +273,7 @@ if($_REQUEST['page'] == 'usercp') {
     exit();
 }
 
-$muservermakerJsonPath = $_SERVER['DOCUMENT_ROOT'] . '/includes/config/muservermaker.json';
-$muservermakerParams = json_decode(file_get_contents($muservermakerJsonPath), true);
+$muservermakerParams = muservermakerConfigs();
 $activeTplName = $muservermakerParams['website_template']; 
 
 $templateConfigPath = $_SERVER['DOCUMENT_ROOT'] . '/templates/' . $activeTplName . '/config.json';

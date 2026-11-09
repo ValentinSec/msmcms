@@ -6,16 +6,18 @@
 
 if (!function_exists('custom_config')) {
     function custom_config($key) {
-        $path = defined('__PATH_CONFIGS__') ? __PATH_CONFIGS__ : 'includes/config/';
-        $configPath = $path . 'custom_settings.json';
-        
-        if (!file_exists($configPath)) {
-            return "";
+        static $settings = null;
+        if ($settings === null) {
+            $path = defined('__PATH_CONFIGS__') ? __PATH_CONFIGS__ : 'includes/config/';
+            $configPath = $path . 'custom_settings.json';
+            if (!file_exists($configPath)) {
+                $settings = array();
+                return "";
+            }
+            $configData = file_get_contents($configPath);
+            $decoded = json_decode($configData, true);
+            $settings = is_array($decoded) ? $decoded : array();
         }
-        
-        $configData = file_get_contents($configPath);
-        $settings = json_decode($configData, true);
-        
         return (isset($settings[$key])) ? $settings[$key] : "";
     }
 }

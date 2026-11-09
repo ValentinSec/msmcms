@@ -273,13 +273,16 @@ function getGensLeadershipRank($rankPosition) {
 }
 
 // FUNCIÓN RENOMBRADA: muservermakerConfigs
-function muservermakerConfigs() {
-	if(!file_exists(__PATH_CONFIGS__ . 'muservermaker.json')) throw new Exception('MuServerMaker configuration file doesn\'t exist, please reupload the website files.');
-	
-	$jsonConfigs = file_get_contents(__PATH_CONFIGS__ . 'muservermaker.json');
-	if(!check_value($jsonConfigs)) throw new Exception('MuServerMaker configuration file is empty, please run the installation script.');
-	
-	return json_decode($jsonConfigs, true);
+function muservermakerConfigs($forceReload = false) {
+    static $cachedConfig = null;
+    if($cachedConfig !== null && !$forceReload) {
+        return $cachedConfig;
+    }
+    if(!file_exists(__PATH_CONFIGS__ . 'muservermaker.json')) throw new Exception('MuServerMaker configuration file doesn\'t exist, please reupload the website files.');
+    $jsonConfigs = file_get_contents(__PATH_CONFIGS__ . 'muservermaker.json');
+    if(!check_value($jsonConfigs)) throw new Exception('MuServerMaker configuration file is empty, please run the installation script.');
+    $cachedConfig = json_decode($jsonConfigs, true);
+    return $cachedConfig;
 }
 
 function config($config_name, $return = false) {
