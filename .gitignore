@@ -10,3 +10,7 @@ includes/config/custom_settings.json
 
 # Caché
 includes/cache/
+includes/config/donation_config.json
+includes/config/smtp_settings.json
+includes/config/donation_transactions.json
+includes/config/economy_cache.json

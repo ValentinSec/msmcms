@@ -1,8 +1,0 @@
-{
-    "smtp_host": "smtp.gmail.com",
-    "smtp_user": "mucanibals6@gmail.com",
-    "smtp_pass": "uzkeadyfeptwgjui",
-    "smtp_port": "587",
-    "smtp_crypto": "tls",
-    "smtp_active": true
-}
