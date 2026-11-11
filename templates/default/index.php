@@ -131,7 +131,7 @@ if(isset($_POST['market_ajax']) && $_POST['market_ajax'] == 'true') {
         if($_POST['action'] == 'buy_item') {
             if(!isLoggedIn()) throw new Exception("Debes iniciar sesión.");
             $result = BlackMarket::buyItem($_SESSION['username'], $_POST['id']);
-            echo json_encode($result);
+            echo json_encode($result, JSON_INVALID_UTF8_SUBSTITUTE);
             exit;
         }
 

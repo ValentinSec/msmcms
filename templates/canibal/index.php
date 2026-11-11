@@ -308,15 +308,13 @@ if((isset($_POST['market_ajax']) && $_POST['market_ajax'] == 'true') || (isset($
         }
 
         // B. Market AJAX Handler
+        // B. Market AJAX Handler
         if(isset($_POST['market_ajax'])) {
-            $serverFile = 'includes/config/muservermaker.json';
-            $serverData = file_exists($serverFile) ? json_decode(file_get_contents($serverFile), true) : [];
-            $dbName = isset($serverData['SQL_DB_NAME']) ? $serverData['SQL_DB_NAME'] : 'MuOnline';
+            $bmAction = isset($_POST['action']) ? $_POST['action'] : '';
 
-            // --- NUEVO: CARGAR WIDGET PARA EL INDEX ---
-            if($_POST['action'] == 'load_widget') {
+            // Widget del index: ultimos 3 items publicados
+            if($bmAction == 'load_widget') {
                 $data = [];
-                // Buscamos los 3 últimos ítems agregados
                 $rows = $db->query_fetch("SELECT TOP 3 id, item_hex, price, currency FROM MUSERVERMAKER_MARKET_SELL ORDER BY date_posted DESC");
                 if(is_array($rows)) {
                     foreach($rows as $row) {
@@ -335,75 +333,29 @@ if((isset($_POST['market_ajax']) && $_POST['market_ajax'] == 'true') || (isset($
                     }
                 }
                 echo json_encode(['status' => 'success', 'data' => $data]);
-                exit; // <-- CRÍTICO: Esto evita que cargue el resto del HTML
+                exit;
             }
 
-
-            // Cargar items de categoría
-            if($_POST['action'] == 'load_category') {
-                $cat = (int)$_POST['category'];
-                $items = $db->query_fetch("SELECT TOP 200 id, seller_account, CONVERT(varchar(max), item_hex, 2) as item_hex, item_name, price, currency FROM MUSERVERMAKER_MARKET_SELL ORDER BY date_posted DESC");
-                $filtered = [];
-                foreach($items as $item) {
-                    $hex = $item['item_hex'];
-                    $byte9 = hexdec(substr($hex, 18, 2));
-                    $group = ($byte9 >> 4) & 0xF;
-                    if($cat == -1 || $group == $cat) {
-                        $id = hexdec(substr($hex, 0, 2));
-                        $item['img'] = __BASE_URL__ . "img/items/{$group}-{$id}.gif";
-                        $item['tooltip'] = bm_parse_item_index($hex); 
-                        $item['clean_name'] = ItemsManager::getItemName($group, $id);
-                        $filtered[] = $item;
-                    }
-                }
-                echo json_encode(['status' => 'success', 'data' => $filtered]); exit;
+            // Listado por categoria (logica central)
+            if($bmAction == 'load_category') {
+                $data = BlackMarket::getMarketItems(isset($_POST['category']) ? $_POST['category'] : -1);
+                echo json_encode(['status' => 'success', 'data' => $data]);
+                exit;
             }
-            
-            // Comprar Item
-            if($_POST['action'] == 'buy_item') {
+
+            // Compra (logica central: cuenta desconectada + consultas parametrizadas)
+            if($bmAction == 'buy_item') {
                 if(!isLoggedIn()) throw new Exception("Inicia sesión.");
-                $username = $_SESSION['username'];
-                $id = (int)$_POST['id'];
-                
-                $itemData = $db->query_fetch_single("SELECT * FROM MUSERVERMAKER_MARKET_SELL WHERE id = ?", [$id]);
-                if(!$itemData) throw new Exception("Item no disponible.");
-                if($itemData['seller_account'] == $username) throw new Exception("Es tu item.");
-                
-                $price = (int)$itemData['price'];
-                $colCoin = ($itemData['currency'] == 'Credits') ? 'Credits' : 'WCoinC'; 
-                $tableCoin = ($itemData['currency'] == 'Credits') ? 'MEMB_INFO' : 'CashShopData'; 
-                $colUser = ($itemData['currency'] == 'Credits') ? 'memb___id' : 'AccountID';
-                
-                $buyer = $db->query_fetch_single("SELECT $colCoin FROM $tableCoin WHERE $colUser = ?", [$username]);
-                if(!$buyer || $buyer[$colCoin] < $price) throw new Exception("Saldo insuficiente.");
-                
-                $wh = $db->query_fetch_single("SELECT Items FROM warehouse WHERE AccountId = ?", [$username]);
-                $whRaw = $wh['Items'];
-                if(!ctype_xdigit((string)$whRaw)) $whRaw = bin2hex($whRaw); 
-                $whRaw = strtoupper($whRaw);
-                
-                if(!preg_match('/^[F0]+$/', $whRaw)) throw new Exception("Tu baúl debe estar VACÍO.");
-                
-                // Ejecutar transacción
-                $cleanHexItem = strtoupper((!ctype_xdigit((string)$itemData['item_hex'])) ? bin2hex($itemData['item_hex']) : $itemData['item_hex']);
-                $vaultLength = strlen($whRaw); $itemLength = strlen($cleanHexItem);
-                $finalVaultHex = $cleanHexItem . str_repeat('F', $vaultLength - $itemLength);
-
-                $db->query("UPDATE $tableCoin SET $colCoin = $colCoin - ? WHERE $colUser = ?", [$price, $username]);
-                $pay = floor($price * 0.9);
-                $db->query("UPDATE $tableCoin SET $colCoin = $colCoin + ? WHERE $colUser = ?", [$pay, $itemData['seller_account']]);
-                $db->query("UPDATE warehouse SET Items = CONVERT(varbinary(max), ?, 2) WHERE AccountId = ?", [$finalVaultHex, $username]);
-                $db->query("DELETE FROM MUSERVERMAKER_MARKET_SELL WHERE id = ?", [$id]);
-                
-                // Log
-                try {
-                    $db->query("INSERT INTO MUSERVERMAKER_MARKET_BUY (buyer_account, seller_account, item_hex, item_name, price_paid, currency, transaction_date) VALUES (?, ?, CONVERT(varbinary(max), ?, 2), ?, ?, ?, GETDATE())", [$username, $itemData['seller_account'], $cleanHexItem, $itemData['item_name'], $price, $itemData['currency']]);
-                } catch(Exception $ex) {}
-
-                echo json_encode(['status' => 'success']); exit;
+                $result = BlackMarket::buyItem($_SESSION['username'], isset($_POST['id']) ? $_POST['id'] : 0);
+            echo json_encode($result, JSON_INVALID_UTF8_SUBSTITUTE);
+                exit;
             }
+
+            echo json_encode(['status' => 'error', 'message' => 'Accion no valida.']);
+            exit;
         }
-    } catch (Exception $e) { echo json_encode(['status' => 'error', 'message' => $e->getMessage()]); exit; }
+    } catch (Exception $e) { echo json_encode(['status' => 'error', 'message' => $e->getMessage()]); exit;
+    } catch (Throwable $e) { error_log('[market_ajax] ' . $e->getMessage()); echo json_encode(['status' => 'error', 'message' => 'Error interno.']); exit; }
 }
 
 // 11. PREPARACIÓN DE DATOS GLOBALES (Para usar en el HTML)
@@ -790,6 +742,7 @@ $seoFile = __PATH_INCLUDES__ . 'config/muservermaker.json';
 
                                         itemsHtml += `
                                             <div class="c-card-mini" 
+                                                 onclick="openDirectBuy(${item.id}, '${item.price} ${item.currency}')"
                                                  data-tooltip="${safeTooltip}"
                                                  onmouseover="idx_show_tt(this)" 
                                                  onmousemove="idx_move_tt(event)" 
@@ -1068,6 +1021,10 @@ $seoFile = __PATH_INCLUDES__ . 'config/muservermaker.json';
                     } else {
                         show_modal_alert("Error", res.message);
                     }
+                })
+                .catch(function() {
+                    document.getElementById('wsLoader').style.display = 'none';
+                    show_modal_alert("Error", "No se pudo procesar la compra. Intenta de nuevo.");
                 });
             }
 

@@ -2,7 +2,10 @@
 /**
  * MuServerMaker CMS - Black Market
  * Motor central del mercado entre jugadores.
- * Paso 1: parseo de items (presentaci贸n). La compra se migra en el Paso 3.
+ *
+ * IMPORTANTE: este archivo es ASCII puro a proposito. Los acentos de los mensajes
+ * se escriben como \u{XXXX} para que json_encode() nunca falle por la codificacion
+ * con la que se guarde el archivo.
  */
 
 class BlackMarket {
@@ -19,7 +22,7 @@ class BlackMarket {
         $byte10 = hexdec(substr($hex, 20, 2));
         $group = ($byte9 >> 4) & 0xF;
 
-        // Detecci贸n S4 / Socket
+        // Deteccion S4 / Socket
         $isSocketItem = false;
         if (($group >= 7 && $group <= 11) && ($id >= 45 && $id <= 65)) $isSocketItem = true;
         if ($group == 0 && $id >= 26) $isSocketItem = true;
@@ -69,7 +72,7 @@ class BlackMarket {
             }
         }
 
-        // 380 Option (Fix Joyeria)
+        // 380 Option (pendiente: validar contra la lista blanca de ItemsManager)
         $is380 = false;
         $op380Names = [];
         if (!$isSocketItem && $group != 13) {
@@ -82,15 +85,14 @@ class BlackMarket {
         $name = ItemsManager::getItemName($group, $id);
         $isExc = count($excOpts) > 0;
 
-        // HTML Build (Strict Order: Name > Skill > Luck > Add > 380 > Harmony > Exc > Socket)
         $html = "<div class='tt-box'>";
 
-        // 1. Name (+Level Hidden if 0)
+        // Nombre (+nivel oculto si es 0)
         $lvlStr = ($level > 0) ? " +".$level : "";
         $nameColor = $isExc ? "tt-exc" : "tt-name";
         $html .= "<span class='$nameColor' style='display:block; font-weight:bold; font-size:13px; margin-bottom:5px; border-bottom:1px solid #444; padding-bottom:5px; color:".($isExc?"#2ecc71":"#fff")."'>$name$lvlStr</span>";
 
-        // 5. 380
+        // 380
         if($is380) {
             if(!empty($op380Names)) {
                 foreach($op380Names as $opName) {
@@ -101,7 +103,7 @@ class BlackMarket {
             }
         }
 
-        // 6. Harmony
+        // Harmony
         if (!$isSocketItem && $byte10 > 0) {
             $hType = 1;
             if ($group == 5) $hType = 5;
@@ -111,7 +113,7 @@ class BlackMarket {
             $optLvl = ($byte10 & 0xF);
 
             $hNames = [
-                1 => [1 => "Min. attack increase", 2 => "Max. attack increase", 3 => "Required strength decrease", 4 => "Required agility decrease", 5 => "Attack increase (Min,Max)", 6 => "Critical damage increase", 7 => "Skill attack increase", 8 => "Attack sucess rate increase (PVP)", 9 => "SD decrement increase", 10 => "SD bypass rate increase"],
+                1 => [1 => "Min. attack increase", 2 => "Max. attack increase", 3 => "Required strength decrease", 4 => "Required agility decrease", 5 => "Attack increase (Min,Max)", 6 => "Critical damage increase", 7 => "Skill attack increase", 8 => "Attack success rate increase (PVP)", 9 => "SD decrement increase", 10 => "SD bypass rate increase"],
                 5 => [1 => "Wizardry increase", 2 => "Required strength decrease", 3 => "Required agility decrease", 4 => "Skill attack increase", 5 => "Critical damage increase", 6 => "SD decrement increase", 7 => "Attack success rate increase (PVP)", 8 => "SD bypass rate increase"],
                 6 => [1 => "Defense increase", 2 => "Max. AG increase", 3 => "Max. HP increase", 4 => "Life auto increment increase", 5 => "Mana auto increment increase", 6 => "Defense success rate increase (PVP)", 7 => "Damage decrement increase", 8 => "SD ratio increase"]
             ];
@@ -121,19 +123,20 @@ class BlackMarket {
                 $html .= "<div style='color:#ffff00'>$hName (Lvl $optLvl)</div>";
             }
         }
-        // 2. Skill
+
+        // Skill
         if($skill) $html .= "<div class='tt-opt' style='color:#9aadcd'>Skill Attack Power</div>";
 
-        // 3. Luck
+        // Luck
         if($luck) $html .= "<div class='tt-luck' style='color:#9aadcd'>Luck (success rate +25%)</div><div class='tt-luck' style='color:#9aadcd'>Luck (critical damage rate +5%)</div>";
 
-        // 4. Add Option
+        // Add Option
         if($option>0) $html .= "<div class='tt-opt' style='color:#9aadcd'>Additional Option +$option</div>";
 
-        // 7. Excellent
+        // Excellent
         foreach($excOpts as $ex) $html .= "<div class='tt-exc' style='color:#2ecc71'>$ex</div>";
 
-        // 8. Sockets
+        // Sockets
         $socketsHTML = "";
         $hasSockets = false;
         $elements = [0=>'Fire', 1=>'Water', 2=>'Ice', 3=>'Wind', 4=>'Earth', 5=>'Lightning'];
@@ -146,7 +149,7 @@ class BlackMarket {
                 if($sockVal != 255 && $sockVal != 0) {
                     $hasSockets = true;
                     if($sockVal == 254) {
-                        $socketsHTML .= "<div class='tt-opt' style='color:#666'>Socket ".($k+1).": Vac铆o</div>";
+                        $socketsHTML .= "<div class='tt-opt' style='color:#666'>Socket ".($k+1).": Vac\u{00ED}o</div>";
                     } else {
                         $seedType = floor($sockVal / 50);
                         $seedId = $sockVal % 50;
@@ -166,9 +169,9 @@ class BlackMarket {
         $html .= "</div>";
         return $html;
     }
-    
-        /**
-     * Lista los items del mercado, filtrados por categoría (group). -1 = todas.
+
+    /**
+     * Lista los items del mercado, filtrados por categoria (group). -1 = todas.
      */
     public static function getMarketItems($categoria) {
         $db = Connection::Database('Me_MuOnline');
@@ -188,7 +191,7 @@ class BlackMarket {
                 $item = array_change_key_case($item, CASE_LOWER);
                 $item['img'] = __BASE_URL__ . "img/items/{$group}-{$id}.gif";
                 $item['tooltip'] = self::parseItemIndex($hex);
-                $item['clean_name'] = explode('+', strip_tags($item['tooltip']))[0];
+                $item['clean_name'] = ItemsManager::getItemName($group, $id);
                 $filtered[] = $item;
             }
         }
@@ -197,25 +200,25 @@ class BlackMarket {
 
     /**
      * Procesa la compra de un item. Devuelve array con status/message.
-     * Toda la lógica original, pero con consultas parametrizadas (anti SQL injection).
+     * Consultas parametrizadas + transaccion: se hace todo o no se hace nada.
      */
     public static function buyItem($username, $itemId) {
-        if(!check_value($username)) return array('status' => 'error', 'message' => 'Sesión inválida.');
+        if(!check_value($username)) return array('status' => 'error', 'message' => "Sesi\u{00F3}n inv\u{00E1}lida.");
 
         $db = Connection::Database('Me_MuOnline');
 
-        // Verificar que la cuenta esté DESCONECTADA (evita dup de items/créditos)
+        // Verificar que la cuenta este DESCONECTADA (evita dup de items/creditos)
         $online = $db->query_fetch_single("SELECT ConnectStat FROM MEMB_STAT WHERE memb___id = ? AND ConnectStat = 1", array($username));
         if(is_array($online)) {
             return array('status' => 'error', 'message' => 'Debes DESCONECTAR tu cuenta del juego para operar en el mercado.');
         }
-        
+
         // Nombre de la base desde la config cacheada
         $serverData = muservermakerConfigs();
         $dbName = isset($serverData['SQL_DB_NAME']) ? $serverData['SQL_DB_NAME'] : 'MuOnline';
-        // Lista blanca: el nombre de base solo puede tener caracteres válidos de identificador
+        // Lista blanca: el nombre de base solo puede tener caracteres validos de identificador
         if(!preg_match('/^[A-Za-z0-9_]+$/', $dbName)) {
-            return array('status' => 'error', 'message' => 'Configuración inválida.');
+            return array('status' => 'error', 'message' => "Configuraci\u{00F3}n inv\u{00E1}lida.");
         }
 
         $id = (int)$itemId;
@@ -235,64 +238,79 @@ class BlackMarket {
         } else {
             $tableCoin = 'CashShopData'; $colCoin = 'WCoinC'; $colUser = 'AccountID';
         }
-        
-        // 3. Saldo del comprador (nombre de columna/tabla validado por lista blanca arriba; valor parametrizado)
-        $buyerData = $db->query_fetch_single("SELECT $colCoin FROM [$dbName].[dbo].[$tableCoin] WHERE $colUser = ?", array($username));
-        if(!is_array($buyerData) || $buyerData[$colCoin] < $price) return array('status' => 'error', 'message' => 'Saldo insuficiente.');
 
-        // 4. Baúl vacío: evaluado 100% en SQL Server, sin traer el campo grande (evita el crash de FreeTDS)
+        // 3. Conexion PDO directa: necesaria para la transaccion y para detectar errores SQL
         try {
             $pdoRef = new ReflectionClass($db);
             $prop = $pdoRef->getProperty('db');
             $prop->setAccessible(true);
             $pdo = $prop->getValue($db);
+        } catch (Throwable $e) { $pdo = null; }
+        if(!($pdo instanceof PDO)) return array('status' => 'error', 'message' => "Sin conexi\u{00F3}n con la base de datos.");
 
-            // Un item ocupa bytes != 0xFF. Un baúl vacío tiene todos los bytes en 0xFF (o 0x00).
-            // Preguntamos si existe algún byte distinto de FF y 00, sin devolver el hex completo.
-            $sql = "SELECT CASE
-                        WHEN Items IS NULL THEN 0
-                        WHEN DATALENGTH(Items) = 0 THEN 0
-                        WHEN CONVERT(varbinary(max), REPLICATE(CONVERT(varchar(2), 0xFF), DATALENGTH(Items)), 1) = Items THEN 0
-                        ELSE 1
-                    END AS tiene_items
-                    FROM [$dbName].[dbo].[warehouse] WHERE AccountId = ?";
+        $run = function($sql, $params = array(), $fetch = false) use ($pdo) {
             $stmt = $pdo->prepare($sql);
-            $stmt->execute(array($username));
-            $whRow = $stmt->fetch(PDO::FETCH_ASSOC);
-        } catch (Throwable $e) {
-            return array('status' => 'error', 'message' => 'No se pudo verificar tu baúl.');
-        }
+            $stmt->execute($params);
+            return $fetch ? $stmt->fetchAll(PDO::FETCH_ASSOC) : true;
+        };
 
-        if(!is_array($whRow)) return array('status' => 'error', 'message' => 'No se encontró tu baúl.');
-        if((int)$whRow['tiene_items'] == 1) {
-            return array('status' => 'error', 'message' => 'Tu baúl debe estar VACÍO.');
-        }
-        
-        // 5. Borrar la publicación PRIMERO y verificar que se borró (anti doble-compra)
-        $deleted = $db->query("DELETE FROM MUSERVERMAKER_MARKET_SELL WHERE id = ?", array($id));
-        $stillThere = $db->query_fetch_single("SELECT id FROM MUSERVERMAKER_MARKET_SELL WHERE id = ?", array($id));
-        if(is_array($stillThere)) return array('status' => 'error', 'message' => 'Este item ya no está disponible.');
+        $pay = (int)floor($price * 0.9);
+        $targetHex = strtoupper((string)$itemData['item_hex']);
 
-        // 6. Movimiento de monedas (valores parametrizados)
-        $db->query("UPDATE [$dbName].[dbo].[$tableCoin] SET $colCoin = $colCoin - ? WHERE $colUser = ?", array($price, $username));
-        $pay = floor($price * 0.9);
-        $db->query("UPDATE [$dbName].[dbo].[$tableCoin] SET $colCoin = $colCoin + ? WHERE $colUser = ?", array($pay, $seller));
-
-        // 7. Entregar el item al baúl del comprador
-        $targetHex = $itemData['item_hex'];
-        $newWh = $targetHex . str_repeat('F', 3840 - strlen($targetHex));
-        $db->query("UPDATE [$dbName].[dbo].[warehouse] SET Items = CONVERT(varbinary(max), ?, 2) WHERE AccountId = ?", array($newWh, $username));
-
-        // 8. Log de la compra (parametrizado)
         try {
-            $hexStr = $itemData['item_hex'];
-            $idItem = hexdec(substr($hexStr, 0, 2));
-            $byte9  = hexdec(substr($hexStr, 18, 2));
-            $group  = ($byte9 >> 4) & 0xF;
-            $realName = ItemsManager::getItemName($group, $idItem);
+            $pdo->beginTransaction();
 
-            $db->query("INSERT INTO [$dbName].[dbo].[MUSERVERMAKER_MARKET_BUY] (buyer_account, seller_account, item_hex, item_name, price_paid, currency, transaction_date) VALUES (?, ?, CONVERT(varbinary(max), ?, 2), ?, ?, ?, GETDATE())", array($username, $seller, $targetHex, $realName, $price, $currency));
-        } catch (Exception $logEx) { }
+            // 4. Reclamar la publicacion: solo UNA compra puede borrarla (anti doble-compra)
+            $claimed = $run("DELETE FROM MUSERVERMAKER_MARKET_SELL OUTPUT DELETED.id, DELETED.price WHERE id = ?", array($id), true);
+            if(count($claimed) !== 1 || (int)$claimed[0]['price'] !== $price) {
+                throw new Exception("Este item ya no est\u{00E1} disponible.");
+            }
+
+            // 5. Saldo del comprador, con la fila bloqueada hasta el final de la compra
+            $buyer = $run("SELECT $colCoin AS saldo FROM [$dbName].[dbo].[$tableCoin] WITH (UPDLOCK, ROWLOCK) WHERE $colUser = ?", array($username), true);
+            if(count($buyer) !== 1 || (int)$buyer[0]['saldo'] < $price) {
+                throw new Exception('Saldo insuficiente.');
+            }
+
+            // 6. Baul vacio: comparacion binaria en SQL Server, sin traer el campo grande
+            $wh = $run("SELECT DATALENGTH(Items) AS bytes,
+                               CASE
+                                   WHEN Items IS NULL OR DATALENGTH(Items) = 0 THEN 0
+                                   WHEN Items = REPLICATE(CONVERT(varbinary(max), 0xFF), DATALENGTH(Items)) THEN 0
+                                   WHEN Items = REPLICATE(CONVERT(varbinary(max), 0x00), DATALENGTH(Items)) THEN 0
+                                   ELSE 1
+                               END AS tiene_items
+                        FROM [$dbName].[dbo].[warehouse] WITH (UPDLOCK, ROWLOCK) WHERE AccountId = ?", array($username), true);
+            if(count($wh) !== 1) throw new Exception("No se encontr\u{00F3} tu ba\u{00FA}l.");
+            if((int)$wh[0]['tiene_items'] === 1) throw new Exception("Tu ba\u{00FA}l debe estar VAC\u{00CD}O.");
+
+            // Tamano real del baul (en este server: 3840 bytes). Se respeta el que tenga la cuenta.
+            $whBytes = (int)$wh[0]['bytes'];
+            if($whBytes <= 0) $whBytes = 3840;
+            $whHexLen = $whBytes * 2;
+            if(!ctype_xdigit($targetHex) || strlen($targetHex) > $whHexLen) throw new Exception("Item inv\u{00E1}lido.");
+            $newWh = $targetHex . str_repeat('F', $whHexLen - strlen($targetHex));
+
+            // 7. Movimientos: si cualquiera falla, se deshace todo
+            $run("UPDATE [$dbName].[dbo].[$tableCoin] SET $colCoin = $colCoin - ? WHERE $colUser = ?", array($price, $username));
+            $run("UPDATE [$dbName].[dbo].[$tableCoin] SET $colCoin = $colCoin + ? WHERE $colUser = ?", array($pay, $seller));
+            $run("UPDATE [$dbName].[dbo].[warehouse] SET Items = CONVERT(varbinary(max), ?, 2) WHERE AccountId = ?", array($newWh, $username));
+
+            $pdo->commit();
+        } catch (PDOException $e) {
+            if($pdo->inTransaction()) $pdo->rollBack();
+            error_log('[BlackMarket::buyItem] ' . $e->getMessage());
+            return array('status' => 'error', 'message' => "No se pudo completar la compra. No se realiz\u{00F3} ning\u{00FA}n cobro.");
+        } catch (Exception $e) {
+            if($pdo->inTransaction()) $pdo->rollBack();
+            return array('status' => 'error', 'message' => $e->getMessage());
+        }
+
+        // 8. Log de la compra (fuera de la transaccion)
+        $idItem = hexdec(substr($targetHex, 0, 2));
+        $group  = (hexdec(substr($targetHex, 18, 2)) >> 4) & 0xF;
+        $realName = ItemsManager::getItemName($group, $idItem);
+        $db->query("INSERT INTO [$dbName].[dbo].[MUSERVERMAKER_MARKET_BUY] (buyer_account, seller_account, item_hex, item_name, price_paid, currency, transaction_date) VALUES (?, ?, CONVERT(varbinary(max), ?, 2), ?, ?, ?, GETDATE())", array($username, $seller, $targetHex, $realName, $price, $currency));
 
         return array('status' => 'success');
     }
