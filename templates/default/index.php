@@ -1048,7 +1048,7 @@ if ($stActive):
     document.addEventListener("DOMContentLoaded", function() {
         setTimeout(function() {
             // PHP inyecta la URL base y la Key automáticamente aquí:
-            var cronUrl = "<?php echo __BASE_URL__; ?>api/cron.php?key=<?php echo isset($muservermakerParams['cron_api_key']) ? $muservermakerParams['cron_api_key'] : '123456'; ?>";
+                        var cronUrl = "<?php echo __BASE_URL__; ?>api/cron.php"; echo isset($muservermakerParams['cron_api_key']) ? $muservermakerParams['cron_api_key'] : '123456'; ?>";
             
             // Ejecutamos el cron silenciosamente
             try {

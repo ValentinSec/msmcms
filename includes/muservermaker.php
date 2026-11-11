@@ -94,6 +94,23 @@ if ($apiResponse) {
 session_name('MuServerMakerSession'); 
 if(defined('access') && access != 'cron') {
     @ob_start();
+    // Cookie de sesion endurecida: no accesible desde JavaScript (HttpOnly), no viaja en
+// pedidos originados en otros sitios (SameSite) y solo por HTTPS cuando el sitio usa HTTPS (Secure).
+if(session_status() === PHP_SESSION_NONE) {
+    $__sessionSecure = (!empty($_SERVER['HTTPS']) && strtolower((string)$_SERVER['HTTPS']) !== 'off')
+        || (isset($_SERVER['SERVER_PORT']) && (int)$_SERVER['SERVER_PORT'] === 443)
+        || (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && strtolower((string)$_SERVER['HTTP_X_FORWARDED_PROTO']) === 'https');
+    ini_set('session.use_strict_mode', '1');
+    ini_set('session.use_only_cookies', '1');
+    session_set_cookie_params(array(
+        'lifetime' => 0,
+        'path'     => '/',
+        'secure'   => $__sessionSecure,
+        'httponly' => true,
+        'samesite' => 'Lax',
+    ));
+    unset($__sessionSecure);
+}
     session_start();
 }
 

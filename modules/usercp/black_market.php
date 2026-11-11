@@ -191,36 +191,13 @@ if(isset($_POST['ajax_action'])) {
         }
         
         if($_POST['ajax_action'] == 'publish') {
-            $slot = (int)$_POST['slot']; $price = (int)$_POST['price'];
-            if($price <= 0) throw new Exception("Precio inválido.");
-            $row = $db->query_fetch_single("SELECT CAST(Items AS VARBINARY(MAX)) as Items FROM warehouse WHERE AccountId = ?", array($username));
-            if(!$row) throw new Exception("Error leyendo baúl.");
-            $itemsHex = bin2hex($row['Items']);
-            if(strlen($itemsHex) < 3840) $itemsHex = str_pad($itemsHex, 3840, 'F', STR_PAD_RIGHT);
-            $itemsHex = strtoupper($itemsHex);
-            $targetHex = substr($itemsHex, $slot * 32, 32);
-            if(substr($targetHex, 0, 8) === 'FFFFFFFF') throw new Exception("Item vacío.");
-            $info = bm_parse_hex($targetHex);
-            $pName = bm_clean($info['name']); $pImg = bm_clean($info['img']); $curr = bm_clean($currency);
-            $sql = "INSERT INTO MUSERVERMAKER_MARKET_SELL (seller_account, item_hex, item_name, item_img, price, currency, date_posted) VALUES ('$username', CONVERT(varbinary(max), '$targetHex', 2), '$pName', '$pImg', $price, '$curr', GETDATE())";
-            if(!$db->query($sql)) throw new Exception("Error SQL al publicar.");
-            $newWh = substr_replace($itemsHex, str_repeat('F', 32), $slot * 32, 32);
-            $db->query("UPDATE warehouse SET Items = 0x" . $newWh . " WHERE AccountId = ?", array($username));
-            echo json_encode(array('status' => 'success')); exit;
+            $result = BlackMarket::publishItem($username, isset($_POST['slot']) ? $_POST['slot'] : -1, isset($_POST['price']) ? $_POST['price'] : 0);
+            echo json_encode($result, JSON_INVALID_UTF8_SUBSTITUTE); exit;
         }
 
         if($_POST['ajax_action'] == 'retract') {
-            $id = (int)$_POST['id'];
-            $item = $db->query_fetch_single("SELECT id, CONVERT(varchar(max), item_hex, 2) as item_hex FROM MUSERVERMAKER_MARKET_SELL WHERE id = $id");
-            if(!$item) throw new Exception("Item no encontrado.");
-            $row = $db->query_fetch_single("SELECT CAST(Items AS VARBINARY(MAX)) as Items FROM warehouse WHERE AccountId = ?", array($username));
-            $hexWh = strtoupper(bin2hex($row['Items']));
-            if(!preg_match('/^[fF0]+$/', $hexWh)) throw new Exception("El baúl debe estar VACÍO.");
-            $targetHex = $item['item_hex'];
-            $newWh = $targetHex . str_repeat('F', 3840 - strlen($targetHex));
-            $db->query("UPDATE warehouse SET Items = 0x" . $newWh . " WHERE AccountId = ?", array($username));
-            $db->query("DELETE FROM MUSERVERMAKER_MARKET_SELL WHERE id = $id");
-            echo json_encode(array('status' => 'success')); exit;
+            $result = BlackMarket::retractItem($username, isset($_POST['id']) ? $_POST['id'] : 0);
+            echo json_encode($result, JSON_INVALID_UTF8_SUBSTITUTE); exit;
         }
 
         if($_POST['ajax_action'] == 'load_sales') {

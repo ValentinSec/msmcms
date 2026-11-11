@@ -282,7 +282,9 @@ class Account extends common {
         if(!is_array($accountData)) throw new Exception(lang('error_23',true));
         
         # Account Recovery Code
-        $arc = $this->generateAccountRecoveryCode($accountData[_CLMN_MEMBID_], $accountData[_CLMN_USERNM_]);
+        $arc = $this->generateAccountRecoveryCode($accountData[_CLMN_MEMBID_],
+        $accountData[_CLMN_USERNM_]);
+        if(!check_value($arc)) throw new Exception(lang('error_23',true));
 
         # Account Recovery URL
         $aru = $this->generateAccountRecoveryLink($accountData[_CLMN_MEMBID_], $accountData[_CLMN_EMAIL_], $arc);
@@ -313,8 +315,8 @@ class Account extends common {
         if(!check_value($ue)) throw new Exception(lang('error_31',true));
         if(!check_value($key)) throw new Exception(lang('error_31',true));
         
-        $user_id = $ui; // user id
-        if(!Validator::UnsignedNumber($user_id)) throw new Exception(lang('error_31',true));
+        $user_id = $ui; // user id (numerico o nombre de cuenta, segun el tipo de server files)
+        if(!is_scalar($user_id) || !preg_match('/^[A-Za-z0-9_]{1,20}$/', (string)$user_id)) throw new Exception(lang('error_31',true));
         
         $user_email = $ue; // email address
         if(!$this->emailExists($user_email)) throw new Exception(lang('error_31',true));
@@ -322,14 +324,18 @@ class Account extends common {
         $accountData = $this->accountInformation($user_id);
         if(!is_array($accountData)) throw new Exception(lang('error_31',true));
         
-        $username = $accountData[_CLMN_USERNM_];
-        $gen_key = $this->generateAccountRecoveryCode($user_id, $username);
+        # el email del enlace tiene que ser el de ESTA cuenta
+        if(strcasecmp(trim((string)$accountData[_CLMN_EMAIL_]), trim((string)$user_email)) !== 0) throw new Exception(lang('error_31',true));
         
-        # compare keys
-        if($key != $gen_key) throw new Exception(lang('error_31',true));
+        $username = $accountData[_CLMN_USERNM_];
+        
+        # codigo aleatorio, con vencimiento y de un solo uso
+        if(!$this->consumeAccountRecoveryCode($user_id, $key)) throw new Exception(lang('error_31',true));
         
         # update user password
-        $new_password = rand(11111111,99999999);
+        $alphabet = 'abcdefghjkmnpqrstuvwxyz23456789';
+        $new_password = '';
+        for($i = 0; $i < 10; $i++) { $new_password .= $alphabet[random_int(0, strlen($alphabet) - 1)]; }
         $update_pass = $this->changePassword($user_id, $username, $new_password);
         if(!$update_pass) throw new Exception(lang('error_23',true));
 

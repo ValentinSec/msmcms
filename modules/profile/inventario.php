@@ -4,11 +4,6 @@
  * Pure PHP Version (Concatenation Safe)
  */
 
-// FORZAR DEBUG EN PANTALLA
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-
 if (!isset($charData)) return;
 
 $inventory_hex = !empty($charData['Inventory']) ? bin2hex($charData['Inventory']) : "";

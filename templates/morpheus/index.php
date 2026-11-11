@@ -462,20 +462,15 @@ if((isset($_POST['market_ajax']) && $_POST['market_ajax'] == 'true') || (isset($
 
         // --- AJAX MARKET ---
         if(isset($_POST['market_ajax'])) {
-            include_once('includes/config/items_manager.php'); 
-            
-            if(!function_exists('bm_ajax_parser_full')) {
-                function bm_ajax_parser_full($hex) {
-                    return bm_parse_item_index($hex);
-                }
-            }
+            include_once('includes/config/items_manager.php');
+            $bmAction = isset($_POST['action']) ? $_POST['action'] : '';
 
-            if($_POST['action'] == 'load_widget') {
+            if($bmAction == 'load_widget') {
                 $data = [];
                 $rows = $db->query_fetch("SELECT TOP 3 id, item_hex, price, currency FROM MUSERVERMAKER_MARKET_SELL ORDER BY date_posted DESC");
                 if(is_array($rows)) {
                     foreach($rows as $row) {
-                        $hex = $row['item_hex']; if(!ctype_xdigit($hex)) $hex = bin2hex($hex);
+                        $hex = $row['item_hex']; if(!ctype_xdigit((string)$hex)) $hex = bin2hex($hex);
                         $id = hexdec(substr($hex, 0, 2)); $group = (hexdec(substr($hex, 18, 2)) >> 4) & 0xF;
                         $level = (hexdec(substr($hex, 2, 2)) >> 3) & 0xF;
                         $data[] = [
@@ -489,83 +484,25 @@ if((isset($_POST['market_ajax']) && $_POST['market_ajax'] == 'true') || (isset($
                         ];
                     }
                 }
-                echo json_encode(['status' => 'success', 'data' => $data]);
+                echo json_encode(['status' => 'success', 'data' => $data], JSON_INVALID_UTF8_SUBSTITUTE);
                 exit;
             }
-            
-            if($_POST['action'] == 'load_category') {
-                $cat = (int)$_POST['category'];
-                $items = $db->query_fetch("SELECT TOP 200 id, seller_account, CONVERT(varchar(max), item_hex, 2) as item_hex, item_name, price, currency, date_posted FROM MUSERVERMAKER_MARKET_SELL ORDER BY date_posted DESC");
-                $filtered = [];
-                if(is_array($items)) {
-                    foreach($items as $item) {
-                        $hex = $item['item_hex']; 
-                        if(!ctype_xdigit((string)$hex)) $hex = bin2hex($hex);
-                        $id = hexdec(substr($hex, 0, 2)); 
-                        $byte9 = hexdec(substr($hex, 18, 2));
-                        $group = ($byte9 >> 4) & 0xF;
-                        if($cat == -1 || $group == $cat) {
-                            $item = array_change_key_case($item, CASE_LOWER);
-                            $item['img'] = __BASE_URL__ . "img/items/{$group}-{$id}.gif";
-                            $item['tooltip'] = bm_parse_item_index($hex);
-                            $item['clean_name'] = ItemsManager::getItemName($group, $id);
-                            $filtered[] = $item;
-                        }
-                    }
-                }
-                echo json_encode(['status' => 'success', 'data' => $filtered]);
+
+            if($bmAction == 'load_category') {
+                $data = BlackMarket::getMarketItems(isset($_POST['category']) ? $_POST['category'] : -1);
+                echo json_encode(['status' => 'success', 'data' => $data], JSON_INVALID_UTF8_SUBSTITUTE);
                 exit;
             }
-            
-            if($_POST['action'] == 'buy_item') {
-                if(!isLoggedIn()) throw new Exception("Inicia sesión.");
-                $username = $_SESSION['username'];
-                $id = (int)$_POST['id'];
-                
-                $itemData = $db->query_fetch_single("SELECT * FROM MUSERVERMAKER_MARKET_SELL WHERE id = ?", [$id]);
-                if(!$itemData) throw new Exception("Item no disponible.");
-                if($itemData['seller_account'] == $username) throw new Exception("Es tu item.");
-                
-                $cleanHexItem = $itemData['item_hex'];
-                if(!ctype_xdigit((string)$cleanHexItem)) $cleanHexItem = bin2hex($cleanHexItem);
-                $cleanHexItem = strtoupper($cleanHexItem);
 
-                $price = (int)$itemData['price'];
-                $colCoin = ($itemData['currency'] == 'Credits') ? 'Credits' : 'WCoinC'; 
-                $tableCoin = ($itemData['currency'] == 'Credits') ? 'MEMB_INFO' : 'CashShopData'; 
-                $colUser = ($itemData['currency'] == 'Credits') ? 'memb___id' : 'AccountID';
-                
-                $buyer = $db->query_fetch_single("SELECT $colCoin FROM $tableCoin WHERE $colUser = ?", [$username]);
-                if(!$buyer || $buyer[$colCoin] < $price) throw new Exception("Saldo insuficiente.");
-                
-                $wh = $db->query_fetch_single("SELECT Items FROM warehouse WHERE AccountId = ?", [$username]);
-                $whRaw = $wh['Items'];
-                if(!ctype_xdigit((string)$whRaw)) $whRaw = bin2hex($whRaw); 
-                $whRaw = strtoupper($whRaw);
-                
-                if(!preg_match('/^[F0]+$/', $whRaw)) throw new Exception("Tu baúl debe estar VACÍO.");
-                
-                $vaultLength = strlen($whRaw); 
-                $itemLength = strlen($cleanHexItem);
-                
-                $padding = str_repeat('F', $vaultLength - $itemLength);
-                $finalVaultHex = $cleanHexItem . $padding;
-
-                $db->query("UPDATE $tableCoin SET $colCoin = $colCoin - ? WHERE $colUser = ?", [$price, $username]);
-                $pay = floor($price * 0.9);
-                $db->query("UPDATE $tableCoin SET $colCoin = $colCoin + ? WHERE $colUser = ?", [$pay, $itemData['seller_account']]);
-                
-                $db->query("UPDATE warehouse SET Items = CONVERT(varbinary(max), ?, 2) WHERE AccountId = ?", [$finalVaultHex, $username]);
-                
-                $db->query("INSERT INTO MUSERVERMAKER_MARKET_BUY (buyer_account, seller_account, item_hex, item_name, price_paid, currency, transaction_date) VALUES (?, ?, CONVERT(varbinary(max), ?, 2), ?, ?, ?, GETDATE())", 
-                    [$username, $itemData['seller_account'], $cleanHexItem, $itemData['item_name'], $price, $itemData['currency']]
-                );
-
-                $db->query("DELETE FROM MUSERVERMAKER_MARKET_SELL WHERE id = ?", [$id]);
-                
-                echo json_encode(['status' => 'success']); 
+            if($bmAction == 'buy_item') {
+                if(!isLoggedIn()) throw new Exception("Inicia sesi\u{00F3}n.");
+                $result = BlackMarket::buyItem($_SESSION['username'], isset($_POST['id']) ? $_POST['id'] : 0);
+                echo json_encode($result, JSON_INVALID_UTF8_SUBSTITUTE);
                 exit;
             }
+
+            echo json_encode(['status' => 'error', 'message' => 'Accion no valida.']);
+            exit;
         }
 
     } catch (Exception $e) {
@@ -1083,10 +1020,22 @@ if(isRankActiveLocal('active_rank_elo', $rankConfig)) $activeRanks['ELO'] = 'PVP
             document.getElementById('buyConfirmModal').style.display = 'flex';
         }
 
+        function bm_buy_loader(show) {
+            var el = document.getElementById('bmBuyLoader');
+            if(!el) {
+                el = document.createElement('div');
+                el.id = 'bmBuyLoader';
+                el.style.cssText = 'display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.85);z-index:2147483647;align-items:center;justify-content:center;flex-direction:column;';
+                el.innerHTML = '<i class="fa fa-spinner fa-spin fa-3x" style="color:#fff;margin-bottom:12px;"></i><span style="color:#fff;font-size:13px;font-weight:bold;letter-spacing:1px;">PROCESANDO COMPRA...</span>';
+                document.body.appendChild(el);
+            }
+            el.style.display = show ? 'flex' : 'none';
+        }
+
         function executeBuy() {
             document.getElementById('buyConfirmModal').style.display = 'none';
-            document.getElementById('wsLoader').style.display = 'flex';
-            
+            bm_buy_loader(true);
+
             var fd = new FormData();
             fd.append('market_ajax', 'true');
             fd.append('action', 'buy_item');
@@ -1095,7 +1044,7 @@ if(isRankActiveLocal('active_rank_elo', $rankConfig)) $activeRanks['ELO'] = 'PVP
             fetch('<?php echo __BASE_URL__; ?>index.php', { method: 'POST', body: fd })
             .then(r => r.json())
             .then(res => {
-                document.getElementById('wsLoader').style.display = 'none';
+                bm_buy_loader(false);
                 if(res.status === 'success') {
                     show_modal_alert("Éxito", "¡Compra realizada! Revisa tu baúl.");
                     var activeCat = document.querySelector('.cat-btn.active');
@@ -1105,8 +1054,8 @@ if(isRankActiveLocal('active_rank_elo', $rankConfig)) $activeRanks['ELO'] = 'PVP
                     show_modal_alert("Error", res.message);
                 }
             }).catch(err => {
-                document.getElementById('wsLoader').style.display = 'none';
-                show_modal_alert("Error", "Fallo de conexión.");
+                bm_buy_loader(false);
+                show_modal_alert("Error", "No se pudo procesar la compra. Intenta de nuevo.");
             });
         }
 
@@ -1253,7 +1202,7 @@ if(isRankActiveLocal('active_rank_elo', $rankConfig)) $activeRanks['ELO'] = 'PVP
     // Auto Cron integrado
     document.addEventListener("DOMContentLoaded", function() {
         setTimeout(function() {
-            var cronUrl = "<?php echo __BASE_URL__; ?>api/cron.php?key=123456";
+                        var cronUrl = "<?php echo __BASE_URL__; ?>api/cron.php";
             try {
                 fetch(cronUrl, {mode: 'no-cors'});
             } catch(e) { }

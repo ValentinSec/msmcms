@@ -1000,10 +1000,22 @@ $seoFile = __PATH_INCLUDES__ . 'config/muservermaker.json';
                 document.getElementById('buyConfirmModal').style.display = 'flex';
             }
 
+            function bm_buy_loader(show) {
+                var el = document.getElementById('bmBuyLoader');
+                if(!el) {
+                    el = document.createElement('div');
+                    el.id = 'bmBuyLoader';
+                    el.style.cssText = 'display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.85);z-index:100001;align-items:center;justify-content:center;flex-direction:column;';
+                    el.innerHTML = '<i class="fa fa-spinner fa-spin fa-3x" style="color:#c8a165;margin-bottom:12px;"></i><span style="color:#fff;font-size:13px;font-weight:bold;letter-spacing:1px;">PROCESANDO COMPRA...</span>';
+                    document.body.appendChild(el);
+                }
+                el.style.display = show ? 'flex' : 'none';
+            }
+
             function executeBuy() {
                 document.getElementById('buyConfirmModal').style.display = 'none';
-                document.getElementById('wsLoader').style.display = 'flex';
-                
+                bm_buy_loader(true);
+
                 var fd = new FormData();
                 fd.append('market_ajax', 'true');
                 fd.append('action', 'buy_item');
@@ -1012,7 +1024,7 @@ $seoFile = __PATH_INCLUDES__ . 'config/muservermaker.json';
                 fetch('<?php echo __BASE_URL__; ?>index.php', { method: 'POST', body: fd })
                 .then(r => r.json())
                 .then(res => {
-                    document.getElementById('wsLoader').style.display = 'none';
+                    bm_buy_loader(false);
                     if(res.status === 'success') {
                         show_modal_alert("Éxito", "¡Compra realizada! Revisa tu baúl.");
                         var activeCat = document.querySelector('.cat-btn.active');
@@ -1023,7 +1035,7 @@ $seoFile = __PATH_INCLUDES__ . 'config/muservermaker.json';
                     }
                 })
                 .catch(function() {
-                    document.getElementById('wsLoader').style.display = 'none';
+                    bm_buy_loader(false);
                     show_modal_alert("Error", "No se pudo procesar la compra. Intenta de nuevo.");
                 });
             }

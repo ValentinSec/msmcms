@@ -48,7 +48,7 @@ $targetColumn = $selectedPack['coin_type'] ?? 'WCoinC';
 $currency = ($methodId == 'mp') ? ($donCfg['methods']['mp']['currency'] ?? 'ARS') : 'USD';
 
 // Registrar transacción
-$txnId = uniqid("TXN_");
+$txnId = 'TXN_' . bin2hex(random_bytes(12));
 $txnFile = dirname(__DIR__) . '/includes/config/donation_transactions.json';
 $transactions = file_exists($txnFile) ? json_decode(file_get_contents($txnFile), true) : [];
 
@@ -58,7 +58,7 @@ $newTxn = [
     'method' => $methodId,
     'pack_id' => $packId,
     'coins' => $coins,
-    'col_coin' => $targetColumn, // <--- GUARDAMOS LA COLUMNA DESTINO AQUÍ
+    'col_coin' => $targetColumn, // <--- GUARDAMOS LA COLUMNA DESTINO AQU??
     'amount' => $amount,
     'currency' => $currency,
     'status' => 'Pending',
@@ -90,7 +90,6 @@ switch ($methodId) {
                     "unit_price" => $amount
                 ]
             ],
-            "payer" => [ "email" => "test_user_123@test.com" ],
             "back_urls" => [
                 "success" => __BASE_URL__ . "index.php?page=usercp&success=mp",
                 "failure" => __BASE_URL__ . "index.php?page=usercp&error=mp",
@@ -110,7 +109,6 @@ switch ($methodId) {
             "Authorization: Bearer $accessToken"
         ]);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         
         $response = curl_exec($ch);
         $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
@@ -121,7 +119,8 @@ switch ($methodId) {
         if (($httpCode == 200 || $httpCode == 201) && isset($jsonResp['init_point'])) {
             header("Location: " . $jsonResp['init_point']);
         } else {
-            echo "Error MP: <pre>" . print_r($jsonResp, true) . "</pre>";
+            error_log('[process_donation] Error MP HTTP ' . $httpCode . ': ' . $response);
+            die("Error: no se pudo iniciar el pago. Intenta nuevamente mas tarde.");
         }
         break;
 

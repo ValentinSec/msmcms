@@ -7,11 +7,87 @@
 // access
 define('access', 'admincp');
 
+// =====================================================================================
+// HELPERS DE SEGURIDAD DEL PANEL
+// =====================================================================================
+
+// Busca la clave del admin sin distinguir mayusculas ni espacios (cuentas CHAR(10))
+function admincp_find_admin_key($admins, $username) {
+    foreach($admins as $key => $value) {
+        if(strcasecmp(trim((string)$key), trim((string)$username)) === 0) return $key;
+    }
+    return null;
+}
+
+function admincp_pin_is_hashed($pin) {
+    $info = password_get_info((string)$pin);
+    return !empty($info['algo']);
+}
+
+// Guarda el PIN del admin como hash dentro de muservermaker.json
+function admincp_save_admin_pin($adminKey, $plainPin) {
+    $file = __PATH_CONFIGS__ . 'muservermaker.json';
+    $cfg = json_decode((string)@file_get_contents($file), true);
+    if(!is_array($cfg) || !isset($cfg['admins']) || !is_array($cfg['admins'])) return false;
+    if(!array_key_exists($adminKey, $cfg['admins'])) return false;
+
+    $entry = $cfg['admins'][$adminKey];
+    $level = is_array($entry) ? (isset($entry['level']) ? (int)$entry['level'] : 1) : (int)$entry;
+    $cfg['admins'][$adminKey] = array('level' => $level, 'pin' => password_hash($plainPin, PASSWORD_DEFAULT));
+
+    $json = json_encode($cfg, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+    if($json === false) return false;
+    return @file_put_contents($file, $json, LOCK_EX) !== false;
+}
+
+// Limite de intentos de PIN por usuario: 5 fallos = 15 minutos de espera.
+// Devuelve los segundos de bloqueo restantes (0 = sin bloqueo).
+function admincp_pin_lock($username, $action = 'get') {
+    $file = __PATH_INCLUDES__ . 'cache/admincp_pin_attempts.json';
+    $data = file_exists($file) ? json_decode((string)@file_get_contents($file), true) : array();
+    if(!is_array($data)) $data = array();
+
+    $key = strtolower(trim((string)$username));
+    $now = time();
+    $row = (isset($data[$key]) && is_array($data[$key])) ? $data[$key] : array('count' => 0, 'until' => 0);
+
+    if($action === 'fail') {
+        $row['count'] = (int)$row['count'] + 1;
+        if($row['count'] >= 5) { $row['until'] = $now + 900; $row['count'] = 0; }
+        $data[$key] = $row;
+        @file_put_contents($file, json_encode($data), LOCK_EX);
+    } elseif($action === 'reset') {
+        unset($data[$key]);
+        @file_put_contents($file, json_encode($data), LOCK_EX);
+        return 0;
+    }
+
+    return ((int)$row['until'] > $now) ? ((int)$row['until'] - $now) : 0;
+}
+
+function admincp_csrf_fail() {
+    while (ob_get_level() > 0) { @ob_end_clean(); }
+    http_response_code(403);
+    $isAjax = (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest')
+           || (isset($_SERVER['HTTP_ACCEPT']) && strpos($_SERVER['HTTP_ACCEPT'], 'application/json') !== false);
+    if($isAjax) {
+        header('Content-Type: application/json');
+        echo json_encode(array('status' => 'error', 'success' => false, 'message' => 'Token de seguridad invalido. Recarga la pagina.'));
+    } else {
+        echo '<div style="font-family:sans-serif; background:#15171c; color:#fff; border:1px solid #e74c3c; padding:20px; margin:40px auto; max-width:520px; border-radius:8px;">';
+        echo '<h3 style="margin-top:0; color:#e74c3c;">Solicitud bloqueada</h3>';
+        echo '<p>El token de seguridad no es v&aacute;lido o la sesi&oacute;n expir&oacute;. Volv&eacute; al panel, recarg&aacute; la p&aacute;gina e intent&aacute; de nuevo.</p>';
+        echo '<a href="index.php" style="color:#f39c12;">Volver al panel</a>';
+        echo '</div>';
+    }
+    exit();
+}
+
 // ----------------------------------------
 
 try {
     
-    // Load WebENGINE
+    // Load MuServerMaker core
     if(!@include_once('../includes/muservermaker.php')) throw new Exception('Could not load MuServerMaker CMS.');
 
     // Check if user is logged in
@@ -19,6 +95,24 @@ try {
 
     // Check if user has access
     if(!canAccessAdminCP($_SESSION['username'])) { redirect(); }
+
+    // =================================================================================
+    // TOKEN ANTI-CSRF (un token por sesion; se exige en TODOS los POST del panel)
+    // =================================================================================
+    if(empty($_SESSION['admincp_csrf']) || !is_string($_SESSION['admincp_csrf'])) {
+        $_SESSION['admincp_csrf'] = bin2hex(random_bytes(32));
+    }
+    $csrfToken = $_SESSION['admincp_csrf'];
+
+    if($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $sentToken = '';
+        if(isset($_POST['csrf_token']) && is_string($_POST['csrf_token'])) {
+            $sentToken = $_POST['csrf_token'];
+        } elseif(isset($_SERVER['HTTP_X_CSRF_TOKEN'])) {
+            $sentToken = (string)$_SERVER['HTTP_X_CSRF_TOKEN'];
+        }
+        if(!hash_equals($csrfToken, $sentToken)) admincp_csrf_fail();
+    }
 
     // =================================================================================
     // INICIO SISTEMA DE SEGURIDAD AVANZADO (PIN INDIVIDUAL + AUTO-LOCK)
@@ -48,37 +142,90 @@ try {
         $_SESSION['admin_last_activity'] = time();
     }
 
-    // 3. PROCESAR DESBLOQUEO
-    if (isset($_POST['unlock_pin'])) {
-        $adminsList = config('admins', true);
-        $currentUser = $_SESSION['username'];
-        $userPin = '123456'; 
+    // 3. DATOS DEL PIN DEL ADMIN ACTUAL (sin PIN por defecto)
+    $adminsList = config('admins', true);
+    $adminKey = is_array($adminsList) ? admincp_find_admin_key($adminsList, $_SESSION['username']) : null;
+    $storedPin = '';
+    if($adminKey !== null && is_array($adminsList[$adminKey]) && isset($adminsList[$adminKey]['pin'])) {
+        $storedPin = (string)$adminsList[$adminKey]['pin'];
+    }
+    // Sin PIN, o con el viejo PIN por defecto: hay que crear uno propio
+    $pinNeedsSetup = ($storedPin === '' || $storedPin === '123456');
 
-        if(isset($adminsList[$currentUser])) {
-            $userData = $adminsList[$currentUser];
-            if(is_array($userData) && isset($userData['pin'])) {
-                $userPin = $userData['pin'];
-            } 
-        }
+    // 4a. CREAR PIN (primer ingreso)
+    if (isset($_POST['setup_pin']) && $pinNeedsSetup) {
+        $newPin = is_string($_POST['setup_pin']) ? $_POST['setup_pin'] : '';
+        $newPinConfirm = (isset($_POST['setup_pin_confirm']) && is_string($_POST['setup_pin_confirm'])) ? $_POST['setup_pin_confirm'] : '';
 
-        if ($_POST['unlock_pin'] === (string)$userPin) {
+        if($adminKey === null) {
+            $pinError = 'Tu usuario no figura en la lista de administradores.';
+        } elseif(strlen($newPin) < 6 || strlen($newPin) > 64) {
+            $pinError = 'El PIN debe tener entre 6 y 64 caracteres.';
+        } elseif($newPin === '123456') {
+            $pinError = 'Ese PIN no está permitido. Elegí otro.';
+        } elseif($newPin !== $newPinConfirm) {
+            $pinError = 'Los dos PIN no coinciden.';
+        } elseif(!admincp_save_admin_pin($adminKey, $newPin)) {
+            $pinError = 'No se pudo guardar el PIN. Revisá los permisos de muservermaker.json.';
+        } else {
             $_SESSION['admin_pin_verified'] = true;
             $_SESSION['admin_last_activity'] = time();
             header("Location: index.php");
             exit();
-        } else {
-            $pinError = 'PIN Incorrecto.';
         }
     }
 
-    // 4. EL GATEKEEPER (PANTALLA DE BLOQUEO EN PHP PURO)
+    // 4b. DESBLOQUEAR CON PIN EXISTENTE
+    if (isset($_POST['unlock_pin']) && !$pinNeedsSetup) {
+        $inputPin = is_string($_POST['unlock_pin']) ? $_POST['unlock_pin'] : '';
+        $waitSeconds = admincp_pin_lock($_SESSION['username']);
+
+        if($waitSeconds > 0) {
+            $pinError = 'Demasiados intentos fallidos. Esperá ' . ceil($waitSeconds / 60) . ' minuto(s).';
+        } else {
+            $pinIsHashed = admincp_pin_is_hashed($storedPin);
+            $pinOk = $pinIsHashed ? password_verify($inputPin, $storedPin) : hash_equals($storedPin, $inputPin);
+
+            if ($pinOk) {
+                // PIN viejo en texto plano: se convierte a hash en este mismo ingreso
+                if(!$pinIsHashed && $adminKey !== null) admincp_save_admin_pin($adminKey, $inputPin);
+                admincp_pin_lock($_SESSION['username'], 'reset');
+                $_SESSION['admin_pin_verified'] = true;
+                $_SESSION['admin_last_activity'] = time();
+                header("Location: index.php");
+                exit();
+            } else {
+                $remaining = admincp_pin_lock($_SESSION['username'], 'fail');
+                $pinError = ($remaining > 0) ? 'Demasiados intentos fallidos. Esperá 15 minutos.' : 'PIN incorrecto.';
+            }
+        }
+    }
+
+    // 5. EL GATEKEEPER (PANTALLA DE BLOQUEO EN PHP PURO)
     if (!isset($_SESSION['admin_pin_verified']) || $_SESSION['admin_pin_verified'] !== true) {
         $baseUrl = __BASE_URL__;
-        $userNameUpper = strtoupper($_SESSION['username']);
+        $userNameUpper = htmlspecialchars(strtoupper($_SESSION['username']), ENT_QUOTES, 'UTF-8');
         $errorHtml = '';
         
         if(!empty($pinError)) {
-            $errorHtml = '<div class="error-msg"><i class="fa fa-clock me-2"></i> ' . $pinError . '</div>';
+            $errorHtml = '<div class="error-msg"><i class="fa fa-clock me-2"></i> ' . htmlspecialchars($pinError, ENT_QUOTES, 'UTF-8') . '</div>';
+        }
+
+        if($pinNeedsSetup) {
+            $gateText = 'Creá tu PIN de seguridad personal (mínimo 6 caracteres).';
+            $formHtml = '<form method="post" action="">'
+                      . '<input type="hidden" name="csrf_token" value="' . $csrfToken . '">'
+                      . '<input type="password" name="setup_pin" class="form-control form-control-pin" placeholder="Nuevo PIN" maxlength="64" autofocus autocomplete="new-password">'
+                      . '<input type="password" name="setup_pin_confirm" class="form-control form-control-pin" placeholder="Repetir PIN" maxlength="64" autocomplete="new-password">'
+                      . '<button type="submit" class="btn btn-unlock">Guardar PIN <i class="fa fa-arrow-right ms-2"></i></button>'
+                      . '</form>';
+        } else {
+            $gateText = 'Ingrese su PIN de seguridad personal.';
+            $formHtml = '<form method="post" action="">'
+                      . '<input type="hidden" name="csrf_token" value="' . $csrfToken . '">'
+                      . '<input type="password" name="unlock_pin" class="form-control form-control-pin" placeholder="••••••" maxlength="64" autofocus autocomplete="off">'
+                      . '<button type="submit" class="btn btn-unlock">Desbloquear <i class="fa fa-arrow-right ms-2"></i></button>'
+                      . '</form>';
         }
 
         echo <<<HTML
@@ -98,7 +245,7 @@ try {
                 .avatar-box { width: 90px; height: 90px; margin: 0 auto 20px; border-radius: 50%; background: #1a1d24; display: flex; align-items: center; justify-content: center; border: 2px solid #2d323e; color: #f39c12; font-size: 32px; box-shadow: 0 0 20px rgba(0,0,0,0.3); }
                 h4 { color: #fff; font-weight: 700; margin-bottom: 5px; letter-spacing: 1px; }
                 p { color: #8a8d93; font-size: 13px; margin-bottom: 30px; }
-                .form-control-pin { background: rgba(0,0,0,0.3); border: 1px solid #2d323e; color: #fff; text-align: center; font-size: 24px; letter-spacing: 10px; height: 50px; border-radius: 8px; margin-bottom: 20px; transition: 0.3s; }
+                .form-control-pin { background: rgba(0,0,0,0.3); border: 1px solid #2d323e; color: #fff; text-align: center; font-size: 20px; letter-spacing: 6px; height: 50px; border-radius: 8px; margin-bottom: 20px; transition: 0.3s; }
                 .form-control-pin:focus { background: rgba(0,0,0,0.5); border-color: #f39c12; box-shadow: 0 0 10px rgba(243, 156, 18, 0.2); outline: none; color: #f39c12; }
                 .btn-unlock { width: 100%; padding: 12px; border-radius: 8px; background: linear-gradient(135deg, #f39c12 0%, #d35400 100%); border: none; color: #fff; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; font-size: 14px; transition: 0.3s; }
                 .btn-unlock:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(243, 156, 18, 0.3); color: #fff; }
@@ -113,12 +260,9 @@ try {
                 <div class="lock-card">
                     <div class="avatar-box"><i class="fa fa-user-shield"></i></div>
                     <h4>{$userNameUpper}</h4>
-                    <p>Ingrese su PIN de seguridad personal.</p>
+                    <p>{$gateText}</p>
                     {$errorHtml}
-                    <form method="post" action="">
-                        <input type="password" name="unlock_pin" class="form-control form-control-pin" placeholder="••••••" maxlength="20" autofocus autocomplete="off">
-                        <button type="submit" class="btn btn-unlock">Desbloquear <i class="fa fa-arrow-right ms-2"></i></button>
-                    </form>
+                    {$formHtml}
                     <a href="{$baseUrl}" class="back-link"><i class="fa fa-arrow-left me-1"></i> Volver al sitio web</a>
                 </div>
             </div>
@@ -157,7 +301,7 @@ include('modules_list.php');
 $adminCpHome = __PATH_ADMINCP_HOME__;
 $baseUrl = __BASE_URL__;
 $adminName = admincp_base();
-$usernameInitial = strtoupper(substr($_SESSION['username'], 0, 1));
+$usernameInitial = htmlspecialchars(strtoupper(substr($_SESSION['username'], 0, 1)), ENT_QUOTES, 'UTF-8');
 
 // --- RENDERIZADO DEL PANEL PRINCIPAL (PHP PURO) ---
 
@@ -169,6 +313,7 @@ echo <<<HTML
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="MuServerMaker AdminCP 1.0">
     <meta name="author" content="MuServerMaker">
+    <meta name="csrf-token" content="{$csrfToken}">
     <title>MuServerMaker - AdminCP</title>
     
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
@@ -177,8 +322,58 @@ echo <<<HTML
     <link rel="stylesheet" href="https://cdn.datatables.net/2.2.2/css/dataTables.bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tinymce@7.7.0/skins/ui/oxide/content.min.css">
-    <link rel="stylesheet" href="css/webengine.css">
+        <link rel="stylesheet" href="css/admincp.css">
     
+    <script>
+    // Anti-CSRF: agrega el token a todos los formularios POST y a todas las llamadas AJAX del panel
+    (function() {
+        var T = "{$csrfToken}";
+        function sameOrigin(u) {
+            try { return new URL(u, window.location.href).origin === window.location.origin; } catch (e) { return false; }
+        }
+        function addField(f) {
+            if (!f || !f.getAttribute) return;
+            var method = (f.getAttribute('method') || 'get').toLowerCase();
+            if (method !== 'post') return;
+            if (!sameOrigin(f.getAttribute('action') || window.location.href)) return;
+            var i = f.querySelector('input[name="csrf_token"]');
+            if (!i) { i = document.createElement('input'); i.type = 'hidden'; i.name = 'csrf_token'; f.appendChild(i); }
+            i.value = T;
+        }
+        document.addEventListener('submit', function(e) { addField(e.target); }, true);
+        var nativeSubmit = HTMLFormElement.prototype.submit;
+        HTMLFormElement.prototype.submit = function() { addField(this); return nativeSubmit.call(this); };
+        document.addEventListener('DOMContentLoaded', function() {
+            Array.prototype.forEach.call(document.forms, addField);
+        });
+        if (window.fetch) {
+            var nativeFetch = window.fetch;
+            window.fetch = function(input, init) {
+                init = init || {};
+                var isString = (typeof input === 'string');
+                var url = isString ? input : ((input && input.url) || '');
+                var method = String(init.method || (!isString && input && input.method) || 'GET').toUpperCase();
+                if (method !== 'GET' && sameOrigin(url)) {
+                    var h = new Headers(init.headers || (!isString && input && input.headers) || {});
+                    h.set('X-CSRF-Token', T);
+                    init.headers = h;
+                }
+                return nativeFetch.call(this, input, init);
+            };
+        }
+        var xhrOpen = XMLHttpRequest.prototype.open;
+        var xhrSend = XMLHttpRequest.prototype.send;
+        XMLHttpRequest.prototype.open = function(method, url) {
+            this._csrfNeeded = (String(method).toUpperCase() !== 'GET' && sameOrigin(url));
+            return xhrOpen.apply(this, arguments);
+        };
+        XMLHttpRequest.prototype.send = function() {
+            if (this._csrfNeeded) { try { this.setRequestHeader('X-CSRF-Token', T); } catch (e) {} }
+            return xhrSend.apply(this, arguments);
+        };
+    })();
+    </script>
+
     <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
 
     <link rel="shortcut icon" href="/img/favicon.ico" type="image/x-icon">
@@ -297,7 +492,7 @@ HTML;
 
                         // --- ROUTER INTELIGENTE ---
                         $req = isset($_REQUEST['module']) ? $_REQUEST['module'] : 'home';
-                        $req = preg_replace('/[^a-zA-Z0-9_]/', '', $req); 
+                        $req = preg_replace('/[^a-zA-Z0-9_]/', '', (string)$req); 
 
                         $base_modules_path = 'modules/';
                         $file_to_load = '';
@@ -357,11 +552,14 @@ echo <<<HTML
     
     <script>
     $(document).ready(function() {
+        function isMobileView() { return window.matchMedia("(max-width: 991px)").matches; }
+
         $("#sidebarToggle").click(function(e) {
             e.preventDefault();
+            e.stopPropagation();
             $("#wrapper").toggleClass("toggled");
             var logo = $("#sidebar-logo");
-            if ($("#wrapper").hasClass("toggled")) {
+            if ($("#wrapper").hasClass("toggled") && !isMobileView()) {
                 logo.attr("src", "img/colapse.png");
                 logo.css("max-width", "40px"); 
             } else {
@@ -369,9 +567,15 @@ echo <<<HTML
                 logo.css("max-width", "100%"); 
             }
         });
+
+        // En pantallas angostas el menu se abre encima del contenido: tocar afuera lo cierra
+        $("#page-wrapper").click(function() {
+            if (isMobileView() && $("#wrapper").hasClass("toggled")) {
+                $("#wrapper").removeClass("toggled");
+            }
+        });
     });
     </script>
 </body>
 </html>
 HTML;
-?>

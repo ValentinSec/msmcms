@@ -251,10 +251,47 @@ class common {
 		}
 	}
 
+	// Genera un codigo de recuperacion aleatorio, valido 30 minutos y de un solo uso.
 	public function generateAccountRecoveryCode($userid,$username) {
 		if(!check_value($userid)) return;
 		if(!check_value($username)) return;
-		return md5($userid . $username . date("m-d-Y"));
+		$token = bin2hex(random_bytes(32));
+		$store = $this->_recoveryStore();
+		// Un pedido nuevo invalida los codigos anteriores de la misma cuenta
+		foreach($store as $k => $v) {
+			if(is_array($v) && isset($v['uid']) && (string)$v['uid'] === (string)$userid) unset($store[$k]);
+		}
+		$store[hash('sha256', $token)] = array('uid' => (string)$userid, 'exp' => time() + 1800);
+		if(!$this->_recoveryStore($store)) return;
+		return $token;
+	}
+
+	// Valida y CONSUME el codigo: tras este llamado ya no sirve mas.
+	public function consumeAccountRecoveryCode($userid,$token) {
+		if(!check_value($userid)) return false;
+		if(!is_string($token) || !preg_match('/^[a-f0-9]{64}$/', $token)) return false;
+		$store = $this->_recoveryStore();
+		$key = hash('sha256', $token);
+		if(!isset($store[$key]) || !is_array($store[$key])) return false;
+		$entry = $store[$key];
+		unset($store[$key]);
+		$this->_recoveryStore($store);
+		if(!isset($entry['exp'], $entry['uid']) || (int)$entry['exp'] < time()) return false;
+		return hash_equals((string)$entry['uid'], (string)$userid);
+	}
+
+	// Lee o guarda los codigos pendientes (solo se guarda su hash, nunca el codigo).
+	protected function _recoveryStore($newData = null) {
+		$file = __PATH_INCLUDES__ . 'cache/recovery_tokens.json';
+		if($newData === null) {
+			$data = file_exists($file) ? json_decode((string)@file_get_contents($file), true) : array();
+			return is_array($data) ? $data : array();
+		}
+		$now = time();
+		foreach($newData as $k => $v) {
+			if(!is_array($v) || !isset($v['exp']) || (int)$v['exp'] < $now) unset($newData[$k]);
+		}
+		return @file_put_contents($file, json_encode($newData), LOCK_EX) !== false;
 	}
 	
 	public function isIpBlocked($ip) {

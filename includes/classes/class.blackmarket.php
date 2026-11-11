@@ -1,7 +1,7 @@
 <?php
 /**
  * MuServerMaker CMS - Black Market
- * Motor central del mercado entre jugadores.
+ * Motor central del mercado entre jugadores: listar, comprar, publicar y retirar.
  *
  * IMPORTANTE: este archivo es ASCII puro a proposito. Los acentos de los mensajes
  * se escriben como \u{XXXX} para que json_encode() nunca falle por la codificacion
@@ -10,9 +10,81 @@
 
 class BlackMarket {
 
+    const ITEM_BYTES = 16;      // bytes que ocupa un item dentro del baul
+    const VISIBLE_SLOTS = 120;  // casilleros que muestra el UserCP (8 x 15)
+
+    /* ====================================================================
+     * HELPERS INTERNOS
+     * ==================================================================== */
+
+    private static function config() {
+        static $cfg = null;
+        if($cfg === null) {
+            $file = __PATH_INCLUDES__ . 'config/black_market_config.json';
+            $data = file_exists($file) ? json_decode((string)@file_get_contents($file), true) : null;
+            $cfg = is_array($data) ? $data : array();
+        }
+        return $cfg;
+    }
+
+    private static function taxPercent() {
+        $cfg = self::config();
+        $tax = isset($cfg['tax_percent']) ? (int)$cfg['tax_percent'] : 10;
+        if($tax < 0) $tax = 0;
+        if($tax > 100) $tax = 100;
+        return $tax;
+    }
+
+    private static function dbName() {
+        $serverData = muservermakerConfigs();
+        $dbName = isset($serverData['SQL_DB_NAME']) ? $serverData['SQL_DB_NAME'] : 'MuOnline';
+        // Lista blanca: solo caracteres validos de identificador
+        return preg_match('/^[A-Za-z0-9_]+$/', (string)$dbName) ? $dbName : null;
+    }
+
+    private static function pdoFrom($db) {
+        try {
+            $ref = new ReflectionClass($db);
+            $prop = $ref->getProperty('db');
+            $prop->setAccessible(true);
+            $pdo = $prop->getValue($db);
+        } catch (Throwable $e) { $pdo = null; }
+        return ($pdo instanceof PDO) ? $pdo : null;
+    }
+
+    private static function isOnline($db, $username) {
+        $online = $db->query_fetch_single("SELECT ConnectStat FROM MEMB_STAT WHERE memb___id = ? AND ConnectStat = 1", array($username));
+        return is_array($online);
+    }
+
+    private static function itemName($group, $id) {
+        if(!class_exists('ItemsManager')) {
+            $file = __PATH_INCLUDES__ . 'config/items_manager.php';
+            if(file_exists($file)) include_once($file);
+        }
+        if(class_exists('ItemsManager') && method_exists('ItemsManager', 'getItemName')) {
+            return ItemsManager::getItemName($group, $id);
+        }
+        return "Item ($group-$id)";
+    }
+
+    private static function vaultSql($dbName) {
+        return "SELECT DATALENGTH(Items) AS bytes,
+                       CASE
+                           WHEN Items IS NULL OR DATALENGTH(Items) = 0 THEN 0
+                           WHEN Items = REPLICATE(CONVERT(varbinary(max), 0xFF), DATALENGTH(Items)) THEN 0
+                           WHEN Items = REPLICATE(CONVERT(varbinary(max), 0x00), DATALENGTH(Items)) THEN 0
+                           ELSE 1
+                       END AS tiene_items
+                FROM [$dbName].[dbo].[warehouse] WITH (UPDLOCK, ROWLOCK) WHERE AccountId = ?";
+    }
+
+    /* ====================================================================
+     * PRESENTACION
+     * ==================================================================== */
+
     /**
      * Convierte el hex de un item en el tooltip HTML.
-     * (Migrado desde bm_parse_item_index del template default)
      */
     public static function parseItemIndex($hex) {
         $id = hexdec(substr($hex, 0, 2));
@@ -198,6 +270,10 @@ class BlackMarket {
         return $filtered;
     }
 
+    /* ====================================================================
+     * COMPRA
+     * ==================================================================== */
+
     /**
      * Procesa la compra de un item. Devuelve array con status/message.
      * Consultas parametrizadas + transaccion: se hace todo o no se hace nada.
@@ -207,19 +283,13 @@ class BlackMarket {
 
         $db = Connection::Database('Me_MuOnline');
 
-        // Verificar que la cuenta este DESCONECTADA (evita dup de items/creditos)
-        $online = $db->query_fetch_single("SELECT ConnectStat FROM MEMB_STAT WHERE memb___id = ? AND ConnectStat = 1", array($username));
-        if(is_array($online)) {
+        // La cuenta debe estar DESCONECTADA (evita dup de items/creditos)
+        if(self::isOnline($db, $username)) {
             return array('status' => 'error', 'message' => 'Debes DESCONECTAR tu cuenta del juego para operar en el mercado.');
         }
 
-        // Nombre de la base desde la config cacheada
-        $serverData = muservermakerConfigs();
-        $dbName = isset($serverData['SQL_DB_NAME']) ? $serverData['SQL_DB_NAME'] : 'MuOnline';
-        // Lista blanca: el nombre de base solo puede tener caracteres validos de identificador
-        if(!preg_match('/^[A-Za-z0-9_]+$/', $dbName)) {
-            return array('status' => 'error', 'message' => "Configuraci\u{00F3}n inv\u{00E1}lida.");
-        }
+        $dbName = self::dbName();
+        if($dbName === null) return array('status' => 'error', 'message' => "Configuraci\u{00F3}n inv\u{00E1}lida.");
 
         $id = (int)$itemId;
 
@@ -240,13 +310,8 @@ class BlackMarket {
         }
 
         // 3. Conexion PDO directa: necesaria para la transaccion y para detectar errores SQL
-        try {
-            $pdoRef = new ReflectionClass($db);
-            $prop = $pdoRef->getProperty('db');
-            $prop->setAccessible(true);
-            $pdo = $prop->getValue($db);
-        } catch (Throwable $e) { $pdo = null; }
-        if(!($pdo instanceof PDO)) return array('status' => 'error', 'message' => "Sin conexi\u{00F3}n con la base de datos.");
+        $pdo = self::pdoFrom($db);
+        if($pdo === null) return array('status' => 'error', 'message' => "Sin conexi\u{00F3}n con la base de datos.");
 
         $run = function($sql, $params = array(), $fetch = false) use ($pdo) {
             $stmt = $pdo->prepare($sql);
@@ -254,7 +319,8 @@ class BlackMarket {
             return $fetch ? $stmt->fetchAll(PDO::FETCH_ASSOC) : true;
         };
 
-        $pay = (int)floor($price * 0.9);
+        // Lo que recibe el vendedor: precio menos el impuesto configurado en el AdminCP
+        $pay = (int)floor($price * (100 - self::taxPercent()) / 100);
         $targetHex = strtoupper((string)$itemData['item_hex']);
 
         try {
@@ -273,14 +339,7 @@ class BlackMarket {
             }
 
             // 6. Baul vacio: comparacion binaria en SQL Server, sin traer el campo grande
-            $wh = $run("SELECT DATALENGTH(Items) AS bytes,
-                               CASE
-                                   WHEN Items IS NULL OR DATALENGTH(Items) = 0 THEN 0
-                                   WHEN Items = REPLICATE(CONVERT(varbinary(max), 0xFF), DATALENGTH(Items)) THEN 0
-                                   WHEN Items = REPLICATE(CONVERT(varbinary(max), 0x00), DATALENGTH(Items)) THEN 0
-                                   ELSE 1
-                               END AS tiene_items
-                        FROM [$dbName].[dbo].[warehouse] WITH (UPDLOCK, ROWLOCK) WHERE AccountId = ?", array($username), true);
+            $wh = $run(self::vaultSql($dbName), array($username), true);
             if(count($wh) !== 1) throw new Exception("No se encontr\u{00F3} tu ba\u{00FA}l.");
             if((int)$wh[0]['tiene_items'] === 1) throw new Exception("Tu ba\u{00FA}l debe estar VAC\u{00CD}O.");
 
@@ -309,8 +368,165 @@ class BlackMarket {
         // 8. Log de la compra (fuera de la transaccion)
         $idItem = hexdec(substr($targetHex, 0, 2));
         $group  = (hexdec(substr($targetHex, 18, 2)) >> 4) & 0xF;
-        $realName = ItemsManager::getItemName($group, $idItem);
+        $realName = self::itemName($group, $idItem);
         $db->query("INSERT INTO [$dbName].[dbo].[MUSERVERMAKER_MARKET_BUY] (buyer_account, seller_account, item_hex, item_name, price_paid, currency, transaction_date) VALUES (?, ?, CONVERT(varbinary(max), ?, 2), ?, ?, ?, GETDATE())", array($username, $seller, $targetHex, $realName, $price, $currency));
+
+        return array('status' => 'success');
+    }
+
+    /* ====================================================================
+     * VENTA: PUBLICAR
+     * ==================================================================== */
+
+    /**
+     * Publica el item de un casillero del baul. Saca el item del baul y crea
+     * la publicacion en la misma transaccion (anti duplicacion).
+     */
+    public static function publishItem($username, $slot, $price) {
+        if(!check_value($username)) return array('status' => 'error', 'message' => "Sesi\u{00F3}n inv\u{00E1}lida.");
+
+        $slot = (int)$slot;
+        $price = (int)$price;
+        if($price <= 0 || $price > 2000000000) return array('status' => 'error', 'message' => "Precio inv\u{00E1}lido.");
+        if($slot < 0 || $slot >= self::VISIBLE_SLOTS) return array('status' => 'error', 'message' => "Casillero inv\u{00E1}lido.");
+
+        $db = Connection::Database('Me_MuOnline');
+        if(self::isOnline($db, $username)) {
+            return array('status' => 'error', 'message' => "Debes desconectarte del juego para gestionar el ba\u{00FA}l.");
+        }
+
+        $dbName = self::dbName();
+        if($dbName === null) return array('status' => 'error', 'message' => "Configuraci\u{00F3}n inv\u{00E1}lida.");
+
+        $pdo = self::pdoFrom($db);
+        if($pdo === null) return array('status' => 'error', 'message' => "Sin conexi\u{00F3}n con la base de datos.");
+
+        $run = function($sql, $params = array(), $fetch = false) use ($pdo) {
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute($params);
+            return $fetch ? $stmt->fetchAll(PDO::FETCH_ASSOC) : true;
+        };
+
+        // Moneda configurada en el AdminCP
+        $cfg = self::config();
+        $currency = isset($cfg['allowed_currency']) ? (string)$cfg['allowed_currency'] : 'Credits';
+        if(!preg_match('/^[A-Za-z0-9_]{1,20}$/', $currency)) $currency = 'Credits';
+
+        // Posiciones en bytes dentro del baul (enteros calculados aca, no vienen del usuario)
+        $before = $slot * self::ITEM_BYTES;        // bytes anteriores al casillero
+        $start  = $before + 1;                     // primer byte del casillero (SQL cuenta desde 1)
+        $after  = $before + self::ITEM_BYTES + 1;  // primer byte posterior al casillero
+
+        try {
+            $pdo->beginTransaction();
+
+            // 1. Leer SOLO el casillero pedido, con el baul bloqueado hasta el final
+            $row = $run("SELECT DATALENGTH(Items) AS bytes, CONVERT(varchar(32), SUBSTRING(Items, $start, 16), 2) AS slot_hex FROM [$dbName].[dbo].[warehouse] WITH (UPDLOCK, ROWLOCK) WHERE AccountId = ?", array($username), true);
+            if(count($row) !== 1) throw new Exception("No se encontr\u{00F3} tu ba\u{00FA}l.");
+
+            $bytes = (int)$row[0]['bytes'];
+            if($bytes < $before + self::ITEM_BYTES) throw new Exception("Casillero inv\u{00E1}lido.");
+
+            $slotHex = strtoupper((string)$row[0]['slot_hex']);
+            if(strlen($slotHex) !== 32 || !ctype_xdigit($slotHex)) throw new Exception("Item vac\u{00ED}o.");
+            if(substr($slotHex, 0, 8) === 'FFFFFFFF' || preg_match('/^0+$/', $slotHex)) throw new Exception("Item vac\u{00ED}o.");
+
+            // 2. Datos de la publicacion
+            $itemId = hexdec(substr($slotHex, 0, 2));
+            $group  = (hexdec(substr($slotHex, 18, 2)) >> 4) & 0xF;
+            $name   = self::itemName($group, $itemId);
+            $img    = "img/items/{$group}-{$itemId}.gif";
+
+            // 3. Crear la publicacion
+            $run("INSERT INTO MUSERVERMAKER_MARKET_SELL (seller_account, item_hex, item_name, item_img, price, currency, date_posted) VALUES (?, CONVERT(varbinary(max), ?, 2), ?, ?, ?, ?, GETDATE())", array($username, $slotHex, $name, $img, $price, $currency));
+
+            // 4. Vaciar el casillero, sin tocar el resto del baul
+            $run("UPDATE [$dbName].[dbo].[warehouse] SET Items = SUBSTRING(Items, 1, $before) + 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF + SUBSTRING(Items, $after, DATALENGTH(Items)) WHERE AccountId = ?", array($username));
+
+            $pdo->commit();
+        } catch (PDOException $e) {
+            if($pdo->inTransaction()) $pdo->rollBack();
+            error_log('[BlackMarket::publishItem] ' . $e->getMessage());
+            return array('status' => 'error', 'message' => "No se pudo publicar el item. Tu ba\u{00FA}l no fue modificado.");
+        } catch (Exception $e) {
+            if($pdo->inTransaction()) $pdo->rollBack();
+            return array('status' => 'error', 'message' => $e->getMessage());
+        } catch (Throwable $e) {
+            if($pdo->inTransaction()) $pdo->rollBack();
+            error_log('[BlackMarket::publishItem] ' . $e->getMessage());
+            return array('status' => 'error', 'message' => 'Error interno.');
+        }
+
+        return array('status' => 'success');
+    }
+
+    /* ====================================================================
+     * VENTA: RETIRAR
+     * ==================================================================== */
+
+    /**
+     * Devuelve al baul una publicacion PROPIA. Exige baul vacio.
+     */
+    public static function retractItem($username, $itemId) {
+        if(!check_value($username)) return array('status' => 'error', 'message' => "Sesi\u{00F3}n inv\u{00E1}lida.");
+
+        $id = (int)$itemId;
+        if($id <= 0) return array('status' => 'error', 'message' => 'Item no encontrado.');
+
+        $db = Connection::Database('Me_MuOnline');
+        if(self::isOnline($db, $username)) {
+            return array('status' => 'error', 'message' => "Debes desconectarte del juego para gestionar el ba\u{00FA}l.");
+        }
+
+        $dbName = self::dbName();
+        if($dbName === null) return array('status' => 'error', 'message' => "Configuraci\u{00F3}n inv\u{00E1}lida.");
+
+        $pdo = self::pdoFrom($db);
+        if($pdo === null) return array('status' => 'error', 'message' => "Sin conexi\u{00F3}n con la base de datos.");
+
+        $run = function($sql, $params = array(), $fetch = false) use ($pdo) {
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute($params);
+            return $fetch ? $stmt->fetchAll(PDO::FETCH_ASSOC) : true;
+        };
+
+        try {
+            $pdo->beginTransaction();
+
+            // 1. Reclamar la publicacion: debe ser del usuario. Si alguien la compra
+            //    al mismo tiempo, solo una de las dos operaciones la obtiene.
+            $claimed = $run("DELETE FROM MUSERVERMAKER_MARKET_SELL OUTPUT DELETED.id, CONVERT(varchar(max), DELETED.item_hex, 2) AS item_hex WHERE id = ? AND seller_account = ?", array($id, $username), true);
+            if(count($claimed) !== 1) throw new Exception('Item no encontrado.');
+
+            $targetHex = strtoupper((string)$claimed[0]['item_hex']);
+
+            // 2. Baul vacio, bloqueado hasta el final
+            $wh = $run(self::vaultSql($dbName), array($username), true);
+            if(count($wh) !== 1) throw new Exception("No se encontr\u{00F3} tu ba\u{00FA}l.");
+            if((int)$wh[0]['tiene_items'] === 1) throw new Exception("El ba\u{00FA}l debe estar VAC\u{00CD}O.");
+
+            // 3. Devolver el item respetando el tamano real del baul
+            $whBytes = (int)$wh[0]['bytes'];
+            if($whBytes <= 0) $whBytes = 3840;
+            $whHexLen = $whBytes * 2;
+            if(!ctype_xdigit($targetHex) || strlen($targetHex) > $whHexLen) throw new Exception("Item inv\u{00E1}lido.");
+            $newWh = $targetHex . str_repeat('F', $whHexLen - strlen($targetHex));
+
+            $run("UPDATE [$dbName].[dbo].[warehouse] SET Items = CONVERT(varbinary(max), ?, 2) WHERE AccountId = ?", array($newWh, $username));
+
+            $pdo->commit();
+        } catch (PDOException $e) {
+            if($pdo->inTransaction()) $pdo->rollBack();
+            error_log('[BlackMarket::retractItem] ' . $e->getMessage());
+            return array('status' => 'error', 'message' => "No se pudo retirar el item. La publicaci\u{00F3}n sigue activa.");
+        } catch (Exception $e) {
+            if($pdo->inTransaction()) $pdo->rollBack();
+            return array('status' => 'error', 'message' => $e->getMessage());
+        } catch (Throwable $e) {
+            if($pdo->inTransaction()) $pdo->rollBack();
+            error_log('[BlackMarket::retractItem] ' . $e->getMessage());
+            return array('status' => 'error', 'message' => 'Error interno.');
+        }
 
         return array('status' => 'success');
     }

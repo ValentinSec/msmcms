@@ -2238,3 +2238,104 @@ textarea.form-control-dark {
 .res-name { display: block; font-weight: 600; font-size: 13px; }
 .res-details { display: block; font-size: 11px; color: #94a3b8; }
 .search-no-results { padding: 15px; color: #64748b; font-size: 12px; text-align: center; }
+
+/* ====================================================================
+   DISEÑO ADAPTABLE (pantallas de menos de 992px)
+   - El menu lateral se oculta y se abre encima del contenido con el boton.
+   - El contenido usa todo el ancho.
+   - Las tarjetas dejan de encogerse al tamaño de su contenido.
+   ==================================================================== */
+@media (max-width: 991px) {
+
+    /* --- Menu lateral: oculto por defecto, se abre con el boton --- */
+    .navbar-default.sidebar {
+        width: 260px;
+        transform: translateX(-100%);
+        z-index: 1100;
+        box-shadow: 10px 0 30px rgba(0, 0, 0, 0.6);
+    }
+    #wrapper.toggled .navbar-default.sidebar {
+        width: 260px;
+        transform: translateX(0);
+    }
+
+    /* Abierto en pantalla angosta se ve completo, no en modo "solo iconos" */
+    #wrapper.toggled .sidebar .nav-link-text { display: inline !important; }
+    #wrapper.toggled .sidebar .arrow { display: inline-block !important; }
+    #wrapper.toggled .sidebar #side-menu > li > a { justify-content: flex-start; padding: 12px 15px; }
+    #wrapper.toggled .sidebar #side-menu > li > a i { margin-right: 12px; font-size: 16px; }
+    #wrapper.toggled .sidebar .sidebar-logo-area img { max-width: 160px !important; }
+    #wrapper.toggled .sidebar .nav-second-level.in,
+    #wrapper.toggled .sidebar .nav-second-level.mm-show { display: block !important; }
+
+    /* Fondo oscuro detras del menu abierto */
+    #wrapper.toggled #page-wrapper::before {
+        content: "";
+        position: fixed;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: rgba(0, 0, 0, 0.6);
+        z-index: 1050;
+    }
+
+    /* --- Encabezado y contenido a todo el ancho --- */
+    .top-header,
+    #wrapper.toggled .top-header {
+        left: 0;
+        padding: 0 15px;
+    }
+    #page-wrapper,
+    #wrapper.toggled #page-wrapper {
+        margin-left: 0;
+        border-left: none;
+    }
+    .header-left { margin-right: 10px; }
+    .header-right { flex: 1; min-width: 0; justify-content: flex-end; gap: 10px; }
+    .header-search { flex: 1; min-width: 0; max-width: 300px; }
+    .header-search input,
+    .header-search input:focus { width: 100%; }
+    .search-results-overlay { width: 100%; }
+
+    /* --- Filas del panel: las columnas vuelven a ocupar todo el renglon --- */
+    #page-wrapper .dashboard-row,
+    #page-wrapper .dashboard-row-bottom,
+    #page-wrapper .row-flex,
+    #page-wrapper .row-tables-flex {
+        display: block;
+    }
+    #page-wrapper .bottom-card,
+    #page-wrapper .settings-section,
+    #page-wrapper .template-card,
+    #page-wrapper .info-category-card {
+        height: auto;
+    }
+    #page-wrapper .dashboard-row-bottom { margin-top: 0; }
+
+    /* --- Dashboard: tarjetas de totales en dos columnas --- */
+    #page-wrapper .dashboard-col-left {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 15px;
+        margin-bottom: 20px;
+    }
+    #page-wrapper .dashboard-col-left .dashboard-card { margin-bottom: 0 !important; }
+    #page-wrapper .dashboard-col-left .card-welcome { grid-column: 1 / -1; }
+
+    /* --- Grafico: alto razonable en pantallas chicas --- */
+    #page-wrapper .chart-card {
+        min-height: 340px !important;
+        height: auto;
+        margin-bottom: 20px;
+    }
+    #page-wrapper .chart-body { height: 260px; }
+
+    /* --- Contenido ancho (tablas): se desplaza en vez de cortarse --- */
+    #page-wrapper .container-fluid { overflow-x: auto; }
+}
+
+/* Celulares */
+@media (max-width: 575px) {
+    #page-wrapper { padding-left: 5px; padding-right: 5px; }
+    #page-wrapper .dashboard-col-left { grid-template-columns: 1fr; }
+    .header-btn { display: none; }
+    .top-header { padding: 0 10px; }
+}

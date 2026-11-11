@@ -165,8 +165,13 @@ function debug($value) {
 }
 
 function canAccessAdminCP($username) {
-	if(!check_value($username)) return;
-	if(array_key_exists($username, config('admins',true))) return true;
+	if(!check_value($username)) return false;
+	$admins = config('admins', true);
+	if(!is_array($admins)) return false;
+	$username = trim((string)$username);
+	foreach($admins as $adminUser => $adminData) {
+		if(strcasecmp(trim((string)$adminUser), $username) === 0) return true;
+	}
 	return false;
 }
 
@@ -272,7 +277,6 @@ function getGensLeadershipRank($rankPosition) {
 	return;
 }
 
-// FUNCIÓN RENOMBRADA: muservermakerConfigs
 function muservermakerConfigs($forceReload = false) {
     static $cachedConfig = null;
     if($cachedConfig !== null && !$forceReload) {
