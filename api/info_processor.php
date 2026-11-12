@@ -11,15 +11,15 @@ ini_set('display_errors', 0);
 // --- 1. BUSCADOR DE NÚCLEO INTELIGENTE ---
 $possible_cores = [
     // Opción A: Estructura estándar (api/ -> includes/)
-    __DIR__ . '/../includes/webengine.php',
+    __DIR__ . '/../includes/muservermaker.php',
     __DIR__ . '/../includes/muservermaker.php',
     
     // Opción B: Ruta Absoluta (Document Root)
-    $_SERVER['DOCUMENT_ROOT'] . '/includes/webengine.php',
+    $_SERVER['DOCUMENT_ROOT'] . '/includes/muservermaker.php',
     $_SERVER['DOCUMENT_ROOT'] . '/includes/muservermaker.php',
     
     // Opción C: Estás en la raíz (por si acaso)
-    __DIR__ . '/includes/webengine.php'
+    __DIR__ . '/includes/muservermaker.php'
 ];
 
 $core_loaded = false;
@@ -33,7 +33,7 @@ foreach ($possible_cores as $path) {
 
 if (!$core_loaded) {
     // Si falla, mostramos dónde estamos parados para depurar
-    die("Error Crítico: No se encuentra 'includes/webengine.php' ni 'muservermaker.php'.<br>Script ejecutado desde: " . __DIR__);
+    die("Error Crítico: No se encuentra 'includes/muservermaker.php' ni 'muservermaker.php'.<br>Script ejecutado desde: " . __DIR__);
 }
 
 // Cargar clases DB si el núcleo no las cargó

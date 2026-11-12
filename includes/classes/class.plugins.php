@@ -70,15 +70,15 @@ class Plugins {
 	}
 	
 	private function checkCompatibility($array) {
-		if(array_key_exists('webengine',$array)) {
-			if(is_array($array['webengine'])) {
-				if(in_array(__WEBENGINE_VERSION__,$array['webengine'])) {
+		if(array_key_exists('muservermaker',$array)) {
+			if(is_array($array['muservermaker'])) {
+				if(in_array(__MUSERVERMAKER_VERSION__,$array['muservermaker'])) {
 					return true;
 				} else {
 					return false;
 				}
 			} else {
-				if(__WEBENGINE_VERSION__ == $array['webengine']) {
+				if(__MUSERVERMAKER_VERSION__ == $array['muservermaker']) {
 					return true;
 				} else {
 					return false;
@@ -144,10 +144,10 @@ class Plugins {
 	}
 	
 	private function installPlugin($pluginDATA) {
-		$compatibility = $pluginDATA['compatibility']['webengine'];
+		$compatibility = $pluginDATA['compatibility']['muservermaker'];
 		$files = $pluginDATA['files']['file'];
-		if(is_array($pluginDATA['compatibility']['webengine'])) {
-			$compatibility = implode("|",$pluginDATA['compatibility']['webengine']);
+		if(is_array($pluginDATA['compatibility']['muservermaker'])) {
+			$compatibility = implode("|",$pluginDATA['compatibility']['muservermaker']);
 		}
 		if(is_array($pluginDATA['files']['file'])) {
 			$files = implode("|",$pluginDATA['files']['file']);
@@ -163,7 +163,7 @@ class Plugins {
 			time(),
 			$_SESSION['username']
 		);
-		$query = $this->db->query("INSERT INTO ".WEBENGINE_PLUGINS." (name, author, version, compatibility, folder, files, status, install_date, installed_by) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)", $data);
+		$query = $this->db->query("INSERT INTO ".MUSERVERMAKER_PLUGINS." (name, author, version, compatibility, folder, files, status, install_date, installed_by) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)", $data);
 		if($query) {
 			@$this->_getPluginLatestVersion($pluginDATA['folder'], $pluginDATA['version']);
 			return true;
@@ -173,12 +173,12 @@ class Plugins {
 	}
 	
 	public function retrieveInstalledPlugins() {
-		$plugins = $this->db->query_fetch("SELECT * FROM ".WEBENGINE_PLUGINS." ORDER BY id ASC");
+		$plugins = $this->db->query_fetch("SELECT * FROM ".MUSERVERMAKER_PLUGINS." ORDER BY id ASC");
 		return $plugins;
 	}
 	
 	public function updatePluginStatus($plugin_id,$new_status) {
-		$update = $this->db->query("UPDATE ".WEBENGINE_PLUGINS." SET status = ? WHERE id = ?", array($new_status, $plugin_id));
+		$update = $this->db->query("UPDATE ".MUSERVERMAKER_PLUGINS." SET status = ? WHERE id = ?", array($new_status, $plugin_id));
 		$update_cache = $this->rebuildPluginsCache();
 		if(!$update_cache) {
 			message('error','Could not update plugins cache data, make sure the file exists and it\'s writable!');
@@ -186,7 +186,7 @@ class Plugins {
 	}
 	
 	public function uninstallPlugin($plugin_id) {
-		$uninstall = $this->db->query("DELETE FROM ".WEBENGINE_PLUGINS." WHERE id = ?", array($plugin_id));
+		$uninstall = $this->db->query("DELETE FROM ".MUSERVERMAKER_PLUGINS." WHERE id = ?", array($plugin_id));
 		if($uninstall) {
 			return true;
 		} else {
@@ -195,7 +195,7 @@ class Plugins {
 	}
 	
 	public function rebuildPluginsCache() {
-		$plugins = $this->db->query_fetch("SELECT * FROM ".WEBENGINE_PLUGINS." WHERE status = 1 ORDER BY id ASC");
+		$plugins = $this->db->query_fetch("SELECT * FROM ".MUSERVERMAKER_PLUGINS." WHERE status = 1 ORDER BY id ASC");
 		if(!is_array($plugins)) {
 			$update = updateCacheFile('plugins.cache', "");
 			if(!$update) return;
@@ -205,7 +205,7 @@ class Plugins {
 		foreach($plugins as $key => $row) {
 			$compatibility = explode('|', $row['compatibility']);
 			if(!is_array($compatibility)) continue;
-			if(!in_array(__WEBENGINE_VERSION__, $compatibility)) continue;
+			if(!in_array(__MUSERVERMAKER_VERSION__, $compatibility)) continue;
 			
 			$files = explode('|', $row['files']);
 			if(!is_array($files)) continue;
@@ -243,7 +243,7 @@ class Plugins {
 		curl_setopt($ch, CURLOPT_POSTFIELDS, implode("&", $fieldsArray));
 		curl_setopt($ch, CURLOPT_TIMEOUT, 10);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		curl_setopt($ch, CURLOPT_USERAGENT, 'WebEngine');
+		curl_setopt($ch, CURLOPT_USERAGENT, 'MuServerMaker');
 		curl_setopt($ch, CURLOPT_HEADER, false);
 
 		$result = curl_exec($ch);
@@ -288,7 +288,7 @@ class Plugins {
 		curl_setopt($ch, CURLOPT_POSTFIELDS, implode("&", $fieldsArray));
 		curl_setopt($ch, CURLOPT_TIMEOUT, 10);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		curl_setopt($ch, CURLOPT_USERAGENT, 'WebEngine');
+		curl_setopt($ch, CURLOPT_USERAGENT, 'MuServerMaker');
 		curl_setopt($ch, CURLOPT_HEADER, false);
 
 		$result = curl_exec($ch);

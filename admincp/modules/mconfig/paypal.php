@@ -92,7 +92,7 @@ $creditSystem = new CreditSystem();
 			</td>
 		</tr>
 		<tr>
-			<th>IPN Notify URL<br/><span>URL of WebEngine's PayPal API.<br/><br/> By default it has to be in: <b>http://YOURWEBSITE.COM/api/paypal.php</b></span></th>
+			<th>IPN Notify URL<br/><span>URL of MuServerMaker's PayPal API.<br/><br/> By default it has to be in: <b>http://YOURWEBSITE.COM/api/paypal.php</b></span></th>
 			<td>
 				<input class="input-xxlarge" type="text" name="setting_8" value="<?php echo mconfig('paypal_notify_url'); ?>"/>
 			</td>

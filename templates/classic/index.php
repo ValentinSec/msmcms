@@ -388,45 +388,6 @@ if(isset($_POST['market_ajax']) && $_POST['market_ajax'] == 'true') {
     </style>
     <?php endif; ?>
 
-    <style>
-        .market-section-classic { padding: 60px 0; background: #fff; border-bottom: 1px solid #eee; }
-        .market-ticker-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-top: 40px; }
-        .market-card-white { background: #fff; border: 1px solid #e0e0e0; border-radius: 8px; padding: 15px; transition: all 0.3s ease; box-shadow: 0 5px 15px rgba(0,0,0,0.05); position: relative; }
-        .market-card-white:hover { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(0,0,0,0.15); border-color: #333; }
-        .mc-img-box { height: 100px; display: flex; align-items: center; justify-content: center; background: #f8f9fa; border-radius: 4px; margin-bottom: 10px; }
-        .mc-name { font-family: 'Poppins', sans-serif; font-size: 0.85rem; font-weight: 600; color: #333; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 5px; }
-        .mc-price { font-family: 'Poppins', sans-serif; color: #d32f2f; font-weight: 700; font-size: 0.9rem; margin-bottom: 10px; }
-        .mc-btn-buy { background: #222; border: none; color: #fff; width: 100%; padding: 8px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; cursor: pointer; border-radius: 4px; }
-        .mc-btn-buy:hover { background: #000; }
-        .market-empty-state { grid-column: 1 / -1; padding: 40px; border: 2px dashed #ddd; color: #888; border-radius: 8px; font-weight: 500; }
-        
-        .ws-modal-content { background: #111 !important; color: #ccc !important; border: 1px solid #333 !important; box-shadow: 0 0 50px rgba(0,0,0,0.8) !important; }
-        .ws-sidebar-left { background: #080808 !important; border-right: 1px solid #222 !important; }
-        .cat-header { color: #FF8A3B !important; border-bottom: 1px solid #222 !important; font-family: 'Cinzel', serif !important; text-shadow: 0 0 10px rgba(255, 138, 59, 0.3); }
-        .cat-btn { color: #888 !important; border-bottom: 1px solid #1a1a1a; }
-        .cat-btn:hover, .cat-btn.active { background: rgba(255, 138, 59, 0.1) !important; color: #fff !important; border-left: 3px solid #FF8A3B; }
-        .ws-center-panel { background: #111 !important; position: relative; }
-        .center-toolbar { background: rgba(0,0,0,0.5) !important; border-bottom: 1px solid #222 !important; }
-        .search-wrapper-market input { background: #000 !important; color: #fff !important; border: 1px solid #444 !important; }
-        .btn-ws-close { color: #fff !important; opacity: 0.7; }
-        .btn-ws-close:hover { opacity: 1; transform: rotate(90deg); transition: 0.3s; }
-
-        .confirm-box-classic { background: #151515 !important; border: 1px solid #FF8A3B !important; color: #fff !important; box-shadow: 0 0 30px rgba(255, 138, 59, 0.15) !important; width: 400px; padding: 30px; text-align: center; border-radius: 8px; }
-        .confirm-title { color: #fff !important; font-family: 'Cinzel', serif !important; border-bottom: 1px solid #333; padding-bottom: 10px; margin-bottom: 15px; font-weight: bold; font-size: 1.2rem; }
-        .confirm-body { color: #ccc !important; margin-bottom: 20px; }
-        .confirm-btns { display: flex !important; flex-direction: row !important; justify-content: center !important; align-items: center !important; gap: 15px !important; margin-top: 25px !important; }
-        .btn-confirm-yes { background: linear-gradient(to bottom, #FF8A3B, #D74921) !important; border: none !important; color: #fff !important; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 4px 10px rgba(215, 73, 33, 0.4); padding: 10px 20px; border-radius: 4px; font-weight: bold; cursor: pointer; width: auto !important; }
-        .btn-confirm-yes:hover { filter: brightness(1.2); transform: scale(1.05); }
-        .btn-confirm-no { background: transparent !important; border: 1px solid #555 !important; color: #aaa !important; padding: 10px 20px; border-radius: 4px; font-weight: bold; cursor: pointer; width: auto !important; }
-        .btn-confirm-no:hover { background: #222 !important; color: #fff !important; }
-
-        #global-tt { position: fixed; display: none; z-index: 100000; background: rgba(0, 0, 0, 0.95); border: 1px solid #555; padding: 10px; border-radius: 6px; pointer-events: none; box-shadow: 0 0 20px rgba(0,0,0,0.8); width: 220px; text-align: center; }
-        .tt-name { display: block; font-weight: bold; color: #fff; margin-bottom: 5px; border-bottom: 1px solid #333; padding-bottom: 5px; }
-        .tt-exc { color: #2ecc71; font-size: 12px; margin-bottom: 2px; }
-        .tt-opt { color: #a9b5df; font-size: 12px; }
-        .tt-luck { color: #f1c40f; font-size: 12px; font-weight: bold; }
-        .tt-380 { color: #d63384; font-size: 12px; font-weight: bold; }
-    </style>
 </head>
 <body class="<?php echo (isset($_REQUEST['page']) && $_REQUEST['page'] == 'usercp') ? 'usercp-body' : ''; ?>">
 
@@ -476,7 +437,7 @@ if(isset($_POST['market_ajax']) && $_POST['market_ajax'] == 'true') {
             $nTitle = isset($news['news_title']) ? $news['news_title'] : (isset($news['title']) ? $news['title'] : 'Noticia');
             $nDate = isset($news['news_date']) ? date('Y-m-d', $news['news_date']) : (isset($news['date']) ? $news['date'] : '');
             
-            // WebEngine a veces guarda el texto en 'content' y otras en 'news_content'
+            // MuServerMaker a veces guarda el texto en 'content' y otras en 'news_content'
             $nContent = isset($news['news_content']) ? $news['news_content'] : (isset($news['content']) ? $news['content'] : 'Contenido no disponible.');
             
             // Sanitizar para evitar que comillas rompan el Javascript
@@ -572,8 +533,10 @@ if(isset($_POST['market_ajax']) && $_POST['market_ajax'] == 'true') {
         document.getElementById('readNewsContent').innerHTML = ''; 
     }
 </script>
-
+                        </div><!-- cierra home-news-section -->
+                    </div><!-- cierra col-lg-5 content-col -->
                     <div class="col-lg-7 col-md-12 text-center">
+					
                         <div class="hero-image-wrapper">
                             <img src="<?php echo __BASE_URL__; ?>templates/classic/img/<?php echo $heroImage; ?>" class="hero-img img-fluid" alt="Hero">
                         </div>

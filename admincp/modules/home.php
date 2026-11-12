@@ -1,143 +1,198 @@
 <?php
 /**
- * Dashboard Module (Home) - FIXED LAYOUT
- * Pure PHP Version (No closing tags)
+ * Dashboard Module (Home)
+ * Pure PHP Version (No closing tag)
  */
 
+if(!defined('access')) die();
+
+if(!defined('__MUSERVERMAKER_VERSION__')) define('__MUSERVERMAKER_VERSION__', '1.0.0');
+$currentVersion = __MUSERVERMAKER_VERSION__;
+$dashCacheDir = __PATH_INCLUDES__ . 'cache/';
+
+$esc = function($value) { return htmlspecialchars((string)$value, ENT_QUOTES, 'UTF-8'); };
+$fmtDate = function($value, $format = 'd/m/Y') {
+    if(empty($value)) return '-';
+    try { $d = new DateTime((string)$value); return $d->format($format); } catch (Exception $e) { return '-'; }
+};
+
 // =====================================================================
-// INICIO: LÓGICA DE ACTUALIZACIONES
+// 1. ACTUALIZACIONES (una consulta cada 12 h; si falla, reintenta en 1 h)
 // =====================================================================
 $updateAvailable = false;
-$updateData = [];
-
-if (!defined('__MUSERVERMAKER_VERSION__')) define('__MUSERVERMAKER_VERSION__', '1.0.0');
-$currentVersion = __MUSERVERMAKER_VERSION__;
-
-try {
-    $licenseUrl = 'https://licencias.muservermaker.com/api/check_update.php'; 
-    $postData = ['version' => $currentVersion, 'domain' => $_SERVER['HTTP_HOST']];
-
-    $ch = curl_init();
-    curl_setopt($ch, CURLOPT_URL, $licenseUrl);
-    curl_setopt($ch, CURLOPT_POST, 1);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($postData));
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_TIMEOUT, 3);
-    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-    
-    $response = curl_exec($ch);
-    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-    curl_close($ch);
-
-    if ($httpCode == 200 && $response) {
-        $json = json_decode($response, true);
-        if (isset($json['update']) && $json['update'] === true) {
-            $updateAvailable = true;
-            $updateData = $json;
-        }
-    }
-} catch (Exception $e) {}
-// =====================================================================
-
-// --- 1. DATOS FALSOS PARA GRÁFICO ---
-$visitorDates = [];
-$visitorCounts = [];
-for ($i = 6; $i >= 0; $i--) {
-    $date = date('Y-m-d', strtotime("-$i days"));
-    $visitorDates[] = $date;
-    $visitorCounts[] = rand(250, 450); 
+$updateData = array();
+$updateCacheFile = $dashCacheDir . 'update_check.json';
+$updateCache = file_exists($updateCacheFile) ? json_decode((string)@file_get_contents($updateCacheFile), true) : null;
+$updateFresh = false;
+if(is_array($updateCache) && isset($updateCache['checked'])) {
+    $ttl = !empty($updateCache['ok']) ? 43200 : 3600;
+    if(time() - (int)$updateCache['checked'] < $ttl) $updateFresh = true;
 }
-$jsonDates = json_encode($visitorDates);
-$jsonCounts = json_encode($visitorCounts);
+if(!$updateFresh && function_exists('curl_init')) {
+    $updateCache = array('checked' => time(), 'ok' => false, 'data' => array());
+    try {
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, 'https://licencias.muservermaker.com/api/check_update.php');
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query(array('version' => $currentVersion, 'domain' => isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : '')));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 2);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 3);
+        $response = curl_exec($ch);
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+        if($httpCode == 200 && $response) {
+            $decoded = json_decode($response, true);
+            if(is_array($decoded)) { $updateCache['ok'] = true; $updateCache['data'] = $decoded; }
+        }
+    } catch (Throwable $e) { }
+    @file_put_contents($updateCacheFile, json_encode($updateCache), LOCK_EX);
+}
+if(is_array($updateCache) && !empty($updateCache['data']['update']) && $updateCache['data']['update'] === true) {
+    $updateAvailable = true;
+    $updateData = $updateCache['data'];
+}
 
-// --- 2. VARIABLES ---
-$totalAccounts = 0;
-$totalCharacters = 0;
-$totalGuilds = 0;
-$totalBanned = 0;
-$latestRegistrations = [];
-$gMembers = 0;
-$gNoMembers = 0;
-$gHighScore = "Ninguno";
-$gLowScore = "Ninguno";
-$csOwner = "SIN DUEÑO";
-$csMaster = "-";
+// =====================================================================
+// 2. DATOS
+// =====================================================================
+$totalAccounts = 0; $totalCharacters = 0; $totalGuilds = 0; $totalBanned = 0;
+$onlineNow = 0;
+$latestRegistrations = array();
+$recentActivity = array();
+$regByDay = array();
+$gMembers = 0; $gNoMembers = 0;
+$gHighScore = 'Ninguno'; $gLowScore = 'Ninguno';
+$csOwner = 'SIN DUEÑO'; $csMaster = '-';
 
-$jewelStats = [
-    'Chaos'    => ['count' => 0, 'holder' => '-', 'holder_amt' => 0],
-    'Bless'    => ['count' => 0, 'holder' => '-', 'holder_amt' => 0],
-    'Soul'     => ['count' => 0, 'holder' => '-', 'holder_amt' => 0],
-    'Life'     => ['count' => 0, 'holder' => '-', 'holder_amt' => 0],
-    'Creation' => ['count' => 0, 'holder' => '-', 'holder_amt' => 0],
-];
-
-// --- 3. CONEXIÓN Y CONSULTAS ---
 try {
     $db = Connection::Database('Me_MuOnline');
 
-    $qAccounts = $db->query_fetch_single("SELECT COUNT(*) as count FROM MEMB_INFO");
-    if(is_array($qAccounts)) $totalAccounts = $qAccounts['count'];
+    $q = $db->query_fetch_single("SELECT COUNT(*) as count FROM MEMB_INFO");
+    if(is_array($q)) $totalAccounts = (int)$q['count'];
 
-    $qChars = $db->query_fetch_single("SELECT COUNT(*) as count FROM Character");
-    if(is_array($qChars)) $totalCharacters = $qChars['count'];
+    $q = $db->query_fetch_single("SELECT COUNT(*) as count FROM Character");
+    if(is_array($q)) $totalCharacters = (int)$q['count'];
 
-    $qGuilds = $db->query_fetch_single("SELECT COUNT(*) as count FROM Guild");
-    if(is_array($qGuilds)) $totalGuilds = $qGuilds['count'];
+    $q = $db->query_fetch_single("SELECT COUNT(*) as count FROM Guild");
+    if(is_array($q)) $totalGuilds = (int)$q['count'];
 
-    $qBanned = $db->query_fetch_single("SELECT COUNT(*) as count FROM MEMB_INFO WHERE bloc_code = 1");
-    if(is_array($qBanned)) $totalBanned = $qBanned['count'];
+    $q = $db->query_fetch_single("SELECT COUNT(*) as count FROM MEMB_INFO WHERE bloc_code = 1");
+    if(is_array($q)) $totalBanned = (int)$q['count'];
 
-    $sqlRegistros = "SELECT TOP 6 i.memb___id, i.appl_days, s.ConnectStat 
-                     FROM MEMB_INFO i
-                     LEFT JOIN MEMB_STAT s ON i.memb___id = s.memb___id
-                     ORDER BY i.appl_days DESC, i.memb_guid DESC";
-    $latestRegistrations = $db->query_fetch($sqlRegistros);
+    // Conectados ahora
+    $q = $db->query_fetch_single("SELECT COUNT(*) as count FROM MEMB_STAT WHERE ConnectStat = 1");
+    if(is_array($q)) $onlineNow = (int)$q['count'];
 
-    $qGMem = $db->query_fetch_single("SELECT COUNT(*) as count FROM GuildMember");
-    if(is_array($qGMem)) $gMembers = $qGMem['count'];
-    $gNoMembers = $totalCharacters - $gMembers;
-    if($gNoMembers < 0) $gNoMembers = 0;
+    // Registros por dia (ultimos 7 dias)
+    $rows = $db->query_fetch("SELECT CONVERT(varchar(10), appl_days, 120) AS dia, COUNT(*) AS total FROM MEMB_INFO WHERE appl_days >= DATEADD(day, -6, CONVERT(date, GETDATE())) GROUP BY CONVERT(varchar(10), appl_days, 120)");
+    if(is_array($rows)) { foreach($rows as $r) { $regByDay[(string)$r['dia']] = (int)$r['total']; } }
 
-    $qHigh = $db->query_fetch_single("SELECT TOP 1 G_Name FROM Guild ORDER BY G_Score DESC");
-    if(is_array($qHigh) && !empty($qHigh['G_Name'])) $gHighScore = $qHigh['G_Name'];
+    // Ultimas cuentas creadas
+    $rows = $db->query_fetch("SELECT TOP 6 i.memb___id, i.appl_days, s.ConnectStat, s.ConnectTM FROM MEMB_INFO i LEFT JOIN MEMB_STAT s ON i.memb___id = s.memb___id ORDER BY i.appl_days DESC, i.memb___id DESC");
+    if(is_array($rows)) $latestRegistrations = $rows;
 
+    // Ultimas conexiones
+    $rows = $db->query_fetch("SELECT TOP 6 memb___id, IP, ConnectTM, ConnectStat FROM MEMB_STAT ORDER BY ConnectTM DESC");
+    if(is_array($rows)) $recentActivity = $rows;
+
+    // Guilds
+    $q = $db->query_fetch_single("SELECT COUNT(*) as count FROM GuildMember");
+    if(is_array($q)) $gMembers = (int)$q['count'];
+    $gNoMembers = max(0, $totalCharacters - $gMembers);
+
+    $q = $db->query_fetch_single("SELECT TOP 1 G_Name FROM Guild ORDER BY G_Score DESC");
+    if(is_array($q) && !empty($q['G_Name'])) $gHighScore = $q['G_Name'];
+
+    $q = $db->query_fetch_single("SELECT TOP 1 G_Name FROM Guild ORDER BY G_Score ASC");
+    if(is_array($q) && !empty($q['G_Name'])) $gLowScore = $q['G_Name'];
+
+    // Castle Siege
+    $q = $db->query_fetch_single("SELECT OWNER_GUILD FROM MuCastle_DATA");
+    if(is_array($q)) {
+        $owner = trim((string)$q['OWNER_GUILD']);
+        if($owner !== '' && strcasecmp($owner, 'No Owner') !== 0) {
+            $csOwner = $owner;
+            $qm = $db->query_fetch_single("SELECT G_Master FROM Guild WHERE G_Name = ?", array($owner));
+            if(is_array($qm) && !empty($qm['G_Master'])) $csMaster = $qm['G_Master'];
+        }
+    }
 } catch (Exception $e) { }
 
-// --- LÓGICA ECONOMÍA ---
-$itemSize = 32; 
-$jewelIds = [
-    'Chaos'    => [12, 15], 
-    'Bless'    => [14, 13], 
-    'Soul'     => [14, 14], 
-    'Life'     => [14, 16], 
-    'Creation' => [14, 22]
-];
+// Aforo configurado en el panel
+$maxUsers = (int)custom_config('server_max_users');
+if($maxUsers <= 0) $maxUsers = (int)custom_config('maximum_online');
+$occupancy = ($maxUsers > 0) ? min(100, (int)round(($onlineNow / $maxUsers) * 100)) : null;
 
-$cacheFile = __PATH_INCLUDES__ . 'config/economy_cache.json';
-$cacheTime = 3600; 
-$jewelStats = [];
+// Serie del grafico
+$chartLabels = array(); $chartValues = array(); $regWeekTotal = 0;
+for($i = 6; $i >= 0; $i--) {
+    $ts = strtotime("-$i days");
+    $key = date('Y-m-d', $ts);
+    $val = isset($regByDay[$key]) ? $regByDay[$key] : 0;
+    $chartLabels[] = date('d/m', $ts);
+    $chartValues[] = $val;
+    $regWeekTotal += $val;
+}
 
-if (file_exists($cacheFile) && (time() - filemtime($cacheFile) < $cacheTime)) {
-    $jewelStats = json_decode(file_get_contents($cacheFile), true);
-} else {
-    ini_set('memory_limit', '512M');
-    set_time_limit(120); 
+// =====================================================================
+// 3. ECONOMIA (joyas en circulacion). Cache de 1 hora.
+// =====================================================================
+$jewelIds = array(
+    'Chaos'    => array(12, 15),
+    'Bless'    => array(14, 13),
+    'Soul'     => array(14, 14),
+    'Life'     => array(14, 16),
+    'Creation' => array(14, 22)
+);
+$jewelStats = array();
+$economyCacheFile = $dashCacheDir . 'economy_cache.json';
+
+if(file_exists($economyCacheFile) && (time() - filemtime($economyCacheFile) < 3600)) {
+    $cached = json_decode((string)@file_get_contents($economyCacheFile), true);
+    if(is_array($cached)) $jewelStats = $cached;
+}
+
+if(empty($jewelStats)) {
+    @ini_set('memory_limit', '512M');
+    @set_time_limit(120);
+
+    if(!function_exists('msm_dash_count_jewels')) {
+        // Cada item ocupa 16 bytes (32 caracteres hex). Id = byte 0, grupo = mitad alta del byte 9.
+        function msm_dash_count_jewels($binData, $jewelIds, &$holders, $account) {
+            if(empty($binData)) return;
+            $hex = strtoupper(bin2hex($binData));
+            $len = strlen($hex);
+            for($i = 0; $i + 32 <= $len; $i += 32) {
+                $item = substr($hex, $i, 32);
+                if(substr($item, 0, 4) === 'FFFF') continue;
+                $itemId = hexdec(substr($item, 0, 2));
+                $itemGroup = (hexdec(substr($item, 18, 2)) >> 4) & 0xF;
+                foreach($jewelIds as $jName => $ids) {
+                    if($itemGroup == $ids[0] && $itemId == $ids[1]) {
+                        if(!isset($holders[$account][$jName])) $holders[$account][$jName] = 0;
+                        $holders[$account][$jName]++;
+                        break;
+                    }
+                }
+            }
+        }
+    }
 
     try {
-        if(!isset($db)) $db = Connection::Database('MuOnline');
-        $holders = [];
-        foreach($jewelIds as $name => $code) $totalCounts[$name] = 0;
+        if(!isset($db)) $db = Connection::Database('Me_MuOnline');
+        $holders = array();
 
-        $chkTable = $db->query_fetch_single("SELECT count(*) as cnt FROM information_schema.tables WHERE table_name = 'JewelBank'");
-        if ($chkTable && $chkTable['cnt'] > 0) {
-            $jbCols = ['Chaos' => 'JewelOfChaos', 'Bless' => 'JewelOfBless', 'Soul' => 'JewelOfSoul', 'Life' => 'JewelOfLife', 'Creation' => 'JewelOfCreation'];
-            $validCols = []; $colSelect = [];
+        // Banco de joyas, si el server lo tiene
+        $chk = $db->query_fetch_single("SELECT COUNT(*) as cnt FROM information_schema.tables WHERE table_name = 'JewelBank'");
+        if(is_array($chk) && $chk['cnt'] > 0) {
+            $jbCols = array('Chaos' => 'JewelOfChaos', 'Bless' => 'JewelOfBless', 'Soul' => 'JewelOfSoul', 'Life' => 'JewelOfLife', 'Creation' => 'JewelOfCreation');
+            $validCols = array(); $colSelect = array();
             foreach($jbCols as $key => $col) {
-                try { $db->query("SELECT TOP 1 $col FROM JewelBank"); $validCols[$key] = $col; $colSelect[] = "CAST($col AS INT) as $key"; } catch(Exception $e) { continue; }
+                if($db->query("SELECT TOP 1 $col FROM JewelBank")) { $validCols[$key] = $col; $colSelect[] = "CAST($col AS INT) as $key"; }
             }
             if(!empty($validCols)) {
-                $sqlJB = "SELECT AccountID, " . implode(',', $colSelect) . " FROM JewelBank";
-                $jbData = $db->query_fetch($sqlJB);
+                $jbData = $db->query_fetch("SELECT AccountID, " . implode(',', $colSelect) . " FROM JewelBank");
                 if(is_array($jbData)) {
                     foreach($jbData as $row) {
                         $acc = $row['AccountID'];
@@ -150,469 +205,332 @@ if (file_exists($cacheFile) && (time() - filemtime($cacheFile) < $cacheTime)) {
             }
         }
 
-        if (!function_exists('parse_items_hex')) {
-            function parse_items_hex($binData, $itemSize, $jewelIds, &$holders, $account) {
-                if(empty($binData)) return;
-                $hex = bin2hex($binData);
-                $hexLen = strlen($hex);
-                $itemHexLen = $itemSize * 2; 
-                for ($i = 0; $i < $hexLen; $i += $itemHexLen) {
-                    $itemHex = substr($hex, $i, $itemHexLen);
-                    if(strlen($itemHex) < $itemHexLen) continue; 
-                    if(strtoupper(substr($itemHex, 0, 4)) == 'FFFF') continue;
-                    $byte0 = hexdec(substr($itemHex, 0, 2));
-                    $byte1 = hexdec(substr($itemHex, 2, 2));
-                    $itemID = $byte0; 
-                    if(($byte1 & 128) == 128) $itemID += 256;
-                    $itemGroup = ($byte1 & 240) >> 4;
-                    foreach($jewelIds as $jName => $ids) {
-                        if($itemGroup == $ids[0] && $itemID == $ids[1]) {
-                             if(!isset($holders[$account][$jName])) $holders[$account][$jName] = 0;
-                             $holders[$account][$jName]++;
-                             break;
-                        }
-                    }
-                }
-            }
-        }
-
         $whData = $db->query_fetch("SELECT AccountID, Items FROM warehouse");
-        if(is_array($whData)) { foreach($whData as $row) parse_items_hex($row['Items'], $itemSize, $jewelIds, $holders, $row['AccountID']); }
+        if(is_array($whData)) { foreach($whData as $row) msm_dash_count_jewels($row['Items'], $jewelIds, $holders, $row['AccountID']); }
 
-        $chkExt = $db->query_fetch_single("SELECT count(*) as cnt FROM information_schema.tables WHERE table_name = 'ExtWarehouse'");
-        if ($chkExt && $chkExt['cnt'] > 0) {
+        $chk = $db->query_fetch_single("SELECT COUNT(*) as cnt FROM information_schema.tables WHERE table_name = 'ExtWarehouse'");
+        if(is_array($chk) && $chk['cnt'] > 0) {
             $ewhData = $db->query_fetch("SELECT AccountID, Items FROM ExtWarehouse");
-            if(is_array($ewhData)) { foreach($ewhData as $row) parse_items_hex($row['Items'], $itemSize, $jewelIds, $holders, $row['AccountID']); }
+            if(is_array($ewhData)) { foreach($ewhData as $row) msm_dash_count_jewels($row['Items'], $jewelIds, $holders, $row['AccountID']); }
         }
 
         $invData = $db->query_fetch("SELECT AccountID, Inventory FROM Character");
-        if(is_array($invData)) { foreach($invData as $row) parse_items_hex($row['Inventory'], $itemSize, $jewelIds, $holders, $row['AccountID']); }
+        if(is_array($invData)) { foreach($invData as $row) msm_dash_count_jewels($row['Inventory'], $jewelIds, $holders, $row['AccountID']); }
 
-        foreach($jewelIds as $jName => $v) $jewelStats[$jName] = ['count' => 0, 'holder' => '-', 'holder_amt' => 0];
+        foreach($jewelIds as $jName => $unused) $jewelStats[$jName] = array('count' => 0, 'holder' => '-', 'holder_amt' => 0);
         foreach($holders as $acc => $items) {
             foreach($items as $jName => $qty) {
                 if(!isset($jewelStats[$jName])) continue;
                 $jewelStats[$jName]['count'] += $qty;
                 if($qty > $jewelStats[$jName]['holder_amt']) {
                     $jewelStats[$jName]['holder_amt'] = $qty;
-                    $jewelStats[$jName]['holder'] = $acc; 
+                    $jewelStats[$jName]['holder'] = (string)$acc;
                 }
             }
         }
-        foreach($jewelStats as &$stat) {
-            $stat['count'] = number_format($stat['count']);
-            $stat['holder_amt'] = number_format($stat['holder_amt']);
-        }
-        file_put_contents($cacheFile, json_encode($jewelStats));
-    } catch (Exception $e) { $jewelStats = []; }
+        @file_put_contents($economyCacheFile, json_encode($jewelStats), LOCK_EX);
+    } catch (Throwable $e) { $jewelStats = array(); }
 }
 
-// --- RENDERIZADO HTML ---
+// =====================================================================
+// 4. DONACIONES (solo lectura de los registros existentes)
+// =====================================================================
+$txnFile = __PATH_INCLUDES__ . 'config/donation_transactions.json';
+$cfgFile = __PATH_INCLUDES__ . 'config/donation_config.json';
+$transactions = file_exists($txnFile) ? json_decode((string)@file_get_contents($txnFile), true) : array();
+$donationConfig = file_exists($cfgFile) ? json_decode((string)@file_get_contents($cfgFile), true) : array();
+if(!is_array($transactions)) $transactions = array();
+if(!is_array($donationConfig)) $donationConfig = array();
+
+$totals = array(); $currencies = array(); $ranking = array();
+foreach($transactions as $t) {
+    if(!is_array($t) || !isset($t['status']) || $t['status'] != 'Completed') continue;
+    $method = isset($t['method']) ? (string)$t['method'] : 'default';
+    $amount = floatval(str_replace(',', '.', isset($t['amount']) ? (string)$t['amount'] : '0'));
+    if(!isset($totals[$method])) { $totals[$method] = 0; $currencies[$method] = isset($t['currency']) ? (string)$t['currency'] : ''; }
+    $totals[$method] += $amount;
+    $user = isset($t['user']) ? (string)$t['user'] : '-';
+    if(!isset($ranking[$user])) $ranking[$user] = 0;
+    $ranking[$user] += $amount;
+}
+arsort($ranking);
+$top5 = array_slice($ranking, 0, 5, true);
+$maxTotal = !empty($totals) ? max($totals) : 0;
+
+$uiMap = array(
+    'mp'      => array('icon' => 'fa-handshake-o', 'class' => 'dm-mp',      'fallback_curr' => 'ARS'),
+    'paypal'  => array('icon' => 'fa-paypal',      'class' => 'dm-paypal',  'fallback_curr' => 'USD'),
+    'binance' => array('icon' => 'fa-btc',         'class' => 'dm-binance', 'fallback_curr' => 'USDT'),
+    'stripe'  => array('icon' => 'fa-cc-stripe',   'class' => 'dm-stripe',  'fallback_curr' => 'USD'),
+    'yape'    => array('icon' => 'fa-mobile',      'class' => 'dm-mp',      'fallback_curr' => 'PEN'),
+    'bank'    => array('icon' => 'fa-university',  'class' => 'dm-binance', 'fallback_curr' => 'ARS'),
+    'default' => array('icon' => 'fa-credit-card', 'class' => 'dm-mp',      'fallback_curr' => '$')
+);
+
+// =====================================================================
+// 5. RENDER
+// =====================================================================
 echo '<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>';
 
-// =========================================================================
-// CORRECCIÓN: EL BANNER VA AFUERA DE LA FILA PRINCIPAL (FULL WIDTH)
-// =========================================================================
-if ($updateAvailable) {
-    $newVer = isset($updateData['new_version']) ? htmlspecialchars($updateData['new_version']) : '?.?.?';
-    $downloadUrl = isset($updateData['download_url']) ? $updateData['download_url'] : '#'; 
-
-    echo '<div class="row mb-4">'; 
-        echo '<div class="col-12">';
-            // Banner simplificado sin changelog
-            echo '<div class="dashboard-card shadow-sm" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; border:none; display: flex; flex-direction: row; align-items: center; justify-content: space-between; padding: 20px; border-radius: 8px;">';
-                
-                // COLUMNA IZQUIERDA (SOLO TEXTO PRINCIPAL)
-                echo '<div>';
-                    echo '<h4 style="margin: 0; font-weight: bold;"><i class="fa fa-gift" style="margin-right: 10px;"></i> ¡Nueva versión disponible!</h4>';
-                    echo '<p style="margin: 5px 0 0 0; opacity: 0.95;">La versión <strong>'.$newVer.'</strong> está lista. (Actual: '.$currentVersion.')</p>';
-                echo '</div>';
-                
-                // COLUMNA DERECHA (BOTÓN BLANCO / LETRA NEGRA)
-                if ($downloadUrl !== '#') {
-                    echo '<a href="'.$downloadUrl.'" target="_blank" class="btn btn-light shadow" style="color: #000; font-weight: bold; padding: 10px 30px; border-radius: 50px; text-transform: uppercase; border: none;">';
-                        echo '<i class="fa fa-cloud-download"></i> Descargar';
-                    echo '</a>';
-                }
-            echo '</div>';
+// --- Aviso de version nueva ---
+if($updateAvailable) {
+    $newVer = isset($updateData['new_version']) ? $esc($updateData['new_version']) : '?.?.?';
+    $downloadUrl = (isset($updateData['download_url']) && is_string($updateData['download_url']) && strpos($updateData['download_url'], 'https://') === 0) ? $updateData['download_url'] : '';
+    echo '<div class="dash-update-banner">';
+        echo '<div>';
+            echo '<h4><i class="fa fa-gift"></i> ¡Nueva versión disponible!</h4>';
+            echo '<p>La versión <strong>' . $newVer . '</strong> está lista. (Actual: ' . $esc($currentVersion) . ')</p>';
         echo '</div>';
+        if($downloadUrl !== '') {
+            echo '<a href="' . $esc($downloadUrl) . '" target="_blank" rel="noopener" class="dash-update-btn"><i class="fa fa-cloud-download"></i> Descargar</a>';
+        }
     echo '</div>';
 }
-// =========================================================================
 
-
-// AHORA SÍ EMPIEZA LA FILA DEL DASHBOARD (IZQ Y DER)
+// --- Fila superior: totales + grafico ---
 echo '<div class="row dashboard-row">';
-    
-    // COLUMNA IZQUIERDA (STATS CARDS)
+
     echo '<div class="col-lg-4 col-md-5 dashboard-col-left">';
-        
-        // Card Welcome
+
         echo '<div class="dashboard-card card-welcome">';
             echo '<div style="z-index: 2;">';
-                echo '<span class="welcome-badge">Lifetime License</span>';
-                echo '<h3 class="welcome-title">Bienvenido/a a tu ADMINCP</h3>';
-                echo '<p class="welcome-subtitle">License Status: ON</p>';
+                echo '<span class="welcome-badge">MuServerMaker CMS</span>';
+                echo '<h3 class="welcome-title">Hola, ' . $esc($_SESSION['username']) . '</h3>';
+                echo '<p class="welcome-subtitle">Versión ' . $esc($currentVersion) . '</p>';
             echo '</div>';
             echo '<div class="card-icon-bg"><i class="fa fa-shield"></i></div>';
         echo '</div>';
 
-        // Card Total Accounts
+        echo '<div class="dashboard-card card-online">';
+            echo '<h2 class="card-title-text">' . number_format($onlineNow) . ($maxUsers > 0 ? ' <small>/ ' . number_format($maxUsers) . '</small>' : '') . '</h2>';
+            echo '<p class="card-subtitle-text">Online ahora' . ($occupancy !== null ? ' · ' . $occupancy . '% de ocupación' : '') . '</p>';
+            if($occupancy !== null) {
+                echo '<div class="occupancy-track"><div class="occupancy-fill" style="width: ' . $occupancy . '%;"></div></div>';
+            }
+            echo '<div class="card-icon-bg"><i class="fa fa-signal"></i></div>';
+        echo '</div>';
+
         echo '<div class="dashboard-card card-blue-1">';
             echo '<h2 class="card-title-text">' . number_format($totalAccounts) . '</h2>';
             echo '<p class="card-subtitle-text">Total Registrados</p>';
             echo '<div class="card-icon-bg"><i class="fa fa-users"></i></div>';
         echo '</div>';
 
-        // Card Total Characters
         echo '<div class="dashboard-card card-blue-2">';
             echo '<h2 class="card-title-text">' . number_format($totalCharacters) . '</h2>';
             echo '<p class="card-subtitle-text">Total Personajes</p>';
             echo '<div class="card-icon-bg"><i class="fa fa-user"></i></div>';
         echo '</div>';
 
-        // Card Total Guilds
         echo '<div class="dashboard-card card-blue-3">';
             echo '<h2 class="card-title-text">' . number_format($totalGuilds) . '</h2>';
             echo '<p class="card-subtitle-text">Total Guilds</p>';
             echo '<div class="card-icon-bg"><i class="fa fa-flag"></i></div>';
         echo '</div>';
 
-        // Card Banned
         echo '<div class="dashboard-card card-blue-4">';
             echo '<h2 class="card-title-text">' . number_format($totalBanned) . '</h2>';
-            echo '<p class="card-subtitle-text">Total Banned</p>';
+            echo '<p class="card-subtitle-text">Total Baneados</p>';
             echo '<div class="card-icon-bg"><i class="fa fa-ban"></i></div>';
         echo '</div>';
 
-    echo '</div>'; // Fin col-left
+    echo '</div>';
 
-    // COLUMNA DERECHA (CHART)
     echo '<div class="col-lg-8 col-md-7 dashboard-col-right">';
         echo '<div class="chart-card">';
             echo '<div class="chart-header">';
-                echo '<div class="chart-title">Visitor Log</div>';
-                echo '<div class="chart-updated">Updated 1 min ago</div>';
+                echo '<div class="chart-title">Cuentas nuevas · últimos 7 días</div>';
+                echo '<div class="chart-updated">Total de la semana: ' . number_format($regWeekTotal) . '</div>';
             echo '</div>';
-            echo '<div class="chart-body">';
-                echo '<canvas id="visitorChart"></canvas>';
-            echo '</div>';
+            echo '<div class="chart-body"><canvas id="regChart"></canvas></div>';
         echo '</div>';
-    echo '</div>'; // Fin col-right
+    echo '</div>';
 
-echo '</div>'; // Fin row top (Dashboard Row)
+echo '</div>';
 
-// --- SECCION INFERIOR ---
+// --- Fila 2: registros + actividad ---
 echo '<div class="row dashboard-row-bottom">';
-    
-    // 1. ÚLTIMOS REGISTROS
-    echo '<div class="col-lg-4 col-md-5">';
+
+    echo '<div class="col-md-6">';
     echo '<div class="bottom-card">';
         echo '<div class="bottom-card-header">';
             echo '<h4 class="bottom-card-title">Últimos Registros</h4>';
-            echo '<p class="bottom-card-subtitle">Estadísticas basadas en los últimos 5 minutos</p>';
+            echo '<p class="bottom-card-subtitle">Las seis cuentas creadas más recientemente</p>';
         echo '</div>';
-        echo '<div class="table-responsive">';
-            echo '<table class="table table-registrations">';
-                echo '<thead><tr><th>País</th><th>Usuario</th><th>Fecha</th><th class="text-right">Estado</th></tr></thead>';
-                echo '<tbody>';
-                
-                if(is_array($latestRegistrations) && count($latestRegistrations) > 0) {
-                    foreach($latestRegistrations as $reg) {
-                        $isOnline = ($reg['ConnectStat'] == 1);
-                        $statusClass = $isOnline ? 'status-online' : 'status-offline';
-                        $statusText = $isOnline ? 'Online' : 'Offline';
-                        
-                        $dateFormatted = "N/A";
-                        if (!empty($reg['appl_days'])) {
-                            try {
-                                $dateObj = new DateTime($reg['appl_days']);
-                                $dateFormatted = $dateObj->format('d/m/Y');
-                            } catch (Exception $e) { $dateFormatted = "N/A"; }
-                        }
-                        
-                        echo '<tr>';
-                        echo '<td><i class="fa fa-flag" style="color: #fff;"></i></td>';
-                        echo '<td class="reg-user">' . htmlspecialchars($reg['memb___id']) . '</td>';
-                        echo '<td>' . $dateFormatted . '</td>';
-                        echo '<td class="text-right"><span class="status-badge ' . $statusClass . '">' . $statusText . '</span></td>';
-                        echo '</tr>';
-                    }
-                } else {
-                    echo '<tr><td colspan="4" class="text-center" style="padding: 20px; color: #64748b;">No hay registros recientes.</td></tr>';
+        echo '<div class="table-responsive"><table class="table table-registrations">';
+            echo '<thead><tr><th>Usuario</th><th>Creada</th><th>Última conexión</th><th class="text-right">Estado</th></tr></thead><tbody>';
+            if(!empty($latestRegistrations)) {
+                foreach($latestRegistrations as $reg) {
+                    $isOnline = (isset($reg['ConnectStat']) && $reg['ConnectStat'] == 1);
+                    echo '<tr>';
+                    echo '<td class="reg-user">' . $esc($reg['memb___id']) . '</td>';
+                    echo '<td>' . $fmtDate($reg['appl_days']) . '</td>';
+                    echo '<td>' . $fmtDate(isset($reg['ConnectTM']) ? $reg['ConnectTM'] : null, 'd/m/Y H:i') . '</td>';
+                    echo '<td class="text-right"><span class="status-badge ' . ($isOnline ? 'status-online' : 'status-offline') . '">' . ($isOnline ? 'Online' : 'Offline') . '</span></td>';
+                    echo '</tr>';
                 }
-                
-                echo '</tbody></table>';
-        echo '</div>';
+            } else {
+                echo '<tr><td colspan="4" class="text-center dash-empty">No hay registros.</td></tr>';
+            }
+        echo '</tbody></table></div>';
     echo '</div>';
-    echo '</div>'; // Fin Registros
+    echo '</div>';
 
-    // 2. ESTADISTICAS DONACIONES (Middle)
-    echo '<div class="col-lg-8 col-md-7">';
+    echo '<div class="col-md-6">';
     echo '<div class="bottom-card">';
-    echo '<div class="bottom-card-header">';
-        echo '<h4 class="bottom-card-title">Estadísticas de Donaciones</h4>';
-        echo '<p class="bottom-card-subtitle">Estadísticas basadas en métodos Automáticos</p>';
-    echo '</div>';
-    
-    echo '<div class="donations-grid">';
-        
-        $txnFile = __PATH_INCLUDES__ . 'config/donation_transactions.json';
-        $cfgFile = __PATH_INCLUDES__ . 'config/donation_config.json';
-
-        $transactions = file_exists($txnFile) ? json_decode(file_get_contents($txnFile), true) : [];
-        $config = file_exists($cfgFile) ? json_decode(file_get_contents($cfgFile), true) : ['methods' => []];
-
-        $totals = [];
-        $currencies = [];
-
-        if (is_array($transactions)) {
-            foreach ($transactions as $t) {
-                if (isset($t['status']) && $t['status'] == 'Completed') {
-                    $method = $t['method'];
-                    $rawAmount = str_replace(',', '.', $t['amount']);
-                    $amount = floatval($rawAmount);
-                    
-                    if (!isset($totals[$method])) {
-                        $totals[$method] = 0;
-                        $currencies[$method] = $t['currency'];
-                    }
-                    $totals[$method] += $amount;
+        echo '<div class="bottom-card-header">';
+            echo '<h4 class="bottom-card-title">Actividad Reciente</h4>';
+            echo '<p class="bottom-card-subtitle">Últimas conexiones al juego y su IP</p>';
+        echo '</div>';
+        echo '<div class="table-responsive"><table class="table table-registrations">';
+            echo '<thead><tr><th>Usuario</th><th>IP</th><th>Conexión</th><th class="text-right">Estado</th></tr></thead><tbody>';
+            if(!empty($recentActivity)) {
+                foreach($recentActivity as $act) {
+                    $isOnline = (isset($act['ConnectStat']) && $act['ConnectStat'] == 1);
+                    echo '<tr>';
+                    echo '<td class="reg-user">' . $esc($act['memb___id']) . '</td>';
+                    echo '<td>' . $esc(isset($act['IP']) && $act['IP'] !== null && $act['IP'] !== '' ? $act['IP'] : '-') . '</td>';
+                    echo '<td>' . $fmtDate(isset($act['ConnectTM']) ? $act['ConnectTM'] : null, 'd/m/Y H:i') . '</td>';
+                    echo '<td class="text-right"><span class="status-badge ' . ($isOnline ? 'status-online' : 'status-offline') . '">' . ($isOnline ? 'Online' : 'Offline') . '</span></td>';
+                    echo '</tr>';
                 }
+            } else {
+                echo '<tr><td colspan="4" class="text-center dash-empty">Sin actividad registrada.</td></tr>';
             }
-        }
+        echo '</tbody></table></div>';
+    echo '</div>';
+    echo '</div>';
 
-        $maxTotal = !empty($totals) ? max($totals) : 0;
+echo '</div>';
 
-        $uiMap = [
-            'mp' => ['icon' => 'fa-handshake-o', 'class' => 'dm-mp', 'fallback_curr' => 'ARS'],
-            'paypal' => ['icon' => 'fa-paypal', 'class' => 'dm-paypal', 'fallback_curr' => 'USD'],
-            'binance' => ['icon' => 'fa-btc', 'class' => 'dm-binance', 'fallback_curr' => 'USDT'],
-            'stripe' => ['icon' => 'fa-cc-stripe', 'class' => 'dm-stripe', 'fallback_curr' => 'USD'],
-            'yape' => ['icon' => 'fa-mobile', 'class' => 'dm-mp', 'fallback_curr' => 'PEN'],
-            'bank' => ['icon' => 'fa-university', 'class' => 'dm-binance', 'fallback_curr' => 'ARS'],
-            'default' => ['icon' => 'fa-credit-card', 'class' => 'dm-mp', 'fallback_curr' => '$']
-        ];
-
-        $hasMethods = false;
-        if (isset($config['methods']) && is_array($config['methods'])) {
-            foreach ($config['methods'] as $key => $data) {
-                if (!isset($data['active']) || $data['active'] != 1) continue;
-                $hasMethods = true;
-                $ui = isset($uiMap[$key]) ? $uiMap[$key] : $uiMap['default'];
-                $displayName = isset($data['name']) ? $data['name'] : ucfirst($key);
-                $totalAmount = isset($totals[$key]) ? $totals[$key] : 0;
-                $currency = isset($currencies[$key]) ? $currencies[$key] : (isset($data['currency']) ? $data['currency'] : $ui['fallback_curr']);
-                $percent = ($maxTotal > 0) ? ($totalAmount / $maxTotal) * 100 : 0;
-                $displayAmount = number_format($totalAmount, 2, '.', ',') . ' ' . $currency;
-                
-                echo '<div class="donation-item ' . $ui['class'] . '">';
-                    echo '<div class="donation-header">';
-                        echo '<i class="fa ' . $ui['icon'] . ' donation-icon"></i>';
-                        echo '<span class="donation-name">' . htmlspecialchars($displayName) . '</span>';
-                    echo '</div>';
-                    echo '<div class="donation-amount">' . $displayAmount . '</div>';
-                    echo '<div class="donation-progress">';
-                        echo '<div class="donation-bar" style="width: ' . $percent . '%;"></div>';
-                    echo '</div>';
-                echo '</div>';
-            }
-        }
-        
-        if (!$hasMethods) {
-            echo '<p style="padding:20px; text-align:center; color:#666; width:100%;">No hay métodos de pago activos.</p>';
-        }
-        
-    echo '</div>'; // Fin grid
-    echo '</div>'; // Fin card
-    echo '</div>'; // Fin col
-echo '</div>'; // Fin row
-
-// --- SECCION ECONOMIA, GUILDS, TOP DONATORS ---
+// --- Fila 3: donaciones + top donadores ---
 echo '<div class="row dashboard-row-bottom">';
-    
-    // 3. ECONOMIA
-    echo '<div class="col-lg-4 col-md-6">';
+
+    echo '<div class="col-md-6">';
     echo '<div class="bottom-card">';
         echo '<div class="bottom-card-header">';
-            echo '<h4 class="bottom-card-title">Economía del juego</h4>';
-            echo '<p class="bottom-card-subtitle">Joyas en circulación (Banco + Baúl + Inventario)</p>';
+            echo '<h4 class="bottom-card-title">Estadísticas de Donaciones</h4>';
+            echo '<p class="bottom-card-subtitle">Total acreditado por cada método activo</p>';
         echo '</div>';
-        echo '<div class="table-responsive">';
-            echo '<table class="table table-economy">';
-                echo '<thead><tr><th>Joya</th><th class="text-center">Cant.</th><th class="text-right">Mayor Tenedor</th></tr></thead>';
-                echo '<tbody>';
-                
-                if(!empty($jewelStats)) {
-                    foreach($jewelStats as $name => $data) {
-                        $color = ($name == 'Chaos') ? '#a855f7' : (($name == 'Bless') ? '#d946ef' : (($name == 'Soul') ? '#ec4899' : (($name == 'Life') ? '#f43f5e' : '#eab308')));
-                        echo '<tr>';
-                        echo '<td><i class="fa fa-diamond" style="color:' . $color . ';"></i> ' . $name . '</td>';
-                        echo '<td class="text-center">' . $data['count'] . '</td>';
-                        echo '<td class="text-right"><span class="economy-holder">' . htmlspecialchars($data['holder']) . ' (' . $data['holder_amt'] . ')</span></td>';
-                        echo '</tr>';
-                    }
-                } else {
-                    echo '<tr><td colspan="3" class="text-center">Cargando datos o Caché vacío...</td></tr>';
+        echo '<div class="donations-grid">';
+            $hasMethods = false;
+            if(isset($donationConfig['methods']) && is_array($donationConfig['methods'])) {
+                foreach($donationConfig['methods'] as $key => $data) {
+                    if(!is_array($data) || !isset($data['active']) || $data['active'] != 1) continue;
+                    $hasMethods = true;
+                    $ui = isset($uiMap[$key]) ? $uiMap[$key] : $uiMap['default'];
+                    $displayName = isset($data['name']) ? $data['name'] : ucfirst((string)$key);
+                    $totalAmount = isset($totals[$key]) ? $totals[$key] : 0;
+                    $currency = !empty($currencies[$key]) ? $currencies[$key] : (isset($data['currency']) ? $data['currency'] : $ui['fallback_curr']);
+                    $percent = ($maxTotal > 0) ? round(($totalAmount / $maxTotal) * 100) : 0;
+                    echo '<div class="donation-item ' . $ui['class'] . '">';
+                        echo '<div class="donation-header"><i class="fa ' . $ui['icon'] . ' donation-icon"></i><span class="donation-name">' . $esc($displayName) . '</span></div>';
+                        echo '<div class="donation-amount">' . number_format($totalAmount, 2, '.', ',') . ' ' . $esc($currency) . '</div>';
+                        echo '<div class="donation-progress"><div class="donation-bar" style="width: ' . $percent . '%;"></div></div>';
+                    echo '</div>';
                 }
-                echo '</tbody></table>';
+            }
+            if(!$hasMethods) echo '<p class="dash-empty text-center">No hay métodos de pago activos.</p>';
         echo '</div>';
     echo '</div>';
     echo '</div>';
 
-    // 4. INFO GUILDS
-    echo '<div class="col-lg-4 col-md-6">';
-    echo '<div class="bottom-card">';
-        echo '<div class="bottom-card-header">';
-            echo '<h4 class="bottom-card-title">Info Guilds</h4>';
-            echo '<p class="bottom-card-subtitle">Estadísticas útiles sobre clanes</p>';
-        echo '</div>';
-        echo '<div class="info-header-bar">Información</div>';
-        echo '<div class="guild-stats-container">';
-            
-            echo '<div class="guild-stat-row">';
-            echo '<span class="guild-stat-label">Total Guilds creados:</span>';
-            echo '<span class="guild-stat-value">' . number_format($totalGuilds) . '</span>';
-            echo '</div>';
-
-            echo '<div class="guild-stat-row">';
-            echo '<span class="guild-stat-label">Total Personajes con Guilds:</span>';
-            echo '<span class="guild-stat-value">' . number_format($gMembers) . '</span>';
-            echo '</div>';
-
-            echo '<div class="guild-stat-row">';
-            echo '<span class="guild-stat-label">Total Personajes sin Guilds:</span>';
-            echo '<span class="guild-stat-value" style="color: #f59e0b;">' . number_format($gNoMembers) . '</span>';
-            echo '</div>';
-
-            echo '<div class="guild-stat-row">';
-            echo '<span class="guild-stat-label">Más score:</span>';
-            echo '<span class="guild-stat-value highlight">' . htmlspecialchars($gHighScore) . '</span>';
-            echo '</div>';
-
-            echo '<div class="guild-stat-row">';
-            echo '<span class="guild-stat-label">Menos score:</span>';
-            echo '<span class="guild-stat-value highlight">' . htmlspecialchars($gLowScore) . '</span>';
-            echo '</div>';
-
-            echo '<div class="guild-stat-row">';
-            echo '<span class="guild-stat-label"><i class="fa fa-trophy" style="color:#f59e0b;"></i> Guild Owner Castle Siege:</span>';
-            echo '<span class="guild-stat-value">' . htmlspecialchars($csOwner) . '</span>';
-            echo '</div>';
-
-            echo '<div class="guild-stat-row">';
-            echo '<span class="guild-stat-label"><i class="fa fa-user" style="color:#a855f7;"></i> Guild Master CS:</span>';
-            echo '<span class="guild-stat-value">' . htmlspecialchars($csMaster) . '</span>';
-            echo '</div>';
-
-        echo '</div>';
-    echo '</div>';
-    echo '</div>';
-
-    // 5. TOP DONADORES
-    echo '<div class="col-lg-4 col-md-6">';
+    echo '<div class="col-md-6">';
     echo '<div class="bottom-card">';
         echo '<div class="bottom-card-header">';
             echo '<h4 class="bottom-card-title">Top Donadores</h4>';
-            echo '<p class="bottom-card-subtitle">Ranking por monto acumulado (Histórico)</p>';
+            echo '<p class="bottom-card-subtitle">Ranking por monto acumulado (histórico)</p>';
         echo '</div>';
-        echo '<div class="table-responsive">';
-            echo '<table class="table table-donators">';
-                echo '<thead><tr><th class="text-center">#</th><th>Usuario</th><th class="text-right">Total</th></tr></thead>';
-                echo '<tbody>';
-                
-                $txnFile = __PATH_INCLUDES__ . 'config/donation_transactions.json';
-                $ranking = [];
-
-                if (file_exists($txnFile)) {
-                    $data = json_decode(file_get_contents($txnFile), true);
-                    if (is_array($data)) {
-                        foreach ($data as $txn) {
-                            if (isset($txn['status']) && $txn['status'] == 'Completed') {
-                                $user = $txn['user'];
-                                $amount = (float)$txn['amount'];
-                                if (!isset($ranking[$user])) $ranking[$user] = 0;
-                                $ranking[$user] += $amount;
-                            }
-                        }
-                        arsort($ranking);
-                        $top5 = array_slice($ranking, 0, 5, true);
-                    }
+        echo '<div class="table-responsive"><table class="table table-donators">';
+            echo '<thead><tr><th class="text-center">#</th><th>Usuario</th><th class="text-right">Total</th></tr></thead><tbody>';
+            if(!empty($top5)) {
+                $i = 1;
+                foreach($top5 as $user => $totalAmount) {
+                    $rankBadge = ($i <= 3) ? '<div class="rank-badge rank-' . $i . '">' . $i . '</div>' : '<span class="dash-rank-plain">' . $i . '</span>';
+                    echo '<tr>';
+                    echo '<td class="text-center">' . $rankBadge . '</td>';
+                    echo '<td><span class="donator-user">' . $esc($user) . '</span></td>';
+                    echo '<td class="text-right text-success">' . number_format($totalAmount, 2) . '</td>';
+                    echo '</tr>';
+                    $i++;
                 }
+            } else {
+                echo '<tr><td colspan="3" class="text-center dash-empty">Aún no hay donaciones registradas.</td></tr>';
+            }
+        echo '</tbody></table></div>';
+    echo '</div>';
+    echo '</div>';
 
-                if (!empty($top5)) {
-                    $i = 1;
-                    foreach ($top5 as $user => $totalAmount) {
-                        if ($i == 1) $rankBadge = '<div class="rank-badge rank-1">1</div>';
-                        elseif ($i == 2) $rankBadge = '<div class="rank-badge rank-2">2</div>';
-                        elseif ($i == 3) $rankBadge = '<div class="rank-badge rank-3">3</div>';
-                        else $rankBadge = '<span style="color:#64748b; font-size:11px;">'.$i.'</span>';
-                        
-                        $montoFormateado = '$' . number_format($totalAmount, 2);
-                        
-                        echo '<tr>';
-                        echo '<td class="text-center">' . $rankBadge . '</td>';
-                        echo '<td><span class="donator-user">' . htmlspecialchars($user) . '</span></td>';
-                        echo '<td class="text-right text-success">' . $montoFormateado . '</td>';
-                        echo '</tr>';
-                        $i++;
-                    }
-                } else {
-                    echo '<tr><td colspan="3" class="text-center" style="padding:15px; color:#666;">Aún no hay donaciones registradas.</td></tr>';
+echo '</div>';
+
+// --- Fila 4: economia + guilds ---
+echo '<div class="row dashboard-row-bottom">';
+
+    echo '<div class="col-md-6">';
+    echo '<div class="bottom-card">';
+        echo '<div class="bottom-card-header">';
+            echo '<h4 class="bottom-card-title">Economía del juego</h4>';
+            echo '<p class="bottom-card-subtitle">Joyas en circulación (banco, baúl e inventario) · se actualiza cada hora</p>';
+        echo '</div>';
+        echo '<div class="table-responsive"><table class="table table-economy">';
+            echo '<thead><tr><th>Joya</th><th class="text-center">Cantidad</th><th class="text-right">Mayor tenedor</th></tr></thead><tbody>';
+            $jewelColors = array('Chaos' => '#a855f7', 'Bless' => '#d946ef', 'Soul' => '#ec4899', 'Life' => '#f43f5e', 'Creation' => '#eab308');
+            if(!empty($jewelStats)) {
+                foreach($jewelStats as $name => $data) {
+                    $color = isset($jewelColors[$name]) ? $jewelColors[$name] : '#94a3b8';
+                    $count = isset($data['count']) ? (int)str_replace(',', '', (string)$data['count']) : 0;
+                    $holderAmt = isset($data['holder_amt']) ? (int)str_replace(',', '', (string)$data['holder_amt']) : 0;
+                    $holder = isset($data['holder']) ? $data['holder'] : '-';
+                    echo '<tr>';
+                    echo '<td><i class="fa fa-diamond" style="color:' . $color . ';"></i> ' . $esc($name) . '</td>';
+                    echo '<td class="text-center">' . number_format($count) . '</td>';
+                    echo '<td class="text-right"><span class="economy-holder">' . ($holderAmt > 0 ? $esc($holder) . ' (' . number_format($holderAmt) . ')' : '-') . '</span></td>';
+                    echo '</tr>';
                 }
-                echo '</tbody></table>';
+            } else {
+                echo '<tr><td colspan="3" class="text-center dash-empty">No se pudieron calcular los datos.</td></tr>';
+            }
+        echo '</tbody></table></div>';
+    echo '</div>';
+    echo '</div>';
+
+    echo '<div class="col-md-6">';
+    echo '<div class="bottom-card">';
+        echo '<div class="bottom-card-header">';
+            echo '<h4 class="bottom-card-title">Info Guilds</h4>';
+            echo '<p class="bottom-card-subtitle">Estadísticas de clanes y Castle Siege</p>';
+        echo '</div>';
+        echo '<div class="guild-stats-container">';
+            $guildRows = array(
+                array('Total Guilds creados:', number_format($totalGuilds), ''),
+                array('Personajes con Guild:', number_format($gMembers), ''),
+                array('Personajes sin Guild:', number_format($gNoMembers), 'highlight'),
+                array('Más score:', $esc($gHighScore), 'highlight'),
+                array('Menos score:', $esc($gLowScore), 'highlight'),
+                array('<i class="fa fa-trophy" style="color:#f59e0b;"></i> Dueño de Castle Siege:', $esc($csOwner), ''),
+                array('<i class="fa fa-user" style="color:#a855f7;"></i> Guild Master CS:', $esc($csMaster), '')
+            );
+            foreach($guildRows as $gr) {
+                echo '<div class="guild-stat-row"><span class="guild-stat-label">' . $gr[0] . '</span><span class="guild-stat-value ' . $gr[2] . '">' . $gr[1] . '</span></div>';
+            }
         echo '</div>';
     echo '</div>';
     echo '</div>';
 
-echo '</div>'; // Fin row bottom
+echo '</div>';
 
-// --- JAVASCRIPT ---
+// --- Grafico ---
 echo '<script>';
 echo 'document.addEventListener("DOMContentLoaded", function() {';
-    echo 'const ctx = document.getElementById("visitorChart").getContext("2d");';
-    echo 'let gradient = ctx.createLinearGradient(0, 0, 0, 400);';
-    echo 'gradient.addColorStop(0, "rgba(74, 222, 128, 0.2)");';
-    echo 'gradient.addColorStop(1, "rgba(74, 222, 128, 0)");';
-
-    echo 'const visitorChart = new Chart(ctx, {';
-        echo 'type: "line",';
-        echo 'data: {';
-            echo 'labels: ' . $jsonDates . ',';
-            echo 'datasets: [{';
-                echo 'label: "Visits",';
-                echo 'data: ' . $jsonCounts . ',';
-                echo 'borderColor: "#4ade80",';
-                echo 'backgroundColor: gradient,';
-                echo 'borderWidth: 2,';
-                echo 'pointBackgroundColor: "#0f1115",';
-                echo 'pointBorderColor: "#4ade80",';
-                echo 'pointHoverBackgroundColor: "#4ade80",';
-                echo 'pointHoverBorderColor: "#fff",';
-                echo 'tension: 0.4,';
-                echo 'fill: true';
-            echo '}]';
-        echo '},';
-        echo 'options: {';
-            echo 'responsive: true,';
-            echo 'maintainAspectRatio: false,';
-            echo 'plugins: {';
-                echo 'legend: { display: false },';
-                echo 'tooltip: {';
-                    echo 'backgroundColor: "#1e293b",';
-                    echo 'titleColor: "#fff",';
-                    echo 'bodyColor: "#94a3b8",';
-                    echo 'borderColor: "#334155",';
-                    echo 'borderWidth: 1,';
-                    echo 'displayColors: false';
-                echo '}';
-            echo '},';
-            echo 'scales: {';
-                echo 'x: { grid: { color: "rgba(255, 255, 255, 0.05)", borderColor: "transparent" }, ticks: { color: "#94a3b8", font: { size: 11 } } },';
-                echo 'y: { grid: { color: "rgba(255, 255, 255, 0.05)", borderColor: "transparent" }, ticks: { color: "#94a3b8", font: { size: 11 }, beginAtZero: true } }';
-            echo '}';
-        echo '}';
-    echo '});';
+echo 'var el = document.getElementById("regChart");';
+echo 'if (!el || typeof Chart === "undefined") return;';
+echo 'new Chart(el.getContext("2d"), {';
+echo 'type: "bar",';
+echo 'data: { labels: ' . json_encode($chartLabels) . ', datasets: [{ label: "Cuentas nuevas", data: ' . json_encode($chartValues) . ', backgroundColor: "rgba(74, 222, 128, 0.35)", borderColor: "#4ade80", borderWidth: 1, borderRadius: 6, maxBarThickness: 48 }] },';
+echo 'options: { responsive: true, maintainAspectRatio: false,';
+echo 'plugins: { legend: { display: false }, tooltip: { backgroundColor: "#1e293b", titleColor: "#fff", bodyColor: "#94a3b8", borderColor: "#334155", borderWidth: 1, displayColors: false } },';
+echo 'scales: { x: { grid: { display: false }, ticks: { color: "#94a3b8", font: { size: 11 } } }, y: { beginAtZero: true, suggestedMax: 5, grid: { color: "rgba(255, 255, 255, 0.05)" }, ticks: { color: "#94a3b8", font: { size: 11 }, precision: 0 } } }';
+echo '}';
+echo '});';
 echo '});';
 echo '</script>';
-?>

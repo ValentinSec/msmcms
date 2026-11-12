@@ -18,34 +18,21 @@ $customLinks = $navConf['custom_links'] ?? [];
 
 // 3. Detectar página actual
 $currentPage = isset($_REQUEST['page']) ? $_REQUEST['page'] : '';
-
-// 4. LÓGICA DE VERIFICACIÓN DE ADMIN (CORREGIDA FATAL ERROR)
-$isMuserverAdmin = false;
-if(isLoggedIn() && isset($_SESSION['username'])) {
-    $msmPath = __PATH_INCLUDES__ . 'config/muservermaker.json';
-    if(file_exists($msmPath)) {
-        $msmConf = json_decode(file_get_contents($msmPath), true);
-        if(isset($msmConf['admins']) && is_array($msmConf['admins'])) {
-            // FIX: Validamos manualmente iterando sobre las llaves para evitar el TypeError de array_map
-            $currentUser = strtolower($_SESSION['username']);
-            foreach($msmConf['admins'] as $adminName => $adminData) {
-                if(is_string($adminName) && strtolower($adminName) === $currentUser) {
-                    $isMuserverAdmin = true;
-                    break;
-                }
-            }
-        }
-    }
-}
 ?>
-<link href="<?php echo __BASE_URL__; ?>templates/morpheus/css/navbar.css" rel="stylesheet">
+<link href="<?php echo __BASE_URL__; ?>templates/morpheus/css/navbar.css?v=20261112b" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&display=swap" rel="stylesheet">
 
 <div class="morpheus-nav-wrapper">
     <div class="container h-100">
-        <nav class="morpheus-nav">
-            
-            <ul class="nav-links">
+        <nav class="morpheus-nav" id="morphNav">
+
+            <a href="<?php echo __BASE_URL__; ?>" class="nav-brand-mobile"><?php echo htmlspecialchars(custom_config('server_name')); ?></a>
+
+            <button type="button" class="nav-toggle" id="morphNavToggle" aria-label="Abrir men&uacute;" aria-controls="morphNavLinks" aria-expanded="false">
+                <span></span><span></span><span></span>
+            </button>
+
+            <ul class="nav-links" id="morphNavLinks">
                 <li>
                     <a href="<?php echo __BASE_URL__; ?>" class="<?php echo (empty($currentPage)) ? 'active' : ''; ?>">
                         <span class="nav-text">Inicio</span>
@@ -141,3 +128,14 @@ if(isLoggedIn() && isset($_SESSION['username'])) {
         </nav>
     </div>
 </div>
+<script>
+(function () {
+    var btn = document.getElementById('morphNavToggle');
+    var nav = document.getElementById('morphNav');
+    if (!btn || !nav) return;
+    btn.addEventListener('click', function () {
+        var open = nav.classList.toggle('is-open');
+        btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+})();
+</script>

@@ -13,10 +13,10 @@
 
 /**
  * File Compatibility
- * List of server files compatible with WebEngine
+ * List of server files compatible with MuServerMaker
  */
 
-$webengine['file_compatibility'] = array(
+$muservermaker['file_compatibility'] = array(
 	'igcn' => array(
 		'name' => 'IGCN',
 		'file' => 'igcn.tables.php',

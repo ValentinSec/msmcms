@@ -4,7 +4,7 @@
 if(!defined('access')) define('access', 'index');
 
 try {
-    # Load WebEngine
+    # Load MuServerMaker
     if(!@include_once('includes/muservermaker.php')) {
         throw new Exception('Could not load MuServerMaker CMS.');
     }

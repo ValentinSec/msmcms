@@ -11,7 +11,7 @@ header('Content-Type: application/json');
 
 try {
 	
-	// 1. Cargar el Kernel de MuServerMaker (Reemplaza a WebEngine)
+	// 1. Cargar el Kernel de MuServerMaker (Reemplaza a MuServerMaker)
     // Busca en la carpeta 'includes' el archivo muservermaker.php
 	if(!@include_once(rtrim(str_replace('\\','/', dirname(__DIR__)), '/') . '/includes/muservermaker.php')) {
         throw new Exception('Could not load MuServerMaker Kernel.');

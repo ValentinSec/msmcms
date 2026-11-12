@@ -85,7 +85,7 @@ function getDownloadsList() {
 	$db = config('SQL_USE_2_DB',true) ? Connection::Database('Me_MuOnline') : Connection::Database('MuOnline');
 	
 	// Verificar si la constante existe antes de usarla, sino usar fallback
-	$table = defined('MUSERVERMAKER_DOWNLOADS') ? MUSERVERMAKER_DOWNLOADS : 'WEBENGINE_DOWNLOADS';
+	$table = defined('MUSERVERMAKER_DOWNLOADS') ? MUSERVERMAKER_DOWNLOADS : 'MUSERVERMAKER_DOWNLOADS';
 	
 	$result = $db->query_fetch("SELECT * FROM ".$table." ORDER BY download_type ASC, download_id ASC");
 	if(!is_array($result)) return;
@@ -101,7 +101,7 @@ function addDownload($title, $description='', $link, $size=0, $type=1) {
 	if(strlen($title) > 100) return;
 	if(strlen($description) > 100) return;
 	
-	$table = defined('MUSERVERMAKER_DOWNLOADS') ? MUSERVERMAKER_DOWNLOADS : 'WEBENGINE_DOWNLOADS';
+	$table = defined('MUSERVERMAKER_DOWNLOADS') ? MUSERVERMAKER_DOWNLOADS : 'MUSERVERMAKER_DOWNLOADS';
 	
 	$result = $db->query("INSERT INTO ".$table." (download_title, download_description, download_link, download_size, download_type) VALUES (?, ?, ?, ?, ?)", array($title, $description, $link, $size, $type));
 	if(!$result) return;
@@ -120,7 +120,7 @@ function editDownload($id, $title, $description='', $link, $size=0, $type=1) {
 	if(strlen($title) > 100) return;
 	if(strlen($description) > 100) return;
 	
-	$table = defined('MUSERVERMAKER_DOWNLOADS') ? MUSERVERMAKER_DOWNLOADS : 'WEBENGINE_DOWNLOADS';
+	$table = defined('MUSERVERMAKER_DOWNLOADS') ? MUSERVERMAKER_DOWNLOADS : 'MUSERVERMAKER_DOWNLOADS';
 	
 	$result = $db->query("UPDATE ".$table." SET download_title = ?, download_description = ?, download_link = ?, download_size = ?, download_type = ? WHERE download_id = ?", array($title, $description, $link, $size, $type, $id));
 	if(!$result) return;
@@ -133,7 +133,7 @@ function deleteDownload($id) {
 	$db = config('SQL_USE_2_DB',true) ? Connection::Database('Me_MuOnline') : Connection::Database('MuOnline');
 	if(!check_value($id)) return;
 	
-	$table = defined('MUSERVERMAKER_DOWNLOADS') ? MUSERVERMAKER_DOWNLOADS : 'WEBENGINE_DOWNLOADS';
+	$table = defined('MUSERVERMAKER_DOWNLOADS') ? MUSERVERMAKER_DOWNLOADS : 'MUSERVERMAKER_DOWNLOADS';
 	
 	$result = $db->query("DELETE FROM ".$table." WHERE download_id = ?", array($id));
 	if(!$result) return;
@@ -145,7 +145,7 @@ function deleteDownload($id) {
 function updateDownloadsCache() {
 	$db = config('SQL_USE_2_DB',true) ? Connection::Database('Me_MuOnline') : Connection::Database('MuOnline');
 	
-	$table = defined('MUSERVERMAKER_DOWNLOADS') ? MUSERVERMAKER_DOWNLOADS : 'WEBENGINE_DOWNLOADS';
+	$table = defined('MUSERVERMAKER_DOWNLOADS') ? MUSERVERMAKER_DOWNLOADS : 'MUSERVERMAKER_DOWNLOADS';
 	
 	$downloadsData = $db->query_fetch("SELECT * FROM ".$table." ORDER BY download_type ASC, download_id ASC");
 	$cacheData = encodeCache($downloadsData);
@@ -166,7 +166,7 @@ function weekDaySelectOptions($selected='Monday') {
 	return $result;
 }
 
-function webengine_send_mail($to, $subject, $message_content, $username = "Jugador") {
+function msm_send_mail($to, $subject, $message_content, $username = "Jugador") {
     // 1. Cargar configuración SMTP
     $smtpFile = __DIR__ . '/../../includes/config/smtp_settings.json';
     if(!file_exists($smtpFile)) return false;

@@ -16,6 +16,15 @@ if(!defined('access') or !access) die();
 include('inc/template.functions.php');
 include_once('includes/config/items_manager.php');
 
+// Versión de archivos estáticos = fecha de modificación.
+// El navegador los guarda y solo los vuelve a pedir cuando el archivo cambia.
+if(!function_exists('msm_v')) {
+    function msm_v($relPath) {
+        $t = @filemtime($relPath);
+        return $t ? $t : 1;
+    }
+}
+
 // ====================================================================================
 // [MODIFICADO] MÓDULO DE SEGURIDAD VISUAL (IP BLOCK & DDOS) - VERSIÓN FINAL
 // ====================================================================================
@@ -365,12 +374,12 @@ if(!function_exists('bm_parse_item_index')) {
 // ====================================================================================
 // [LOGIN FUNCIONAL]
 // ====================================================================================
-if((isset($_POST['webengineLogin_user']) && !empty($_POST['webengineLogin_user'])) || isset($_POST['webengineLogin_submit'])) {
-    $_POST['webengineLogin_submit'] = 'submit';
+if((isset($_POST['msmLogin_user']) && !empty($_POST['msmLogin_user'])) || isset($_POST['msmLogin_submit'])) {
+    $_POST['msmLogin_submit'] = 'submit';
     try {
         if(class_exists('login')) {
             $userLogin = new login();
-            $userLogin->validateLogin($_POST['webengineLogin_user'], $_POST['webengineLogin_pwd']);
+            $userLogin->validateLogin($_POST['msmLogin_user'], $_POST['msmLogin_pwd']);
             ob_clean();
             header("Location: " . __BASE_URL__ . "usercp");
             exit;
@@ -514,8 +523,8 @@ if((isset($_POST['market_ajax']) && $_POST['market_ajax'] == 'true') || (isset($
 // 8. LOGICA USERCP
 if(isset($_REQUEST['page']) && $_REQUEST['page'] == 'usercp') {
     if(!defined('USERCP_CLEAN')) define('USERCP_CLEAN', true);
-    echo '<script>document.body.classList.add("usercp-body");</script>';
-    include('templates/morpheus/inc/modules/navbar.php'); 
+    // La barra de morpheus la incluye modules/usercp.php dentro de <body>.
+    // Imprimirla aqui, antes del <!DOCTYPE>, ponia al navegador en "modo quirks".
     
     $modulesPath = 'modules/usercp.php'; 
     if(!file_exists($modulesPath)) $modulesPath = __DIR__ . '/../../modules/usercp.php';
@@ -549,28 +558,36 @@ $csActive = custom_config('active_cs');
 $csInfo = ['owner' => 'Sin Dueño', 'master' => '---', 'mark' => '', 'date_str' => 'No definido'];
 
 if(empty($_REQUEST['page'])) {
-    try {
-        $db = Connection::Database('MuOnline');
-        $stats['accounts'] = $db->query_fetch_single("SELECT COUNT(*) as c FROM MEMB_INFO")['c'];
-        $stats['chars']    = $db->query_fetch_single("SELECT COUNT(*) as c FROM Character")['c'];
-        $stats['guilds']   = $db->query_fetch_single("SELECT COUNT(*) as c FROM Guild")['c'];
-        
-        if($csActive) {
-            $siegeData = $db->query_fetch_single("SELECT OWNER_GUILD FROM MuCastle_DATA");
-            if($siegeData && !empty($siegeData['OWNER_GUILD']) && $siegeData['OWNER_GUILD'] != 'No Owner') {
-                $csInfo['owner'] = $siegeData['OWNER_GUILD'];
-                $guildData = $db->query_fetch_single("SELECT G_Master, G_Mark FROM Guild WHERE G_Name = ?", [$csInfo['owner']]);
-                if($guildData) {
-                    $csInfo['master'] = $guildData['G_Master'];
-                    $csInfo['mark'] = __BASE_URL__ . 'api/guildmark.php?data=' . bin2hex($guildData['G_Mark']) . '&size=80';
+
+    // Totales del sitio (caché de 5 minutos: templates/misc/inc/site_counts.php)
+    @include_once(__DIR__ . '/../misc/inc/site_counts.php');
+    if(function_exists('msm_cached_counts')) {
+        $stats = msm_cached_counts();
+    }
+
+    // Castle Siege
+    if($csActive) {
+        try {
+            $db = Connection::Database('MuOnline');
+            if(is_object($db)) {
+                $siegeData = $db->query_fetch_single("SELECT OWNER_GUILD FROM MuCastle_DATA");
+                if(is_array($siegeData) && !empty($siegeData['OWNER_GUILD']) && $siegeData['OWNER_GUILD'] != 'No Owner') {
+                    $csInfo['owner'] = $siegeData['OWNER_GUILD'];
+                    $guildData = $db->query_fetch_single("SELECT G_Master, G_Mark FROM Guild WHERE G_Name = ?", [$csInfo['owner']]);
+                    if(is_array($guildData)) {
+                        $csInfo['master'] = $guildData['G_Master'];
+                        $csInfo['mark'] = __BASE_URL__ . 'api/guildmark.php?data=' . bin2hex($guildData['G_Mark']) . '&size=80';
+                    }
                 }
             }
-            $csDayNum = (int)custom_config('cs_day'); $csTimeStr = custom_config('cs_time');
-            $daysMap = [1 => 'Lunes', 2 => 'Martes', 3 => 'Miércoles', 4 => 'Jueves', 5 => 'Viernes', 6 => 'Sábado', 7 => 'Domingo'];
-            $dayName = isset($daysMap[$csDayNum]) ? $daysMap[$csDayNum] : 'Domingo';
-            $csInfo['date_str'] = $dayName . ' a las ' . $csTimeStr . 'hs';
-        }
-    } catch (Exception $e) { }
+        } catch (Throwable $e) { }
+
+        $csDayNum = (int)custom_config('cs_day');
+        $csTimeStr = custom_config('cs_time');
+        $daysMap = [1 => 'Lunes', 2 => 'Martes', 3 => 'Mi&eacute;rcoles', 4 => 'Jueves', 5 => 'Viernes', 6 => 'S&aacute;bado', 7 => 'Domingo'];
+        $dayName = isset($daysMap[$csDayNum]) ? $daysMap[$csDayNum] : 'Domingo';
+        $csInfo['date_str'] = $dayName . ' a las ' . $csTimeStr . 'hs';
+    }
 }
 
 $realOnline = 0;
@@ -643,19 +660,19 @@ if(isRankActiveLocal('active_rank_elo', $rankConfig)) $activeRanks['ELO'] = 'PVP
     
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
-    
-    <link href="<?php echo __BASE_URL__; ?>templates/misc/css/sidebar.css" rel="stylesheet">
-    <link href="<?php echo __BASE_URL__; ?>templates/morpheus/css/main.css?v=<?php echo time(); ?>" rel="stylesheet">
-    <link href="<?php echo __BASE_URL__; ?>templates/morpheus/css/login.css?v=<?php echo time(); ?>" rel="stylesheet">
-    <link href="<?php echo __BASE_URL__; ?>templates/morpheus/css/info.css?v=<?php echo time(); ?>" rel="stylesheet">
-    <link href="<?php echo __BASE_URL__; ?>templates/morpheus/css/downloads.css?v=<?php echo time(); ?>" rel="stylesheet">
-    <link href="<?php echo __BASE_URL__; ?>templates/morpheus/css/rankings.css?v=<?php echo time(); ?>" rel="stylesheet">
-    <link href="<?php echo __BASE_URL__; ?>templates/morpheus/css/news.css?v=<?php echo time(); ?>" rel="stylesheet">
-    <link href="<?php echo __BASE_URL__; ?>templates/morpheus/css/guides.css?v=<?php echo time(); ?>" rel="stylesheet">
-    <link href="<?php echo __BASE_URL__; ?>templates/morpheus/css/forgotpassword.css?v=<?php echo time(); ?>" rel="stylesheet">
-    <link href="<?php echo __BASE_URL__; ?>templates/morpheus/css/footer.css?v=<?php echo time(); ?>" rel="stylesheet">
-    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">    
+    <link href="<?php echo __BASE_URL__; ?>templates/misc/css/sidebar.css?v=<?php echo msm_v('templates/misc/css/sidebar.css'); ?>" rel="stylesheet">
+    <link href="<?php echo __BASE_URL__; ?>templates/morpheus/css/main.css?v=<?php echo msm_v('templates/morpheus/css/main.css'); ?>" rel="stylesheet">
+    <link href="<?php echo __BASE_URL__; ?>templates/morpheus/css/login.css?v=<?php echo msm_v('templates/morpheus/css/login.css'); ?>" rel="stylesheet">
+    <link href="<?php echo __BASE_URL__; ?>templates/morpheus/css/info.css?v=<?php echo msm_v('templates/morpheus/css/info.css'); ?>" rel="stylesheet">
+    <link href="<?php echo __BASE_URL__; ?>templates/morpheus/css/downloads.css?v=<?php echo msm_v('templates/morpheus/css/downloads.css'); ?>" rel="stylesheet">
+    <link href="<?php echo __BASE_URL__; ?>templates/morpheus/css/rankings.css?v=<?php echo msm_v('templates/morpheus/css/rankings.css'); ?>" rel="stylesheet">
+    <link href="<?php echo __BASE_URL__; ?>templates/morpheus/css/news.css?v=<?php echo msm_v('templates/morpheus/css/news.css'); ?>" rel="stylesheet">
+    <link href="<?php echo __BASE_URL__; ?>templates/morpheus/css/guides.css?v=<?php echo msm_v('templates/morpheus/css/guides.css'); ?>" rel="stylesheet">
+    <link href="<?php echo __BASE_URL__; ?>templates/morpheus/css/forgotpassword.css?v=<?php echo msm_v('templates/morpheus/css/forgotpassword.css'); ?>" rel="stylesheet">
+    <link href="<?php echo __BASE_URL__; ?>templates/morpheus/css/footer.css?v=<?php echo msm_v('templates/morpheus/css/footer.css'); ?>" rel="stylesheet">  
     
     <link rel="icon" type="image/x-icon" href="<?php echo __PATH_TEMPLATE_IMG__; ?>favicon.ico">
     
@@ -672,7 +689,7 @@ if(isRankActiveLocal('active_rank_elo', $rankConfig)) $activeRanks['ELO'] = 'PVP
         }
     </style>
 </head>
-<body>
+<body class="page-<?php echo empty($_REQUEST['page']) ? 'home' : preg_replace('/[^a-zA-Z0-9_-]/', '', $_REQUEST['page']); ?>">
 
     <?php include 'templates/morpheus/inc/modules/navbar.php'; ?>
 
@@ -684,18 +701,20 @@ if(isRankActiveLocal('active_rank_elo', $rankConfig)) $activeRanks['ELO'] = 'PVP
                 <div class="hero-overlay-bottom"></div>
                 
                 <div class="hero-logo-container">
-                    <img src="<?php echo __BASE_URL__; ?>templates/morpheus/img/<?php echo $heroLogo; ?>?v=<?php echo time(); ?>" 
+                    <img src="<?php echo __BASE_URL__; ?>templates/morpheus/img/<?php echo $heroLogo; ?>?v=<?php echo msm_v('templates/morpheus/img/' . $heroLogo); ?>" 
                          class="floating-logo" 
                          alt="Logo">
                 </div>
 
-                <div class="hero-action-bar">
+                <div class="hero-action-bar<?php echo isLoggedIn() ? ' is-logged' : ''; ?>">
+                    <?php if(!isLoggedIn()): ?>
                     <a href="<?php echo __BASE_URL__; ?>register" class="action-panel panel-register">
                         <div class="panel-content text-left">
                             <h2 class="panel-title text-gold">REGISTRAR</h2>
                             <span class="panel-subtitle">Juega gratuitamente ahora</span>
                         </div>
                     </a>
+                    <?php endif; ?>
                     <div class="online-status-container">
                         <div class="status-circle">
                             <div class="status-info">
@@ -725,7 +744,7 @@ if(isRankActiveLocal('active_rank_elo', $rankConfig)) $activeRanks['ELO'] = 'PVP
                             </div>
                             <div class="carousel-inner">
                                 <div class="carousel-item active">
-                                    <div class="slider-content" style="background-image: url('<?php echo __BASE_URL__; ?>templates/morpheus/img/<?php echo $s1_img; ?>?v=<?php echo time(); ?>');">
+                                    <div class="slider-content" style="background-image: url('<?php echo __BASE_URL__; ?>templates/morpheus/img/<?php echo $s1_img; ?>?v=<?php echo msm_v('templates/morpheus/img/' . $s1_img); ?>');">
                                         <div class="slider-overlay"></div>
                                         <div class="slider-text">
                                             <h2 class="slider-title"><?php echo $s1_title; ?></h2>
@@ -734,7 +753,7 @@ if(isRankActiveLocal('active_rank_elo', $rankConfig)) $activeRanks['ELO'] = 'PVP
                                     </div>
                                 </div>
                                 <div class="carousel-item">
-                                    <div class="slider-content" style="background-image: url('<?php echo __BASE_URL__; ?>templates/morpheus/img/<?php echo $s2_img; ?>?v=<?php echo time(); ?>');">
+                                    <div class="slider-content" style="background-image: url('<?php echo __BASE_URL__; ?>templates/morpheus/img/<?php echo $s2_img; ?>?v=<?php echo msm_v('templates/morpheus/img/' . $s2_img); ?>');">');">
                                         <div class="slider-overlay"></div>
                                         <div class="slider-text">
                                             <h2 class="slider-title"><?php echo $s2_title; ?></h2>
@@ -812,7 +831,7 @@ if(isRankActiveLocal('active_rank_elo', $rankConfig)) $activeRanks['ELO'] = 'PVP
                                         <div class="p-4 text-center text-white">Loading Market...</div>
                                     </div>
                                     <div class="mt-3 text-center">
-                                        <button onclick="openMarketModal()" class="btn" style="background: #151518; border: 1px solid #c8a165; color: #c8a165; padding: 10px 20px; font-family: 'Cinzel', serif; font-weight: bold; width: 100%; border-radius: 4px; transition: 0.3s;" onmouseover="this.style.background='#c8a165'; this.style.color='#151518';" onmouseout="this.style.background='#151518'; this.style.color='#c8a165';">
+                                        <button type="button" onclick="openMarketModal()" class="btn-market-full">
                                             VER MERCADO COMPLETO <i class="fa fa-arrow-right ms-1"></i>
                                         </button>
                                     </div>
@@ -871,25 +890,24 @@ if(isRankActiveLocal('active_rank_elo', $rankConfig)) $activeRanks['ELO'] = 'PVP
 
     </div>
 
-    <div id="alertModal" class="alert-modal-overlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:999999; align-items:center; justify-content:center;">
-        <div class="alert-box" style="background:#161b22; border:1px solid #c8a165; padding:30px; border-radius:8px; text-align:center; width:400px; color:#fff;">
-            <h3 id="alertTitle" style="color:#c8a165; font-family:'Cinzel', serif; margin-bottom:15px; font-weight:bold;">Aviso</h3>
-            <p id="alertBody" style="font-size:14px; color:#ccc; margin-bottom:20px;">Mensaje</p>
-            <button onclick="document.getElementById('alertModal').style.display='none'" style="background:#c8a165; color:#111; border:none; padding:10px 20px; font-weight:bold; border-radius:4px; cursor:pointer;">Aceptar</button>
+    <div id="alertModal" class="alert-modal-overlay msm-dialog-overlay" style="display:none;">
+        <div class="msm-dialog">
+            <h3 id="alertTitle" class="msm-dialog-title">Aviso</h3>
+            <p id="alertBody" class="msm-dialog-body">Mensaje</p>
+            <button type="button" class="msm-btn msm-btn-gold" onclick="document.getElementById('alertModal').style.display='none'">Aceptar</button>
         </div>
     </div>
 
-    <div id="buyConfirmModal" class="confirm-modal-overlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.95); z-index:999999; align-items:center; justify-content:center;">
-        <div class="confirm-box" style="background:#161b22; border:1px solid #30363d; padding:20px; border-radius:8px; text-align:center; width:300px; color:#fff;">
-            <div class="confirm-title" style="color:#FF8A3B; font-weight:bold; margin-bottom:15px; font-size:16px;">Confirmar Compra</div>
-            <div class="confirm-body" style="font-size:13px; color:#ccc; margin-bottom:20px;">
-                ¿Comprar este item por <span id="buyPriceLabel" style="color:#ffd700; font-weight:bold;"></span>?
-                <br><br>
-                <small style="color:#e74c3c;">Tu baúl debe estar <b>VACÍO</b>.</small>
+    <div id="buyConfirmModal" class="confirm-modal-overlay msm-dialog-overlay" style="display:none;">
+        <div class="msm-dialog msm-dialog-sm">
+            <div class="msm-dialog-title">Confirmar compra</div>
+            <div class="msm-dialog-body">
+                &iquest;Comprar este &iacute;tem por <span id="buyPriceLabel" class="msm-dialog-price"></span>?
+                <small class="msm-dialog-warn">Tu ba&uacute;l debe estar <b>VAC&Iacute;O</b>.</small>
             </div>
-            <div class="confirm-btns" style="display:flex; gap:10px; justify-content:center;">
-                <button onclick="document.getElementById('buyConfirmModal').style.display='none'" style="background:transparent; border:1px solid #444; color:#888; padding:8px 20px; border-radius:4px; cursor:pointer;">Cancelar</button>
-                <button id="btnDoBuy" style="background:#238636; color:#fff; border:none; padding:8px 20px; border-radius:4px; font-weight:bold; cursor:pointer;">COMPRAR</button>
+            <div class="msm-dialog-btns">
+                <button type="button" class="msm-btn msm-btn-ghost" onclick="document.getElementById('buyConfirmModal').style.display='none'">Cancelar</button>
+                <button type="button" id="btnDoBuy" class="msm-btn msm-btn-gold">COMPRAR</button>
             </div>
         </div>
     </div>
@@ -897,45 +915,8 @@ if(isRankActiveLocal('active_rank_elo', $rankConfig)) $activeRanks['ELO'] = 'PVP
     <div id="global-tt" style="display:none; position:fixed; z-index:9999999; background:rgba(10,10,12,0.98); border:1px solid #c8a165; color:#fff; padding:15px; border-radius:6px; pointer-events:none; box-shadow:0 0 20px rgba(0,0,0,0.8); width:220px; font-size:12px; text-align:center; font-family:'Roboto',sans-serif;"></div>
 
     <?php if(isset($bmActive) && $bmActive): ?>
-    <style>
-        .ws-workspace { display: flex; width: 90%; max-width: 1200px; height: 80vh; background: #0d1117; border: 1px solid #30363d; border-radius: 8px; overflow: hidden; box-shadow: 0 0 50px rgba(0,0,0,0.8); position: relative; }
-        .ws-sidebar-left { width: 220px; background: #161b22; border-right: 1px solid #30363d; display: flex; flex-direction: column; }
-        .cat-header { padding: 15px; font-weight: bold; color: #8b949e; border-bottom: 1px solid #30363d; font-family: 'Cinzel', serif; text-transform: uppercase; letter-spacing: 1px; }
-        .cat-list { flex: 1; overflow-y: auto; padding: 10px; }
-        .cat-list::-webkit-scrollbar { width: 5px; }
-        .cat-list::-webkit-scrollbar-track { background: #0d1117; }
-        .cat-list::-webkit-scrollbar-thumb { background: #30363d; border-radius: 4px; }
-        .cat-btn { width: 100%; text-align: left; background: transparent; border: none; padding: 10px; color: #c9d1d9; font-size: 13px; border-radius: 4px; cursor: pointer; transition: 0.2s; display: flex; align-items: center; gap: 10px; margin-bottom: 2px; }
-        .cat-btn:hover, .cat-btn.active { background: rgba(56, 139, 253, 0.1); color: #58a6ff; border-left: 3px solid #58a6ff; }
-        
-        .ws-center-panel { flex: 1; display: flex; flex-direction: column; position: relative; background: #0d1117; }
-        .center-toolbar { padding: 10px 20px; border-bottom: 1px solid #30363d; display: flex; align-items: center; background: #161b22; }
-        .search-wrapper { position: relative; width: 300px; }
-        .search-icon { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: #8b949e; font-size: 12px; }
-        .search-input { width: 100%; background: #0d1117; border: 1px solid #30363d; padding: 6px 10px 6px 30px; border-radius: 4px; color: #fff; font-size: 13px; outline: none; transition: 0.3s; }
-        .search-input:focus { border-color: #58a6ff; }
-        
-        .item-grid-container { flex: 1; overflow-y: auto; padding: 20px; display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; align-content: start; }
-        .item-grid-container::-webkit-scrollbar { width: 5px; }
-        .item-grid-container::-webkit-scrollbar-track { background: #0d1117; }
-        .item-grid-container::-webkit-scrollbar-thumb { background: #30363d; border-radius: 4px; }
-        
-        .ws-item-card { background: rgba(22, 27, 34, 0.8); border: 1px solid #30363d; border-radius: 6px; padding: 10px; display: flex; flex-direction: column; align-items: center; text-align: center; transition: 0.2s; cursor: pointer; position: relative; }
-        .ws-item-card:hover { border-color: #FF8A3B; transform: translateY(-3px); background: #1c2128; box-shadow: 0 5px 15px rgba(255, 138, 59, 0.1); }
-        .ws-card-img { width: 60px; height: 60px; object-fit: contain; background: #000; border: 1px solid #333; border-radius: 4px; margin-bottom: 10px; }
-        .ws-card-name { font-size: 12px; font-weight: bold; color: #e2e8f0; margin-bottom: 5px; width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-family: 'Roboto', sans-serif; }
-        .ws-card-price { font-size: 12px; color: #ffd700; font-family: 'Roboto', sans-serif; font-weight: bold; margin-bottom: 10px; }
-        .ws-card-btn { width: 100%; padding: 5px; font-size: 11px; background: #238636; border: none; border-radius: 3px; color: #fff; font-weight: bold; cursor: pointer; transition: 0.3s; }
-        .ws-card-btn:hover { background: #2ea043; }
 
-        .btn-ws-close { position: absolute; top: 15px; right: 20px; background: transparent; border: none; color: #8b949e; cursor: pointer; font-size: 24px; z-index: 10001; transition: 0.3s; }
-        .btn-ws-close:hover { color: #fff; transform: rotate(90deg); }
-        
-        .loading-overlay { position: absolute; top:0; left:0; width:100%; height:100%; background: rgba(13,17,23,0.8); display: none; align-items: center; justify-content: center; flex-direction: column; z-index: 50; }
-        .spinner { width: 30px; height: 30px; border: 3px solid rgba(255,255,255,0.3); border-radius: 50%; border-top-color: #fff; animation: spin 1s ease-in-out infinite; margin-bottom: 10px; }
-        @keyframes spin { to { transform: rotate(360deg); } }
-    </style>
-    <div id="wsMarketModal" class="ws-modal-overlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:99999; align-items:center; justify-content:center; backdrop-filter:blur(5px);">
+    <div id="wsMarketModal" class="ws-modal-overlay" style="display:none;">
         <div class="ws-workspace">
             <button class="btn-ws-close" onclick="closeMarketModal()"><i class="fa fa-times"></i></button>
             <div class="ws-sidebar-left">
@@ -1212,7 +1193,7 @@ if(isRankActiveLocal('active_rank_elo', $rankConfig)) $activeRanks['ELO'] = 'PVP
     <?php endif; ?>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>const baseUrl = '<?php echo __BASE_URL__; ?>';</script>
-    <script src="<?php echo __BASE_URL__; ?>templates/morpheus/js/main.js?v=<?php echo time(); ?>"></script>
+    <script src="<?php echo __BASE_URL__; ?>templates/morpheus/js/main.js?v=<?php echo msm_v('templates/morpheus/js/main.js'); ?>"></script>
     <?php include 'templates/misc/countdown.php'; ?>
 </body>
 </html>

@@ -26,10 +26,10 @@ try {
     } else {
         
         // CASO 2: SOLICITUD DE RECUPERACIÓN (Formulario)
-        if(isset($_POST['webengineEmail_submit'])) {
+        if(isset($_POST['msmEmail_submit'])) {
             try {
                 $Account = new Account();
-                $Account->passwordRecoveryProcess($_POST['webengineEmail_current'], $_SERVER['REMOTE_ADDR']);
+                $Account->passwordRecoveryProcess($_POST['msmEmail_current'], $_SERVER['REMOTE_ADDR']);
             } catch (Exception $ex) {
                 message('error', $ex->getMessage());
             }
@@ -41,16 +41,16 @@ try {
                 
                 // Input Email
                 echo '<div class="form-group">';
-                    echo '<label for="webengineEmail" class="col-sm-4 control-label">' . lang('forgotpass_txt_1',true) . '</label>';
+                    echo '<label for="msmEmail" class="col-sm-4 control-label">' . lang('forgotpass_txt_1',true) . '</label>';
                     echo '<div class="col-sm-8">';
-                        echo '<input type="text" class="form-control" id="webengineEmail" name="webengineEmail_current" required>';
+                        echo '<input type="text" class="form-control" id="msmEmail" name="msmEmail_current" required>';
                     echo '</div>';
                 echo '</div>';
                 
                 // Botón Submit
                 echo '<div class="form-group">';
                     echo '<div class="col-sm-offset-4 col-sm-8">';
-                        echo '<button type="submit" name="webengineEmail_submit" value="submit" class="btn btn-primary">' . lang('forgotpass_txt_2',true) . '</button>';
+                        echo '<button type="submit" name="msmEmail_submit" value="submit" class="btn btn-primary">' . lang('forgotpass_txt_2',true) . '</button>';
                     echo '</div>';
                 echo '</div>';
                 

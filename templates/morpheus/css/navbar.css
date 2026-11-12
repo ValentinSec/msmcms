@@ -1,27 +1,26 @@
 /* templates/morpheus/css/navbar.css */
 
 :root {
-    --morph-gold: #c8a165;          /* Dorado clásico MU */
-    --morph-gold-bright: #ffd700;   /* Dorado brillante */
-    --morph-text: #cccccc;          /* Texto base gris claro */
-    --morph-text-hover: #ffffff;    /* Texto al pasar mouse */
-    --morph-nav-bg: rgba(9, 10, 12, 0.85); /* Fondo casi negro */
+    --morph-gold: #c8a165;
+    --morph-gold-bright: #ffd700;
+    --morph-text: #cccccc;
+    --morph-text-hover: #ffffff;
+    --morph-nav-bg: rgba(9, 10, 12, 0.85);
     --morph-nav-border: rgba(255, 255, 255, 0.08);
 }
 
 /* WRAPPER PRINCIPAL */
 .morpheus-nav-wrapper {
     width: 100%;
-    height: 80px; /* Altura fija importante para los efectos */
+    height: 80px;
     background: var(--morph-nav-bg);
     border-bottom: 1px solid var(--morph-nav-border);
     font-family: 'Cinzel', serif;
     position: relative;
     z-index: 1000;
-    backdrop-filter: blur(10px); /* Efecto cristal moderno */
+    backdrop-filter: blur(10px);
 }
 
-/* CONTENEDOR FLEX */
 .morpheus-nav {
     display: flex;
     justify-content: space-between;
@@ -30,16 +29,21 @@
     height: 100%;
 }
 
+/* Elementos solo para pantallas angostas */
+.nav-brand-mobile,
+.nav-toggle { display: none; }
+
+/* La barra también se usa en el UserCP, donde no se carga main.css */
+.morpheus-nav-wrapper a { text-decoration: none; }
+
 /* --- LISTA DE LINKS --- */
 .nav-links {
     display: flex;
     list-style: none;
-    margin: 0;
+    margin: 0 auto;
     padding: 0;
     height: 100%;
-    gap: 0; /* Sin espacio, los botones se tocan */
-    margin-left: auto;
-    margin-right: auto;
+    gap: 0;
 }
 
 .nav-links li {
@@ -47,23 +51,21 @@
     position: relative;
 }
 
-/* ENLACES (ESTILO BASE) */
 .nav-links a {
     display: flex;
     align-items: center;
     justify-content: center;
     height: 100%;
-    padding: 0 25px; /* Ancho del botón */
+    padding: 0 25px;
     text-decoration: none;
     position: relative;
     transition: all 0.3s ease;
-    overflow: hidden; /* IMPORTANTE para contener el brillo */
+    overflow: hidden;
 }
 
-/* TEXTO DEL ENLACE */
 .nav-text {
     position: relative;
-    z-index: 2; /* Por encima del brillo */
+    z-index: 2;
     font-size: 15px;
     font-weight: 700;
     color: var(--morph-text);
@@ -72,30 +74,27 @@
     transition: color 0.3s ease, text-shadow 0.3s ease;
 }
 
-/* --- EL EFECTO HOVER "CAJA DE LUZ" --- */
-/* Esta es la capa de luz de fondo */
+/* Efecto "caja de luz" */
 .nav-glow {
     position: absolute;
     bottom: 0;
     left: 0;
     width: 100%;
-    height: 0%; /* Empieza invisible */
-    /* Degradado dorado que se desvanece hacia arriba */
-    background: linear-gradient(to top, 
-        rgba(200, 161, 101, 0.35) 0%, 
-        rgba(200, 161, 101, 0.1) 60%, 
+    height: 0%;
+    background: linear-gradient(to top,
+        rgba(200, 161, 101, 0.35) 0%,
+        rgba(200, 161, 101, 0.1) 60%,
         transparent 100%
     );
     transition: height 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     z-index: 1;
-    border-bottom: 3px solid var(--morph-gold); /* La línea sólida abajo */
+    border-bottom: 3px solid var(--morph-gold);
 }
 
-/* ESTADOS HOVER Y ACTIVE */
 .nav-links a:hover .nav-glow,
 .nav-links a.active .nav-glow,
 .dropdown-item:hover > a .nav-glow {
-    height: 100%; /* La luz sube hasta llenar la caja */
+    height: 100%;
 }
 
 .nav-links a:hover .nav-text,
@@ -105,21 +104,19 @@
     text-shadow: 0 0 10px rgba(200, 161, 101, 0.8), 0 0 20px rgba(200, 161, 101, 0.4);
 }
 
-/* --- DROPDOWN (MENÚ DESPLEGABLE) --- */
-.dropdown-item {
-    position: relative;
-}
+/* --- DROPDOWN --- */
+.dropdown-item { position: relative; }
 
 .morpheus-dropdown {
     position: absolute;
     top: 100%;
     left: 50%;
-    transform: translateX(-50%) translateY(10px); /* Empieza un poco abajo */
+    transform: translateX(-50%) translateY(10px);
     min-width: 220px;
     opacity: 0;
     visibility: hidden;
     transition: all 0.3s ease;
-    padding-top: 0px;
+    padding-top: 0;
     z-index: 1001;
 }
 
@@ -132,7 +129,7 @@
 .dropdown-content {
     background: #0f0f12;
     border: 1px solid rgba(255, 255, 255, 0.1);
-    border-top: 3px solid var(--morph-gold); /* Línea dorada superior */
+    border-top: 3px solid var(--morph-gold);
     box-shadow: 0 15px 40px rgba(0,0,0,0.8);
     border-radius: 0 0 4px 4px;
 }
@@ -142,31 +139,28 @@
     height: auto;
     padding: 12px 20px;
     text-align: left;
-    justify-content: flex-start; /* Alinear texto izquierda */
+    justify-content: flex-start;
     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
-.dropdown-content a:last-child {
-    border-bottom: none;
-}
+.dropdown-content a:last-child { border-bottom: none; }
 
-/* Hover dentro del dropdown */
 .dropdown-content a:hover {
     background: linear-gradient(90deg, rgba(200, 161, 101, 0.2) 0%, transparent 100%);
 }
 
 .dropdown-content a:hover .nav-text {
     color: var(--morph-gold);
-    transform: translateX(5px); /* Pequeño desplazamiento */
+    transform: translateX(5px);
 }
 
-/* Resetear el efecto glow principal para items del dropdown (usamos otro estilo) */
-.dropdown-content a .nav-glow {
-    display: none; 
-}
+.dropdown-content a .nav-glow { display: none; }
 
-/* --- BOTÓN AUTH (LOGIN/PANEL) --- */
+/* --- BOTONES DE CUENTA (PANEL / LOGIN / ADM) --- */
 .nav-auth {
+    display: flex !important;
+    align-items: center;
+    gap: 15px;
     margin-left: 20px;
 }
 
@@ -199,12 +193,11 @@
 .auth-icon i {
     color: var(--morph-gold);
     font-size: 18px;
-    transform: rotate(-45deg); /* Llave inclinada */
+    transform: rotate(-45deg);
     transition: 0.3s;
     filter: drop-shadow(0 0 5px rgba(200, 161, 101, 0.5));
 }
 
-/* Hover del Login */
 .auth-btn:hover {
     color: #fff;
     text-shadow: 0 0 10px rgba(255,255,255,0.5);
@@ -221,37 +214,181 @@
     filter: drop-shadow(0 0 8px var(--morph-gold));
 }
 
-/* RESPONSIVE */
-@media (max-width: 992px) {
-    .morpheus-nav {
-        flex-direction: column;
-        height: auto;
-        padding: 20px;
-    }
-    .morpheus-nav-wrapper {
-        height: auto;
-    }
-    .nav-links {
-        flex-direction: column;
-        width: 100%;
-        height: auto;
-    }
-    .nav-links li {
-        width: 100%;
-        height: 50px;
-    }
-    .nav-auth {
-        margin-top: 20px;
-        margin-left: 0;
-    }
+/* Botón ADM */
+.btn-admincp-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    height: 48px;
+    padding: 0 5px 0 20px;
+    border-radius: 50px;
+    text-decoration: none;
+    background: linear-gradient(135deg, #d4af37 0%, #fcf6ba 50%, #aa8e2d 100%);
+    border: 1px solid #ffd700;
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
+    transition: all 0.3s ease;
 }
 
-/* --- LOGIN MODAL (PREMIUM STYLE) --- */
+.btn-admincp-nav span {
+    color: #111;
+    font-weight: 900;
+    font-size: 15px;
+    letter-spacing: 1px;
+    font-family: 'Cinzel', serif;
+}
+
+.btn-admincp-nav .auth-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.45);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #000;
+    border: 1px solid rgba(0,0,0,0.1);
+    transition: 0.3s;
+}
+
+.btn-admincp-nav .auth-icon i { font-size: 16px; }
+
+.btn-admincp-nav:hover {
+    background: linear-gradient(135deg, #ffd700 0%, #fff 50%, #d4af37 100%);
+    box-shadow: 0 0 25px rgba(255, 215, 0, 0.6);
+    transform: translateY(-2px);
+}
+
+.btn-admincp-nav:hover .auth-icon {
+    background: #000;
+    color: #ffd700;
+}
+
+.btn-admincp-nav:hover .auth-icon i { transform: rotate(90deg); }
+
+/* =========================================
+   BARRA ADAPTABLE (menos de 992px)
+   ========================================= */
+@media (max-width: 991.98px) {
+    .morpheus-nav-wrapper { height: auto; }
+
+    .morpheus-nav {
+        flex-wrap: wrap;
+        height: auto;
+        min-height: 64px;
+        padding: 8px 0;
+        gap: 0 12px;
+    }
+
+    /* Nombre del servidor a la izquierda */
+    .nav-brand-mobile {
+        display: block;
+        order: 1;
+        flex: 1 1 auto;
+        min-width: 0;
+        font-family: 'Cinzel', serif;
+        font-size: 18px;
+        font-weight: 700;
+        color: var(--morph-gold);
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    /* Botones de cuenta y hamburguesa a la derecha */
+    .nav-auth { order: 2; margin-left: 0; gap: 10px; }
+
+    .nav-toggle {
+        display: flex;
+        order: 3;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 5px;
+        width: 42px;
+        height: 42px;
+        padding: 0;
+        background: transparent;
+        border: 1px solid rgba(200, 161, 101, 0.35);
+        border-radius: 6px;
+        cursor: pointer;
+    }
+    .nav-toggle span {
+        display: block;
+        width: 20px;
+        height: 2px;
+        background: var(--morph-gold);
+        border-radius: 2px;
+        transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+    .morpheus-nav.is-open .nav-toggle span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .morpheus-nav.is-open .nav-toggle span:nth-child(2) { opacity: 0; }
+    .morpheus-nav.is-open .nav-toggle span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    /* Menú: cerrado por defecto, se abre debajo de la barra */
+    .nav-links {
+        order: 4;
+        display: none;
+        flex-direction: column;
+        width: 100%;
+        height: auto;
+        margin: 8px 0 4px;
+        border-top: 1px solid var(--morph-nav-border);
+    }
+    .morpheus-nav.is-open .nav-links { display: flex; }
+
+    .nav-links li {
+        width: 100%;
+        height: auto;
+        border-bottom: 1px solid var(--morph-nav-border);
+    }
+    .nav-links a {
+        justify-content: flex-start;
+        height: auto;
+        padding: 14px 16px;
+    }
+    .nav-text { font-size: 14px; }
+
+    /* Indicador del enlace activo: barra dorada a la izquierda */
+    .nav-glow {
+        height: 100%;
+        width: 0;
+        border-bottom: none;
+        border-left: 0 solid var(--morph-gold);
+        background: linear-gradient(90deg, rgba(200, 161, 101, 0.25) 0%, transparent 100%);
+        transition: width 0.3s ease;
+    }
+    .nav-links a:hover .nav-glow,
+    .nav-links a.active .nav-glow {
+        width: 100%;
+        border-left-width: 3px;
+    }
+
+    /* Botones de cuenta más compactos */
+    .auth-btn { font-size: 13px; gap: 8px; }
+    .auth-icon { width: 36px; height: 36px; }
+    .auth-icon i { font-size: 15px; }
+    .btn-admincp-nav { height: 40px; gap: 8px; padding: 0 3px 0 14px; }
+    .btn-admincp-nav span { font-size: 13px; }
+    .btn-admincp-nav .auth-icon { width: 32px; height: 32px; }
+}
+
+/* Celular angosto: botones de cuenta solo con ícono */
+@media (max-width: 575.98px) {
+    .nav-brand-mobile { font-size: 16px; }
+    .auth-btn span,
+    .btn-admincp-nav span { display: none; }
+    .btn-admincp-nav { padding: 0 3px; }
+}
+
+/* --- LOGIN MODAL --- */
 .login-overlay {
     display: none;
     position: fixed;
     top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0, 0, 0, 0.85); /* Fondo oscuro */
+    background: rgba(0, 0, 0, 0.85);
     backdrop-filter: blur(5px);
     z-index: 10000;
     align-items: center;
@@ -260,13 +397,12 @@
     transition: opacity 0.3s ease;
 }
 
-.login-overlay.active {
-    opacity: 1;
-}
+.login-overlay.active { opacity: 1; }
 
 .login-box {
-    background: #0f1012; /* Fondo casi negro */
+    background: #0f1012;
     width: 380px;
+    max-width: calc(100vw - 30px);
     padding: 40px;
     border-radius: 8px;
     border: 1px solid #2a2a2a;
@@ -277,9 +413,7 @@
     transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-.login-overlay.active .login-box {
-    transform: translateY(0);
-}
+.login-overlay.active .login-box { transform: translateY(0); }
 
 .login-close {
     position: absolute;
@@ -290,7 +424,7 @@
     cursor: pointer;
     transition: 0.2s;
 }
-.login-close:hover { color: #FF8A3B; }
+.login-close:hover { color: var(--morph-gold); }
 
 .login-title {
     font-family: 'Cinzel', serif;
@@ -318,19 +452,18 @@
 }
 
 .login-input:focus {
-    border-color: #FF8A3B; /* Naranja al hacer foco */
+    border-color: var(--morph-gold);
     background: rgba(0,0,0,0.2);
-    box-shadow: 0 0 10px rgba(255, 138, 59, 0.1);
+    box-shadow: 0 0 10px rgba(200, 161, 101, 0.15);
 }
 
 .login-input::placeholder { color: #666; }
 
-/* Botón Entrar (Gradiente como en la foto) */
 .login-btn-enter {
     width: 100%;
     background: linear-gradient(180deg, #5a4b3c 0%, #2e261f 100%);
     border: 1px solid #6d5b4a;
-    color: #e0d0b0; /* Color hueso/dorado */
+    color: #e0d0b0;
     padding: 12px;
     font-size: 16px;
     font-weight: 600;
@@ -344,11 +477,10 @@
 
 .login-btn-enter:hover {
     filter: brightness(1.2);
-    border-color: #FF8A3B;
+    border-color: var(--morph-gold);
     color: #fff;
 }
 
-/* Opciones extra (Remember, Recovery, Sign Up) */
 .login-options {
     display: flex;
     align-items: center;
@@ -357,7 +489,7 @@
     color: #fff;
 }
 
-.login-checkbox { margin-right: 8px; accent-color: #FF8A3B; }
+.login-checkbox { margin-right: 8px; accent-color: var(--morph-gold); }
 
 .login-footer {
     border-top: 1px solid #222;
@@ -371,121 +503,48 @@
 .login-link { color: #888; text-decoration: none; transition: 0.2s; }
 .login-link:hover { color: #ccc; }
 
-.login-link-gold { color: #FF8A3B; text-transform: uppercase; font-weight: bold; font-size: 14px; text-decoration: none; }
-.login-link-gold:hover { text-shadow: 0 0 8px rgba(255, 138, 59, 0.5); }
+.login-link-gold { color: #e2c084; text-transform: uppercase; font-weight: bold; font-size: 14px; text-decoration: none; }
+.login-link-gold:hover { text-shadow: 0 0 8px rgba(200, 161, 101, 0.5); }
 
-/* --- 1. ALINEACIÓN DEL CONTENEDOR (CRÍTICO) --- */
-.nav-auth {
-    display: flex !important; /* Pone los elementos uno al lado del otro */
-    align-items: center;
-    gap: 15px; /* Espacio entre el botón ADM y PANEL */
-    margin-left: 20px;
+@media (max-width: 575.98px) {
+    .login-box { padding: 30px 22px; }
+    .login-title { font-size: 26px; margin-bottom: 22px; }
 }
 
-/* --- 2. ESTILO BOTÓN ADMIN (FIXED) --- */
-.btn-admincp-nav {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-    height: 48px; /* Altura para igualar al botón Panel */
-    padding: 0 5px 0 20px; /* Padding para texto e icono */
-    border-radius: 50px; /* Bordes redondos como el Panel */
-    text-decoration: none;
-    
-    /* Tu estilo dorado */
-    background: linear-gradient(135deg, #d4af37 0%, #fcf6ba 50%, #aa8e2d 100%);
-    border: 1px solid #ffd700;
-    box-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
-    transition: all 0.3s ease;
-}
-
-/* Texto ADM */
-.btn-admincp-nav span {
-    color: #111;
-    font-weight: 900;
-    font-size: 15px;
-    letter-spacing: 1px;
-    font-family: 'Cinzel', serif;
-}
-
-/* Círculo del Icono */
-.btn-admincp-nav .auth-icon {
-    width: 38px;
-    height: 38px;
-    border-radius: 50%;
-    background: rgba(0, 0, 0, 0.45); /* Oscuro sutil */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #000;
-    border: 1px solid rgba(0,0,0,0.1);
-    transition: 0.3s;
-}
-
-.btn-admincp-nav .auth-icon i {
-    font-size: 16px;
-}
-
-/* Hover */
-.btn-admincp-nav:hover {
-    background: linear-gradient(135deg, #ffd700 0%, #fff 50%, #d4af37 100%);
-    box-shadow: 0 0 25px rgba(255, 215, 0, 0.6);
-    transform: translateY(-2px);
-}
-
-.btn-admincp-nav:hover .auth-icon {
-    background: #000;
-    color: #ffd700;
-}
-
-.btn-admincp-nav:hover .auth-icon i {
-    transform: rotate(90deg);
-}
-
-/* Estilo del Dropdown de Filtro */
+/* --- FILTRO DE EVENTOS (panel lateral del home) --- */
 #eventFilterSelect {
-    /* Color ligeramente más claro que #1a191f */
-    background-color: #25242b !important; 
+    background-color: #25242b !important;
     color: #a0a0a0;
     border: 1px solid #333;
     border-radius: 4px;
     width: 100%;
     font-size: 12px;
     height: 32px;
-    padding: 0 30px 0 10px; /* Padding derecho para la flecha */
+    padding: 0 30px 0 10px;
     outline: none;
     cursor: pointer;
     transition: all 0.3s ease;
-    
-    /* Quitamos la flecha fea por defecto del navegador */
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
-    
-    /* Agregamos nuestra propia flecha (SVG codificado) color gris */
     background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23666' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
     background-repeat: no-repeat;
     background-position: right 8px center;
     background-size: 12px;
 }
 
-/* Al pasar el mouse */
 #eventFilterSelect:hover {
-    background-color: #2b2a33 !important; /* Un pelín más claro al hover */
+    background-color: #2b2a33 !important;
     border-color: #444;
     color: #ccc;
 }
 
-/* Al hacer click (Foco) */
 #eventFilterSelect:focus {
-    border-color: #c8a165; /* Borde dorado al seleccionar */
+    border-color: #c8a165;
     color: #fff;
-    /* Flecha se vuelve dorada */
     background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23c8a165' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
 }
 
-/* Las opciones desplegables */
 #eventFilterSelect option {
     background-color: #25242b;
     color: #ccc;

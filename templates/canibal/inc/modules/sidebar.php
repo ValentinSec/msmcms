@@ -45,16 +45,16 @@ $blackMarketActive = (isset($bmData['module_active']) && $bmData['module_active'
         isSubmittingLogin = true;
 
         const formData = new FormData(form);
-        // WebEngine requiere este campo oculto para saber que se apretó el botón
-        formData.append('webengineLogin_submit', '1'); 
+        // MuServerMaker requiere este campo oculto para saber que se apretó el botón
+        formData.append('msmLogin_submit', '1'); 
 
         fetch(form.action, {
             method: 'POST',
             body: formData,
-            redirect: 'follow' // Seguimos a WebEngine en las sombras
+            redirect: 'follow' // Seguimos a MuServerMaker en las sombras
         })
         .then(response => {
-            // Si WebEngine nos redirigió al usercp internamente, ¡el login fue un éxito!
+            // Si MuServerMaker nos redirigió al usercp internamente, ¡el login fue un éxito!
             if (response.url.indexOf('usercp') !== -1) {
                 // Redirigimos al index.php de inmediato, carga limpia y rápida
                 window.location.href = '<?php echo __BASE_URL__; ?>'; 
@@ -76,10 +76,10 @@ $blackMarketActive = (isset($bmData['module_active']) && $bmData['module_active'
     <div class="sidebar-box-login">
         <h6 class="sidebar-title">INGRESAR</h6>
         <form action="<?php echo __BASE_URL__; ?>login" method="post" style="width:100%;" onsubmit="doAjaxLogin(event, this);">
-            <input type="text" name="webengineLogin_user" class="login-input" placeholder="Usuario" required>
-            <input type="password" name="webengineLogin_pwd" class="login-input" placeholder="Contraseña" required>
+            <input type="text" name="msmLogin_user" class="login-input" placeholder="Usuario" required>
+            <input type="password" name="msmLogin_pwd" class="login-input" placeholder="Contraseña" required>
             
-            <button type="submit" name="webengineLogin_submit" class="btn-login-custom" style="transition: all 0.3s ease;">
+            <button type="submit" name="msmLogin_submit" class="btn-login-custom" style="transition: all 0.3s ease;">
                 INGRESAR <i class="fa fa-chevron-right ms-2"></i>
             </button>
             

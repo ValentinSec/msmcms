@@ -1,20 +1,6 @@
 <?php
-/**
- * WebEngine CMS
- * https://webenginecms.org/
- * 
- * @version 1.2.6
- * @author Lautaro Angelico <http://lautaroangelico.com/>
- * @copyright (c) 2013-2025 Lautaro Angelico, All Rights Reserved
- * 
- * Licensed under the MIT license
- * http://opensource.org/licenses/MIT
- */
 
 class Handler {
-	
-	private $_disableWebEngineFooterVersion = false;
-	private $_disableWebEngineFooterCredits = false;
 	
 	public function loadPage() {
 		global $config,$lang,$custom,$tSettings;
@@ -44,11 +30,6 @@ class Handler {
 				
 				# load template
 				include(__PATH_TEMPLATES__ . $config['website_template'] . '/index.php');
-				
-				# show admincp button
-				if(isLoggedIn() && canAccessAdminCP($_SESSION['username'])) {
-					echo '<a href="'.__PATH_ADMINCP_HOME__.'" class="btn btn-primary admincp-button">AdminCP</a>';
-				}
 				break;
 			case 'api':
 				
@@ -152,17 +133,8 @@ class Handler {
 		return false;
 	}
 	
-	public function webenginePowered() {
-		if($this->_disableWebEngineFooterCredits) return;
-		
-		echo '<a href="https://webenginecms.org/" target="_blank" class="webengine-powered">';
-			echo 'Powered by WebEngine';
-			if(!$this->_disableWebEngineFooterVersion) echo ' ' . __WEBENGINE_VERSION__;
-		echo '</a>';
-	}
-	
 	public function loadAdminCPModule($module='home') {
-		global $config,$lang,$custom,$handler,$mconfig,$gconfig,$webengine;
+		global $config,$lang,$custom,$handler,$mconfig,$gconfig;
 		
 		$dB = Connection::Database('MuOnline');
 		$dB2 = Connection::Database('Me_MuOnline');

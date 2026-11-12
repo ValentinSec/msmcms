@@ -417,7 +417,7 @@ if(isset($_POST['market_ajax']) && $_POST['market_ajax'] == 'true') {
                 <div class="content-wrapper-clean"> 
                     <?php 
                         if(!empty($_REQUEST['page'])) {
-                            // Carga automática del sistema WebEngine para login, register, etc.
+                            // Carga automática del sistema MuServerMaker para login, register, etc.
                             $handler->loadModule($_REQUEST['page'], $_REQUEST['subpage']);
                         } else {
                             $newsFile = __PATH_INCLUDES__ . 'config/server_news.json';
@@ -487,7 +487,7 @@ if(isset($_POST['market_ajax']) && $_POST['market_ajax'] == 'true') {
                                     }
                                 echo '</div>';
                                 } else {
-                                    // Formato FULL (el estándar de WebEngine)
+                                    // Formato FULL (el estándar de MuServerMaker)
                                     foreach($newsData as $news) {
                                         $img = !empty($news['image']) ? __BASE_URL__ . $news['image'] : '';
                                         echo '<div class="news-item" style="margin-bottom:30px; background: rgba(0,0,0,0.3); padding: 20px; border-radius: 8px;">';
@@ -1048,8 +1048,7 @@ if ($stActive):
     document.addEventListener("DOMContentLoaded", function() {
         setTimeout(function() {
             // PHP inyecta la URL base y la Key automáticamente aquí:
-                        var cronUrl = "<?php echo __BASE_URL__; ?>api/cron.php"; echo isset($muservermakerParams['cron_api_key']) ? $muservermakerParams['cron_api_key'] : '123456'; ?>";
-            
+            var cronUrl = "<?php echo __BASE_URL__; ?>api/cron.php";            
             // Ejecutamos el cron silenciosamente
             try {
                 fetch(cronUrl, {mode: 'no-cors'});

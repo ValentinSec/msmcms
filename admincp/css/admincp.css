@@ -2339,3 +2339,31 @@ textarea.form-control-dark {
     .header-btn { display: none; }
     .top-header { padding: 0 10px; }
 }
+
+/* ====================================================================
+   DASHBOARD: elementos nuevos
+   ==================================================================== */
+.card-online { background: linear-gradient(135deg, #1e293b 0%, #064e3b 100%); border-left: 3px solid #10b981; }
+.card-online .card-icon-bg { background-color: #10b981; }
+.card-title-text small { font-size: 13px; font-weight: 500; color: rgba(255, 255, 255, 0.6); }
+.occupancy-track { height: 4px; width: calc(100% - 55px); background: rgba(0, 0, 0, 0.35); border-radius: 2px; margin-top: 8px; overflow: hidden; }
+.occupancy-fill { height: 100%; background: #4ade80; border-radius: 2px; }
+
+.dash-update-banner {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: #fff; border-radius: 10px; padding: 18px 22px; margin-bottom: 15px;
+    display: flex; align-items: center; justify-content: space-between; gap: 15px; flex-wrap: wrap;
+}
+.dash-update-banner h4 { margin: 0; font-weight: 700; font-size: 17px; }
+.dash-update-banner h4 i { margin-right: 8px; }
+.dash-update-banner p { margin: 5px 0 0; opacity: 0.95; font-size: 13px; }
+.dash-update-btn {
+    background: #fff; color: #000 !important; font-weight: 700; font-size: 12px; text-transform: uppercase;
+    padding: 10px 26px; border-radius: 50px; text-decoration: none !important; white-space: nowrap;
+}
+.dash-update-btn:hover { background: #e2e8f0; }
+
+.dash-empty { padding: 20px !important; color: #64748b !important; }
+.dash-rank-plain { color: #64748b; font-size: 11px; }
+#page-wrapper .dashboard-row-bottom > [class*="col-"] { margin-bottom: 20px; }
+#page-wrapper .dashboard-row-bottom .bottom-card { margin-bottom: 0; }

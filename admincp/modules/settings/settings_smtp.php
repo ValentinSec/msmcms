@@ -47,7 +47,7 @@ if(isset($_POST['test_smtp_email'])) {
     $target = $_POST['test_email_target'];
     if(filter_var($target, FILTER_VALIDATE_EMAIL)) {
         // Usamos la función nativa del CMS
-        if(webengine_send_mail($target, "Test de Conexión - " . config('server_name'), "<h1>Conexión Exitosa</h1><p>Si estás leyendo esto, tu SMTP está funcionando perfectamente.</p>")) {
+        if(msm_send_mail($target, "Test de Conexión - " . config('server_name'), "<h1>Conexión Exitosa</h1><p>Si estás leyendo esto, tu SMTP está funcionando perfectamente.</p>")) {
             echo '<div class="alert alert-success-custom"><i class="fa fa-envelope"></i> Correo de prueba enviado exitosamente a <b>'.$target.'</b>.</div>';
         } else {
             echo '<div class="alert alert-danger"><i class="fa fa-times-circle"></i> Fallo en el envío. Revisa los logs de error de PHP o verifica credenciales.</div>';

@@ -1,8 +1,5 @@
 /* templates/morpheus/css/main.css */
 
-/* --- 1. FUENTES Y VARIABLES GLOBALES --- */
-@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Roboto:wght@300;400;500;700&display=swap');
-
 :root {
     --morph-gold: #c8a165;
     --morph-gold-glow: rgba(200, 161, 101, 0.6);
@@ -11,9 +8,10 @@
     --morph-green: #00ff88;
     --morph-bg-dark: #1a191f;
     --morph-panel-bg: rgba(20, 20, 25, 0.95);
-    
+
     /* Variables de Color Unificadas */
     --color-gold: #c8a165;
+    --color-gold-bright: #e2c084;
     --color-blue: #3278c8;
     --color-green: #00ff00;
     --border-color: rgba(255, 255, 255, 0.08);
@@ -66,18 +64,15 @@ ul { list-style: none; padding: 0; margin: 0; }
     pointer-events: none;
 }
 
-/* --- 3. LOGO FLOTANTE (Fix Tamaño Real) --- */
+/* --- 3. LOGO FLOTANTE --- */
 .hero-logo-container {
     position: absolute;
-    top: 45%; 
+    top: 45%;
     left: 50%;
     transform: translate(-50%, -50%);
     z-index: 5;
-    
-    /* Permite que el contenido defina el ancho, pero sin salirse de la pantalla */
     width: auto;
-    max-width: 90vw; 
-    
+    max-width: 90vw;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -85,12 +80,9 @@ ul { list-style: none; padding: 0; margin: 0; }
 }
 
 .floating-logo {
-    /* CRÍTICO: Eliminamos width: 100% para que respete el style inline de PHP */
+    /* El ancho lo define el bloque <style> de index.php (valor del AdminCP) */
     height: auto;
-    
-    /* Aseguramos que en celulares no rompa el sitio */
-    max-width: 100%; 
-    
+    max-width: 100%;
     filter: drop-shadow(0 0 10px rgba(0,0,0,0.8)) drop-shadow(0 20px 40px rgba(0,0,0,0.5));
     animation: float 6s ease-in-out infinite;
 }
@@ -100,20 +92,8 @@ ul { list-style: none; padding: 0; margin: 0; }
     50% { transform: translateY(-15px); }
 }
 
-/* RESPONSIVE: En celular forzamos un máximo razonable */
-@media (max-width: 768px) {
-    .hero-logo-container {
-        top: 40%;
-    }
-    .floating-logo {
-        /* Si el admin puso 800px, en celular lo bajamos a 300px máx */
-        max-width: 300px !important; 
-        width: auto !important; /* Respetar proporción */
-    }
-}
-
 /* =========================================
-   4. ACTION BAR (Barra Inferior con Imágenes)
+   4. ACTION BAR (Registrar / Online / Descargas)
    ========================================= */
 .hero-action-bar {
     position: relative;
@@ -123,14 +103,13 @@ ul { list-style: none; padding: 0; margin: 0; }
     justify-content: center;
     width: 100%;
     max-width: 1300px;
-    height: 180px; /* Altura suficiente para los elementos */
+    height: 180px;
     margin: 0 auto;
 }
 
-/* Base Paneles */
 .action-panel {
     flex: 1;
-    height: 100px; 
+    height: 100px;
     display: flex;
     align-items: center;
     text-decoration: none !important;
@@ -138,9 +117,6 @@ ul { list-style: none; padding: 0; margin: 0; }
     border: none;
     background-color: transparent;
     box-shadow: none;
-    backdrop-filter: none;
-    -webkit-mask-image: none;
-    mask-image: none;
 }
 
 .action-panel:hover {
@@ -148,34 +124,29 @@ ul { list-style: none; padding: 0; margin: 0; }
     filter: brightness(1.2);
 }
 
-/* Contenido interno del panel (Texto) */
 .panel-content {
     z-index: 2;
     display: flex;
     flex-direction: column;
     justify-content: center;
     width: 100%;
-    padding: 0 40px; /* Ajustado para dar aire */
+    padding: 0 40px;
 }
 
 /* Panel Izquierdo: REGISTRAR */
 .panel-register {
     justify-content: flex-start;
-    margin-right: auto; 
+    margin-right: auto;
     margin-left: 0;
-    
-    /* Fondo alineado a la izquierda */
     background: url('../img/register.webp') no-repeat left center;
-    background-size: contain; 
-    
-    /* Ancho máximo para que no se estire infinitamente */
-    max-width: 500px; 
+    background-size: contain;
+    max-width: 500px;
     width: 100%;
 }
 
 .panel-register .panel-content {
     text-align: left;
-    padding-left: 100px; /* Separación del borde izquierdo */
+    padding-left: 100px;
 }
 
 .panel-register .panel-title {
@@ -190,7 +161,8 @@ ul { list-style: none; padding: 0; margin: 0; }
     text-shadow: 0 2px 5px rgba(0,0,0,0.8);
 }
 
-.panel-register .panel-subtitle {
+.panel-register .panel-subtitle,
+.panel-download .panel-subtitle {
     color: #bbb;
     font-family: 'Roboto', sans-serif;
     font-size: 0.85rem;
@@ -199,24 +171,20 @@ ul { list-style: none; padding: 0; margin: 0; }
     text-transform: none;
 }
 
-/* Panel Derecho: DOWNLOADS */
+/* Panel Derecho: DESCARGAS */
 .panel-download {
     justify-content: flex-end;
     margin-left: auto;
     margin-right: 0;
-
-    /* Fondo alineado a la derecha */
     background: url('../img/downloads.webp') no-repeat right center;
     background-size: contain;
-    
-    /* Ancho máximo igual al de registro */
     max-width: 500px;
     width: 100%;
 }
 
 .panel-download .panel-content {
     text-align: right;
-    padding-right: 100px; /* Separación del borde derecho */
+    padding-right: 100px;
 }
 
 .panel-download .panel-title {
@@ -231,33 +199,23 @@ ul { list-style: none; padding: 0; margin: 0; }
     text-shadow: 0 0 10px rgba(33, 198, 235, 0.4);
 }
 
-.panel-download .panel-subtitle {
-    color: #bbb;
-    font-family: 'Roboto', sans-serif;
-    font-size: 0.85rem;
-    letter-spacing: 0.5px;
-    margin-top: 5px;
-    text-transform: none;
-}
-
 /* Limpieza de orbes antiguos */
-.orb-container, .orb-img, .orb-glow-gold, .orb-glow-blue, 
+.orb-container, .orb-img, .orb-glow-gold, .orb-glow-blue,
 .orb-left, .orb-right {
-    display: none; 
+    display: none;
 }
 
 /* =========================================
-   5. ONLINE WIDGET (CENTRO - IMAGEN)
+   5. ONLINE WIDGET (CENTRO)
    ========================================= */
 .online-status-container {
     position: relative;
     z-index: 25;
     width: 299px;
     height: 162px;
-    top: -20px; 
+    top: -20px;
     background: url('../img/online.webp') no-repeat center center;
     background-size: contain;
-    
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -265,20 +223,15 @@ ul { list-style: none; padding: 0; margin: 0; }
     flex-shrink: 0;
 }
 
-/* EL CÍRCULO CENTRAL */
 .status-circle {
     width: 122px;
     height: 122px;
-    aspect-ratio: auto 122 / 122;
-    
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    margin-top: 0px; 
-    
     border-radius: 50%;
-    border: 3px solid #00b83c; /* --green-1 */
+    border: 3px solid #00b83c;
     background-color: rgba(18, 18, 18, 0.6);
     box-shadow: 0 0 15px rgba(0, 184, 60, 0.4), inset 0 0 20px rgba(0,0,0,0.8);
     box-sizing: border-box;
@@ -299,21 +252,20 @@ ul { list-style: none; padding: 0; margin: 0; }
 
 .online-label {
     display: block;
-    font-family: "sans-serif", Tahoma, Geneva, Verdana, sans-serif;
+    font-family: Tahoma, Geneva, Verdana, sans-serif;
     font-size: 12px;
     text-transform: uppercase;
-    color: #00b83c; 
+    color: #00b83c;
     letter-spacing: 2px;
 }
 
 .progress-ring, .green-indicator, .ring-glow-left, .ring-glow-right { display: none; }
 
-
 /* =========================================
    6. CONTENEDOR PRINCIPAL
    ========================================= */
 .main-content-area {
-    margin-top: -30px; 
+    margin-top: -30px;
     position: relative;
     z-index: 5;
 }
@@ -348,16 +300,15 @@ ul { list-style: none; padding: 0; margin: 0; }
 .slider-text { position: relative; z-index: 2; width: 50%; }
 
 .slider-title {
-    font-family: 'Cinzel', serif; 
-    font-size: 42px; 
-    color: #fff; 
-    text-shadow: 0 2px 10px rgba(0,0,0,0.8); 
+    font-family: 'Cinzel', serif;
+    font-size: 42px;
+    color: #fff;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.8);
     margin-bottom: 25px;
     font-weight: 700;
     line-height: 1.1;
 }
 
-/* Botón Slider */
 .btn-slider {
     display: inline-block;
     padding: 14px 35px;
@@ -365,10 +316,9 @@ ul { list-style: none; padding: 0; margin: 0; }
     border-radius: 6px;
     border: 1px solid #000;
     color: var(--color-gold);
-    font-family: 'Cinzel', serif; 
+    font-family: 'Cinzel', serif;
     font-size: 16px;
     font-weight: 600;
-    text-transform: none; 
     letter-spacing: 0.5px;
     text-decoration: none;
     box-shadow: 0 4px 10px rgba(0,0,0,0.6);
@@ -381,28 +331,27 @@ ul { list-style: none; padding: 0; margin: 0; }
     box-shadow: 0 6px 15px rgba(0,0,0,0.8);
 }
 
-/* Indicadores Slider */
-.carousel-indicators { 
-    margin-bottom: 20px; 
-    justify-content: center; 
+.carousel-indicators {
+    margin-bottom: 20px;
+    justify-content: center;
     margin-left: 0; width: 100%;
 }
 
 .carousel-indicators button {
-    width: 12px !important; height: 12px !important; 
-    border-radius: 3px !important; background-color: #444 !important; 
-    border: 1px solid #000 !important; margin: 0 6px !important; 
+    width: 12px !important; height: 12px !important;
+    border-radius: 3px !important; background-color: #444 !important;
+    border: 1px solid #000 !important; margin: 0 6px !important;
     opacity: 1 !important; transition: all 0.3s ease;
 }
 
-.carousel-indicators button.active { 
-    background-color: var(--color-gold) !important; 
+.carousel-indicators button.active {
+    background-color: var(--color-gold) !important;
     border-color: var(--color-gold) !important;
     box-shadow: 0 0 8px rgba(200, 161, 101, 0.6);
     transform: scale(1.1);
 }
 
-/* --- NEWS MODULE --- */
+/* --- NOTICIAS --- */
 .morph-news-module {
     margin-top: 30px;
     background: var(--morph-panel-bg);
@@ -436,15 +385,15 @@ ul { list-style: none; padding: 0; margin: 0; }
 .nf-month { display: block; font-size: 11px; color: var(--color-gold); text-transform: uppercase; margin-top: 2px; }
 
 .nf-content { position: relative; z-index: 2; padding: 30px; width: 100%; }
-.nf-title { 
-    font-family: 'Cinzel', serif; color: var(--color-gold); 
-    font-size: 24px; margin-bottom: 10px; font-weight: 700; 
+.nf-title {
+    font-family: 'Cinzel', serif; color: var(--color-gold);
+    font-size: 24px; margin-bottom: 10px; font-weight: 700;
 }
 .nf-desc { font-size: 14px; color: #ccc; margin: 0; line-height: 1.6; max-width: 90%; }
 
 .news-list-container { padding: 0; }
 .news-row {
-    display: flex; justify-content: space-between; align-items: center;
+    display: flex; justify-content: space-between; align-items: center; gap: 15px;
     padding: 18px 30px;
     border-bottom: 1px solid var(--border-color);
     color: #aaa;
@@ -454,7 +403,7 @@ ul { list-style: none; padding: 0; margin: 0; }
 .news-row:hover { background: rgba(255,255,255,0.03); color: #fff; }
 .nr-title { font-size: 14px; font-weight: 500; border-bottom: 1px solid transparent; transition: 0.2s; }
 .news-row:hover .nr-title { border-bottom-color: var(--color-gold); color: var(--color-gold); }
-.nr-date { font-size: 12px; color: #555; }
+.nr-date { font-size: 12px; color: #555; flex-shrink: 0; }
 
 .news-footer { padding: 15px 30px; text-align: right; background: rgba(0,0,0,0.3); border-top: 1px solid var(--border-color); }
 .btn-read-all {
@@ -462,7 +411,7 @@ ul { list-style: none; padding: 0; margin: 0; }
 }
 .btn-read-all:hover { background: #ccc; color: #000; border-color: #ccc; }
 
-/* --- SIDEBAR PANELS --- */
+/* --- PANELES LATERALES --- */
 .sidebar-panel {
     background: #29282d;
     border: 1px solid var(--border-color);
@@ -473,19 +422,19 @@ ul { list-style: none; padding: 0; margin: 0; }
     margin-bottom: 30px;
 }
 
-/* Donate */
+/* Donaciones */
 .donate-panel {
     min-height: 150px;
     display: flex; align-items: center;
     background: linear-gradient(135deg, #151518 0%, #0a0a0c 100%);
-    overflow: visible; 
-    border: 1px solid rgba(200, 161, 101, 0.2); 
+    overflow: visible;
+    border: 1px solid rgba(200, 161, 101, 0.2);
 }
 .donate-content { z-index: 2; width: 60%; }
 .sb-title.gold { color: var(--color-gold); font-size: 26px; margin-bottom: 5px; font-weight: 700; }
 .sb-subtitle { font-size: 13px; color: #888; margin-bottom: 20px; }
 .btn-donate-go {
-    background: #1a1a1a; border: 1px solid #444; padding: 8px 25px; color: #fff; 
+    background: #1a1a1a; border: 1px solid #444; padding: 8px 25px; color: #fff;
     border-radius: 30px; font-size: 12px; text-transform: uppercase; font-weight: 700; display: inline-block;
 }
 .btn-donate-go:hover { background: #fff; color: #000; border-color: #fff; box-shadow: 0 0 15px rgba(255,255,255,0.3); }
@@ -494,7 +443,7 @@ ul { list-style: none; padding: 0; margin: 0; }
     filter: drop-shadow(-5px 5px 10px rgba(0,0,0,0.5)); transition: 0.3s;
 }
 
-/* Headers */
+/* Encabezados */
 .sb-header {
     display: flex; justify-content: space-between; align-items: center;
     margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 10px;
@@ -503,16 +452,16 @@ ul { list-style: none; padding: 0; margin: 0; }
 .sb-icon { font-size: 10px; color: #666; border: 1px solid #333; padding: 5px; border-radius: 4px; cursor: pointer; transition: 0.2s; }
 .sb-icon:hover { color: #fff; border-color: #666; }
 
-/* Info Table */
+/* Información */
 .info-row {
-    display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.03); font-size: 13px; color: #777;
+    display: flex; justify-content: space-between; gap: 10px; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.03); font-size: 13px; color: #777;
 }
 .info-row:last-child { border-bottom: none; }
 .info-row span:first-child { font-weight: 500; }
-.info-row .val { color: #ccc; font-weight: bold; }
+.info-row .val { color: #ccc; font-weight: bold; text-align: right; }
 .info-row .val.gold { color: var(--color-gold); }
 
-/* Events */
+/* Eventos */
 .events-controls {
     background: rgba(0,0,0,0.3); border: 1px solid var(--border-color);
     padding: 10px; border-radius: 4px; margin-bottom: 15px;
@@ -520,21 +469,21 @@ ul { list-style: none; padding: 0; margin: 0; }
     display: flex; justify-content: space-between; align-items: center;
 }
 .event-row {
-    display: flex; align-items: center; padding: 10px 0; font-size: 13px; color: #999;
+    display: flex; align-items: center; gap: 8px; padding: 10px 0; font-size: 13px; color: #999;
     border-bottom: 1px dashed rgba(255,255,255,0.05);
 }
 .event-row:last-child { border-bottom: none; }
-.ev-status { width: 8px; height: 8px; border-radius: 50%; background: #333; margin-right: 12px; }
+.ev-status { width: 8px; height: 8px; border-radius: 50%; background: #333; margin-right: 4px; flex-shrink: 0; }
 .ev-status.online { background: #00ff00; box-shadow: 0 0 8px rgba(0,255,0,0.6); }
-.ev-name { flex: 1; }
-.ev-timer { font-family: monospace; color: var(--color-gold); font-size: 12px; }
+.ev-name { flex: 1; min-width: 0; }
+.ev-timer { font-family: monospace; color: var(--color-gold); font-size: 12px; text-align: right; }
 
 /* Castle Siege */
 .cs-widget {
     position: relative; width: 100%; height: 250px;
     background: url('../img/siege-bg.webp') no-repeat center; background-size: cover;
     border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); overflow: hidden;
-    display: flex; align-items: center; margin-top: 30px; 
+    display: flex; align-items: center; margin-top: 30px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.5);
 }
 .cs-statue {
@@ -558,11 +507,11 @@ ul { list-style: none; padding: 0; margin: 0; }
 .cs-guild-name { display: block; font-family: 'Cinzel', serif; font-size: 28px; color: #fff; font-weight: 700; line-height: 1; }
 .cs-guild-master { display: block; font-size: 13px; color: #999; margin-top: 4px; }
 .cs-guild-mark {
-    width: 60px; height: 60px; background: #111; border: 1px solid #444;
+    width: 60px; height: 60px; background: #111; border: 1px solid #444; flex-shrink: 0;
     display: flex; align-items: center; justify-content: center; box-shadow: 0 0 15px rgba(0,0,0,0.5);
 }
 .cs-next-battle { font-size: 14px; color: #ccc; font-family: 'Roboto', sans-serif; }
-.cs-next-battle span { color: #c8a165; font-weight: 700; margin-left: 5px; }
+.cs-next-battle span { color: var(--color-gold); font-weight: 700; margin-left: 5px; }
 .cs-overlay {
     position: absolute; top: 0; left: 0; width: 100%; height: 100%;
     background: linear-gradient(90deg, rgba(0,0,0,0) 0%, rgba(20,20,25,0.9) 100%);
@@ -570,7 +519,7 @@ ul { list-style: none; padding: 0; margin: 0; }
 }
 
 /* =========================================
-   MARKET WIDGET (ESTILO TARJETA PREMIUM)
+   MERCADO (WIDGET DEL HOME)
    ========================================= */
 .market-widget-box {
     display: flex;
@@ -578,13 +527,12 @@ ul { list-style: none; padding: 0; margin: 0; }
     gap: 15px;
 }
 
-/* Contenedor de la Tarjeta */
 .market-card {
     display: flex;
     align-items: center;
     width: 100%;
-    height: 105px;
-    background: #232227; /* Fondo oscuro específico */
+    min-height: 105px;
+    background: #232227;
     border: 1px solid rgba(255, 255, 255, 0.05);
     border-radius: 8px;
     padding: 15px;
@@ -601,16 +549,9 @@ ul { list-style: none; padding: 0; margin: 0; }
     box-shadow: 0 5px 15px rgba(0,0,0,0.3);
 }
 
-/* ID decorativo */
-.mc-id-corner {
-    position: absolute;
-    top: 10px; right: 15px;
-    font-size: 11px;
-    color: rgba(255,255,255,0.1);
-    font-family: monospace; font-weight: bold;
-}
+/* ID de la publicación: no aporta información al jugador */
+.mc-id-corner { display: none; }
 
-/* Imagen Item */
 .mc-image-box {
     width: 75px; height: 75px;
     background: #151518;
@@ -625,9 +566,8 @@ ul { list-style: none; padding: 0; margin: 0; }
     filter: drop-shadow(0 0 5px rgba(255,255,255,0.5));
 }
 
-/* Información */
 .mc-info {
-    display: flex; flex-direction: column; justify-content: center; flex: 1;
+    display: flex; flex-direction: column; justify-content: center; flex: 1; min-width: 0;
 }
 .mc-label {
     font-family: 'Roboto', sans-serif;
@@ -645,25 +585,25 @@ ul { list-style: none; padding: 0; margin: 0; }
     display: flex; align-items: center; gap: 8px;
 }
 .mc-price-val {
-    font-size: 15px; color: #ff8a3b; font-weight: 700; font-family: 'Roboto', sans-serif;
+    font-size: 15px; color: var(--color-gold-bright); font-weight: 700; font-family: 'Roboto', sans-serif;
 }
 .mc-currency-badge {
-    background: rgba(255, 138, 59, 0.1);
-    border: 1px solid rgba(255, 138, 59, 0.2);
+    background: rgba(200, 161, 101, 0.1);
+    border: 1px solid rgba(200, 161, 101, 0.25);
     color: #bfbfbf; font-size: 10px;
     padding: 1px 6px; border-radius: 4px;
     text-transform: uppercase;
 }
 
 /* =========================================
-   RANKING WIDGET (ESTILO HALL OF FAME)
+   RANKING (WIDGET DEL HOME)
    ========================================= */
 .ranking-widget-box {
     background: #232227;
     border: 1px solid rgba(255, 255, 255, 0.05);
     border-radius: 8px;
     padding: 25px;
-    height: 100%; 
+    height: 100%;
     min-height: 345px;
     display: flex; flex-direction: column;
 }
@@ -687,24 +627,22 @@ ul { list-style: none; padding: 0; margin: 0; }
 
 .rank-filter { margin-bottom: 20px; }
 .rank-select {
-    /* Usamos background-color para no borrar la flecha SVG de Bootstrap (.form-select) */
-    background-color: #151518; 
+    background-color: #151518;
     border: 1px solid #333;
-    color: #e6cb9a; /* Gold text */
+    color: #e6cb9a;
     font-size: 13px;
     padding: 10px;
     border-radius: 4px;
     cursor: pointer;
     width: 100%;
 }
-.rank-select:focus { 
-    background-color: #151518; 
-    color: #fff; 
-    box-shadow: none; 
-    border-color: #555; 
+.rank-select:focus {
+    background-color: #151518;
+    color: #fff;
+    box-shadow: none;
+    border-color: #555;
 }
 
-/* Tabla */
 .rank-list-container {
     flex: 1; display: flex; flex-direction: column; gap: 10px;
 }
@@ -727,13 +665,12 @@ ul { list-style: none; padding: 0; margin: 0; }
 .rank-row:hover { background: rgba(255,255,255,0.02); }
 .rank-row:last-child { border-bottom: none; }
 
-/* Columnas Ranking */
-.r-nick { width: 50%; display: flex; align-items: center; gap: 10px; }
+.r-nick { width: 50%; display: flex; align-items: center; gap: 10px; min-width: 0; }
 .r-flag { width: 20%; text-align: center; }
 .r-val { width: 30%; text-align: right; font-weight: 700; color: #fff; font-family: monospace; font-size: 15px; }
 
 .r-pos-icon { width: 20px; height: auto; }
-.r-name { color: #e2e8f0; font-weight: 600; font-family: 'Roboto', sans-serif; }
+.r-name { color: #e2e8f0; font-weight: 600; font-family: 'Roboto', sans-serif; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .rank-row:first-child .r-name { color: #e6cb9a; }
 
 /* =========================================
@@ -758,41 +695,9 @@ ul { list-style: none; padding: 0; margin: 0; }
 .tt-380 { color: #d63384; font-weight: bold; }
 .tt-socket { color: #a29bfe; }
 
-/* =========================================
-   RESPONSIVE DESIGN
-   ========================================= */
-@media (max-width: 992px) {
-    .hero-section { height: auto; min-height: 800px; padding-top: 100px; padding-bottom: 50px; }
-    .hero-logo-container { position: relative; width: 100%; top: auto; left: auto; transform: none; margin-bottom: 40px; text-align: center; }
-    .hero-action-bar { flex-direction: column; height: auto; gap: 20px; }
-    .action-panel { width: 260px !important; max-width: 260px !important; height: 100px; border-radius: 8px; }
-    .panel-register { margin-right: 0; order: 2; background-size: cover; padding-left: 20px; }
-    .panel-register .panel-content { padding-left: 20px; }
-    .panel-download { margin-left: 0; order: 3; background-size: cover; padding-right: 20px; }
-    .panel-download .panel-content { padding-right: 20px; }
-    .online-status-container { order: 1; top: 0; margin: 10px 0; width: 200px; height: 110px; }
-    .online-count { font-size: 2rem; }
-    .online-label { font-size: 0.7rem; }
-    .main-content-area { margin-top: 20px; }
-    .morph-slider { height: 250px; }
-    .slider-content { height: 250px; padding-left: 20px; }
-    .slider-title { font-size: 24px; }
-    .btn-slider { padding: 10px 20px; font-size: 12px; }
-    .sidebar-panel { margin-bottom: 20px; }
-    .cs-widget { height: auto; flex-direction: column; text-align: center; padding: 20px; }
-    .cs-statue { display: none; }
-    .cs-info-container { width: 100%; padding: 0; align-items: center; }
-    .cs-guild-box { width: 100%; justify-content: center; }
-    .cs-guild-info { text-align: center; }
-    .cs-overlay { background: rgba(0,0,0,0.7); }
-    .market-widget-box, .ranking-widget-box { margin-bottom: 20px; }
-}
-
 /* =========================================================
-   STREAMERS WIDGET (ADAPTADO PARA MORPHEUS - DARK)
+   STREAMERS (botón flotante y panel)
    ========================================================= */
-
-/* Contenedor Flotante del Botón */
 #streamWidgetRoot {
     position: fixed;
     left: 20px;
@@ -804,11 +709,10 @@ ul { list-style: none; padding: 0; margin: 0; }
     gap: 10px;
 }
 
-/* Botón Flotante */
 .stream-float-btn {
-    background: rgba(20, 20, 25, 0.95); /* --morph-panel-bg */
-    color: #e6cb9a; /* --morph-gold */
-    border: 1px solid rgba(200, 161, 101, 0.3); /* Borde dorado sutil */
+    background: rgba(20, 20, 25, 0.95);
+    color: #e6cb9a;
+    border: 1px solid rgba(200, 161, 101, 0.3);
     padding: 10px 15px;
     border-radius: 4px;
     display: flex;
@@ -820,16 +724,16 @@ ul { list-style: none; padding: 0; margin: 0; }
     transition: all 0.3s ease;
     font-size: 13px;
     text-transform: uppercase;
-    font-family: 'Cinzel', serif; /* Fuente del template */
+    font-family: 'Cinzel', serif;
     backdrop-filter: blur(5px);
 }
 
 .stream-float-btn:hover {
     background: rgba(30, 30, 35, 1);
-    border-color: #FF8A3B; /* Naranja activo */
-    color: #FF8A3B;
+    border-color: var(--color-gold);
+    color: var(--color-gold-bright);
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(255, 138, 59, 0.2);
+    box-shadow: 0 6px 20px rgba(200, 161, 101, 0.2);
 }
 
 .stream-float-btn svg {
@@ -837,13 +741,12 @@ ul { list-style: none; padding: 0; margin: 0; }
     height: 18px;
 }
 
-/* Panel Desplegable */
 .stream-panel-container {
-    display: none; /* Oculto por defecto */
+    display: none;
     flex-direction: column;
     width: 320px;
     max-height: 400px;
-    background: #1a191f; /* --morph-bg-dark */
+    background: #1a191f;
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 8px;
     overflow: hidden;
@@ -852,19 +755,17 @@ ul { list-style: none; padding: 0; margin: 0; }
     animation: slideUpStream 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* Animación */
 @keyframes slideUpStream {
     from { opacity: 0; transform: translateY(20px); }
     to { opacity: 1; transform: translateY(0); }
 }
 
-/* Cabecera del Panel */
 .stream-panel-header {
     background: rgba(255, 255, 255, 0.03);
     padding: 15px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     font-weight: 700;
-    color: #e6cb9a; /* Dorado */
+    color: #e6cb9a;
     display: flex;
     align-items: center;
     gap: 8px;
@@ -874,21 +775,18 @@ ul { list-style: none; padding: 0; margin: 0; }
 }
 
 .stream-panel-header svg {
-    color: #FF8A3B; /* Naranja */
+    color: var(--color-gold);
 }
 
-/* Lista de Streamers */
 .stream-list {
     padding: 10px;
     overflow-y: auto;
-    background: #151518; /* Fondo lista oscuro */
+    background: #151518;
 }
 
-/* Scrollbar fina para webkit */
 .stream-list::-webkit-scrollbar { width: 5px; }
 .stream-list::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
 
-/* Item Individual */
 .stream-item {
     margin-bottom: 15px;
     border: 1px solid rgba(255, 255, 255, 0.05);
@@ -897,11 +795,8 @@ ul { list-style: none; padding: 0; margin: 0; }
     background: #1e1e24;
 }
 
-.stream-item:last-child {
-    margin-bottom: 0;
-}
+.stream-item:last-child { margin-bottom: 0; }
 
-/* Etiqueta de Usuario */
 .stream-user-label {
     padding: 8px 12px;
     background: rgba(0, 0, 0, 0.2);
@@ -915,11 +810,10 @@ ul { list-style: none; padding: 0; margin: 0; }
     align-items: center;
 }
 
-/* Contenedor Video */
 .stream-embed-responsive {
     position: relative;
     width: 100%;
-    padding-bottom: 56.25%; /* 16:9 */
+    padding-bottom: 56.25%;
     background: #000;
 }
 
@@ -932,31 +826,18 @@ ul { list-style: none; padding: 0; margin: 0; }
     border: 0;
 }
 
-/* Responsive */
-@media (max-width: 768px) {
-    #streamWidgetRoot {
-        left: 10px;
-        bottom: 10px;
-        z-index: 99999;
-    }
-    .stream-panel-container {
-        width: 280px;
-    }
-}
-
 /* =========================================================
    PANTALLA DE ACCESO DENEGADO (IP BLOCK)
    ========================================================= */
-
 .access-denied-overlay {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: #050505; /* Fondo muy oscuro */
+    background: #050505;
     background-image: radial-gradient(circle at center, #1a0a0a 0%, #000000 100%);
-    z-index: 999999; /* Por encima de todo */
+    z-index: 999999;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -965,7 +846,7 @@ ul { list-style: none; padding: 0; margin: 0; }
 
 .ad-card {
     background: rgba(15, 15, 15, 0.95);
-    border: 1px solid #d32f2f; /* Borde Rojo Alerta */
+    border: 1px solid #d32f2f;
     box-shadow: 0 0 50px rgba(211, 47, 47, 0.15);
     padding: 50px 40px;
     border-radius: 12px;
@@ -976,7 +857,6 @@ ul { list-style: none; padding: 0; margin: 0; }
     overflow: hidden;
 }
 
-/* Línea superior decorativa */
 .ad-card::before {
     content: '';
     position: absolute;
@@ -992,7 +872,7 @@ ul { list-style: none; padding: 0; margin: 0; }
 }
 
 .ad-title {
-    font-family: 'Cinzel', serif; /* Tu fuente principal */
+    font-family: 'Cinzel', serif;
     font-size: 28px;
     color: #fff;
     margin: 0 0 15px 0;
@@ -1033,4 +913,639 @@ ul { list-style: none; padding: 0; margin: 0; }
     0% { transform: scale(1); opacity: 1; text-shadow: 0 0 0 rgba(211, 47, 47, 0); }
     50% { transform: scale(1.1); opacity: 0.8; text-shadow: 0 0 20px rgba(211, 47, 47, 0.5); }
     100% { transform: scale(1); opacity: 1; text-shadow: 0 0 0 rgba(211, 47, 47, 0); }
+}
+
+/* =========================================================
+   8. DISEÑO ADAPTABLE
+   Puntos de corte de Bootstrap 5: lg = 992px, md = 768px, sm = 576px
+   ========================================================= */
+
+/* ---------- Por debajo de 992px (media pantalla y celular) ---------- */
+@media (max-width: 991.98px) {
+
+    /* Hero: el logo deja de flotar y todo se ordena en columna */
+    .hero-section {
+        height: auto;
+        min-height: 640px;
+        padding: 100px 15px 40px;
+    }
+    .hero-overlay-bottom { height: 260px; }
+    .hero-logo-container {
+        position: relative;
+        top: auto; left: auto;
+        transform: none;
+        width: 100%;
+        margin: 30px 0 30px;
+    }
+
+    /* Barra de acciones: online arriba, Registrar y Descargas abajo */
+    .hero-action-bar {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-areas:
+            "online online"
+            "reg    dl";
+        gap: 16px;
+        height: auto;
+        max-width: 760px;
+    }
+    .online-status-container {
+        grid-area: online;
+        justify-self: center;
+        top: 0;
+        width: 220px;
+        height: 120px;
+    }
+    .status-circle { width: 104px; height: 104px; }
+    .online-count { font-size: 2.2rem; }
+    .online-label { font-size: 11px; }
+
+    .action-panel {
+        width: 100%;
+        max-width: none;
+        height: 88px;
+        margin: 0;
+        border-radius: 8px;
+    }
+    .panel-register {
+        grid-area: reg;
+        background-size: auto 100%;
+        background-position: left center;
+    }
+    .panel-download {
+        grid-area: dl;
+        background-size: auto 100%;
+        background-position: right center;
+    }
+    .panel-register .panel-content { padding: 0 12px 0 90px; }
+    .panel-download .panel-content { padding: 0 90px 0 12px; }
+    .panel-register .panel-title,
+    .panel-download .panel-title { font-size: 1.25rem; }
+    .panel-register .panel-subtitle,
+    .panel-download .panel-subtitle { font-size: 0.8rem; }
+
+    /* Contenido */
+    .main-content-area { margin-top: 10px; }
+
+    .morph-slider, .slider-content { height: 280px; }
+    .slider-content { padding: 0 30px; }
+    .slider-text { width: 75%; }
+    .slider-title { font-size: clamp(24px, 4vw, 34px); margin-bottom: 18px; }
+    .btn-slider { padding: 11px 24px; font-size: 14px; }
+
+    .morph-news-module { margin-top: 24px; }
+
+    .sidebar-panel { padding: 22px; margin-bottom: 20px; }
+
+    /* Castle Siege en una columna, centrado */
+    .cs-widget { height: auto; flex-direction: column; text-align: center; padding: 24px 20px; margin-top: 24px; }
+    .cs-statue { display: none; }
+    .cs-info-container { width: 100%; padding: 0; align-items: center; text-align: center; }
+    .cs-guild-box { justify-content: center; }
+    .cs-guild-info { text-align: center; }
+    .cs-overlay { background: rgba(0,0,0,0.7); }
+
+    .ranking-widget-box { min-height: 0; }
+}
+
+/* ---------- Solo media pantalla (768 a 991px) ---------- */
+@media (min-width: 768px) and (max-width: 991.98px) {
+
+    /* Aprovechar el ancho: Bootstrap limita el contenedor a 720px */
+    .main-content-area.container { max-width: 960px; }
+
+    /* Información y Eventos lado a lado */
+    .main-content-area > .row > .col-lg-4 {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 20px;
+        align-items: stretch;
+    }
+    .main-content-area > .row > .col-lg-4 > .sidebar-panel { margin-bottom: 0 !important; }
+    .main-content-area > .row > .col-lg-4 > .donate-panel { grid-column: 1 / -1; }
+
+    /* OPCIONAL: Mercado y Top Ranking lado a lado.
+       Para dejarlos apilados, borrar las dos reglas siguientes. */
+    .main-content-area .row.g-4.mt-1 > .col-lg-6 { flex: 0 0 auto; width: 50%; }
+    .main-content-area .market-widget-box,
+    .main-content-area .ranking-widget-box { margin-bottom: 0; }
+}
+
+/* ---------- Celular (menos de 768px) ---------- */
+@media (max-width: 767.98px) {
+    .hero-logo-container { margin: 20px 0 24px; }
+    .floating-logo {
+        /* Si el admin configuró un logo muy ancho, en celular se limita */
+        max-width: 300px !important;
+        width: auto !important;
+    }
+    .market-widget-box { margin-bottom: 0; }
+}
+
+/* ---------- Celular angosto (menos de 576px) ---------- */
+@media (max-width: 575.98px) {
+
+    .hero-section { min-height: 0; padding: 90px 12px 30px; }
+
+    .hero-action-bar {
+        grid-template-columns: minmax(0, 1fr);
+        grid-template-areas:
+            "online"
+            "reg"
+            "dl";
+        gap: 12px;
+        max-width: 420px;
+    }
+    .online-status-container { width: 190px; height: 104px; }
+    .status-circle { width: 92px; height: 92px; }
+    .online-count { font-size: 1.9rem; }
+    .action-panel { height: 80px; }
+    .panel-register .panel-content { padding-left: 82px; }
+    .panel-download .panel-content { padding-right: 82px; }
+
+    .morph-slider, .slider-content { height: 220px; }
+    .slider-content { padding: 0 20px; }
+    .slider-text { width: 100%; }
+    .slider-title { font-size: 22px; }
+    .btn-slider { padding: 9px 18px; font-size: 13px; }
+    .carousel-indicators { margin-bottom: 12px; }
+
+    .news-featured { height: 220px; }
+    .nf-date { top: 14px; right: 14px; padding: 6px 10px; }
+    .nf-content { padding: 20px; }
+    .nf-title { font-size: 19px; }
+    .nf-desc { max-width: 100%; font-size: 13px; }
+    .news-row { padding: 14px 18px; }
+    .nr-title { font-size: 13px; }
+    .news-footer { padding: 12px 18px; }
+
+    .cs-title { font-size: 26px; }
+    .cs-desc { margin-bottom: 18px; }
+    .cs-guild-box { gap: 14px; padding: 10px 14px; }
+    .cs-guild-name { font-size: 22px; }
+    .cs-guild-mark { width: 52px; height: 52px; }
+
+    .market-card { padding: 12px; min-height: 90px; }
+    .mc-image-box { width: 60px; height: 60px; margin-right: 14px; }
+    .mc-name { font-size: 15px; }
+
+    .ranking-widget-box { padding: 18px; }
+    .rank-row { padding: 10px 6px; font-size: 13px; }
+    .r-val { font-size: 14px; }
+
+    .sidebar-panel { padding: 18px; }
+    .donate-char-img { height: 140px; }
+
+    /* Botón de streams: solo el ícono, para no tapar contenido */
+    #streamWidgetRoot { left: 10px; bottom: 10px; z-index: 99999; }
+    .stream-float-btn { padding: 9px 11px; }
+    .stream-float-btn span,
+    .stream-float-btn #arrowIcon { display: none; }
+    .stream-panel-container { width: calc(100vw - 20px); max-width: 320px; }
+}
+
+/* =========================================================
+   9. PESTAÑA LATERAL COMPARTIDA (templates/misc/sidebar.php)
+   Colores de morpheus sin modificar el archivo de misc/.
+   ========================================================= */
+body #global-sidebar {
+    background: rgba(15, 15, 18, 0.95);
+    border-left: 2px solid var(--color-gold);
+}
+body #sidebar-toggle {
+    background: #111014;
+    border-color: var(--color-gold);
+}
+body #sidebar-toggle::after { border-color: var(--color-gold); }
+body #sidebar-toggle:hover::after { border-color: #fff; }
+
+body .stat-bubble {
+    border-color: var(--color-gold);
+    color: var(--color-gold);
+    background: #151518;
+}
+body .stat-bubble:hover {
+    background: var(--color-gold);
+    color: #111;
+    box-shadow: 0 0 10px rgba(200, 161, 101, 0.6);
+}
+
+body .stat-modal-content {
+    background: #151518;
+    border: 1px solid rgba(200, 161, 101, 0.45);
+    box-shadow: 0 0 50px rgba(0, 0, 0, 0.6);
+}
+body .stat-row { border-bottom-color: rgba(200, 161, 101, 0.12); }
+body .stat-row span:first-child { color: var(--color-gold); }
+
+body .btn-orange {
+    background-color: var(--color-gold);
+    border-color: var(--color-gold);
+    color: #111;
+}
+body .btn-orange:hover {
+    background-color: var(--color-gold-bright);
+    border-color: var(--color-gold-bright);
+    color: #111;
+    box-shadow: 0 0 15px rgba(200, 161, 101, 0.4);
+}
+body .btn-outline-orange {
+    color: var(--color-gold);
+    border-color: var(--color-gold);
+}
+body .btn-outline-orange:hover {
+    background: rgba(200, 161, 101, 0.1);
+    color: var(--color-gold-bright);
+}
+
+/* Celular: pestaña más angosta y más abajo, para no tapar el contenido */
+@media (max-width: 767.98px) {
+    body #global-sidebar { top: auto; bottom: 120px; }
+    body #sidebar-toggle {
+        left: -28px;
+        width: 28px;
+        height: 40px;
+        opacity: 0.85;
+    }
+    body #sidebar-toggle::after { width: 9px; height: 9px; border-width: 2px; }
+}
+
+/* =========================================================
+   10. BOTÓN "AdminCP" QUE IMPRIME class.handler.php
+   La barra ya tiene el botón ADM; este queda suelto al pie.
+   ========================================================= */
+.admincp-button { display: none !important; }
+
+/* =========================================================
+   11. MERCADO: botón del home, modal completo y cuadros de aviso
+   (antes eran estilos en línea y un <style> dentro de index.php)
+   ========================================================= */
+
+/* Botón "VER MERCADO COMPLETO" */
+.btn-market-full {
+    display: block;
+    width: 100%;
+    padding: 11px 20px;
+    background: #151518;
+    border: 1px solid var(--color-gold);
+    color: var(--color-gold);
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+.btn-market-full:hover { background: var(--color-gold); color: #151518; }
+
+/* Fondo del modal (el display lo maneja el JavaScript) */
+.ws-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.88);
+    z-index: 99999;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(5px);
+}
+
+.ws-workspace {
+    display: flex;
+    width: 92%;
+    max-width: 1200px;
+    height: 82vh;
+    background: #141417;
+    border: 1px solid rgba(200, 161, 101, 0.25);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 0 50px rgba(0, 0, 0, 0.8);
+    position: relative;
+}
+
+/* Columna de categorías */
+.ws-sidebar-left {
+    width: 220px;
+    flex-shrink: 0;
+    background: #1a191f;
+    border-right: 1px solid rgba(255, 255, 255, 0.06);
+    display: flex;
+    flex-direction: column;
+}
+.cat-header {
+    padding: 16px 18px;
+    color: var(--color-gold);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+.cat-list { flex: 1; overflow-y: auto; padding: 10px; }
+.cat-list::-webkit-scrollbar { width: 5px; height: 5px; }
+.cat-list::-webkit-scrollbar-track { background: transparent; }
+.cat-list::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
+
+.cat-btn {
+    width: 100%;
+    text-align: left;
+    background: transparent;
+    border: none;
+    border-left: 3px solid transparent;
+    padding: 10px 12px;
+    color: #bbb;
+    font-size: 13px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 2px;
+}
+.cat-btn i { width: 16px; text-align: center; color: #777; transition: 0.2s; }
+.cat-btn:hover { background: rgba(200, 161, 101, 0.06); color: #fff; }
+.cat-btn.active {
+    background: rgba(200, 161, 101, 0.12);
+    color: var(--color-gold-bright);
+    border-left-color: var(--color-gold);
+}
+.cat-btn:hover i,
+.cat-btn.active i { color: var(--color-gold); }
+
+/* Panel central */
+.ws-center-panel {
+    flex: 1;
+    min-width: 0;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    background: #141417;
+}
+.center-toolbar {
+    padding: 12px 64px 12px 20px; /* deja lugar para la X */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    display: flex;
+    align-items: center;
+    background: #1a191f;
+}
+.search-wrapper { position: relative; width: 100%; max-width: 320px; }
+.search-icon {
+    position: absolute; left: 11px; top: 50%;
+    transform: translateY(-50%);
+    color: #777; font-size: 12px;
+}
+.search-input {
+    width: 100%;
+    background: #0f0f12;
+    border: 1px solid #2a2a31;
+    padding: 8px 12px 8px 32px;
+    border-radius: 4px;
+    color: #fff;
+    font-size: 13px;
+    outline: none;
+    transition: 0.3s;
+}
+.search-input:focus { border-color: var(--color-gold); }
+
+.item-grid-container {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 15px;
+    align-content: start;
+}
+.item-grid-container::-webkit-scrollbar { width: 5px; }
+.item-grid-container::-webkit-scrollbar-track { background: transparent; }
+.item-grid-container::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
+
+/* Tarjetas de ítems (las arma el JavaScript) */
+.ws-item-card {
+    background: #1d1c22;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 8px;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    transition: 0.2s;
+    cursor: pointer;
+    position: relative;
+}
+.ws-item-card:hover {
+    border-color: rgba(200, 161, 101, 0.5);
+    transform: translateY(-3px);
+    background: #232227;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35);
+}
+.ws-card-img {
+    width: 64px; height: 64px;
+    object-fit: contain;
+    background: #0f0f12;
+    border: 1px solid #2a2a31;
+    border-radius: 6px;
+    margin-bottom: 10px;
+}
+.ws-card-name {
+    font-size: 12px; font-weight: 700; color: #e2e2e2;
+    margin-bottom: 5px; width: 100%;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    font-family: 'Roboto', sans-serif;
+}
+.ws-card-price {
+    font-size: 13px; color: var(--color-gold-bright);
+    font-family: 'Roboto', sans-serif; font-weight: 700;
+    margin-bottom: 10px;
+}
+.ws-card-btn {
+    width: 100%;
+    padding: 7px;
+    font-size: 11px;
+    letter-spacing: 0.5px;
+    background: linear-gradient(180deg, #d9b77a 0%, #a8844a 100%);
+    border: none;
+    border-radius: 4px;
+    color: #141416;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.3s;
+}
+.ws-card-btn:hover { filter: brightness(1.1); }
+
+/* Cerrar */
+.btn-ws-close {
+    position: absolute;
+    top: 12px; right: 16px;
+    width: 36px; height: 36px;
+    background: transparent;
+    border: none;
+    color: #888;
+    cursor: pointer;
+    font-size: 22px;
+    z-index: 10001;
+    transition: 0.3s;
+}
+.btn-ws-close:hover { color: var(--color-gold-bright); transform: rotate(90deg); }
+
+/* Cargando */
+.loading-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(20, 20, 23, 0.85);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    z-index: 50;
+}
+.spinner {
+    width: 30px; height: 30px;
+    border: 3px solid rgba(200, 161, 101, 0.25);
+    border-radius: 50%;
+    border-top-color: var(--color-gold);
+    animation: spin 1s linear infinite;
+    margin-bottom: 10px;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* Cuadros "Aviso" y "Confirmar compra" */
+.msm-dialog-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.9);
+    z-index: 999999;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+}
+.msm-dialog {
+    background: #18181c;
+    border: 1px solid rgba(200, 161, 101, 0.35);
+    border-radius: 10px;
+    padding: 28px 24px;
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+    color: #fff;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
+}
+.msm-dialog-sm { max-width: 340px; }
+.msm-dialog-title {
+    font-family: 'Cinzel', serif;
+    color: var(--color-gold);
+    font-weight: 700;
+    font-size: 20px;
+    margin-bottom: 14px;
+}
+.msm-dialog-body { font-size: 14px; color: #ccc; margin-bottom: 22px; line-height: 1.5; }
+.msm-dialog-price { color: var(--color-gold-bright); font-weight: 700; }
+.msm-dialog-warn { display: block; margin-top: 12px; color: #e57373; font-size: 12px; }
+.msm-dialog-btns { display: flex; gap: 10px; justify-content: center; }
+.msm-btn {
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-weight: 700;
+    font-size: 14px;
+    cursor: pointer;
+    transition: 0.25s;
+    border: 1px solid transparent;
+}
+.msm-btn-ghost { background: transparent; border-color: #444; color: #999; }
+.msm-btn-ghost:hover { border-color: #777; color: #fff; }
+.msm-btn-gold {
+    background: linear-gradient(180deg, #d9b77a 0%, #a8844a 100%);
+    border-color: #c8a165;
+    color: #141416;
+}
+.msm-btn-gold:hover { filter: brightness(1.1); }
+
+/* Media pantalla */
+@media (min-width: 768px) and (max-width: 991.98px) {
+    .ws-workspace { width: 95%; height: 85vh; }
+    .ws-sidebar-left { width: 180px; }
+    .item-grid-container { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
+}
+
+/* Celular: pantalla completa, categorías en tira horizontal */
+@media (max-width: 767.98px) {
+    .ws-workspace {
+        width: 100%; height: 100%;
+        max-width: none;
+        border-radius: 0;
+        border: none;
+        flex-direction: column;
+    }
+    .ws-sidebar-left {
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+    .cat-header { padding: 14px 60px 14px 16px; }
+    .cat-list {
+        flex: none;
+        display: flex;
+        flex-direction: row;
+        gap: 6px;
+        overflow-x: auto;
+        overflow-y: hidden;
+        padding: 10px 12px;
+    }
+    .cat-btn {
+        width: auto;
+        flex-shrink: 0;
+        white-space: nowrap;
+        margin: 0;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 20px;
+        padding: 7px 12px;
+        font-size: 12px;
+    }
+    .cat-btn.active { border-color: var(--color-gold); }
+    .center-toolbar { padding: 10px 12px; }
+    .search-wrapper { max-width: none; }
+    .item-grid-container {
+        padding: 12px;
+        gap: 10px;
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    }
+    .btn-ws-close { top: 8px; right: 8px; }
+
+    .msm-dialog { padding: 24px 18px; }
+    .msm-dialog-btns .msm-btn { flex: 1; }
+}
+
+/* =========================================================
+   12. BARRA DEL HERO CON SESIÓN INICIADA (sin REGISTRAR)
+   ========================================================= */
+.hero-action-bar.is-logged { justify-content: center; gap: 24px; }
+.hero-action-bar.is-logged .panel-download { margin-left: 0; flex: 0 1 500px; }
+
+@media (max-width: 991.98px) {
+    .hero-action-bar.is-logged {
+        grid-template-columns: minmax(0, 1fr);
+        grid-template-areas:
+            "online"
+            "dl";
+        max-width: 420px;
+    }
+}
+
+/* =========================================================
+   13. FONDO DE LA PÁGINA INFO
+   Mismo efecto que las demás páginas: imagen fija a pantalla
+   completa con sombra oscura. La ruta es relativa a este archivo
+   (templates/morpheus/css/ -> raíz del sitio).
+   ========================================================= */
+body.page-info::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background:
+        linear-gradient(to bottom, rgba(10, 10, 15, 0.8) 0%, rgba(10, 10, 15, 0.95) 100%),
+        url('../../../img/misc/forgot.jpg') center / cover no-repeat;
 }

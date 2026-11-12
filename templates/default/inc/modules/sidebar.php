@@ -9,9 +9,9 @@ if(!isLoggedIn()) {
         echo '<div class="panel-heading"><h3 class="panel-title">'.lang('module_titles_txt_2').'</h3></div>';
         echo '<div class="panel-body">';
             echo '<form action="'.__BASE_URL__.'login" method="post">';
-                echo '<div class="form-group"><input type="text" class="form-control" name="webengineLogin_user" placeholder="Usuario" required></div>';
-                echo '<div class="form-group"><input type="password" class="form-control" name="webengineLogin_pwd" placeholder="Contraseña" required></div>';
-                echo '<button type="submit" name="webengineLogin_submit" value="submit" class="btn btn-primary btn-block">'.lang('login_txt_3').'</button>';
+                echo '<div class="form-group"><input type="text" class="form-control" name="msmLogin_user" placeholder="Usuario" required></div>';
+                echo '<div class="form-group"><input type="password" class="form-control" name="msmLogin_pwd" placeholder="Contraseña" required></div>';
+                echo '<button type="submit" name="msmLogin_submit" value="submit" class="btn btn-primary btn-block">'.lang('login_txt_3').'</button>';
             echo '</form>';
         echo '</div>';
     echo '</div>';

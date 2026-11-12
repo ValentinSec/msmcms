@@ -69,14 +69,40 @@ class BlackMarket {
     }
 
     private static function vaultSql($dbName) {
+        // Solo se evalua la zona visible del baul (120 casilleros). Lo que el
+        // servidor del juego guarde mas alla no se mira ni se modifica.
+        $vis = self::VISIBLE_SLOTS * self::ITEM_BYTES;
         return "SELECT DATALENGTH(Items) AS bytes,
                        CASE
                            WHEN Items IS NULL OR DATALENGTH(Items) = 0 THEN 0
-                           WHEN Items = REPLICATE(CONVERT(varbinary(max), 0xFF), DATALENGTH(Items)) THEN 0
-                           WHEN Items = REPLICATE(CONVERT(varbinary(max), 0x00), DATALENGTH(Items)) THEN 0
+                           WHEN SUBSTRING(Items, 1, $vis) = REPLICATE(CONVERT(varbinary(max), 0xFF), CASE WHEN DATALENGTH(Items) < $vis THEN DATALENGTH(Items) ELSE $vis END) THEN 0
+                           WHEN SUBSTRING(Items, 1, $vis) = REPLICATE(CONVERT(varbinary(max), 0x00), CASE WHEN DATALENGTH(Items) < $vis THEN DATALENGTH(Items) ELSE $vis END) THEN 0
                            ELSE 1
                        END AS tiene_items
                 FROM [$dbName].[dbo].[warehouse] WITH (UPDLOCK, ROWLOCK) WHERE AccountId = ?";
+    }
+
+    /**
+     * Arma la escritura del item en el PRIMER casillero del baul.
+     * El resto del baul queda como estaba.
+     */
+    private static function vaultPut($dbName, $targetHex, $whBytes) {
+        $itemHexLen = self::ITEM_BYTES * 2;
+        if(!ctype_xdigit($targetHex) || strlen($targetHex) !== $itemHexLen) throw new Exception("Item inv\u{00E1}lido.");
+
+        if($whBytes < self::ITEM_BYTES) {
+            // Baul sin datos (NULL o largo 0): se crea completo
+            return array(
+                'sql' => "UPDATE [$dbName].[dbo].[warehouse] SET Items = CONVERT(varbinary(max), ?, 2) WHERE AccountId = ?",
+                'hex' => $targetHex . str_repeat('F', (3840 * 2) - $itemHexLen)
+            );
+        }
+
+        $next = self::ITEM_BYTES + 1; // primer byte posterior al primer casillero
+        return array(
+            'sql' => "UPDATE [$dbName].[dbo].[warehouse] SET Items = CONVERT(varbinary(16), ?, 2) + SUBSTRING(Items, $next, DATALENGTH(Items)) WHERE AccountId = ?",
+            'hex' => $targetHex
+        );
     }
 
     /* ====================================================================
@@ -343,17 +369,12 @@ class BlackMarket {
             if(count($wh) !== 1) throw new Exception("No se encontr\u{00F3} tu ba\u{00FA}l.");
             if((int)$wh[0]['tiene_items'] === 1) throw new Exception("Tu ba\u{00FA}l debe estar VAC\u{00CD}O.");
 
-            // Tamano real del baul (en este server: 3840 bytes). Se respeta el que tenga la cuenta.
-            $whBytes = (int)$wh[0]['bytes'];
-            if($whBytes <= 0) $whBytes = 3840;
-            $whHexLen = $whBytes * 2;
-            if(!ctype_xdigit($targetHex) || strlen($targetHex) > $whHexLen) throw new Exception("Item inv\u{00E1}lido.");
-            $newWh = $targetHex . str_repeat('F', $whHexLen - strlen($targetHex));
-
+            // El item se escribe solo en el primer casillero; el resto del baul no se toca
+            $put = self::vaultPut($dbName, $targetHex, (int)$wh[0]['bytes']);
             // 7. Movimientos: si cualquiera falla, se deshace todo
             $run("UPDATE [$dbName].[dbo].[$tableCoin] SET $colCoin = $colCoin - ? WHERE $colUser = ?", array($price, $username));
             $run("UPDATE [$dbName].[dbo].[$tableCoin] SET $colCoin = $colCoin + ? WHERE $colUser = ?", array($pay, $seller));
-            $run("UPDATE [$dbName].[dbo].[warehouse] SET Items = CONVERT(varbinary(max), ?, 2) WHERE AccountId = ?", array($newWh, $username));
+            $run($put['sql'], array($put['hex'], $username));
 
             $pdo->commit();
         } catch (PDOException $e) {
@@ -505,15 +526,10 @@ class BlackMarket {
             if(count($wh) !== 1) throw new Exception("No se encontr\u{00F3} tu ba\u{00FA}l.");
             if((int)$wh[0]['tiene_items'] === 1) throw new Exception("El ba\u{00FA}l debe estar VAC\u{00CD}O.");
 
-            // 3. Devolver el item respetando el tamano real del baul
-            $whBytes = (int)$wh[0]['bytes'];
-            if($whBytes <= 0) $whBytes = 3840;
-            $whHexLen = $whBytes * 2;
-            if(!ctype_xdigit($targetHex) || strlen($targetHex) > $whHexLen) throw new Exception("Item inv\u{00E1}lido.");
-            $newWh = $targetHex . str_repeat('F', $whHexLen - strlen($targetHex));
-
-            $run("UPDATE [$dbName].[dbo].[warehouse] SET Items = CONVERT(varbinary(max), ?, 2) WHERE AccountId = ?", array($newWh, $username));
-
+            // 3. Devolver el item al primer casillero; el resto del baul no se toca
+            $put = self::vaultPut($dbName, $targetHex, (int)$wh[0]['bytes']);
+            $run($put['sql'], array($put['hex'], $username));
+            
             $pdo->commit();
         } catch (PDOException $e) {
             if($pdo->inTransaction()) $pdo->rollBack();

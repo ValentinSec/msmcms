@@ -6,23 +6,22 @@
 /* --- CONTENEDOR PRINCIPAL --- */
 .info-container {
     display: flex;
-    gap: 30px;
-    min-height: 600px;
+    gap: clamp(16px, 3vw, 30px);
     color: #ccc;
     font-family: 'Poppins', sans-serif;
     position: relative;
     align-items: flex-start;
 }
 
-/* --- SIDEBAR (MENÚ IZQUIERDO) --- */
+/* --- MENU (izquierda en escritorio, arriba en pantallas angostas) --- */
 .info-sidebar {
     width: 280px;
-    background: #111; /* Fondo oscuro sólido */
-    border-radius: 8px;
-    padding: 20px;
-    border: 1px solid #333;
+    background: #111113;
+    border-radius: 10px;
+    padding: 16px;
+    border: 1px solid #2c2c31;
     flex-shrink: 0;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.18);
 }
 
 .info-menu {
@@ -32,186 +31,189 @@
 }
 
 .info-menu li {
-    padding: 15px 20px;
-    margin-bottom: 8px;
+    padding: 13px 18px;
+    margin-bottom: 6px;
     cursor: pointer;
-    border-radius: 4px;
-    transition: all 0.3s ease;
+    border-radius: 6px;
+    transition: all 0.25s ease;
     background: transparent;
     border-left: 3px solid transparent;
-    color: #888;
+    color: #9a9aa3;
     font-weight: 500;
     font-size: 0.95rem;
     display: flex;
     align-items: center;
     gap: 12px;
 }
+.info-menu li:last-child { margin-bottom: 0; }
 
 .info-menu li i {
     width: 20px;
     text-align: center;
-    transition: 0.3s;
+    transition: 0.25s;
 }
 
 .info-menu li:hover {
     background: rgba(255, 255, 255, 0.05);
     color: #fff;
-    padding-left: 25px; /* Efecto de deslizamiento */
 }
 
 .info-menu li.active {
-    background: linear-gradient(90deg, rgba(255, 138, 59, 0.1) 0%, transparent 100%);
-    border-left: 3px solid #FF8A3B; /* Naranja/Dorado */
-    color: #FF8A3B;
+    background: linear-gradient(90deg, rgba(211, 47, 47, 0.18) 0%, transparent 100%);
+    border-left-color: var(--cl-red, #d32f2f);
+    color: var(--cl-gold-bright, #e0b534);
     font-weight: 700;
-    text-shadow: 0 0 10px rgba(255, 138, 59, 0.2);
 }
+.info-menu li.active i { color: var(--cl-gold-bright, #e0b534); }
 
-.info-menu li.active i {
-    color: #FF8A3B;
-}
-
-/* --- ÁREA DE CONTENIDO (DERECHA) --- */
+/* --- AREA DE CONTENIDO --- */
 .info-content {
-    flex-grow: 1;
-    background: rgba(10, 10, 10, 0.85); /* Fondo semitransparente oscuro */
-    border-radius: 8px;
-    padding: 40px;
-    border: 1px solid #333;
-    min-height: 500px;
+    flex: 1 1 auto;
+    min-width: 0;
+    background: #151517;                 /* antes semitransparente: se veia gris */
+    border-radius: 10px;
+    padding: clamp(16px, 3.5vw, 36px);
+    border: 1px solid #2c2c31;
+    min-height: 320px;
     position: relative;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.18);
 }
 
-/* --- TABLAS DE INFORMACIÓN (General y Custom) --- */
+/* --- TABLAS DE INFORMACION (General y Custom) --- */
 .info-table {
     width: 100%;
     border-collapse: separate;
-    border-spacing: 0 10px; /* Separación entre filas */
+    border-spacing: 0 6px;
 }
 
-.info-table tr {
-    transition: 0.2s;
-}
-
-.info-table tr:hover td {
-    background: rgba(255, 255, 255, 0.03);
-    transform: translateX(5px);
-}
+.info-table tr:hover td { background: rgba(255, 255, 255, 0.03); }
 
 .info-table td {
-    padding: 15px 20px;
+    padding: 13px 16px;
     border: none;
-    border-bottom: 1px solid #222;
+    border-bottom: 1px solid #26262b;
+    transition: background 0.2s;
 }
 
-/* Primera columna (Labels): Fuente Cinzel, Color Dorado */
+/* Primera columna (etiquetas) */
 .info-table td:first-child {
-    color: #FF8A3B;
+    color: var(--cl-gold-bright, #e0b534);
     font-family: 'Cinzel', serif;
     font-weight: 700;
     width: 40%;
     text-transform: uppercase;
-    font-size: 0.9rem;
+    font-size: 0.88rem;
     letter-spacing: 0.5px;
     border-left: 2px solid transparent;
 }
+.info-table tr:hover td:first-child { border-left-color: var(--cl-red, #d32f2f); }
 
-.info-table tr:hover td:first-child {
-    border-left: 2px solid #FF8A3B;
-}
-
-/* Segunda columna (Valores) */
+/* Segunda columna (valores) */
 .info-table td:last-child {
     color: #eee;
     text-align: right;
     font-weight: 500;
+    overflow-wrap: anywhere;
 }
 
-/* --- ESTILOS PARA INVASIONES (Si retorna una tabla) --- */
+/* --- INVASIONES (si devuelve una tabla) --- */
 .invasion-table {
     width: 100%;
     border-collapse: collapse;
 }
-
 .invasion-table th {
     text-align: left;
-    padding: 15px;
-    background: #1a1a1a;
-    color: #FF8A3B;
+    padding: 13px;
+    background: #1c1c20;
+    color: var(--cl-gold-bright, #e0b534);
     font-family: 'Cinzel', serif;
     border-bottom: 2px solid #333;
 }
-
 .invasion-table td {
-    padding: 15px;
-    border-bottom: 1px solid #222;
+    padding: 13px;
+    border-bottom: 1px solid #26262b;
     color: #ccc;
 }
-
-.invasion-name {
-    font-weight: 700;
-    color: #fff;
-}
-
+.invasion-name { font-weight: 700; color: #fff; }
 .invasion-time {
     font-family: 'Courier New', monospace;
     font-weight: bold;
     background: #222;
     padding: 5px 10px;
     border-radius: 4px;
-    color: #2ecc71; /* Verde online */
+    color: #2ecc71;
 }
+.invasion-time.offline { color: #e74c3c; }
 
-.invasion-time.offline {
-    color: #e74c3c; /* Rojo offline */
-}
+/* =========================================================
+   DISENO ADAPTABLE
+   ========================================================= */
 
-/* --- RESPONSIVE --- */
-@media (max-width: 991px) {
+/* Menos de 992px: menu arriba como pestanas, contenido a todo el ancho */
+@media (max-width: 991.98px) {
     .info-container {
         flex-direction: column;
+        align-items: stretch;            /* antes flex-start: encogia la tarjeta */
     }
-    
+
     .info-sidebar {
         width: 100%;
+        padding: 10px;
     }
-    
+
+    /* Las pestanas se acomodan en filas: sin barra de desplazamiento */
     .info-menu {
         display: flex;
-        overflow-x: auto;
-        padding-bottom: 10px;
-        gap: 10px;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 6px;
+        overflow: visible;
+        padding-bottom: 0;
     }
-    
+
     .info-menu li {
+        flex: 1 1 auto;
+        justify-content: center;
         white-space: nowrap;
         margin: 0;
+        padding: 10px 14px;
+        font-size: 0.9rem;
         border-left: none;
         border-bottom: 3px solid transparent;
     }
-    
+
     .info-menu li.active {
         border-left: none;
-        border-bottom: 3px solid #FF8A3B;
-        background: rgba(0,0,0,0.2);
+        border-bottom-color: var(--cl-red, #d32f2f);
+        background: rgba(211, 47, 47, 0.14);
     }
-    
+
+    .info-content {
+        width: 100%;
+        min-height: 0;
+    }
+}
+
+/* Celular: etiqueta arriba y valor abajo */
+@media (max-width: 575.98px) {
+    .info-menu li { padding: 9px 10px; font-size: 0.82rem; gap: 8px; }
+
+    .info-table { border-spacing: 0; }
     .info-table td {
         display: block;
         width: 100%;
         text-align: left;
-        padding: 5px 10px;
+        padding: 4px 8px;
+        border-bottom: none;
     }
-    
     .info-table td:first-child {
+        width: 100%;
         margin-top: 10px;
-        color: #FF8A3B;
+        border-left: none;
     }
-    
     .info-table td:last-child {
         text-align: left;
-        padding-bottom: 15px;
-        border-bottom: 1px solid #333;
+        padding-bottom: 12px;
+        border-bottom: 1px solid #26262b;
     }
 }

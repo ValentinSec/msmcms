@@ -64,32 +64,8 @@ function loadMarket() {
     .catch(err => console.error('Market Error:', err));
 }
 
-function openDirectBuy(id, priceLabel) {
-    bm_buy_item_id = id;
-    const lbl = document.getElementById('buyPriceLabel');
-    if(lbl) lbl.innerText = priceLabel;
-    document.getElementById('buyConfirmModal').style.display = 'flex';
-}
-
-function executeBuy() {
-    document.getElementById('buyConfirmModal').style.display = 'none';
-    let fd = new FormData();
-    fd.append('market_ajax', 'true');
-    fd.append('action', 'buy_item');
-    fd.append('id', bm_buy_item_id);
-
-    fetch(window.location.href, { method: 'POST', body: fd })
-    .then(r => r.json())
-    .then(res => {
-        if(res.status === 'success') {
-            showAlertModal('Éxito', '¡Compra realizada! Revisa tu baúl.');
-            loadMarket(); 
-        } else {
-            showAlertModal('Error', res.message);
-        }
-    })
-    .catch(err => showAlertModal('Error', 'Error de comunicación.'));
-}
+// openDirectBuy() y executeBuy() están definidas en templates/morpheus/index.php
+// (con el aviso "PROCESANDO COMPRA..."). No volver a declararlas aquí.
 
 // --- 3. RANKING WIDGET ---
 function switchRanking(type) {
@@ -278,12 +254,12 @@ function openLoginModal() {
                     <span class="login-close" onclick="closeLoginModal()">&times;</span>
                     <h2 class="login-title">Login</h2>
                     <form action="" method="POST" onsubmit="showLoginSpinner(this)">
-                        <input type="hidden" name="webengineLogin_submit" value="submit">
+                        <input type="hidden" name="msmLogin_submit" value="submit">
                         <div class="login-form-group">
-                            <input type="text" name="webengineLogin_user" class="login-input" placeholder="Usuario" required autocomplete="username">
+                            <input type="text" name="msmLogin_user" class="login-input" placeholder="Usuario" required autocomplete="username">
                         </div>
                         <div class="login-form-group">
-                            <input type="password" name="webengineLogin_pwd" class="login-input" placeholder="Contraseña" required autocomplete="current-password">
+                            <input type="password" name="msmLogin_pwd" class="login-input" placeholder="Contraseña" required autocomplete="current-password">
                         </div>
                         <button type="submit" class="login-btn-enter" id="btnLoginSubmit">Entrar</button>
                         <div class="login-options">
@@ -422,15 +398,26 @@ function initRegisterHero() {
             </div>
         `;
 
-        // 6. Inyección
-        document.body.appendChild(heroSection);
-        
-        // Ocultamos el contenedor viejo
-        if (originalContainer) originalContainer.style.display = 'none';
+        // 6. Inyección: antes del pie, para que el pie siga visible debajo
+        const footerEl = document.querySelector('.morph-footer');
+        if (footerEl && footerEl.parentNode) {
+            footerEl.parentNode.insertBefore(heroSection, footerEl);
+        } else {
+            document.body.appendChild(heroSection);
+        }
+
+        const formSlot = document.getElementById('jsFormSlot');
+
+        // Avisos del registro (errores, invitación por referido): se muestran arriba del formulario
+        if (originalContainer) {
+            originalContainer.querySelectorAll('.alert').forEach(function (al) {
+                formSlot.appendChild(al);
+            });
+            originalContainer.style.display = 'none';
+        }
 
         // Movemos el formulario
-        document.getElementById('jsFormSlot').appendChild(originalForm);
-        console.log("DEBUG: Inyección completada.");
+        formSlot.appendChild(originalForm);
 
     } catch (err) {
         console.error("ERROR CRITICO:", err);
@@ -532,7 +519,7 @@ function initGuidesHero() {
 // --- 11. FORGOT PASSWORD HERO INJECTION ---
 function initForgotHero() {
     // Detectamos si estamos en el módulo por el nombre único del input
-    const forgotInput = document.querySelector('input[name="webengineEmail_current"]');
+    const forgotInput = document.querySelector('input[name="msmEmail_current"]');
     
     if (!forgotInput) return; // Si no está el input, no es esta página
     if (document.querySelector('.js-forgot-hero-bg')) return; // Evitar duplicados

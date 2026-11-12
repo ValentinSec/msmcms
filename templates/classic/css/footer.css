@@ -1,49 +1,46 @@
 /* templates/classic/css/footer.css */
-/* ESTILO: TECH-GRID GOLD (Sin imágenes externas) */
+/* ESTILO: grilla oscura con acento dorado (sin imagenes externas) */
 
 /* --- ESTRUCTURA PRINCIPAL --- */
 .footer-main {
-    background-color: #050505; /* Negro profundo */
-    color: #a0a0a0;
-    font-family: 'Segoe UI', 'Roboto', Helvetica, Arial, sans-serif;
-    padding-top: 70px;
-    padding-bottom: 30px;
+    --ft-gold: #e0b534;
+    background-color: #070708;
+    color: #a0a0a8;
+    font-family: 'Poppins', 'Segoe UI', Helvetica, Arial, sans-serif;
+    padding-top: clamp(40px, 6vw, 64px);
+    padding-bottom: 24px;
     position: relative;
     overflow: hidden;
-    
-    /* EFECTO DE GRILLA TECNOLÓGICA (CSS PURO) */
-    background-image: 
-        linear-gradient(rgba(255, 215, 0, 0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255, 215, 0, 0.03) 1px, transparent 1px);
-    background-size: 40px 40px; /* Tamaño de los cuadraditos */
+
+    /* Grilla de fondo */
+    background-image:
+        linear-gradient(rgba(224, 181, 52, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(224, 181, 52, 0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
     background-position: center top;
 }
 
-/* Línea de energía superior */
+/* Linea superior */
 .footer-main::before {
     content: '';
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 3px;
-    background: linear-gradient(90deg, transparent, #ffd700, transparent);
-    box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+    top: 0; left: 0;
+    width: 100%; height: 3px;
+    background: linear-gradient(90deg, transparent, var(--ft-gold), transparent);
+    box-shadow: 0 0 15px rgba(224, 181, 52, 0.5);
 }
 
-/* Sombra interior para dar profundidad */
+/* Sombra interior */
 .footer-main::after {
     content: '';
     position: absolute;
     top: 0; left: 0; width: 100%; height: 100%;
-    background: radial-gradient(circle at 50% 0%, rgba(20,20,20,0), #000);
+    background: radial-gradient(circle at 50% 0%, rgba(20, 20, 20, 0), #000);
     pointer-events: none;
 }
 
-.footer-content {
-    position: relative;
-    z-index: 2; /* Para estar encima del fondo */
-}
+.footer-content { position: relative; z-index: 2; }
+.footer-content > .row { row-gap: 36px; }
 
 /* --- LOGO Y ESTADO --- */
 .footer-logo {
@@ -53,89 +50,77 @@
     transition: all 0.4s ease;
 }
 .footer-logo:hover {
-    filter: grayscale(0%) opacity(1);
+    filter: grayscale(0%) opacity(1) drop-shadow(0 0 10px rgba(224, 181, 52, 0.3));
     transform: scale(1.05);
-    drop-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
 }
 
 .footer-desc {
     font-size: 0.85rem;
     line-height: 1.6;
-    margin-bottom: 25px;
-    color: #666;
+    margin-bottom: 22px;
+    color: #8a8a93;
+    max-width: 46ch;
 }
 
-/* Badge Online Animado */
 .status-badge {
     background: rgba(46, 125, 50, 0.1);
     border: 1px solid #2e7d32;
     padding: 6px 15px;
-    border-radius: 50px; /* Redondo estilo cápsula */
+    border-radius: 50px;
     display: inline-flex;
     align-items: center;
-    font-size: 0.75rem;
-    font-weight: 800;
+    font-size: 0.72rem;
+    font-weight: 700;
     color: #4caf50;
     letter-spacing: 1px;
     text-transform: uppercase;
     box-shadow: 0 0 10px rgba(46, 125, 50, 0.2);
 }
-
 .status-badge .dot {
-    width: 8px;
-    height: 8px;
+    width: 8px; height: 8px;
     background-color: #00ff00;
     border-radius: 50%;
     margin-right: 10px;
     box-shadow: 0 0 5px #00ff00;
     animation: pulse-green 2s infinite;
 }
-
 @keyframes pulse-green {
     0% { box-shadow: 0 0 0 0 rgba(0, 255, 0, 0.7); }
     70% { box-shadow: 0 0 0 6px rgba(0, 255, 0, 0); }
     100% { box-shadow: 0 0 0 0 rgba(0, 255, 0, 0); }
 }
 
-/* --- TÍTULOS --- */
+/* --- TITULOS --- */
 .footer-title {
     color: #fff;
-    font-size: 0.95rem;
-    font-weight: 800;
-    margin-bottom: 30px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    margin-bottom: 28px;
     text-transform: uppercase;
     letter-spacing: 1.5px;
     position: relative;
     display: inline-block;
 }
-
-/* Decoración debajo del título */
 .footer-title::after {
     content: '';
     position: absolute;
-    bottom: -8px;
-    left: 0;
-    width: 40px;
-    height: 2px;
-    background-color: #ffd700;
-    box-shadow: 0 0 8px #ffd700;
+    bottom: -8px; left: 0;
+    width: 40px; height: 2px;
+    background-color: var(--ft-gold);
+    box-shadow: 0 0 8px var(--ft-gold);
     transition: width 0.3s;
 }
-.col-md-3:hover .footer-title::after {
-    width: 100%; /* La línea crece al pasar el mouse por la columna */
-}
+.footer-content .col-md-3:hover .footer-title::after { width: 100%; }
 
-/* --- ENLACES CON EFECTO SLIDE --- */
+/* --- ENLACES --- */
 .footer-links, .footer-social {
     list-style: none;
     padding: 0;
     margin: 0;
 }
-
 .footer-links li { margin-bottom: 10px; }
-
 .footer-links a {
-    color: #777;
+    color: #8a8a93;
     text-decoration: none;
     font-size: 0.9rem;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -144,26 +129,21 @@
     border-left: 2px solid transparent;
     padding-left: 0;
 }
-
 .footer-links a i {
     font-size: 0.7rem;
     margin-right: 10px;
-    color: #444;
+    color: #555;
     transition: color 0.3s;
 }
-
 .footer-links a:hover {
     color: #fff;
-    padding-left: 10px; /* Se desplaza a la derecha */
-    border-left-color: #ffd700; /* Aparece borde dorado */
-    text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+    padding-left: 10px;
+    border-left-color: var(--ft-gold);
 }
+.footer-links a:hover i { color: var(--ft-gold); }
 
-.footer-links a:hover i { color: #ffd700; }
-
-/* --- REDES SOCIALES (Botones) --- */
+/* --- REDES SOCIALES --- */
 .footer-social li { margin-bottom: 8px; }
-
 .footer-social a {
     background: rgba(255, 255, 255, 0.03);
     color: #aaa;
@@ -171,46 +151,54 @@
     font-size: 0.85rem;
     display: flex;
     align-items: center;
-    padding: 8px 12px;
-    border-radius: 4px;
+    padding: 9px 12px;
+    border-radius: 6px;
     transition: all 0.3s;
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.06);
 }
-
 .footer-social a i {
     width: 20px;
     text-align: center;
     margin-right: 10px;
     font-size: 1rem;
 }
-
 .footer-social a:hover {
-    background: rgba(255, 215, 0, 0.1);
-    border-color: #ffd700;
-    color: #ffd700;
+    background: rgba(224, 181, 52, 0.1);
+    border-color: var(--ft-gold);
+    color: var(--ft-gold);
     transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
 }
 
 /* --- INFO BOX --- */
 .info-box p {
     margin-bottom: 12px;
-    font-size: 0.9rem;
-    color: #888;
+    font-size: 0.88rem;
+    color: #8a8a93;
     display: flex;
-    align-items: center;
+    align-items: flex-start;
+    min-width: 0;
+    overflow-wrap: anywhere;   /* el email largo ya no se sale de la columna */
 }
-.info-box i { color: #ffd700; margin-right: 12px; font-size: 0.9rem; }
+.info-box i {
+    color: var(--ft-gold);
+    margin-right: 12px;
+    font-size: 0.9rem;
+    margin-top: 4px;
+    flex-shrink: 0;
+}
 
 .server-tag {
-    background: linear-gradient(135deg, #111, #000);
+    background: linear-gradient(135deg, #131315, #000);
     border: 1px solid #333;
-    border-radius: 4px;
+    border-radius: 6px;
     padding: 12px;
     margin-top: 20px;
     display: flex;
+    flex-wrap: wrap;           /* si no entra en una linea, baja en vez de encimarse */
     justify-content: space-between;
     align-items: center;
+    gap: 4px 12px;
 }
 .server-tag span {
     color: #fff;
@@ -221,29 +209,51 @@
 .server-tag small {
     color: #4caf50;
     font-weight: 600;
+    white-space: nowrap;
 }
 
 /* --- FOOTER BOTTOM --- */
 .footer-hr {
-    border-color: #222;
-    margin: 50px 0 25px 0;
+    border-color: #2a2a2e;
+    margin: clamp(28px, 5vw, 48px) 0 20px 0;
 }
-
 .footer-bottom {
     font-size: 0.8rem;
-    color: #444;
+    color: #6a6a72;
 }
-
-.footer-bottom strong { color: #888; }
-
+.footer-bottom p { margin: 0; }
+.footer-bottom strong { color: #a0a0a8; }
 .footer-bottom a {
-    color: #555;
+    color: #8a8a93;
     text-decoration: none;
-    margin-left: 15px;
+    margin-left: 12px;
     transition: color 0.2s;
     text-transform: uppercase;
     font-weight: 700;
     font-size: 0.75rem;
 }
+.footer-bottom a:hover { color: var(--ft-gold); }
 
-.footer-bottom a:hover { color: #ffd700; }
+/* =========================================================
+   DISENO ADAPTABLE
+   ========================================================= */
+
+/* Entre 576 y 991px: dos columnas en vez de cuatro apretadas */
+@media (min-width: 576px) and (max-width: 991.98px) {
+    .footer-content > .row > .col-md-3 { flex: 0 0 auto; width: 50%; }
+}
+
+/* Menos de 768px: linea final centrada */
+@media (max-width: 767.98px) {
+    .footer-bottom .row { row-gap: 10px; }
+    .footer-bottom .text-start,
+    .footer-bottom .text-end { text-align: center !important; }
+    .footer-bottom a { margin: 0 6px; }
+}
+
+/* Celular: una columna */
+@media (max-width: 575.98px) {
+    .footer-content > .row { row-gap: 30px; }
+    .footer-title { margin-bottom: 24px; }
+    .footer-desc { max-width: none; }
+}

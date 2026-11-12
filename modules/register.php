@@ -19,7 +19,7 @@ $baseUrl = __BASE_URL__;
 
 // --- INICIO RENDERIZADO ---
 
-echo '<link href="' . $cssPath . 'register.css" rel="stylesheet">';
+echo '<link href="' . $cssPath . 'register.css?v=20261112a" rel="stylesheet">';
 
 echo '<div id="downloads-page-balduneta">';
     
@@ -43,7 +43,7 @@ echo '<div id="register-page-balduneta">';
             if(!mconfig('active')) throw new Exception(lang('error_17',true));
             
             // PROCESAMIENTO DEL FORMULARIO
-            if(isset($_POST['webengineRegister_submit'])) {
+            if(isset($_POST['msmRegister_submit'])) {
                 try {
                     // --- VALIDACIÓN DE SEGURIDAD RECAPTCHA ---
                     $secConfigFile = __PATH_INCLUDES__ . 'config/security_config.json';
@@ -57,10 +57,10 @@ echo '<div id="register-page-balduneta">';
                     }
             
                     $Account = new Account();
-                    $user  = $_POST['webengineRegister_user'];
-                    $pass  = $_POST['webengineRegister_pwd'];
-                    $passc = $_POST['webengineRegister_pwdc'];
-                    $email = $_POST['webengineRegister_email'];
+                    $user  = $_POST['msmRegister_user'];
+                    $pass  = $_POST['msmRegister_pwd'];
+                    $passc = $_POST['msmRegister_pwdc'];
+                    $email = $_POST['msmRegister_email'];
                     $idCode = isset($_POST['register_id_code']) ? $_POST['register_id_code'] : '';
             
                     // 1. REGISTRO DE CUENTA
@@ -134,7 +134,7 @@ echo '<div id="register-page-balduneta">';
             echo '<label class="register-label">NOMBRE DE USUARIO</label>';
             echo '<div class="input-container">';
             echo '<i class="fa fa-user input-icon"></i>';
-            echo '<input type="text" name="webengineRegister_user" class="form-control-balduneta" placeholder="Usuario" required>';
+            echo '<input type="text" name="msmRegister_user" class="form-control-balduneta" placeholder="Usuario" required>';
             echo '</div></div>';
 
             // Email
@@ -142,7 +142,7 @@ echo '<div id="register-page-balduneta">';
             echo '<label class="register-label">CORREO ELECTRÓNICO</label>';
             echo '<div class="input-container">';
             echo '<i class="fa fa-envelope input-icon"></i>';
-            echo '<input type="email" name="webengineRegister_email" class="form-control-balduneta" placeholder="Email" required>';
+            echo '<input type="email" name="msmRegister_email" class="form-control-balduneta" placeholder="Email" required>';
             echo '</div></div>';
 
             // Password
@@ -150,7 +150,7 @@ echo '<div id="register-page-balduneta">';
             echo '<label class="register-label">CONTRASEÑA</label>';
             echo '<div class="input-container">';
             echo '<i class="fa fa-lock input-icon"></i>';
-            echo '<input type="password" name="webengineRegister_pwd" class="form-control-balduneta" placeholder="Contraseña" required>';
+            echo '<input type="password" name="msmRegister_pwd" class="form-control-balduneta" placeholder="Contraseña" required>';
             echo '</div></div>';
 
             // Confirm Password
@@ -158,7 +158,7 @@ echo '<div id="register-page-balduneta">';
             echo '<label class="register-label">CONFIRMAR CONTRASEÑA</label>';
             echo '<div class="input-container">';
             echo '<i class="fa fa-lock input-icon"></i>';
-            echo '<input type="password" name="webengineRegister_pwdc" class="form-control-balduneta" placeholder="Confirmar" required>';
+            echo '<input type="password" name="msmRegister_pwdc" class="form-control-balduneta" placeholder="Confirmar" required>';
             echo '</div></div>';
 
             // ID Code (Opcional)
@@ -190,7 +190,7 @@ echo '<div id="register-page-balduneta">';
             }
 
             // Botón Submit
-            echo '<button type="submit" name="webengineRegister_submit" class="btn-register-balduneta">REGISTRARSE</button>';
+            echo '<button type="submit" name="msmRegister_submit" class="btn-register-balduneta">REGISTRARSE</button>';
             echo '</form>';
 
         } catch(Exception $ex) {

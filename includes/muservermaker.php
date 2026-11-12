@@ -208,11 +208,8 @@ if(!@include_once(__PATH_INCLUDES__ . 'template.functions.php')) throw new Excep
 $config = muservermakerConfigs();
 
 if(!isset($config['muservermaker_cms_installed']) || $config['muservermaker_cms_installed'] !== true) {
-    if(isset($config['webengine_cms_installed']) && $config['webengine_cms_installed'] === true) {
-    } else {
-        header('Location: '.__BASE_URL__.'install/');
-        die();
-    }
+    header('Location: '.__BASE_URL__.'install/');
+    die();
 }
 
 if(array_key_exists('blacklisted', $config)) {
@@ -221,8 +218,8 @@ if(array_key_exists('blacklisted', $config)) {
 
 if(!@include_once(__PATH_CONFIGS__ . 'compatibility.php')) throw new Exception('Could not load file compatibility.');
 
-global $muservermaker, $webengine;
-$compatArray = isset($muservermaker) ? $muservermaker : (isset($webengine) ? $webengine : null);
+global $muservermaker;
+$compatArray = isset($muservermaker) ? $muservermaker : null;
 
 if(!isset($compatArray['file_compatibility']) || !array_key_exists(strtolower($config['server_files']), $compatArray['file_compatibility'])) {
     throw new Exception('The server files configuration is not valid.');

@@ -2,13 +2,13 @@
 // Lógica para General, Resets y Master Resets
 $qty_c = (isset($rankings_config['qty_chars']) && is_numeric($rankings_config['qty_chars'])) ? min((int)$rankings_config['qty_chars'], $max_limit) : 10;
 
-// [MODIFICADO] Agregamos AccountCharacter para saber CUÁL personaje está usando la cuenta realmente
+// [MODIFICADO] Agregamos AccountCharacter para saber CUáL personaje está usando la cuenta realmente
 $query = "SELECT TOP $qty_c Character.Name, ResetCount as Stat, cLevel as Extra, Class, MasterResetCount, 
           MEMB_STAT.ConnectStat, AccountCharacter.GameIDC
           FROM Character 
           LEFT JOIN MEMB_STAT ON Character.AccountID = MEMB_STAT.memb___id 
           LEFT JOIN AccountCharacter ON Character.AccountID = AccountCharacter.Id
-          WHERE 1=1 $classFilter $exclude_clause 
+          WHERE 1=1 AND ISNULL(Character.CtlCode, 0) < 32 $classFilter $exclude_clause
           ORDER BY ResetCount DESC, cLevel DESC";
 
 $rankingData = $db->query_fetch($query);
@@ -67,7 +67,7 @@ if(!is_array($rankingData)) {
 
         // Guild
         if($rankings_config['show_guild']) {
-            $checkGuild = $db->query_fetch_single("SELECT G_Name FROM GuildMember WHERE Name = '".$row['Name']."'");
+            $checkGuild = $db->query_fetch_single("SELECT G_Name FROM GuildMember WHERE Name = ?", array($row['Name']));
             $gName = ($checkGuild && isset($checkGuild['G_Name'])) ? $checkGuild['G_Name'] : false;
             echo $gName ? '<td class="text-white small text-center">'.$gName.'</td>' : '<td class="text-white small text-center"><i class="fa fa-shield-blank"></i> Sin Guild</td>';
         }

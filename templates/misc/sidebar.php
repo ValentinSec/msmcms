@@ -28,12 +28,14 @@ if ($bannedActive && file_exists($bannedFilePath)) {
     if (!is_array($bannedList)) { $bannedList = []; }
 }
 
+@include_once __DIR__ . '/inc/site_counts.php';
 try {
-    $db = config('SQL_USE_2_DB', true) ? Connection::Database('Me_MuOnline') : Connection::Database('MuOnline');
-    $stats_accounts = $db->query_fetch_single("SELECT COUNT(*) as result FROM MEMB_INFO") ?: ['result' => 0];
-    $stats_characters = $db->query_fetch_single("SELECT COUNT(*) as result FROM Character") ?: ['result' => 0];
-    $stats_guilds = $db->query_fetch_single("SELECT COUNT(*) as result FROM Guild") ?: ['result' => 0];
-    
+    $msmCounts = function_exists('msm_cached_counts')
+        ? msm_cached_counts()
+        : array('accounts' => 0, 'chars' => 0, 'guilds' => 0);
+    $stats_accounts   = ['result' => $msmCounts['accounts']];
+    $stats_characters = ['result' => $msmCounts['chars']];
+    $stats_guilds     = ['result' => $msmCounts['guilds']];    
     $sidebarOnline = isset($displayOnline) ? $displayOnline : 0;
     $sidebarRecord = isset($maxOnline) ? $maxOnline : 0;
     $sidebarVersion = (function_exists('custom_config')) ? custom_config('server_version') : 'N/A';

@@ -1,22 +1,21 @@
 /* templates/classic/css/register.css */
+/* Todas las reglas estan acotadas a #register-page-balduneta para no afectar otras paginas */
 
-/* --- IMPORTACIÓN DE FUENTES --- */
+/* --- IMPORTACION DE FUENTES --- */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 /* Cinzel se asume cargada globalmente */
 
-/* --- 1. CONTENEDOR PRINCIPAL --- */
-#downloads-page-balduneta, 
+/* --- 1. CONTENEDOR PRINCIPAL (sin fondo propio: usa el de la tarjeta blanca) --- */
 #register-page-balduneta {
-    background-color: #f9f9f9;
+    background: transparent;
     position: relative;
-    padding-bottom: 80px;
-    min-height: 850px;
+    padding-bottom: clamp(16px, 4vw, 48px);
     overflow-x: hidden;
     font-family: 'Poppins', sans-serif !important;
     color: #333;
 }
 
-/* --- 2. IMAGEN LATERAL --- */
+/* --- 2. IMAGEN LATERAL (solo en pantallas anchas) --- */
 #register-page-balduneta::before {
     content: '';
     position: absolute;
@@ -32,61 +31,49 @@
     pointer-events: none;
 }
 
-/* --- 3. HEADER (Título Premium) --- */
-.rank-header {
+/* --- 3. ENCABEZADO --- */
+#register-page-balduneta .rank-header {
     text-align: left !important;
     max-width: 600px;
     margin-left: 10%;
-    margin-bottom: 40px !important; /* Un poco más de espacio */
-    padding-top: 60px;
+    margin-bottom: clamp(24px, 4vw, 40px) !important;
+    padding-top: clamp(8px, 3vw, 40px);
     position: relative;
     z-index: 2;
 }
 
-/* EFECTO DE METAL OSCURO PARA EL TÍTULO */
-.rank-title {
+#register-page-balduneta .rank-title {
     font-family: 'Cinzel', serif !important;
-    font-size: 4rem !important; /* Un poco más grande */
-    font-weight: 900 !important; /* Bien grueso para que se note el efecto */
-    text-transform: uppercase !important; /* Mayúsculas quedan mejor en Cinzel */
+    font-size: clamp(1.9rem, 1.1rem + 3.2vw, 3.25rem) !important; /* antes 4rem fijo */
+    font-weight: 900 !important;
+    text-transform: uppercase !important;
     margin-bottom: 10px;
-    letter-spacing: -1px;
-    line-height: 1;
+    letter-spacing: -0.5px;
+    line-height: 1.1;
+    overflow-wrap: break-word;
 
-    /* El Truco del Degradado Metálico */
-    background: linear-gradient(
-        135deg, 
-        #444444 0%,   /* Gris medio */
-        #000000 40%,   /* Negro puro (punto focal) */
-        #222222 70%,   /* Gris oscuro */
-        #555555 100%   /* Reflejo final */
-    );
-    
-    /* Recortar el fondo con la forma del texto */
+    background: linear-gradient(135deg, #3a3a40 0%, #000 45%, #2a0c0c 72%, var(--cl-red-dark, #8f1717) 100%);
     -webkit-background-clip: text;
     background-clip: text;
-    
-    /* Hacer el texto transparente para ver el fondo */
     -webkit-text-fill-color: transparent;
     color: transparent !important;
 
-    /* Sombra suave para profundidad */
-    filter: drop-shadow(0px 4px 3px rgba(0,0,0,0.2));
+    filter: drop-shadow(0px 3px 2px rgba(0, 0, 0, 0.18));
 }
 
-.rank-subtitle {
+#register-page-balduneta .rank-subtitle {
     font-family: 'Poppins', sans-serif !important;
-    color: #777 !important;
-    font-size: 1.1rem !important;
+    color: var(--cl-muted, #6d6d76) !important;
+    font-size: clamp(0.95rem, 0.9rem + 0.3vw, 1.1rem) !important;
     max-width: 500px;
     line-height: 1.6;
     font-weight: 500;
-    border-bottom: 2px solid #eee;
+    border-bottom: 2px solid var(--cl-line, #e3ded5);
     padding-bottom: 20px;
 }
 
 /* --- 4. CONTENEDOR DEL FORMULARIO --- */
-.register-main-container {
+#register-page-balduneta .register-main-container {
     max-width: 650px;
     margin-left: 10%;
     padding: 0 !important;
@@ -94,121 +81,144 @@
     z-index: 2;
 }
 
-/* --- 5. ALERTA VIOLETA --- */
-.alert-info, .alert-warning {
+/* --- 5. AVISOS --- */
+#register-page-balduneta .alert-info,
+#register-page-balduneta .alert-warning {
     font-family: 'Poppins', sans-serif !important;
-    background-color: #f3e5f5 !important;
-    border: 1px solid #e1bee7 !important;
-    color: #7b1fa2 !important;
+    background-color: #fbf5e0 !important;
+    border: 1px solid #ecdca4 !important;
+    color: #6b5510 !important;
     border-radius: 8px;
-    padding: 20px;
+    padding: 16px 20px;
     display: flex;
     align-items: center;
     gap: 15px;
     font-size: 0.9rem;
     font-weight: 600;
     margin-bottom: 30px;
-    box-shadow: 0 5px 15px rgba(123, 31, 162, 0.1); /* Sombra sutil violeta */
+    box-shadow: 0 5px 15px rgba(201, 162, 39, 0.1);
 }
-
-.alert i {
+#register-page-balduneta .alert i {
     font-size: 1.4rem;
-    color: #8e24aa;
+    color: var(--cl-gold, #c9a227);
+    flex-shrink: 0;
 }
 
 /* --- 6. GRILLA DEL FORMULARIO --- */
-.register-form {
+#register-page-balduneta .register-form {
     display: grid;
     grid-template-columns: 1fr 1fr;
     column-gap: 30px;
     row-gap: 5px;
 }
 
-.form-group {
-    margin-bottom: 15px !important;
+#register-page-balduneta .form-group { margin-bottom: 15px !important; }
+
+/* Estos elementos ocupan siempre el ancho completo de la grilla */
+#register-page-balduneta .checkbox-container,
+#register-page-balduneta .g-recaptcha,
+#register-page-balduneta .btn-register-balduneta,
+#register-page-balduneta .alert {
+    grid-column: 1 / -1;
 }
 
-.checkbox-container,
-.g-recaptcha,
-.btn-register-balduneta,
-.alert {
-    grid-column: span 2;
-}
-
-/* --- 7. INPUTS --- */
-.register-label {
+/* --- 7. CAMPOS --- */
+#register-page-balduneta .register-label {
     font-family: 'Poppins', sans-serif !important;
     display: block;
     font-size: 0.85rem;
     color: #555;
     margin-bottom: 8px;
-    font-weight: 700; /* Etiquetas más gruesas */
+    font-weight: 700;
     text-align: left;
-    text-transform: uppercase; /* Etiquetas en mayúsculas */
+    text-transform: uppercase;
     letter-spacing: 0.5px;
 }
 
-.input-icon { display: none !important; }
-.input-container { width: 100%; }
+#register-page-balduneta .input-container,
+#register-page-balduneta .input-group-balduneta {
+    width: 100%;
+    position: relative;
+}
 
-.form-control-balduneta {
+/* Icono a la izquierda del campo. Los !important vencen estilos en linea del PHP */
+#register-page-balduneta .input-icon {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    left: 0 !important;
+    top: 0;
+    height: 100%;
+    width: 50px !important;
+    color: #666;
+    z-index: 10;
+    pointer-events: none;
+    border-right: 2px solid #eee;
+    font-size: 1rem;
+    background: transparent;
+}
+
+#register-page-balduneta .form-control-balduneta {
     font-family: 'Poppins', sans-serif !important;
     width: 100%;
-    height: 50px; /* Un poco más altos */
-    padding: 10px 15px;
+    height: 50px;
+    padding: 10px 15px 10px 60px !important; /* 60px: lugar para el icono */
     background-color: #fff;
-    border: 2px solid #eee; /* Borde más grueso y claro */
+    border: 2px solid #eee;
     border-radius: 6px;
     font-size: 0.95rem;
     color: #333;
-    transition: all 0.3s;
+    transition: all 0.2s;
     font-weight: 500;
 }
-
-.form-control-balduneta:focus {
+#register-page-balduneta .form-control-balduneta:focus {
     border-color: #000;
     background-color: #fff;
     outline: none;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
 }
-.form-control-balduneta::placeholder { color: #aaa; font-weight: 400; }
+#register-page-balduneta .form-control-balduneta::placeholder {
+    color: #aaa;
+    font-weight: 400;
+}
 
 /* --- 8. CHECKBOX --- */
-.custom-checkbox {
+#register-page-balduneta .custom-checkbox {
     font-family: 'Poppins', sans-serif !important;
     display: flex;
     align-items: center;
+    flex-wrap: wrap;
     font-size: 0.95rem;
     color: #444;
     cursor: pointer;
     margin-top: 15px;
     font-weight: 500;
 }
-
-.custom-checkbox input {
+#register-page-balduneta .custom-checkbox input {
     width: 20px;
     height: 20px;
     margin-right: 12px;
     accent-color: #000;
     border: 2px solid #ccc;
     cursor: pointer;
+    flex-shrink: 0;
 }
-
-.custom-checkbox a {
+#register-page-balduneta .custom-checkbox a {
     color: #000;
     font-weight: 700;
     text-decoration: none;
     margin-left: 5px;
-    border-bottom: 2px solid #000; /* Subrayado grueso */
+    border-bottom: 2px solid #000;
 }
 
-/* --- 9. BOTÓN "CREAR CUENTA" --- */
-.btn-register-balduneta {
+/* --- 9. BOTON "CREAR CUENTA" --- */
+#register-page-balduneta .btn-register-balduneta {
     font-family: 'Poppins', sans-serif !important;
     background-color: #000;
     color: #fff;
     border: none;
-    padding: 16px 40px; /* Botón más grande */
+    padding: 16px 40px;
     border-radius: 6px;
     font-size: 1rem;
     font-weight: 700;
@@ -220,14 +230,21 @@
     text-transform: uppercase;
     letter-spacing: 1px;
 }
-
-.btn-register-balduneta:hover {
+#register-page-balduneta .btn-register-balduneta:hover {
     background-color: #222;
     transform: translateY(-3px);
-    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
 }
 
-/* --- 10. RESPONSIVE --- */
+/* =========================================================
+   DISENO ADAPTABLE
+   ========================================================= */
+
+/* Pantallas anchas: alto minimo para que entre la imagen lateral */
+@media (min-width: 992px) {
+    #register-page-balduneta { min-height: 850px; }
+}
+
 @media (max-width: 1200px) {
     #register-page-balduneta::before {
         opacity: 0.1;
@@ -235,91 +252,32 @@
     }
 }
 
-@media (max-width: 991px) {
-    .register-form { grid-template-columns: 1fr; }
-    .checkbox-container, .btn-register-balduneta { grid-column: span 1; }
-    
-    .rank-header, .register-main-container {
-        margin-left: 0;
-        max-width: 100%;
-        padding: 0 25px !important;
-        text-align: center !important;
-    }
-    
-    .rank-header { text-align: center !important; }
-    .rank-subtitle { margin: 0 auto; }
-    .register-label { text-align: center; }
-    
-    .btn-register-balduneta {
-        width: 100%;
-        justify-self: center;
-    }
-    
+@media (max-width: 991.98px) {
     #register-page-balduneta::before { display: none; }
+
+    #register-page-balduneta .register-form { grid-template-columns: 1fr; }
+
+    #register-page-balduneta .rank-header,
+    #register-page-balduneta .register-main-container {
+        margin-left: auto;
+        margin-right: auto;
+        max-width: 100%;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+    #register-page-balduneta .rank-header { text-align: center !important; }
+    #register-page-balduneta .rank-subtitle { margin: 0 auto; }
+
+    #register-page-balduneta .btn-register-balduneta {
+        width: 100%;
+        justify-self: stretch;
+    }
 }
 
-/* --- 7. INPUTS (Estilo Clean - Poppins) --- */
-.register-label {
-    font-family: 'Poppins', sans-serif !important;
-    display: block;
-    font-size: 0.85rem;
-    color: #555;
-    margin-bottom: 8px;
-    font-weight: 700;
-    text-align: left;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-.input-container, 
-.input-group-balduneta { /* Agregamos la clase del grupo ID code */
-    width: 100%;
-    position: relative; 
-}
-
-/* Estilo del Ícono "Botón" */
-/* Usamos !important en left y width para vencer los estilos inline del PHP */
-.input-icon,
-.input-group-balduneta .input-icon {
-    display: flex !important;
-    align-items: center;
-    justify-content: center;
-    position: absolute;
-    left: 0 !important; /* Forzamos a la izquierda pegada */
-    top: 0;
-    height: 100%;
-    width: 50px !important; /* Ancho fijo */
-    color: #666;
-    z-index: 10;
-    pointer-events: none;
-    border-right: 2px solid #eee; /* La línea separadora */
-    font-size: 1rem;
-    background: transparent;
-}
-
-.form-control-balduneta {
-    font-family: 'Poppins', sans-serif !important;
-    width: 100%;
-    height: 50px;
-    /* IMPORTANTE: 60px !important para empujar el texto y que no pise el ícono */
-    padding: 10px 15px 10px 60px !important; 
-    background-color: #fff;
-    border: 2px solid #eee;
-    border-radius: 6px;
-    font-size: 0.95rem;
-    color: #333;
-    transition: all 0.2s;
-    font-weight: 500;
-}
-
-.form-control-balduneta:focus {
-    border-color: #000;
-    background-color: #fff;
-    outline: none;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-}
-
-.form-control-balduneta::placeholder { 
-    color: #aaa; 
-    font-weight: 400; 
+/* Celulares angostos: el reCAPTCHA mide 304px fijos; se achica para que no se salga */
+@media (max-width: 400px) {
+    #register-page-balduneta .g-recaptcha {
+        transform: scale(0.88);
+        transform-origin: left top;
+    }
 }

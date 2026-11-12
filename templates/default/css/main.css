@@ -602,7 +602,7 @@ body:has(.navbar-custom.fixed-top) #usercp-main-container {
     margin-top: 100px !important;
 }
 
-/* Si usas WebEngine, el contenedor del UserCP suele tener clases específicas */
+/* Si usas MuServerMaker, el contenedor del UserCP suele tener clases específicas */
 .usercp-wrapper {
     padding-top: 140px; 
 }

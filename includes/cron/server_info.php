@@ -41,12 +41,12 @@ try {
     $totalGuilds = ($guildData && isset($guildData['t'])) ? intval($guildData['t']) : 0;
 
     // 4. Preparar Datos
-    // Formato string clásico de WebEngine: "Cuentas|Pjs|Guilds|Online"
+    // Formato string clásico de MuServerMaker: "Cuentas|Pjs|Guilds|Online"
     // Esto es lo que espera leer tu módulo del home.
     $dataString = "$totalAccounts|$totalCharacters|$totalGuilds|$totalOnline";
     
-    // Estructura caché WebEngine
-    // WebEngine a veces espera un array serializado o un json, pero la función UpdateCache original
+    // Estructura caché MuServerMaker
+    // MuServerMaker a veces espera un array serializado o un json, pero la función UpdateCache original
     // solía guardar solo el string o un array simple. Vamos a guardar el formato seguro.
     $cacheData = [
         0 => time(),        // Timestamp

@@ -32,7 +32,7 @@ try {
     }
 
     // Guardar Caché (Usamos json_encode directo para estandarizar)
-    // Formato WebEngine: [timestamp, [array_de_nombres]]
+    // Formato MuServerMaker: [timestamp, [array_de_nombres]]
     $cacheData = [
         0 => time(),
         1 => $result

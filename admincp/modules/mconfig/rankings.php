@@ -67,7 +67,7 @@ $moduleConfig = simplexml_load_file($xmlPath);
 			</td>
 		</tr>
 		<tr>
-			<th>Rankings Results<br/><span>Amount of ranking results WebEngine should cache.</span></th>
+			<th>Rankings Results<br/><span>Amount of ranking results MuServerMaker should cache.</span></th>
 			<td>
 				<input class="form-control" type="text" name="setting_2" value="<?php echo $moduleConfig->rankings_results; ?>"/>
 			</td>
@@ -185,17 +185,17 @@ $moduleConfig = simplexml_load_file($xmlPath);
 			</td>
 		</tr>
 		<tr>
-			<th>Guild Score Formula<br /><span><br /><strong>Original Guild Score:</strong><br />Uses the game's original guild score.<br /><br /><strong>WebEngine CMS Custom 1:</strong><br />Calculates the sum of all guild member's stats and multiplies by the multiplier value.<br /><br /><strong>WebEngine CMS Custom 2:</strong><br />Calculates the sum of all guild member's stats (except Command) and multiplies by the multiplier value.<br /><br /></span></th>
+			<th>Guild Score Formula<br /><span><br /><strong>Original Guild Score:</strong><br />Uses the game's original guild score.<br /><br /><strong>MuServerMaker CMS Custom 1:</strong><br />Calculates the sum of all guild member's stats and multiplies by the multiplier value.<br /><br /><strong>MuServerMaker CMS Custom 2:</strong><br />Calculates the sum of all guild member's stats (except Command) and multiplies by the multiplier value.<br /><br /></span></th>
 			<td>
 				<select class="form-control" name="setting_21">
 					<option value="1" <?php if($moduleConfig->guild_score_formula == 1) echo 'selected';?>>Original Guild Score</option>
-					<option value="2" <?php if($moduleConfig->guild_score_formula == 2) echo 'selected';?>>WebEngine CMS Custom 1: (STR+AGI+VIT+ENE+CMD) * MULTIPLIER</option>
-					<option value="3" <?php if($moduleConfig->guild_score_formula == 3) echo 'selected';?>>WebEngine CMS Custom 2: (STR+AGI+VIT+ENE) * MULTIPLIER</option>
+					<option value="2" <?php if($moduleConfig->guild_score_formula == 2) echo 'selected';?>>MuServerMaker CMS Custom 1: (STR+AGI+VIT+ENE+CMD) * MULTIPLIER</option>
+					<option value="3" <?php if($moduleConfig->guild_score_formula == 3) echo 'selected';?>>MuServerMaker CMS Custom 2: (STR+AGI+VIT+ENE) * MULTIPLIER</option>
 				</select>
 			</td>
 		</tr>
 		<tr>
-			<th>Multiplier<br /><span>If the score setting is set to one of WebEngine's custom score formulas, use the multiplier to customize how big or small you want the scores to be.</span></th>
+			<th>Multiplier<br /><span>If the score setting is set to one of MuServerMaker's custom score formulas, use the multiplier to customize how big or small you want the scores to be.</span></th>
 			<td>
 				<input class="form-control" type="text" name="setting_22" value="<?php echo $moduleConfig->guild_score_multiplier; ?>"/>
 			</td>

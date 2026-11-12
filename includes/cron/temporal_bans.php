@@ -17,7 +17,7 @@ $file_name = basename(__FILE__);
 // load database
 $database = Connection::Database('Me_MuOnline');
 
-$temporalBans = $database->query_fetch("SELECT * FROM ".WEBENGINE_BANS."");
+$temporalBans = $database->query_fetch("SELECT * FROM ".MUSERVERMAKER_BANS."");
 if(is_array($temporalBans)) {
 	foreach($temporalBans as $tempBan) {
 		$banTimestamp = $tempBan['ban_days']*86400+$tempBan['ban_date'];
@@ -25,8 +25,8 @@ if(is_array($temporalBans)) {
 			// lift ban
 			$unban = $database->query("UPDATE "._TBL_MI_." SET "._CLMN_BLOCCODE_." = 0 WHERE "._CLMN_USERNM_." = ?", array($tempBan['account_id']));
 			if($unban) {
-				$database->query("DELETE FROM ".WEBENGINE_BAN_LOG." WHERE account_id = ?", array($tempBan['account_id']));
-				$database->query("DELETE FROM ".WEBENGINE_BANS." WHERE account_id = ?", array($tempBan['account_id']));
+				$database->query("DELETE FROM ".MUSERVERMAKER_BAN_LOG." WHERE account_id = ?", array($tempBan['account_id']));
+				$database->query("DELETE FROM ".MUSERVERMAKER_BANS." WHERE account_id = ?", array($tempBan['account_id']));
 			}
 		}
 	}

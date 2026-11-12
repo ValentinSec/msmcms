@@ -59,7 +59,7 @@ if(isset($_POST['save_connection_settings'])) {
         if(isset($_POST['SQL_PASSWORD_ENCRYPTION']) && is_string($_POST['SQL_PASSWORD_ENCRYPTION'])) {
             $postedEnc = $_POST['SQL_PASSWORD_ENCRYPTION'];
             $storedEnc = isset($currentConfig['SQL_PASSWORD_ENCRYPTION']) ? (string)$currentConfig['SQL_PASSWORD_ENCRYPTION'] : '';
-            if(isset($encOptions[$postedEnc]) || $postedEnc === $storedEnc) {
+            if($postedEnc !== '' && (isset($encOptions[$postedEnc]) || $postedEnc === $storedEnc)) {
                 $currentConfig['SQL_PASSWORD_ENCRYPTION'] = $postedEnc;
             }
         }
@@ -173,7 +173,9 @@ if(!function_exists('getC')) {
 
 // Si el valor guardado no está en la lista, se muestra igual para no cambiarlo sin querer
 $currentEnc = isset($conf['SQL_PASSWORD_ENCRYPTION']) ? (string)$conf['SQL_PASSWORD_ENCRYPTION'] : '';
-if($currentEnc !== '' && !isset($encOptions[$currentEnc])) {
+if($currentEnc === '') {
+    $encOptions = array('' => '— Sin definir (no se modifica) —') + $encOptions;
+} elseif(!isset($encOptions[$currentEnc])) {
     $encOptions[$currentEnc] = $currentEnc . ' (valor actual)';
 }
 $currentDriver = isset($conf['SQL_PDO_DRIVER']) ? (string)$conf['SQL_PDO_DRIVER'] : '';

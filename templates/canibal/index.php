@@ -253,12 +253,12 @@ if (file_exists($secConfigFile)) {
 }
 
 // 9. LOGICA DE LOGIN (Modificada para permanecer en el sitio)
-if((isset($_POST['webengineLogin_user']) && !empty($_POST['webengineLogin_user'])) || isset($_POST['webengineLogin_submit'])) {
-    $_POST['webengineLogin_submit'] = 'submit';
+if((isset($_POST['msmLogin_user']) && !empty($_POST['msmLogin_user'])) || isset($_POST['msmLogin_submit'])) {
+    $_POST['msmLogin_submit'] = 'submit';
     try {
         if(class_exists('login')) {
             $userLogin = new login();
-            $userLogin->validateLogin($_POST['webengineLogin_user'], $_POST['webengineLogin_pwd']);
+            $userLogin->validateLogin($_POST['msmLogin_user'], $_POST['msmLogin_pwd']);
             
             // En lugar de redirigir a /usercp, recargamos la ubicación actual 
             // para que se actualicen los estados de login en el sidebar.
