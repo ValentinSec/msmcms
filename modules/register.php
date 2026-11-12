@@ -19,7 +19,7 @@ $baseUrl = __BASE_URL__;
 
 // --- INICIO RENDERIZADO ---
 
-echo '<link href="' . $cssPath . 'register.css?v=20261112a" rel="stylesheet">';
+echo '<link href="' . $cssPath . 'register.css?v=20261112b" rel="stylesheet">';
 
 echo '<div id="downloads-page-balduneta">';
     
