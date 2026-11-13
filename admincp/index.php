@@ -302,6 +302,7 @@ $adminCpHome = __PATH_ADMINCP_HOME__;
 $baseUrl = __BASE_URL__;
 $adminName = admincp_base();
 $usernameInitial = htmlspecialchars(strtoupper(substr($_SESSION['username'], 0, 1)), ENT_QUOTES, 'UTF-8');
+$admincpCssVer = (int)@filemtime(__DIR__ . '/css/admincp.css');
 
 // --- RENDERIZADO DEL PANEL PRINCIPAL (PHP PURO) ---
 
@@ -322,7 +323,7 @@ echo <<<HTML
     <link rel="stylesheet" href="https://cdn.datatables.net/2.2.2/css/dataTables.bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tinymce@7.7.0/skins/ui/oxide/content.min.css">
-    <link rel="stylesheet" href="css/admincp.css?v=<?php echo (int)@filemtime(__DIR__ . '/css/admincp.css'); ?>">
+    <link rel="stylesheet" href="css/admincp.css?v={$admincpCssVer}">   
     
     <script>
     // Anti-CSRF: agrega el token a todos los formularios POST y a todas las llamadas AJAX del panel
@@ -418,7 +419,6 @@ echo <<<HTML
                         <img id="sidebar-logo" src="img/logo.png" alt="MuServerMaker Logo" />
                     </a>
                 </div>
-
                 <div class="sidebar-menu-container">
                     <ul class="nav" id="side-menu">
 HTML;

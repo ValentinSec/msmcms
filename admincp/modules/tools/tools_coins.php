@@ -5,14 +5,14 @@
  */
 if(!defined('access')) die();
 
-// 1. CARGAR CONFIGURACI¨®N
+// 1. CARGAR CONFIGURACI?N
 $fileSettings = __DIR__ . '/../../../includes/config/custom_settings.json';
 $config = [];
 if(file_exists($fileSettings)) {
     $config = json_decode(file_get_contents($fileSettings), true);
 }
 
-// Funci¨®n helper para obtener valor o default
+// Funci?n helper para obtener valor o default
 function getConf($key, $arr, $default) {
     return (isset($arr[$key]) && !empty($arr[$key])) ? $arr[$key] : $default;
 }
@@ -29,7 +29,7 @@ if(in_array(strtolower($tableCoins), ['memb_info', 'memb_stat', 'character'])) {
     $colUser = 'memb___id';
 }
 
-// 3. L¨®GICA
+// 3. L?GICA
 $alertMessage = '';
 try {
     $db = Connection::Database('Me_MuOnline');
@@ -37,7 +37,7 @@ try {
     if(isset($_POST['add_coins'])) {
         $account = $_POST['account'];
         $amount  = (int)$_POST['amount'];
-        $type    = $_POST['type']; // Esto traer¨¢ el nombre real de la columna (ej: WCoinC)
+        $type    = $_POST['type']; // Esto traer? el nombre real de la columna (ej: WCoinC)
 
         // Verificar cuenta en MEMB_INFO (siempre fija para validar existencia)
         $checkAccount = $db->query_fetch_single("SELECT memb___id FROM MEMB_INFO WHERE memb___id = ?", [$account]);
@@ -105,9 +105,9 @@ echo '<div class="bottom-card" style="padding: 0;">';
                     echo '<tr>';
                         echo '<td>' . $i++ . '</td>';
                         echo '<td><span class="donator-user">' . $acc[$colUser] . '</span></td>';
-                        echo '<td><span class="coin-pill-white">' . number_format((int)$acc[$col1]) . '</span></td>';
-                        echo '<td><span class="coin-val-white"><i class="fa fa-diamond coin-icon-sm"></i> ' . number_format((int)$acc[$col2]) . '</span></td>';
-                        echo '<td><span class="coin-val-green"><i class="fa fa-bolt coin-icon-sm"></i> ' . number_format((int)$acc[$col3]) . '</span></td>';
+                        echo '<td data-label="' . htmlspecialchars($col1, ENT_QUOTES) . '"><span class="coin-pill-white">' . number_format((int)$acc[$col1]) . '</span></td>';
+                        echo '<td data-label="' . htmlspecialchars($col2, ENT_QUOTES) . '"><span class="coin-val-white"><i class="fa fa-diamond coin-icon-sm"></i> ' . number_format((int)$acc[$col2]) . '</span></td>';
+                        echo '<td data-label="' . htmlspecialchars($col3, ENT_QUOTES) . '"><span class="coin-val-green"><i class="fa fa-bolt coin-icon-sm"></i> ' . number_format((int)$acc[$col3]) . '</span></td>';
                     echo '</tr>';
                 }
             } else {
@@ -172,7 +172,7 @@ echo '</div>';
 
 // CSS
 echo '<style>
-    /* ESTILO MENSAJE ¨¦XITO CUSTOM */
+    /* ESTILO MENSAJE ?XITO CUSTOM */
     .alert-success-custom { background: #1b1b28; border-left: 4px solid #00d084; color: #fff; padding: 15px; margin-bottom: 20px; border-radius: 4px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
 </style>';
 ?>

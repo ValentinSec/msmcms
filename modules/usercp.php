@@ -108,10 +108,10 @@ echo '<!DOCTYPE html>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Panel de Gestión - ' . custom_config("server_name") . '</title>';
     
-if($isMorpheus) {
+$ucpFavicon = 'templates/' . $ucpTemplate . '/img/favicon.ico';
+if(file_exists($ucpFavicon)) {
     echo '
-    <link rel="icon" type="image/x-icon" href="' . __BASE_URL__ . 'templates/morpheus/img/favicon.ico?v=' . time() . '">
-    <link rel="shortcut icon" type="image/x-icon" href="' . __BASE_URL__ . 'templates/morpheus/img/favicon.ico?v=' . time() . '">';
+    <link rel="icon" type="image/x-icon" href="' . __BASE_URL__ . $ucpFavicon . '?v=' . (int)@filemtime($ucpFavicon) . '">';
 }
 
 echo '

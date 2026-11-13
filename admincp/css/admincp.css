@@ -2389,3 +2389,641 @@ textarea.form-control-dark {
     .chart-header { flex-wrap: wrap; gap: 8px; }
     .chart-tab { font-size: 13px; }
 }
+
+/* ====================================================================
+   TABLAS: sin el recuadro claro que Bootstrap agrega en pantallas angostas
+   ==================================================================== */
+@media screen and (max-width: 767px) {
+    #page-wrapper .table-responsive { border: 0; margin-bottom: 0; }
+}
+
+/* ====================================================================
+   CAPA UNIFICADA DEL PANEL (v1)
+   Un solo criterio para contenedores, campos, botones, avisos e interruptores.
+   Los colores se cambian aqui, en las variables.
+   ==================================================================== */
+#page-wrapper {
+    --ad-surface: #0f1115;
+    --ad-field: #0b0d12;
+    --ad-line: #1f2733;
+    --ad-line-strong: #2a3545;
+    --ad-text: #e5e7eb;
+    --ad-muted: #8b95a7;
+    --ad-accent: #10b981;
+    --ad-accent-hover: #0ea371;
+    --ad-info: #3b82f6;
+    --ad-warn: #f59e0b;
+    --ad-danger: #ef4444;
+    --ad-radius: 10px;
+}
+
+/* --- Contenedores --- */
+#page-wrapper .settings-section,
+#page-wrapper .account-list-container,
+#page-wrapper .search-tool-container {
+    background: var(--ad-surface) !important;
+    border: 1px solid var(--ad-line) !important;
+    border-radius: var(--ad-radius);
+    box-shadow: none;
+    font-family: inherit;
+}
+/* Sin contenedor dentro de contenedor: los recuadros internos pasan a ser una division */
+#page-wrapper .btn-config-box {
+    background: transparent;
+    border: 0;
+    border-top: 1px solid var(--ad-line);
+    border-radius: 0;
+    padding: 14px 0 0;
+}
+
+/* --- Titulos y etiquetas --- */
+#page-wrapper .settings-title,
+#page-wrapper .list-title {
+    color: #fff;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 0;
+    text-transform: none;
+}
+#page-wrapper .settings-title {
+    margin: 0 0 18px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--ad-line);
+}
+#page-wrapper .section-header { border-bottom-color: var(--ad-line); }
+#page-wrapper .section-header .settings-title { margin: 0; padding-bottom: 0; border-bottom: 0; }
+#page-wrapper .st-title {
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 0;
+    text-transform: none;
+    margin-bottom: 20px;
+}
+#page-wrapper .settings-label {
+    color: var(--ad-muted);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0;
+    text-transform: none;
+    margin-bottom: 6px;
+}
+
+/* --- Campos, desplegables y areas de texto --- */
+#page-wrapper .form-control-dark,
+#page-wrapper .form-control,
+#page-wrapper .st-input {
+    background-color: var(--ad-field) !important;
+    border: 1px solid var(--ad-line-strong) !important;
+    color: var(--ad-text) !important;
+    border-radius: 8px;
+    box-shadow: none;
+}
+#page-wrapper .form-control-dark { padding: 10px 12px; font-size: 13px; }
+#page-wrapper .form-control-dark:focus,
+#page-wrapper .form-control:focus,
+#page-wrapper .st-input:focus {
+    border-color: var(--ad-info) !important;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+    outline: none;
+}
+#page-wrapper .form-control-dark:disabled,
+#page-wrapper .form-control-dark[readonly] { opacity: 0.6; cursor: not-allowed; }
+#page-wrapper .form-control-dark::placeholder,
+#page-wrapper .form-control::placeholder,
+#page-wrapper .st-input::placeholder { color: #5b6677; }
+#page-wrapper .search-box { background: var(--ad-field); border-color: var(--ad-line-strong); border-radius: 8px; }
+
+/* --- Botones --- */
+/* Principal: guardar, agregar, confirmar */
+#page-wrapper .btn-save-green,
+#page-wrapper .st-btn,
+#page-wrapper .btn-success {
+    background: var(--ad-accent) !important;
+    border: 1px solid var(--ad-accent) !important;
+    color: #fff !important;
+    border-radius: 8px;
+    box-shadow: none;
+    text-shadow: none;
+    transition: background .2s, border-color .2s;
+}
+#page-wrapper .btn-save-green,
+#page-wrapper .st-btn {
+    padding: 10px 20px;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0;
+    text-transform: none;
+}
+#page-wrapper .btn-save-green:hover,
+#page-wrapper .st-btn:hover,
+#page-wrapper .btn-success:hover {
+    background: var(--ad-accent-hover) !important;
+    border-color: var(--ad-accent-hover) !important;
+    box-shadow: none;
+}
+/* Secundario: editar, volver, cancelar */
+#page-wrapper .btn-edit,
+#page-wrapper .btn-back-outline,
+#page-wrapper .btn-default {
+    background: transparent;
+    border: 1px solid var(--ad-line-strong);
+    color: var(--ad-text);
+    border-radius: 8px;
+    box-shadow: none;
+    text-shadow: none;
+}
+#page-wrapper .btn-edit:hover,
+#page-wrapper .btn-back-outline:hover,
+#page-wrapper .btn-default:hover {
+    background: rgba(59, 130, 246, 0.1);
+    border-color: var(--ad-info);
+    color: #fff;
+    box-shadow: none;
+}
+/* Riesgo: borrar, expulsar */
+#page-wrapper .btn-kick-red,
+#page-wrapper .btn-danger {
+    background: var(--ad-danger);
+    border: 1px solid var(--ad-danger);
+    color: #fff;
+    border-radius: 8px;
+    box-shadow: none;
+    text-shadow: none;
+}
+#page-wrapper .btn-kick-red:hover,
+#page-wrapper .btn-danger:hover { filter: brightness(1.1); box-shadow: none; }
+
+/* --- Avisos de exito, error y advertencia --- */
+#page-wrapper .alert,
+#page-wrapper .alert-success-custom {
+    background: var(--ad-surface) !important;
+    border: 1px solid var(--ad-line) !important;
+    border-left: 4px solid var(--ad-muted) !important;
+    border-radius: 8px;
+    color: var(--ad-text) !important;
+    padding: 14px 16px;
+    margin-bottom: 20px;
+    box-shadow: none;
+    text-shadow: none;
+}
+#page-wrapper .alert-success,
+#page-wrapper .alert-success-custom { border-left-color: var(--ad-accent) !important; }
+#page-wrapper .alert-danger { border-left-color: var(--ad-danger) !important; }
+#page-wrapper .alert-warning { border-left-color: var(--ad-warn) !important; }
+#page-wrapper .alert-info { border-left-color: var(--ad-info) !important; }
+
+/* --- Interruptores --- */
+#page-wrapper .slider { background-color: var(--ad-line-strong); }
+#page-wrapper input:checked + .slider { background-color: var(--ad-accent); }
+
+/* --- Tablas propias de los modulos --- */
+#page-wrapper .custom-table th,
+#page-wrapper .admin-table th,
+#page-wrapper .char-table th { color: var(--ad-muted); border-bottom-color: var(--ad-line); }
+#page-wrapper .custom-table td,
+#page-wrapper .admin-table td,
+#page-wrapper .char-table td { border-bottom-color: var(--ad-line); }
+#page-wrapper .custom-table td { white-space: nowrap; }
+#page-wrapper .list-footer { border-top-color: var(--ad-line); }
+
+/* --- Pantallas angostas --- */
+@media (max-width: 767px) {
+    #page-wrapper .settings-section,
+    #page-wrapper .account-list-container { padding: 18px 16px; }
+    #page-wrapper .search-tool-container { padding: 32px 16px; }
+    #page-wrapper .custom-table th,
+    #page-wrapper .custom-table td { padding: 10px 8px; font-size: 12px; }
+    #page-wrapper .search-box,
+    #page-wrapper .search-input { width: 100%; }
+}
+
+/* --- Countdown: previsualizacion en una sola fila --- */
+@media (max-width: 767px) {
+    #page-wrapper .countdown-wrapper { width: 100%; padding: 22px 12px; }
+    #page-wrapper .countdown-wrapper .event-title { font-size: 18px; letter-spacing: 1px; margin-bottom: 14px; }
+    #page-wrapper .countdown-wrapper .timer-flex { flex-wrap: nowrap; gap: 6px; }
+    #page-wrapper .countdown-wrapper .timer-box { flex: 1 1 0; min-width: 0; padding: 8px 2px; }
+    #page-wrapper .countdown-wrapper .time-val { font-size: 26px; }
+    #page-wrapper .countdown-wrapper .time-label { font-size: 9px; letter-spacing: 0; }
+    #page-wrapper .countdown-wrapper .timer-separator { font-size: 20px; margin-top: -12px; }
+}
+
+/* --- Ventana emergente: la vista previa mide 500px fijos; se reduce en proporcion --- */
+@media (max-width: 575px) { #page-wrapper .popup-preview-container { zoom: 0.8; } }
+@media (max-width: 470px) { #page-wrapper .popup-preview-container { zoom: 0.65; } }
+@media (max-width: 399px) { #page-wrapper .popup-preview-container { zoom: 0.55; } }
+@media (max-width: 339px) { #page-wrapper .popup-preview-container { zoom: 0.47; } }
+
+
+/* ====================================================================
+   BOTONES DE ACCION: misma forma y tamano en todo el panel
+   ==================================================================== */
+#page-wrapper .btn-save-green,
+#page-wrapper .st-btn,
+#page-wrapper .btn-success:not(.btn-xs):not(.btn-sm),
+#page-wrapper .btn-primary:not(.btn-xs):not(.btn-sm) {
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    height: 40px !important;
+    min-height: 0 !important;
+    padding: 0 20px !important;
+    font-size: 13px !important;
+    font-weight: 600 !important;
+    line-height: 1 !important;
+    letter-spacing: 0 !important;
+    text-transform: none !important;
+    border-radius: 8px !important;
+    white-space: nowrap;
+    vertical-align: middle;
+}
+/* Accion destacada que no es guardar (por ejemplo "Agregar Boss", "Enviar") */
+#page-wrapper .btn-primary {
+    background: var(--ad-info) !important;
+    border: 1px solid var(--ad-info) !important;
+    color: #fff !important;
+    box-shadow: none;
+    text-shadow: none;
+}
+#page-wrapper .btn-primary:hover { filter: brightness(1.1); }
+/* Boton pegado a un campo: conserva la union con el campo */
+#page-wrapper .input-group .input-group-btn > .btn.btn-primary,
+#page-wrapper .input-group .input-group-btn > .btn.btn-success {
+    border-radius: 0 8px 8px 0 !important;
+}
+
+
+/* ====================================================================
+   EVENTOS: cronograma
+   ==================================================================== */
+#page-wrapper .event-name-box {
+    background: none;
+    border: 0;
+    padding: 0;
+    color: #fff;
+    font-weight: 600;
+}
+#page-wrapper .badge-event-type {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 20px;
+    background: rgba(16, 185, 129, 0.12);
+    border: 1px solid rgba(16, 185, 129, 0.35);
+    color: var(--ad-accent);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .5px;
+    text-transform: uppercase;
+}
+#page-wrapper .btn-edit-blue,
+#page-wrapper .btn-delete-red {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 32px;
+    padding: 0 14px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    text-decoration: none;
+    white-space: nowrap;
+}
+#page-wrapper .btn-edit-blue {
+    background: transparent;
+    border: 1px solid var(--ad-line-strong);
+    color: var(--ad-text);
+}
+#page-wrapper .btn-edit-blue:hover { border-color: var(--ad-info); background: rgba(59, 130, 246, 0.1); color: #fff; }
+#page-wrapper .btn-delete-red {
+    background: var(--ad-danger);
+    border: 1px solid var(--ad-danger);
+    color: #fff;
+}
+#page-wrapper .btn-delete-red:hover { filter: brightness(1.1); color: #fff; }
+
+@media (max-width: 767px) {
+    #page-wrapper .table-dark-custom:has(.event-name-box) thead { display: none; }
+    #page-wrapper .table-dark-custom:has(.event-name-box),
+    #page-wrapper .table-dark-custom:has(.event-name-box) tbody { display: block; width: 100%; }
+    #page-wrapper .table-dark-custom:has(.event-name-box) tr {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 8px 10px;
+        padding: 14px 0;
+        border-bottom: 1px solid var(--ad-line);
+    }
+    #page-wrapper .table-dark-custom:has(.event-name-box) tr:last-child { border-bottom: 0; }
+    #page-wrapper .table-dark-custom:has(.event-name-box) td {
+        display: block;
+        padding: 0 !important;
+        border: 0 !important;
+        background: none !important;
+        text-align: left !important;
+    }
+    #page-wrapper .table-dark-custom:has(.event-name-box) td:nth-child(3),
+    #page-wrapper .table-dark-custom:has(.event-name-box) td:nth-child(4) { grid-column: 1 / -1; }
+    #page-wrapper .table-dark-custom:has(.event-name-box) td:nth-child(4) { display: flex; gap: 8px; }
+}
+
+
+/* ====================================================================
+   BLOQUE B: tablas de modulos en pantallas angostas (sin barra lateral)
+   ==================================================================== */
+
+/* Boton "Agregar Coins": misma forma que los demas botones de accion */
+#page-wrapper .btn-add-blue {
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    height: 40px !important;
+    padding: 0 20px !important;
+    font-size: 13px !important;
+    font-weight: 600 !important;
+    line-height: 1 !important;
+    border-radius: 8px !important;
+    background: var(--ad-info) !important;
+    border: 1px solid var(--ad-info) !important;
+    color: #fff !important;
+    white-space: nowrap;
+}
+#page-wrapper .btn-add-blue:hover { filter: brightness(1.1); }
+
+@media (max-width: 767px) {
+
+    /* --- Coins: una ficha por cuenta --- */
+    #page-wrapper .table-accounts thead { display: none; }
+    #page-wrapper .table-accounts,
+    #page-wrapper .table-accounts tbody { display: block; width: 100%; }
+    #page-wrapper .table-accounts tr {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px 8px;
+        padding: 14px 16px;
+        border-bottom: 1px solid var(--ad-line);
+    }
+    #page-wrapper .table-accounts td {
+        display: block;
+        min-width: 0;
+        padding: 0 !important;
+        border: 0 !important;
+        background: none !important;
+    }
+    #page-wrapper .table-accounts td:nth-child(1):not([colspan]) { display: none; }
+    #page-wrapper .table-accounts td:nth-child(2) { grid-column: 1 / -1; }
+    #page-wrapper .table-accounts td[colspan] { grid-column: 1 / -1; text-align: center; }
+    #page-wrapper .table-accounts td[data-label]::before {
+        content: attr(data-label);
+        display: block;
+        margin-bottom: 4px;
+        color: var(--ad-muted);
+        font-size: 10px;
+        font-weight: 600;
+        letter-spacing: .5px;
+        text-transform: uppercase;
+    }
+
+    /* --- Plugins: nombre en una linea; "Configurar" queda como icono --- */
+    #page-wrapper .table-plugins th { font-size: 11px; padding-left: 8px !important; padding-right: 8px; }
+    #page-wrapper .table-plugins td { padding-left: 8px; padding-right: 8px; }
+    #page-wrapper .table-plugins td:first-child {
+        padding-left: 12px !important;
+        font-size: 13px !important;
+        white-space: nowrap;
+    }
+    #page-wrapper .table-plugins td:first-child i { font-size: 16px !important; margin-right: 8px !important; }
+}
+@media (max-width: 575px) {
+    #page-wrapper .table-plugins .btn-config-outline { font-size: 0; padding: 8px 12px; }
+    #page-wrapper .table-plugins .btn-config-outline i { font-size: 14px; margin: 0; }
+}
+
+@media (max-width: 767px) {
+
+    /* --- Descargas agregadas: link arriba, datos y borrar debajo --- */
+    #page-wrapper .downloads-table thead { display: none; }
+    #page-wrapper .downloads-table,
+    #page-wrapper .downloads-table tbody { display: block; width: 100%; }
+    #page-wrapper .downloads-table tr {
+        display: grid;
+        grid-template-columns: auto 1fr auto;
+        align-items: center;
+        gap: 8px 10px;
+        padding: 12px 0;
+        border-bottom: 1px solid var(--ad-line);
+    }
+    #page-wrapper .downloads-table tr:last-child { border-bottom: 0; }
+    #page-wrapper .downloads-table td {
+        display: block;
+        width: auto !important;
+        padding: 0 !important;
+        border: 0 !important;
+    }
+    #page-wrapper .downloads-table td:nth-child(1) { grid-column: 1 / -1; font-size: 12px; overflow-wrap: anywhere; }
+
+    /* --- Noticias: imagen, titulo con fecha debajo, acciones a la derecha --- */
+    #page-wrapper .table:has(.news-thumb) thead { display: none; }
+    #page-wrapper .table:has(.news-thumb),
+    #page-wrapper .table:has(.news-thumb) tbody { display: block; width: 100%; }
+    #page-wrapper .table:has(.news-thumb) tr {
+        display: grid;
+        grid-template-columns: 40px 1fr auto;
+        align-items: center;
+        gap: 2px 12px;
+        padding: 12px 0;
+        border-bottom: 1px solid var(--ad-line);
+    }
+    #page-wrapper .table:has(.news-thumb) tr:last-child { border-bottom: 0; }
+    #page-wrapper .table:has(.news-thumb) td {
+        display: block;
+        padding: 0 !important;
+        border: 0 !important;
+        text-align: left !important;
+    }
+    #page-wrapper .table:has(.news-thumb) td:nth-child(1) { grid-row: 1 / span 2; }
+    #page-wrapper .table:has(.news-thumb) td:nth-child(2) { grid-column: 2; }
+    #page-wrapper .table:has(.news-thumb) td:nth-child(3) { grid-column: 2; grid-row: 2; }
+    #page-wrapper .table:has(.news-thumb) td:nth-child(4) { grid-column: 3; grid-row: 1 / span 2; }
+}
+
+
+/* ====================================================================
+   EDITOR DE TEMPLATES
+   ==================================================================== */
+#page-wrapper h3, #page-wrapper h5, #page-wrapper h6 { font-family: inherit; }
+#page-wrapper .config-card {
+    background: var(--ad-surface);
+    border: 1px solid var(--ad-line);
+    border-radius: var(--ad-radius);
+    box-shadow: none;
+    padding: 22px;
+    margin-bottom: 20px;
+}
+#page-wrapper .config-card .section-header {
+    display: block;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 0;
+    text-transform: none;
+    border-bottom: 1px solid var(--ad-line);
+    padding-bottom: 14px;
+    margin-bottom: 18px;
+}
+#page-wrapper .config-card .row > [class*="col-"] { margin-bottom: 14px; }
+/* Encabezado: alineado con las secciones y con el mismo contenedor */
+#page-wrapper .col-12:has(#templateSelector) { padding: 0 15px; margin-bottom: 20px; }
+#page-wrapper .col-12:has(#templateSelector) > div {
+    background: var(--ad-surface) !important;
+    border: 1px solid var(--ad-line) !important;
+    border-radius: var(--ad-radius) !important;
+    padding: 18px 22px !important;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+#page-wrapper .col-12:has(#templateSelector) small { color: var(--ad-muted) !important; }
+#page-wrapper #templateSelector { max-width: 100%; }
+#page-wrapper .img-preview-box {
+    background: var(--ad-field);
+    border: 1px dashed var(--ad-line-strong);
+    border-radius: 8px;
+}
+
+/* ====================================================================
+   SELECTOR DE ARCHIVOS: igual en todos los modulos
+   ==================================================================== */
+#page-wrapper .form-control-file-dark,
+#page-wrapper input[type="file"].form-control-dark {
+    display: block;
+    width: 100%;
+    padding: 8px 10px;
+    background: var(--ad-field) !important;
+    border: 1px solid var(--ad-line-strong) !important;
+    border-radius: 8px;
+    color: var(--ad-muted) !important;
+    font-size: 12px;
+}
+#page-wrapper input[type="file"]::file-selector-button {
+    margin-right: 10px;
+    padding: 6px 12px;
+    background: transparent;
+    border: 1px solid var(--ad-line-strong);
+    border-radius: 6px;
+    color: var(--ad-text);
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+}
+#page-wrapper input[type="file"]::file-selector-button:hover { border-color: var(--ad-info); }
+
+/* ====================================================================
+   NOTICIAS: boton "Crear una Nueva Noticia"
+   ==================================================================== */
+#page-wrapper .btn-create-news {
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    height: 40px !important;
+    padding: 0 20px !important;
+    background: var(--ad-accent) !important;
+    border: 1px solid var(--ad-accent) !important;
+    border-radius: 8px !important;
+    color: #fff !important;
+    font-size: 13px !important;
+    font-weight: 600 !important;
+    line-height: 1 !important;
+    white-space: nowrap;
+}
+#page-wrapper .btn-create-news:hover { background: var(--ad-accent-hover) !important; border-color: var(--ad-accent-hover) !important; }
+
+/* ====================================================================
+   DASHBOARD: Ultimos Registros y Actividad Reciente en pantallas angostas
+   ==================================================================== */
+@media (max-width: 767px) {
+    #page-wrapper .table-registrations thead { display: none; }
+    #page-wrapper .table-registrations,
+    #page-wrapper .table-registrations tbody { display: block; width: 100%; }
+    #page-wrapper .table-registrations tr {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px 12px;
+        padding: 12px 0;
+        border-bottom: 1px solid var(--ad-line);
+    }
+    #page-wrapper .table-registrations tr:last-child { border-bottom: 0; }
+    #page-wrapper .table-registrations td {
+        display: block;
+        padding: 0 !important;
+        border: 0 !important;
+        text-align: left !important;
+    }
+    #page-wrapper .table-registrations td:nth-child(1) { grid-column: 1; grid-row: 1; }
+    #page-wrapper .table-registrations td:nth-child(4) { grid-column: 2; grid-row: 1; text-align: right !important; }
+    #page-wrapper .table-registrations td:nth-child(2) { grid-column: 1; grid-row: 2; }
+    #page-wrapper .table-registrations td:nth-child(3) { grid-column: 2; grid-row: 2; text-align: right !important; }
+    #page-wrapper .table-registrations td:nth-child(2)::before,
+    #page-wrapper .table-registrations td:nth-child(3)::before {
+        display: block;
+        margin-bottom: 2px;
+        color: var(--ad-muted);
+        font-size: 10px;
+        font-weight: 600;
+        letter-spacing: .5px;
+        text-transform: uppercase;
+    }
+    #page-wrapper .dashboard-row-bottom > [class*="col-"]:first-child .table-registrations td:nth-child(2)::before { content: "Creada"; }
+    #page-wrapper .dashboard-row-bottom > [class*="col-"]:first-child .table-registrations td:nth-child(3)::before { content: "\DAltima conexi\F3n"; }
+    #page-wrapper .dashboard-row-bottom > [class*="col-"]:last-child .table-registrations td:nth-child(2)::before { content: "IP"; }
+    #page-wrapper .dashboard-row-bottom > [class*="col-"]:last-child .table-registrations td:nth-child(3)::before { content: "Conexi\F3n"; }
+    #page-wrapper .table-registrations td[colspan] {
+        grid-column: 1 / -1 !important;
+        grid-row: auto !important;
+        text-align: center !important;
+    }
+}
+
+
+/* ====================================================================
+   MENU LATERAL: submenus visibles tambien mientras se despliegan
+   (antes quedaban ocultos durante la animacion y aparecian de golpe)
+   ==================================================================== */
+@media (max-width: 991px) {
+    #wrapper.toggled .sidebar .nav-second-level.collapsing,
+    #wrapper.toggled .sidebar .nav-third-level.collapsing,
+    #wrapper.toggled .sidebar .nav-third-level.in { display: block !important; }
+}
+
+
+/* ====================================================================
+   MENU LATERAL: sin fondos claros al hacer clic; marca discreta de la seccion actual
+   ==================================================================== */
+/* El ultimo elemento cliqueado no queda resaltado */
+.sidebar #side-menu a:focus,
+.sidebar #side-menu a:active {
+    background-color: transparent !important;
+    outline: none !important;
+    box-shadow: none;
+}
+/* Un grupo abierto solo se distingue por el texto en blanco */
+.sidebar #side-menu > li.active > a {
+    background: transparent !important;
+    color: #fff !important;
+}
+/* Al pasar el cursor */
+.sidebar #side-menu > li > a:hover {
+    background: rgba(255, 255, 255, 0.06) !important;
+    color: #fff !important;
+}
+/* Seccion en la que se esta: barra verde a la izquierda */
+.sidebar #side-menu > li > a.active {
+    background: rgba(16, 185, 129, 0.10) !important;
+    color: #fff !important;
+    box-shadow: inset 3px 0 0 #10b981;
+}
+.sidebar #side-menu > li > a.active i { color: #10b981 !important; }
+.sidebar #side-menu .nav-second-level li a.active {
+    background: transparent !important;
+    color: #fff !important;
+    box-shadow: inset 2px 0 0 #10b981;
+}

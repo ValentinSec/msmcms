@@ -69,7 +69,11 @@ $cancelLink = admincp_base('module_events');
 echo '<div class="container-fluid">';
     echo '<div class="row">';
         echo '<div class="col-lg-12">';
-            
+            echo '<div class="row" style="margin-bottom: 20px;">';
+                echo '<div class="col-xs-12">';
+                    echo '<h3 style="color:#fff; font-weight:600;">Configuraci&oacute;n de Eventos</h3>';
+                echo '</div>';
+            echo '</div>';
             // Alerta Status
             if(isset($_GET['status'])) {
                 echo '<div class="alert alert-success">Operación realizada con éxito.</div>';

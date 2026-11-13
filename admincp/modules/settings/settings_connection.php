@@ -219,7 +219,7 @@ echo '<div class="container-fluid">';
                         echo '<h3 style="margin:0; color:#fff; font-weight:600;">Configuración de Conexión</h3>';
                     echo '</div>';
                     echo '<div class="col-xs-6 text-right">';
-                        echo '<button type="submit" name="save_connection_settings" class="btn-save-green">Guardar Todo</button>';
+                        echo '<button type="submit" name="save_connection_settings" class="btn-save-green">Guardar Cambios</button>';
                     echo '</div>';
                 echo '</div>';
             echo '</div>';
