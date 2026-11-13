@@ -71,27 +71,53 @@ if (!function_exists('getEloAvatar')) {
 // ==========================================================
 
 $db = Connection::Database('Me_MuOnline');
-$tableName = 'PvPSystem';
 
-$query = "SELECT TOP 50 e.Name, e.Elo, c.Class FROM " . $tableName . " e LEFT JOIN Character c ON e.Name = c.Name ORDER BY e.Elo DESC";
-$rankingData = $db->query_fetch($query);
+// Tabla del sistema PvP: la del juego (PvPSystem) o la propia del CMS (MUSERVERMAKER_PVP_SYSTEM)
+$eloTable = null;
+$tblCheck = $db->query_fetch_single("SELECT OBJECT_ID('PvPSystem', 'U') AS t1, OBJECT_ID('MUSERVERMAKER_PVP_SYSTEM', 'U') AS t2");
+if (is_array($tblCheck)) {
+    if (!empty($tblCheck['t1'])) {
+        $eloTable = 'PvPSystem';
+    } elseif (!empty($tblCheck['t2'])) {
+        $eloTable = 'MUSERVERMAKER_PVP_SYSTEM';
+    }
+}
 
-if($rankingData === false || $rankingData === null) {
-    $tableName = 'MUSERVERMAKER_PVP_SYSTEM';
-    $query = "SELECT TOP 50 e.Name, e.Elo, c.Class FROM " . $tableName . " e LEFT JOIN Character c ON e.Name = c.Name ORDER BY e.Elo DESC";
-    $rankingData = $db->query_fetch($query);
+// Estados: ok | empty | notable | error
+$eloStatus = 'error';
+$rankingData = null;
+
+if ($eloTable === null) {
+    $eloStatus = is_array($tblCheck) ? 'notable' : 'error';
+} else {
+    // Sin administradores (CtlCode 32 o mas), igual que el resto de los rankings
+    $eloWhere = " FROM " . $eloTable . " e LEFT JOIN Character c ON e.Name = c.Name WHERE ISNULL(c.CtlCode, 0) < 32";
+    $rankingData = $db->query_fetch("SELECT TOP 50 e.Name, e.Elo, c.Class" . $eloWhere . " ORDER BY e.Elo DESC");
+
+    if (is_array($rankingData) && !empty($rankingData)) {
+        $eloStatus = 'ok';
+    } else {
+        // query_fetch devuelve null tanto si falla como si no hay filas: se distingue contando
+        $eloCount = $db->query_fetch_single("SELECT COUNT(*) AS c" . $eloWhere);
+        if (is_array($eloCount) && (int)$eloCount['c'] === 0) {
+            $eloStatus = 'empty';
+        }
+    }
 }
 
 // ==========================================================
 // 3. RENDERIZADO
 // ==========================================================
 
-if($rankingData === false || $rankingData === null) {
-    echo '<tr><td colspan="4" class="text-center py-4 text-danger fw-bold"><i class="fa fa-exclamation-triangle"></i> ERROR SQL</td></tr>';
-} 
-elseif(empty($rankingData)) {
-    echo '<tr><td colspan="4" class="text-center py-4 text-white"><i class="fa fa-info-circle"></i> Aún no hay registros en el Ranking ELO.</td></tr>';
-} 
+if ($eloStatus === 'empty') {
+    echo '<tr><td colspan="4" class="text-center py-4 text-white"><i class="fa fa-info-circle"></i> A&uacute;n no hay registros en el Ranking ELO.</td></tr>';
+}
+elseif ($eloStatus === 'notable') {
+    echo '<tr><td colspan="4" class="text-center py-4 text-white"><i class="fa fa-info-circle"></i> El ranking ELO no est&aacute; habilitado en este servidor.</td></tr>';
+}
+elseif ($eloStatus === 'error') {
+    echo '<tr><td colspan="4" class="text-center py-4 text-white"><i class="fa fa-exclamation-triangle text-warning"></i> Ranking ELO no disponible por el momento.</td></tr>';
+}
 else {
     foreach($rankingData as $row) {
         $name = htmlspecialchars($row['Name']);
@@ -113,7 +139,7 @@ else {
             echo '</td>';
             
             echo '<td class="text-center" style="vertical-align: middle;">';
-                echo '<img src="' . $avatarPath . '" class="rank-avatar-img" title="Class" onerror="this.src=\'' . __BASE_URL__ . 'img/character-avatars/avatar.jpg\'">';
+                echo '<img src="' . $avatarPath . '" class="rank-avatar-img" title="Class" onerror="this.onerror=null;this.src=\'' . __BASE_URL__ . 'img/character-avatars/avatar.jpg\'">';
             echo '</td>';
             
             echo '<td class="text-center" style="vertical-align: middle;">';

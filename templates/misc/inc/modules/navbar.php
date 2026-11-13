@@ -53,7 +53,7 @@ if (file_exists($navConfigPath)) {
                 <?php endif; ?>
 
                 <?php if($navConfig['show_guides']): ?>
-                    <li class="nav-item"><a class="nav-link" href="<?php echo __BASE_URL__; ?>guides">GUÍAS<a></li>
+                    <li class="nav-item"><a class="nav-link" href="<?php echo __BASE_URL__; ?>guides">GUÍAS</a></li>
                 <?php endif; ?>
 
                 <?php if(!empty($navConfig['custom_links'])): ?>

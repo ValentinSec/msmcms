@@ -149,145 +149,25 @@ if(isset($_POST['market_ajax']) && $_POST['market_ajax'] == 'true') {
     <title><?php echo custom_config('web_title'); ?></title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="icon" type="image/x-icon" href="<?php echo __BASE_URL__; ?>templates/<?php echo $activeTplName; ?>/img/favicon.ico?v=<?php echo time(); ?>">
-    <link rel="stylesheet" href="<?php echo __BASE_URL__; ?>templates/misc/css/sidebar.css">
-    <link href="<?php echo __PATH_TEMPLATE_CSS__; ?>main.css?v=1.1" rel="stylesheet">
-    <link href="/templates/misc/css/main.css?v=1.1" rel="stylesheet">
-    <link href="<?php echo __PATH_TEMPLATE_CSS__; ?>rankings.css?v=1.1" rel="stylesheet">
-    <link href="<?php echo __BASE_URL__; ?>templates/misc/css/navbar.css" rel="stylesheet">
-    <link href="<?php echo __PATH_TEMPLATE_CSS__; ?>login.css?v=1.1" rel="stylesheet">
-    <link href="<?php echo __PATH_TEMPLATE_CSS__; ?>footer.css?v=1.0" rel="stylesheet">
-    <link href="<?php echo __PATH_TEMPLATE_CSS__; ?>info.css?v=1.0" rel="stylesheet">
-    <link href="<?php echo __PATH_TEMPLATE_CSS__; ?>news.css?v=1.0" rel="stylesheet">
+    <?php
+    // Versión de archivos estáticos = fecha de modificación (el navegador los guarda hasta que cambian)
+    if(!function_exists('msm_v')) {
+        function msm_v($relPath) { $t = @filemtime($relPath); return $t ? $t : 1; }
+    }
+    ?>
+    <link rel="icon" type="image/x-icon" href="<?php echo __BASE_URL__; ?>templates/default/img/favicon.ico?v=<?php echo msm_v('templates/default/img/favicon.ico'); ?>">
+    <link rel="stylesheet" href="<?php echo __BASE_URL__; ?>templates/misc/css/sidebar.css?v=<?php echo msm_v('templates/misc/css/sidebar.css'); ?>">
+    <link href="<?php echo __PATH_TEMPLATE_CSS__; ?>main.css?v=<?php echo msm_v('templates/default/css/main.css'); ?>" rel="stylesheet">
+    <link href="<?php echo __BASE_URL__; ?>templates/misc/css/main.css?v=<?php echo msm_v('templates/misc/css/main.css'); ?>" rel="stylesheet">
+    <link href="<?php echo __PATH_TEMPLATE_CSS__; ?>rankings.css?v=<?php echo msm_v('templates/default/css/rankings.css'); ?>" rel="stylesheet">
+    <link href="<?php echo __BASE_URL__; ?>templates/misc/css/navbar.css?v=<?php echo msm_v('templates/misc/css/navbar.css'); ?>" rel="stylesheet">
+    <link href="<?php echo __PATH_TEMPLATE_CSS__; ?>login.css?v=<?php echo msm_v('templates/default/css/login.css'); ?>" rel="stylesheet">
+    <link href="<?php echo __PATH_TEMPLATE_CSS__; ?>footer.css?v=<?php echo msm_v('templates/default/css/footer.css'); ?>" rel="stylesheet">
+    <link href="<?php echo __PATH_TEMPLATE_CSS__; ?>info.css?v=<?php echo msm_v('templates/default/css/info.css'); ?>" rel="stylesheet">
+    <link href="<?php echo __PATH_TEMPLATE_CSS__; ?>news.css?v=<?php echo msm_v('templates/default/css/news.css'); ?>" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Roboto:wght@300;400&display=swap" rel="stylesheet">
-    <style>
-        .news-container { display: flex; flex-direction: column; gap: 30px; width: 100%; }
-        .news-item { background: rgba(0, 0, 0, 0.4); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 12px; overflow: hidden; }
-        .news-header { padding: 20px; border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
-        .news-title-text { font-family: 'Cinzel', serif; color: #FF8A3B; font-size: 22px; margin: 0; text-transform: uppercase; }
-        .news-body-text { font-family: 'Roboto', sans-serif; padding: 20px; color: #cbd5e1; line-height: 1.7; font-size: 15px; }
-        .news-date { font-size: 11px; color: #64748b; padding: 0 20px 20px 20px; }
-        .news-full { position: relative; min-height: 350px; display: flex; align-items: flex-end; background-size: cover; background-position: center; border:none; }
-        .news-full .news-overlay { position: absolute; top:0; left:0; width:100%; height:100%; background: linear-gradient(to top, rgba(0,0,0,0.95) 10%, rgba(0,0,0,0.2) 100%); }
-        .news-full .news-content-wrapper { position: relative; z-index: 2; padding: 30px; width: 100%; }
-        .news-full .news-title-text { color: #fff; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
-        .news-expanded-img { width: 100%; height: auto; max-height: 400px; object-fit: cover; border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
-        .news-cascada-img { width: 100%; height: auto; padding: 0 20px 20px 20px; border-radius: 0 0 12px 12px; }
-
-        /* MARKETPLACE STYLES FIXED */
-        .market-ticker-wrap {
-            width: 100%; overflow: hidden; background: rgba(0, 0, 0, 0.3); padding: 20px 0;
-            border-top: 1px solid rgba(255,255,255,0.05); border-bottom: 1px solid rgba(255,255,255,0.05); position: relative;
-        }
-        .market-ticker { display: flex; gap: 20px; width: fit-content; animation: ticker 40s linear infinite; }
-        .market-ticker:hover { animation-play-state: paused; }
-        @keyframes ticker { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
-
-        /* --- CONTENEDORES MÁS GRANDES --- */
-        .m-card-mini {
-            width: 260px; height: 110px; flex-shrink: 0; 
-            background: rgba(13, 17, 23, 0.9); border: 1px solid #30363d;
-            border-radius: 6px; padding: 15px; display: flex; align-items: center; gap: 15px;
-            cursor: pointer; transition: 0.2s; position: relative; overflow: visible !important;
-        }
-        .m-card-mini:hover { border-color: #FF8A3B; transform: scale(1.02); background: #1a202c; z-index: 50; }
-        .m-card-mini img { width: 60px; height: 60px; object-fit: contain; background: #000; border: 1px solid #333; border-radius: 4px; }
-        
-        .m-mini-info { flex: 1; display: flex; flex-direction: column; overflow: hidden; justify-content: center; }
-        .m-mini-name { font-size: 13px; font-weight: bold; color: #e2e8f0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .m-mini-price { font-size: 12px; color: #ffd700; font-family: 'Roboto'; font-weight:bold; margin-bottom: 5px; }
-        .m-btn-buy {
-            background: #238636; 
-            color: #fff; 
-            border: none; 
-            border-radius: 3px; 
-            font-size: 10px; 
-            font-weight: bold;
-            padding: 4px 10px; 
-            cursor: pointer; 
-            text-transform: uppercase; 
-            width: fit-content;
-            
-            /* ESTO CENTRA EL BOTÓN: */
-            margin: 0 auto; 
-            display: block; 
-        }
-        .m-btn-buy:hover { background: #2ea043; }
-
-        /* ESTILOS COMUNES TOOLTIP (Negro fondo, letras colores) */
-        .tt-box { text-align: center; }
-        /* tt-name, tt-exc, etc se definen inline o en las clases del parser */
-
-        /* Tooltip Global para Carrusel y Modal */
-        #global-tt {
-            position: fixed; display: none; z-index: 100000; /* Siempre encima */
-            background: rgba(0, 0, 0, 0.95); border: 1px solid #555;
-            padding: 10px; border-radius: 6px; pointer-events: none;
-            box-shadow: 0 0 20px rgba(0,0,0,0.8); width: 220px;
-            font-size: 12px;
-        }
-
-        /* MARKET WORKSPACE MODAL */
-        .ws-modal-overlay {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.9); z-index: 9999; align-items: center; justify-content: center; backdrop-filter: blur(5px);
-        }
-        .ws-workspace {
-            display: flex; width: 90%; max-width: 1200px; height: 80vh;
-            background: #0d1117; border: 1px solid #30363d; border-radius: 8px; overflow: hidden; box-shadow: 0 0 50px rgba(0,0,0,0.8);
-        }
-        .ws-sidebar-left { width: 220px; background: #161b22; border-right: 1px solid #30363d; display: flex; flex-direction: column; }
-        .cat-header { padding: 15px; font-weight: bold; color: #8b949e; border-bottom: 1px solid #30363d; font-family: 'Cinzel', serif; }
-        .cat-list { flex: 1; overflow-y: auto; padding: 10px; }
-        .cat-btn {
-            width: 100%; text-align: left; background: transparent; border: none; padding: 10px;
-            color: #c9d1d9; font-size: 13px; border-radius: 4px; cursor: pointer; transition: 0.2s; display: flex; align-items: center; gap: 10px;
-        }
-        .cat-btn:hover, .cat-btn.active { background: rgba(56, 139, 253, 0.1); color: #58a6ff; }
-        
-        .ws-center-panel { flex: 1; display: flex; flex-direction: column; position: relative; background: #0d1117; }
-        .center-toolbar { padding: 10px 20px; border-bottom: 1px solid #30363d; display: flex; align-items: center; background: #161b22; }
-        .search-wrapper { position: relative; width: 300px; }
-        .search-icon { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: #8b949e; font-size: 12px; }
-        .search-input {
-            width: 100%; background: #0d1117; border: 1px solid #30363d; padding: 6px 10px 6px 30px;
-            border-radius: 4px; color: #fff; font-size: 13px; outline: none;
-        }
-        
-        /* GRID CARDS EN EL MODAL */
-        .item-grid-container { flex: 1; overflow-y: auto; padding: 20px; display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; align-content: start; }
-        .ws-item-card {
-            background: rgba(22, 27, 34, 0.8); border: 1px solid #30363d; border-radius: 6px;
-            padding: 10px; display: flex; flex-direction: column; align-items: center; text-align: center;
-            transition: 0.2s; cursor: pointer; position: relative;
-        }
-        .ws-item-card:hover { border-color: #FF8A3B; transform: translateY(-3px); background: #1c2128; }
-        .ws-card-img { width: 60px; height: 60px; object-fit: contain; background: #000; border: 1px solid #333; border-radius: 4px; margin-bottom: 10px; }
-        .ws-card-name { font-size: 12px; font-weight: bold; color: #e2e8f0; margin-bottom: 5px; width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .ws-card-price { font-size: 12px; color: #ffd700; font-family: 'Roboto'; font-weight: bold; margin-bottom: 10px; }
-        .ws-card-btn { width: 100%; padding: 5px; font-size: 11px; background: #238636; border: none; border-radius: 3px; color: #fff; font-weight: bold; }
-        .ws-card-btn:hover { background: #2ea043; }
-
-        .btn-ws-close { position: absolute; top: 10px; right: 20px; background: transparent; border: none; color: #8b949e; cursor: pointer; font-size: 20px; }
-        
-        .loading-overlay { position: absolute; top:0; left:0; width:100%; height:100%; background: rgba(13,17,23,0.8); display: none; align-items: center; justify-content: center; flex-direction: column; z-index: 50; }
-        .spinner { width: 30px; height: 30px; border: 3px solid rgba(255,255,255,0.3); border-radius: 50%; border-top-color: #fff; animation: spin 1s ease-in-out infinite; margin-bottom: 10px; }
-        @keyframes spin { to { transform: rotate(360deg); } }
-
-        /* CONFIRMATION MODAL */
-        .confirm-modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 10001; align-items: center; justify-content: center; }
-        .confirm-box { background: #161b22; border: 1px solid #30363d; padding: 20px; border-radius: 8px; text-align: center; width: 300px; color: #fff; }
-        .confirm-title { color: #FF8A3B; font-weight: bold; margin-bottom: 15px; font-size: 16px; }
-        .confirm-body { font-size: 13px; color: #ccc; margin-bottom: 20px; }
-        .confirm-btns { display: flex; gap: 10px; justify-content: center; }
-        .btn-confirm-yes { background: #238636; color: #fff; border: none; padding: 8px 20px; border-radius: 4px; font-weight: bold; cursor: pointer; }
-        .btn-confirm-no { background: transparent; border: 1px solid #444; color: #888; padding: 8px 20px; border-radius: 4px; cursor: pointer; }
-
-        /* ALERT MODAL */
-        .alert-modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 10002; align-items: center; justify-content: center; }
-        .alert-box { background: #161b22; border: 1px solid #30363d; padding: 20px; border-radius: 8px; text-align: center; width: 300px; color: #fff; }
-        .alert-btn { background: #1f6feb; color: #fff; border: none; padding: 8px 20px; border-radius: 4px; margin-top: 15px; cursor: pointer; }
-    </style>
     <?php 
         $secConfigFile = __PATH_INCLUDES__ . 'config/security_config.json';
         if (file_exists($secConfigFile)) {
@@ -509,116 +389,70 @@ if(isset($_POST['market_ajax']) && $_POST['market_ajax'] == 'true') {
 
     <?php if(empty($_REQUEST['page'])): ?>
     <?php
-// Consultamos al Top 1 (Personaje con más Resets y luego más Level)
-$db = Connection::Database('MuOnline');
-$topPlayer = $db->query_fetch_single("SELECT TOP 1 Name, Class, cLevel, ResetCount FROM Character ORDER BY ResetCount DESC, cLevel DESC");
-
-// Consultamos la Guild del Top 1 (opcional)
-$topGuild = "Sin Guild";
-if($topPlayer) {
-    $guildMember = $db->query_fetch_single("SELECT G_Name FROM GuildMember WHERE Name = ?", array($topPlayer['Name']));
-    if($guildMember) {
-        $topGuild = $guildMember['G_Name'];
+// --- FILTRO DE CLASES POR VERSIÓN DEL SERVIDOR ---
+if (!function_exists('is_class_allowed')) {
+    function is_class_allowed($classCode) {
+        $ver = strtolower(custom_config('server_version'));
+        $cc = (int)$classCode;
+        if (empty($ver)) $ver = "97";
+        if (strpos($ver, '97') !== false || strpos($ver, '99') !== false) return ($cc < 48);
+        if (strpos($ver, 'season 1') !== false || strpos($ver, 'season 2') !== false) return ($cc < 80);
+        if (strpos($ver, 'season 3') !== false || strpos($ver, 'season 4') !== false || strpos($ver, 'season 5') !== false) return ($cc < 96);
+        return true; // Season 6 en adelante: todas las clases
     }
 }
 
-// Lógica de Imagen de Clase (la misma que usamos en UserCP)
-$topAvatar = "default.jpg";
-if($topPlayer) {
-    if ($topPlayer['Class'] < 16) { $topAvatar = "dw.jpg"; }
-    elseif ($topPlayer['Class'] < 32) { $topAvatar = "dk.jpg"; }
-    elseif ($topPlayer['Class'] < 48) { $topAvatar = "elf.jpg"; }
-    elseif ($topPlayer['Class'] < 64) { $topAvatar = "mg.jpg"; }
-    elseif ($topPlayer['Class'] < 80) { $topAvatar = "dl.jpg"; }
-    elseif ($topPlayer['Class'] < 96) { $topAvatar = "su.jpg"; }
-    elseif ($topPlayer['Class'] < 112) { $topAvatar = "rf.jpg"; }
+// --- TOP 1: mejor personaje válido, sin administradores (CtlCode 32 o más) ---
+$db = Connection::Database('MuOnline');
+$topPlayer = null;
+$candidates = $db->query_fetch("SELECT TOP 5 Name, Class, cLevel, ResetCount FROM Character WHERE ISNULL(CtlCode, 0) < 32 ORDER BY ResetCount DESC, cLevel DESC");
+if (is_array($candidates)) {
+    foreach ($candidates as $candidate) {
+        if (is_class_allowed($candidate['Class'])) { $topPlayer = $candidate; break; }
+    }
 }
+
+$topGuild = "Sin Guild";
+$topAvatar = "avatar.jpg"; // avatar genérico (existe en character-avatars/)
+
+if ($topPlayer) {
+    $guildMember = $db->query_fetch_single("SELECT G_Name FROM GuildMember WHERE Name = ?", array($topPlayer['Name']));
+    if (is_array($guildMember) && !empty($guildMember['G_Name'])) {
+        $topGuild = $guildMember['G_Name'];
+    }
+
+    $cc = (int)$topPlayer['Class'];
+    if ($cc < 16)       { $topAvatar = "dw.jpg"; }
+    elseif ($cc < 32)   { $topAvatar = "dk.jpg"; }
+    elseif ($cc < 48)   { $topAvatar = "elf.jpg"; }
+    elseif ($cc < 64)   { $topAvatar = "mg.jpg"; }
+    elseif ($cc < 80)   { $topAvatar = "dl.jpg"; }
+    elseif ($cc < 96)   { $topAvatar = "sum.jpg"; }
+    elseif ($cc < 112)  { $topAvatar = "rf.jpg"; }
+    else                { $topAvatar = "gl.jpg"; }
+}
+
+// --- DUEÑO DEL CASTILLO ---
+$csOwner = $db->query_fetch_single("SELECT OWNER_GUILD FROM MuCastle_DATA");
+$csOwnerName = (is_array($csOwner) && !empty($csOwner['OWNER_GUILD'])) ? $csOwner['OWNER_GUILD'] : 'VACANTE';
 ?>
 
 <section class="rank-highlight py-5 bg-dark-opacity">
     <div class="container text-center">
         <h2 class="section-title mb-5">LOS MEJORES EN <?php echo strtoupper(custom_config('server_name')); ?></h2>
         <div class="row g-4 justify-content-center">
-            
-            <?php
-// --- FUNCIÓN DE FILTRADO DE CLASES POR VERSIÓN ---
-if (!function_exists('is_class_allowed')) {
-    function is_class_allowed($classCode) {
-        // Obtenemos la versión desde tu configuración
-        $ver = strtolower(custom_config('server_version')); 
-        $cc = (int)$classCode; 
-        
-        if (empty($ver)) $ver = "97"; 
-
-        // CASO 0.97 / 99b
-        if (strpos($ver, '97') !== false || strpos($ver, '99') !== false) {
-            // DW(0), DK(16), ELF(32). Si tu server tiene MG en 97, cambiá 48 por 64.
-            return ($cc < 48); 
-        }
-
-        // SEASON 1, 2
-        if (strpos($ver, 'season 1') !== false || strpos($ver, 'season 2') !== false) {
-            return ($cc < 80); 
-        }
-
-        // SEASON 3, 4, 5
-        if (strpos($ver, 'season 3') !== false || strpos($ver, 'season 4') !== false || strpos($ver, 'season 5') !== false) {
-            return ($cc < 96); 
-        }
-
-        // SEASON 6+ (Muestra todo)
-        return true; 
-    }
-}
-
-// --- LOGICA DEL TOP 1 (Con Filtro Aplicado) ---
-$db = Connection::Database('MuOnline');
-// Traemos el TOP 5 para filtrar por si el primero es una clase inválida (ej: admin con RF en versión 97)
-$candidates = $db->query_fetch("SELECT TOP 5 Name, Class, cLevel, ResetCount FROM Character ORDER BY ResetCount DESC, cLevel DESC");
-
-$topPlayer = null;
-if ($candidates && is_array($candidates)) {
-    foreach ($candidates as $candidate) {
-        // Aplicamos el filtro que pediste
-        if (is_class_allowed($candidate['Class'])) {
-            $topPlayer = $candidate;
-            break; // Encontramos al mejor posicionado válido, cortamos el bucle.
-        }
-    }
-}
-
-// Consultamos la Guild del Top 1 seleccionado
-$topGuild = "Sin Guild";
-$topAvatar = "default.jpg";
-
-if($topPlayer) {
-    $guildMember = $db->query_fetch_single("SELECT G_Name FROM GuildMember WHERE Name = ?", array($topPlayer['Name']));
-    if($guildMember) {
-        $topGuild = $guildMember['G_Name'];
-    }
-
-    // Lógica de Imagen de Clase
-    if ($topPlayer['Class'] < 16) { $topAvatar = "dw.jpg"; }
-    elseif ($topPlayer['Class'] < 32) { $topAvatar = "dk.jpg"; }
-    elseif ($topPlayer['Class'] < 48) { $topAvatar = "elf.jpg"; }
-    elseif ($topPlayer['Class'] < 64) { $topAvatar = "mg.jpg"; }
-    elseif ($topPlayer['Class'] < 80) { $topAvatar = "dl.jpg"; }
-    elseif ($topPlayer['Class'] < 96) { $topAvatar = "su.jpg"; }
-    elseif ($topPlayer['Class'] < 112) { $topAvatar = "rf.jpg"; }
-}
-?>
 
             <div class="col-lg-4 col-md-6">
                 <div class="rank-card gold-glow">
                     <div class="card-header-icon"><i class="fa fa-trophy"></i> TOP 1 RANKING</div>
                     <div class="rank-body">
                         <div class="player-info d-flex align-items-center justify-content-center mb-3">
-                            <img src="<?php echo __PATH_TEMPLATE_IMG__; ?>character-avatars/<?php echo $topAvatar; ?>" class="rank-avatar me-3" onerror="this.src='<?php echo __PATH_TEMPLATE_IMG__; ?>character-avatars/default.jpg';">
+                            <img src="<?php echo __PATH_TEMPLATE_IMG__; ?>character-avatars/<?php echo $topAvatar; ?>" class="rank-avatar me-3" alt="" onerror="this.onerror=null;this.src='<?php echo __PATH_TEMPLATE_IMG__; ?>character-avatars/avatar.jpg';">
                             <div class="text-start">
                                 <span class="player-name text-uppercase fw-bold" style="color: #FF8A3B; font-family: 'Trajan Pro', serif;">
-                                    <?php echo $topPlayer ? $topPlayer['Name'] : 'Nadie aún'; ?>
+                                    <?php echo $topPlayer ? htmlspecialchars($topPlayer['Name']) : 'Nadie a&uacute;n'; ?>
                                 </span><br>
-                                <span class="guild-name text-color small"><?php echo $topGuild; ?></span>
+                                <span class="guild-name text-color small"><?php echo htmlspecialchars($topGuild); ?></span>
                             </div>
                         </div>
                         <div class="row rank-stats">
@@ -641,12 +475,9 @@ if($topPlayer) {
                     <div class="rank-body text-center d-flex flex-column justify-content-center" style="min-height: 115px;">
                         <i class="fa fa-chess-rook fa-2x mb-2 text-orange"></i>
                         <h4 class="guild-owner-name text-white text-uppercase" style="font-family: 'Trajan Pro'; letter-spacing: 1px;">
-                            <?php 
-                                $csOwner = $db->query_fetch_single("SELECT OWNER_GUILD FROM MuCastle_DATA");
-                                echo ($csOwner && $csOwner['OWNER_GUILD'] != "") ? $csOwner['OWNER_GUILD'] : 'VACANTE'; 
-                            ?>
+                            <?php echo htmlspecialchars($csOwnerName); ?>
                         </h4>
-                        <p class="text-color small m-0">Dueños del Castillo</p>
+                        <p class="text-color small m-0">Due&ntilde;os del Castillo</p>
                     </div>
                 </div>
             </div>

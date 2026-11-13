@@ -121,7 +121,7 @@ function createRaceChart(dataValues) {
                     bodyFont: { size: 13, family: 'Poppins' },
                     padding: 12,
                     displayColors: true,
-                    borderColor: '#FF8A3B',
+                    borderColor: '#e0b534',
                     borderWidth: 1
                 }
             }
@@ -156,7 +156,7 @@ function renderVisualStats(counts) {
         html += `
             <div style="text-align:center; display:flex; flex-direction:column; align-items:center;">
                 <div style="width:65px; height:65px; border-radius:50%; border:3px solid \${charColors[i]}; overflow:hidden; margin-bottom:10px; background:#000; box-shadow: 0 0 15px rgba(0,0,0,0.5);">
-                    <img src="\${imgPath}" style="width:100%; height:100%; object-fit:cover;" onerror="this.src='{$baseUrl}img/character-avatars/default.jpg'">
+                    <img src="\${imgPath}" style="width:100%; height:100%; object-fit:cover;" onerror="this.onerror=null;this.src='{$baseUrl}img/character-avatars/avatar.jpg'">
                 </div>
                 <div style="font-weight:700; color:\${charColors[i]}; font-family:'Poppins'; font-size:14px; letter-spacing:1px;">\${charLabels[i]}</div>
                 <div style="color:#fff; font-size:1.2rem; font-weight:bold; margin-top:2px;">\${count}</div>
@@ -175,7 +175,7 @@ function loadInfo(type, element) {
     if(element) element.classList.add('active');
     
     // Loader con estilo
-    area.innerHTML = '<div style="text-align:center; padding-top:150px;"><i class="fas fa-circle-notch fa-spin fa-3x" style="color:#FF8A3B;"></i></div>';
+    area.innerHTML = '<div style="text-align:center; padding-top:150px;"><i class="fas fa-circle-notch fa-spin fa-3x" style="color:#e0b534;"></i></div>';
 
     fetch('api/info_processor.php?type=' + type)
         .then(response => response.text())

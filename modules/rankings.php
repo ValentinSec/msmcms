@@ -241,6 +241,8 @@ function filterClass(classCode, element) {
     loadRank(currentRankType, null, currentClass);
 }
 
+let rankRequestId = 0;
+
 function loadRank(type, element, classCode = currentClass) {
     if(element) {
         document.querySelectorAll('.rank-nav-btn').forEach(btn => btn.classList.remove('active'));
@@ -254,13 +256,20 @@ function loadRank(type, element, classCode = currentClass) {
     
     const content = document.getElementById('rank-content');
     const loader = document.getElementById('rank-loader');
-    
+
+    // Al cambiar de tipo de ranking cambian las columnas: se vacia la tabla
+    // para no mostrar el encabezado nuevo sobre las filas del ranking anterior.
+    if(content && element) content.innerHTML = '';
     if(content) content.style.opacity = '0.3';
     if(loader) loader.style.display = 'flex'; 
+
+    // Si se piden dos rankings seguidos, solo se muestra la ultima respuesta
+    const requestId = ++rankRequestId;
 
     fetch('{$baseUrl}rankings/?ajax=1&type=' + type + '&class=' + classCode)
         .then(response => response.text())
         .then(data => {
+            if(requestId !== rankRequestId) return;
             if(content) {
                 content.innerHTML = data.trim(); 
                 content.style.opacity = '1';
@@ -268,7 +277,9 @@ function loadRank(type, element, classCode = currentClass) {
             if(loader) loader.style.display = 'none';
         })
         .catch(err => {
+            if(requestId !== rankRequestId) return;
             console.error(err);
+            if(content) content.style.opacity = '1';
             if(loader) loader.style.display = 'none';
         });
 }

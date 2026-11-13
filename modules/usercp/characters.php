@@ -84,7 +84,7 @@ echo '<div class="donation-main-container p-4">';
                 echo '<div class="char-card-premium p-4">';
                     echo '<div class="d-flex align-items-center mb-4">';
                         echo '<div class="char-avatar-container me-3">';
-                            echo '<img src="' . $avatarPath . $charImg . '" class="char-img-rank" onerror="this.src=\'' . $avatarPath . 'default.jpg\';">';
+                            echo '<img src="' . $avatarPath . $charImg . '" class="char-img-rank" onerror="this.onerror=null;this.src=\'' . $avatarPath . 'avatar.jpg\';">';
                             echo '<div class="char-level-badge">Lv. ' . $char["cLevel"] . '</div>';
                         echo '</div>';
                         echo '<div class="char-info-header text-start">';
