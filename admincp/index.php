@@ -382,7 +382,7 @@ echo <<<HTML
 </head>
 <body>
     <div id="wrapper">
-
+        <button type="button" class="sidebar-close-float" aria-label="Cerrar menu" onclick="document.getElementById('sidebarToggle').click();"><i class="fa fa-arrow-left"></i></button>
         <header class="top-header">
             <div class="header-left">
                 <button id="sidebarToggle" class="toggle-btn">

@@ -3027,3 +3027,41 @@ textarea.form-control-dark {
     color: #fff !important;
     box-shadow: inset 2px 0 0 #10b981;
 }
+
+/* ====================================================================
+   MENU LATERAL: flecha de cierre por fuera del borde derecho del menu
+   (solo en pantallas angostas y con el menu abierto)
+   ==================================================================== */
+.sidebar-close-float { display: none; }
+@media (max-width: 991px) {
+    .sidebar-close-float {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: fixed;
+        top: 84px;
+        left: 272px;
+        z-index: 1200;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: #1e293b;
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        color: #fff;
+        font-size: 14px;
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.55);
+        cursor: pointer;
+        opacity: 0;
+        pointer-events: none;
+        transform: translateX(-16px);
+        transition: opacity .25s ease, transform .25s ease;
+    }
+    #wrapper.toggled .sidebar-close-float {
+        opacity: 1;
+        pointer-events: auto;
+        transform: translateX(0);
+    }
+    .sidebar-close-float:hover { background: #334155; }
+    /* Con el menu abierto, la hamburguesa de la barra no se muestra */
+    #wrapper.toggled #sidebarToggle { visibility: hidden; }
+}
