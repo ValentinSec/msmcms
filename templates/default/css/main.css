@@ -1320,3 +1320,98 @@ body:has(.navbar-custom.fixed-top) #usercp-main-container {
     .balduneta-navbar-fluid .btn-login-nav i,
     .balduneta-navbar-fluid .btn-admincp-nav i { font-size: 14px; margin: 0; }
 }
+
+/* =========================================================
+   CAMPOS AUTOCOMPLETADOS POR EL NAVEGADOR
+   Chrome les pone fondo celeste; se reemplaza por el tono del template
+   ========================================================= */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+select:-webkit-autofill {
+    -webkit-text-fill-color: #E6D6C6 !important;
+    -webkit-box-shadow: 0 0 0 1000px #1a1110 inset !important;
+    box-shadow: 0 0 0 1000px #1a1110 inset !important;
+    caret-color: #E6D6C6;
+    transition: background-color 9999s ease-out 0s;
+}
+
+/* =========================================================
+   OLVIDÉ MI CONTRASEÑA (default)
+   modules/forgotpassword.php usa clases de Bootstrap 3 que no
+   existen en Bootstrap 5; se acomodan solo en esta página.
+   ========================================================= */
+body.page-forgotpassword .content-wrapper-clean {
+    max-width: 480px;
+    margin: 0 auto;
+    background: #140d0c;
+    border: 1px solid rgba(255, 138, 59, 0.25);
+    border-radius: 14px;
+    padding: 36px 30px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+}
+body.page-forgotpassword .page-title { text-align: center; }
+body.page-forgotpassword .page-title span {
+    font-family: 'Cinzel', serif;
+    color: #FF8A3B;
+    font-size: clamp(1.5rem, 5vw, 2.1rem);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+body.page-forgotpassword .col-xs-8 { width: 100%; margin-top: 24px !important; }
+body.page-forgotpassword .form-group { margin-bottom: 18px; }
+body.page-forgotpassword .form-group > [class*="col-sm-"] { width: 100%; margin: 0; padding: 0; }
+body.page-forgotpassword .control-label {
+    display: block;
+    color: #E6D6C6;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+}
+body.page-forgotpassword .form-control {
+    background: #0e0908;
+    border: 1px solid #3a2622;
+    color: #fff;
+    height: 48px;
+    border-radius: 8px;
+    padding: 10px 14px;
+}
+body.page-forgotpassword .form-control:focus {
+    background: #0e0908;
+    color: #fff;
+    border-color: #FF8A3B;
+    box-shadow: 0 0 0 3px rgba(255, 138, 59, 0.15);
+}
+body.page-forgotpassword .btn-primary {
+    width: 100%;
+    background: linear-gradient(135deg, #ff7700 0%, #cc4400 100%);
+    border: none;
+    padding: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-radius: 8px;
+    box-shadow: 0 6px 18px rgba(255, 102, 0, 0.3);
+}
+body.page-forgotpassword .btn-primary:hover { filter: brightness(1.1); }
+
+@media (max-width: 575.98px) {
+    body.page-forgotpassword .content-wrapper-clean { padding: 26px 18px; }
+}
+
+/* =========================================================
+   AVISOS (error, éxito, etc.) en la paleta oscura de default
+   Antes: rosa y verde claros estándar de Bootstrap.
+   ========================================================= */
+.content-wrapper-clean .alert {
+    border-radius: 8px;
+    border: 1px solid;
+    font-size: 14px;
+}
+.content-wrapper-clean .alert-danger  { background: rgba(220, 53, 69, 0.12);  border-color: rgba(220, 53, 69, 0.45);  color: #ffb3b8; }
+.content-wrapper-clean .alert-success { background: rgba(0, 200, 120, 0.10);  border-color: rgba(0, 200, 120, 0.40);  color: #a6f5cf; }
+.content-wrapper-clean .alert-warning { background: rgba(255, 204, 0, 0.10);  border-color: rgba(255, 204, 0, 0.40);  color: #ffe08a; }
+.content-wrapper-clean .alert-info    { background: rgba(255, 138, 59, 0.10); border-color: rgba(255, 138, 59, 0.40); color: #ffc9a3; }

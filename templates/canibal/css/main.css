@@ -638,3 +638,513 @@ a {
     visibility: visible !important;
     transition: opacity 0.5s ease-in-out !important; /* Fundido suave de medio segundo */
 }
+
+/* =========================================================
+   CANIBAL - DISEÑO ADAPTABLE
+   En 962px o más el diseño queda igual que antes.
+   ========================================================= */
+
+:root { --online-green: #2bdf49; }       /* se usaba sin estar definida */
+
+.admincp-button { display: none !important; }   /* botón suelto de class.handler.php */
+.nav-btn-account { display: none; }              /* botón de cuenta: solo en celular */
+#canibal-account { scroll-margin-top: 16px; }
+
+/* Contenedor y columnas: dejan de tener ancho fijo */
+.canibal-container { width: 100%; max-width: 962px; }
+.main-column { width: auto; flex: 1 1 679px; min-width: 0; max-width: 679px; }
+.sidebar-column { flex: 0 0 260px; }
+
+/* Menos de 962px: margen lateral para que nada toque los bordes */
+@media (max-width: 985.98px) {
+    .canibal-container { padding: 0 12px; box-sizing: border-box; }
+}
+
+/* Media pantalla: columna lateral un poco más angosta y botones más compactos */
+@media (min-width: 768px) and (max-width: 991.98px) {
+    .sidebar-column { flex-basis: 240px; width: 240px; }
+    .nav-btn-custom { font-size: 10px; padding: 0 4px; }
+    .nav-btn-custom i { margin-right: 5px; font-size: 12px; }
+    .hero-online-widget { width: 260px; }
+}
+
+/* ---------- Celular (menos de 768px): todo en una columna ---------- */
+@media (max-width: 767.98px) {
+    /* Logo: deja de flotar y ocupa su lugar arriba */
+    .canibal-header-logo {
+        position: relative !important;
+        top: auto !important;
+        padding: 28px 15px 12px;
+    }
+    .canibal-hero-logo { max-width: 85% !important; }
+
+    .canibal-container {
+        margin-top: 0;
+        min-height: 0;
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    /* Widget de usuarios en línea: debajo del logo */
+    .hero-online-widget {
+        position: relative;
+        top: auto; right: auto;
+        width: 100%;
+        max-width: 380px;
+        margin: 0 auto;
+    }
+
+    /* Barra: botones en grilla de tres */
+    .canibal-navbar-structure {
+        position: relative;
+        top: auto;
+        height: auto;
+        max-width: none;
+    }
+    .canibal-nav-links { flex-wrap: wrap; gap: 8px; justify-content: center; }
+    .nav-btn-custom { flex: 1 1 calc(33.333% - 8px); height: 38px; font-size: 11px; }
+    .nav-btn-custom:hover { transform: none; }
+    .nav-btn-account { display: flex; border-color: #c8a165; color: #c8a165; }
+
+    /* Columnas a todo el ancho */
+    .main-column {
+        width: 100%;
+        max-width: none;
+        flex: none;
+        min-height: 0;
+        padding: 18px 14px;
+    }
+    .sidebar-column { width: 100%; flex: none; gap: 16px !important; }
+
+    /* Noticias del home: título y fecha no se pisan */
+    .home-news-section .d-flex.justify-content-between { gap: 10px; }
+
+    /* Modal del mercado a pantalla completa, categorías en tira horizontal.
+       Sus estilos base están en un <style> del index: se usa "body" para ganar. */
+    body .ws-workspace { width: 100%; height: 100%; max-width: none; border-radius: 0; border: none; flex-direction: column; }
+    body .ws-sidebar-left { width: 100%; border-right: none; border-bottom: 1px solid #2d323e; }
+    body .cat-header { padding: 14px 60px 14px 16px; }
+    body .cat-list { flex: none; display: flex; flex-direction: row; gap: 6px; overflow-x: auto; overflow-y: hidden; padding: 10px 12px; }
+    body .cat-btn { width: auto; flex-shrink: 0; white-space: nowrap; border: 1px solid #2d323e; border-radius: 20px; padding: 7px 12px; font-size: 12px; }
+    body .cat-btn.active { border-color: #c8a165; }
+    body .ws-center-panel { min-width: 0; min-height: 0; }
+    body .center-toolbar { padding: 10px 12px; }
+    body .search-wrapper { width: 100%; }
+    body .item-grid-container { padding: 12px; gap: 10px; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); }
+    body .btn-ws-close { top: 8px; right: 8px; }
+
+    /* Cuadros de confirmación y aviso: no más anchos que la pantalla */
+    body .confirm-modal-overlay,
+    body .alert-modal-overlay { padding: 16px; }
+    body .confirm-box { width: 100%; max-width: 400px; padding: 24px 18px; }
+}
+
+/* Celular angosto: botones de la barra en grilla de dos */
+@media (max-width: 399.98px) {
+    .nav-btn-custom { flex-basis: calc(50% - 8px); }
+}
+
+/* =========================================================
+   BARRA SUPERIOR DE CUENTA (solo celular)
+   ========================================================= */
+.cmb-bar { display: none; }
+.nav-btn-account { display: none !important; }   /* reemplazado por la barra */
+
+@media (max-width: 767.98px) {
+    body.has-cmb { padding-top: 56px; }
+
+    body.has-cmb .cmb-bar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        position: fixed;
+        top: 0; left: 0; right: 0;
+        height: 56px;
+        padding: 0 12px;
+        background: rgba(8, 10, 14, 0.96);
+        border-bottom: 1px solid rgba(200, 161, 101, 0.25);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        z-index: 10050;   /* sobre el logo (9999), debajo de los modales (99999+) */
+    }
+
+    .cmb-logo img { height: 30px; width: auto; display: block; }
+
+    .cmb-toggle {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        max-width: 60%;
+        background: rgba(200, 161, 101, 0.08);
+        border: 1px solid #c8a165;
+        color: #c8a165;
+        border-radius: 6px;
+        padding: 7px 12px;
+        font-family: 'Cinzel', serif;
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+        cursor: pointer;
+    }
+    .cmb-label { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .cmb-chev { font-size: 10px; transition: transform 0.25s ease; }
+    .cmb-bar.is-open .cmb-chev { transform: rotate(180deg); }
+    .cmb-bar.is-open .cmb-toggle { background: rgba(200, 161, 101, 0.18); }
+
+    /* Panel desplegable */
+    .cmb-panel {
+        display: none;
+        position: absolute;
+        top: 100%; left: 0; right: 0;
+        max-height: calc(100vh - 56px);
+        overflow-y: auto;
+        background: #0a0c10;
+        border-bottom: 1px solid rgba(200, 161, 101, 0.25);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.7);
+    }
+    .cmb-bar.is-open .cmb-panel { display: block; animation: cmbDown 0.2s ease-out; }
+
+    /* El cuadro de la cuenta dentro del panel: sin marco propio */
+    .cmb-panel .sidebar-box-login {
+        border: none;
+        border-radius: 0;
+        box-shadow: none;
+        background: transparent;
+        padding: 18px 16px;
+    }
+
+    @keyframes cmbDown {
+        from { opacity: 0; transform: translateY(-6px); }
+        to   { opacity: 1; transform: translateY(0); }
+    }
+}
+
+/* =========================================================
+   PÁGINA DE LOGIN (/login) - modules/login.php
+   Misma estética que el cuadro "INGRESAR" de la columna lateral
+   ========================================================= */
+.login-page-container { max-width: 420px; margin: 10px auto 20px; }
+
+.login-page-container .login-header { text-align: center; margin-bottom: 26px; }
+.login-page-container .login-header h1 {
+    font-family: 'Cinzel', serif;
+    color: #c8a165;
+    font-size: clamp(1.6rem, 5vw, 2.2rem);
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin: 0 0 6px;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
+}
+.login-page-container .login-header p { color: #8b949e; font-size: 14px; margin: 0; }
+
+/* Sin fondo propio: la columna principal ya es el panel */
+.login-page-container .login-card { background: transparent; border: none; padding: 0; box-shadow: none; }
+
+.login-page-container .form-group-custom { margin-bottom: 16px; }
+.login-page-container .form-group-custom label {
+    display: block;
+    color: #ccc;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 6px;
+}
+
+.login-page-container .input-wrapper { position: relative; display: flex; align-items: center; }
+.login-page-container .input-wrapper > i:first-child {
+    position: absolute;
+    left: 12px;
+    color: #6c757d;
+    font-size: 14px;
+    pointer-events: none;
+}
+.login-page-container .input-wrapper input {
+    width: 100%;
+    height: 42px;
+    background: #e9ecef;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    color: #333;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 8px 40px 8px 36px;
+}
+.login-page-container .input-wrapper input:focus {
+    outline: none;
+    background: #fff;
+    border-color: var(--cyan-glow);
+    box-shadow: 0 0 5px rgba(120, 239, 245, 0.5);
+}
+.login-page-container .toggle-password {
+    position: absolute;
+    right: 12px;
+    color: #6c757d;
+    cursor: pointer;
+    font-size: 14px;
+}
+.login-page-container .toggle-password:hover { color: #333; }
+
+.login-page-container .form-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 4px 0 18px;
+    font-size: 12px;
+}
+.login-page-container .remember-me { display: flex; align-items: center; gap: 6px; color: #aaa; margin: 0; cursor: pointer; }
+.login-page-container .remember-me input { accent-color: #c8a165; }
+/* .forgot-link ya existe para la columna lateral (centrado y en bloque): aquí va en línea */
+.login-page-container .forgot-link { display: inline; margin: 0; font-size: 12px; color: #aaa; text-align: right; }
+.login-page-container .forgot-link:hover { color: #fff; }
+
+.login-page-container .btn-login-submit {
+    width: 100%;
+    height: 42px;
+    background-color: rgba(13, 20, 26, 0.8);
+    border: 2px solid var(--cyan-glow);
+    color: #fff;
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+.login-page-container .btn-login-submit:hover {
+    background-color: var(--cyan-glow);
+    color: #000;
+    box-shadow: 0 0 15px var(--cyan-glow);
+}
+
+.login-page-container .login-footer { text-align: center; margin-top: 18px; font-size: 13px; color: #8b949e; }
+.login-page-container .login-footer a { color: #ffc107; font-weight: 700; }
+.login-page-container .login-footer a:hover { color: #ffe69c; }
+
+/* =========================================================
+   AVISOS (error, éxito...) en la paleta oscura del template
+   ========================================================= */
+.main-column .alert { border-radius: 6px; border: 1px solid; font-size: 14px; }
+.main-column .alert-danger  { background: rgba(220, 53, 69, 0.12);  border-color: rgba(220, 53, 69, 0.45);  color: #ffb3b8; }
+.main-column .alert-success { background: rgba(43, 223, 73, 0.10);  border-color: rgba(43, 223, 73, 0.40);  color: #a6f5b5; }
+.main-column .alert-warning { background: rgba(200, 161, 101, 0.12); border-color: rgba(200, 161, 101, 0.45); color: #e6cb9a; }
+.main-column .alert-info    { background: rgba(120, 239, 245, 0.08); border-color: rgba(120, 239, 245, 0.35); color: #b8f6f9; }
+
+/* Aviso justo antes del formulario de login: mismo ancho que el formulario */
+#ajax-container > .alert:has(+ .login-page-container) { max-width: 420px; margin: 0 auto 16px; }
+
+/* =========================================================
+   CASTLE SIEGE (home) - antes eran estilos en línea
+   ========================================================= */
+.home-cs-section {
+    position: relative;
+    padding: 24px;
+    background: url('../../../img/cs-bg.jpg') center / cover no-repeat;
+    border: 1px solid #2d323e;
+    border-radius: 8px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+    overflow: hidden;
+}
+.home-cs-section .cs-shade {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(10, 10, 12, 0.72) 0%, rgba(10, 10, 12, 0.9) 100%);
+}
+.home-cs-section .cs-inner { position: relative; z-index: 1; }
+
+.home-cs-section .cs-heading {
+    text-align: center;
+    color: #fff;
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    margin-bottom: 22px;
+    text-shadow: 0 2px 5px rgba(0, 0, 0, 0.8);
+}
+
+.home-cs-section .cs-mark-box {
+    width: 120px;
+    height: 120px;
+    margin: 0 auto;
+    background: #000;
+    border: 1px solid rgba(200, 161, 101, 0.35);
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.home-cs-section .cs-mark-box img { width: 100%; height: 100%; image-rendering: pixelated; }
+.home-cs-section .cs-mark-box i { font-size: 42px; color: rgba(200, 161, 101, 0.5); }
+
+.home-cs-section .cs-label {
+    color: #c8a165;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+}
+.home-cs-section .cs-value { color: #fff; font-weight: 700; font-size: 14px; overflow-wrap: anywhere; }
+
+.home-cs-section .btn-cs-more {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    margin-top: 24px;
+    padding: 10px;
+    background: rgba(200, 161, 101, 0.08);
+    border: 1px solid #c8a165;
+    border-radius: 4px;
+    color: #c8a165;
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: background 0.3s ease, color 0.3s ease;
+}
+.home-cs-section .btn-cs-more:hover { background: rgba(200, 161, 101, 0.2); color: #fff; }
+
+@media (max-width: 575.98px) {
+    .home-cs-section { padding: 18px 14px; }
+    .home-cs-section .cs-mark-box { width: 96px; height: 96px; }
+}
+
+/* =========================================================
+   DESCARGAS - tabla de requisitos (modules/downloads.php)
+   El encabezado MÍNIMO / RECOMENDADO salía en tamaño de título
+   y se desbordaba de la tarjeta.
+   ========================================================= */
+#downloads-page-balduneta .requirements-table .row { margin-left: 0; margin-right: 0; }
+#downloads-page-balduneta .requirements-table .row > div {
+    min-width: 0;
+    overflow-wrap: anywhere;
+    padding-left: 6px;
+    padding-right: 6px;
+}
+#downloads-page-balduneta .requirements-table .row:first-child > div {
+    font-family: 'Roboto', sans-serif !important;
+    font-size: 11px !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.5px !important;
+    line-height: 1.3 !important;
+    color: #c8a165 !important;
+}
+
+/* =========================================================
+   PÁGINA CASTLE SIEGE (/castlesiege) - modules/castlesiege.php
+   El módulo usa clases de Bootstrap 3; se adapta solo en esta página.
+   ========================================================= */
+body.page-castlesiege .page-title { text-align: center; margin: 4px 0 18px; }
+body.page-castlesiege .page-title span {
+    font-family: 'Cinzel', serif;
+    color: #c8a165;
+    font-size: clamp(1.7rem, 5vw, 2.3rem);
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
+}
+
+/* Títulos de sección */
+body.page-castlesiege .castle-siege-block h2 {
+    font-family: 'Cinzel', serif;
+    color: #c8a165;
+    font-size: 1.15rem;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    text-align: center;
+    margin: 6px 0 16px;
+}
+body.page-castlesiege .castle-siege-block hr {
+    border-color: rgba(255, 255, 255, 0.08);
+    opacity: 1;
+    margin: 26px 0;
+}
+body.page-castlesiege .castle-siege-block a { color: #c8a165; font-weight: 700; }
+body.page-castlesiege .castle-siege-block a:hover { color: #e6cb9a; }
+
+/* Dueño del castillo: todo centrado en una columna, sin tarjeta propia */
+body.page-castlesiege .castle-owner-panel { background: transparent; border: none; margin: 0; }
+body.page-castlesiege .castle-owner-panel .panel-body { padding: 0; }
+body.page-castlesiege .castle-owner-panel .row > div { width: 100%; text-align: center; }
+body.page-castlesiege .castle-owner-name {
+    display: block;
+    font-family: 'Cinzel', serif;
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+}
+body.page-castlesiege .castle-owner-panel img {
+    display: block;
+    margin: 0 auto 14px;
+    border: 1px solid rgba(200, 161, 101, 0.4);
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+    image-rendering: pixelated;
+}
+body.page-castlesiege .castle-owner-panel h4 {
+    color: #8b949e;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin: 0 0 4px;
+}
+body.page-castlesiege .castle-owner-panel p { margin: 0; font-size: 15px; }
+
+/* Alianza del dueño */
+body.page-castlesiege .castle-owner-ally-title,
+body.page-castlesiege .castle-owner-ally { display: flex; margin: 0; padding: 8px 0; }
+body.page-castlesiege .castle-owner-ally-title > div,
+body.page-castlesiege .castle-owner-ally > div { flex: 1; text-align: center; }
+body.page-castlesiege .castle-owner-ally-title { color: #8b949e; font-size: 11px; text-transform: uppercase; border-bottom: 1px solid rgba(255, 255, 255, 0.08); }
+body.page-castlesiege .castle-owner-ally { border-bottom: 1px solid rgba(255, 255, 255, 0.04); }
+
+/* Contador de la batalla */
+body.page-castlesiege .siege-countdown {
+    text-align: center;
+    font-family: 'Cinzel', serif;
+    color: #fff;
+    font-size: clamp(1.3rem, 4vw, 1.8rem);
+    font-weight: 700;
+    text-shadow: 0 0 15px rgba(200, 161, 101, 0.35);
+}
+body.page-castlesiege .siege-date { text-align: center; color: #8b949e; font-size: 13px; margin-top: 4px; }
+
+/* Tablas: oscuras, sin el blanco de Bootstrap */
+body.page-castlesiege .castle-siege-block .table {
+    --bs-table-bg: transparent;
+    --bs-table-color: #ddd;
+    --bs-table-striped-bg: rgba(255, 255, 255, 0.03);
+    --bs-table-striped-color: #ddd;
+    --bs-table-border-color: rgba(255, 255, 255, 0.06);
+    color: #ddd;
+    font-size: 14px;
+    margin-bottom: 0;
+}
+body.page-castlesiege .castle-siege-block .table > :not(caption) > * > * {
+    padding: 10px 12px;
+    border-bottom-color: rgba(255, 255, 255, 0.06);
+    vertical-align: middle;
+}
+body.page-castlesiege .castle-siege-block .table thead th {
+    color: #c8a165;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    border-bottom: 1px solid rgba(200, 161, 101, 0.3);
+}
+/* Tabla de información: etiqueta a la izquierda en gris, valor en blanco */
+body.page-castlesiege .castle-siege-block .table:not(:has(thead)) td:first-child { color: #8b949e; width: 45%; }
+body.page-castlesiege .castle-siege-block .table:not(:has(thead)) td:last-child { color: #fff; font-weight: 700; }
+body.page-castlesiege .castle-siege-block .table img { image-rendering: pixelated; vertical-align: middle; }
+
+@media (max-width: 575.98px) {
+    body.page-castlesiege .castle-siege-block .table { font-size: 12.5px; }
+    body.page-castlesiege .castle-siege-block .table > :not(caption) > * > * { padding: 8px 6px; }
+}

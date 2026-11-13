@@ -73,7 +73,7 @@ $blackMarketActive = (isset($bmData['module_active']) && $bmData['module_active'
 </script>
 
 <?php if(!isLoggedIn()): ?>
-    <div class="sidebar-box-login">
+    <div class="sidebar-box-login" id="canibal-account">
         <h6 class="sidebar-title">INGRESAR</h6>
         <form action="<?php echo __BASE_URL__; ?>login" method="post" style="width:100%;" onsubmit="doAjaxLogin(event, this);">
             <input type="text" name="msmLogin_user" class="login-input" placeholder="Usuario" required>
@@ -88,7 +88,7 @@ $blackMarketActive = (isset($bmData['module_active']) && $bmData['module_active'
         </form>
     </div>
 <?php else: ?>
-    <div class="sidebar-box-login" style="align-items:center; text-align:center; height: auto !important;">
+    <div class="sidebar-box-login" id="canibal-account" style="align-items:center; text-align:center; height: auto !important;">
         <h6 class="text-white mb-3" style="font-family:'Cinzel'; letter-spacing:1px;"><?php echo $_SESSION['username']; ?></h6>
         
         <?php if(canAccessAdminCP($_SESSION['username'])): ?>
@@ -350,4 +350,69 @@ $blackMarketActive = (isset($bmData['module_active']) && $bmData['module_active'
     window.sbEventInterval = setInterval(sbUpdateCountdowns, 1000);
     // Ejecución inicial inmediata
     sbUpdateCountdowns();
+</script>
+
+<?php
+// Barra superior de cuenta (solo celular). El script la mueve al inicio del <body>
+// y traslada el cuadro #canibal-account dentro de su panel desplegable.
+$cmbLabel = isLoggedIn() ? htmlspecialchars($_SESSION['username']) : 'INGRESAR';
+?>
+<div id="cmbBar" class="cmb-bar">
+    <a href="<?php echo __BASE_URL__; ?>" class="cmb-logo">
+        <img src="<?php echo __BASE_URL__; ?>templates/canibal/img/logo.png" alt="Inicio">
+    </a>
+    <button type="button" class="cmb-toggle" id="cmbToggle" aria-expanded="false" aria-controls="cmbPanel">
+        <i class="fa fa-user"></i>
+        <span class="cmb-label"><?php echo $cmbLabel; ?></span>
+        <i class="fa fa-chevron-down cmb-chev"></i>
+    </button>
+    <div class="cmb-panel" id="cmbPanel"></div>
+</div>
+
+<script>
+(function () {
+    var bar = document.getElementById('cmbBar');
+    var account = document.getElementById('canibal-account');
+    if (!bar || !account) return;
+
+    var panel = document.getElementById('cmbPanel');
+    var toggle = document.getElementById('cmbToggle');
+    var homeParent = account.parentNode;          // columna lateral
+    var homeNext = account.nextElementSibling;    // caja "Buscar PJ"
+
+    // Fuera del contenedor del template, para que quede por encima de todo
+    document.body.insertBefore(bar, document.body.firstChild);
+
+    var mq = window.matchMedia('(max-width: 767.98px)');
+
+    function setOpen(open) {
+        bar.classList.toggle('is-open', open);
+        toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    }
+
+    function place() {
+        if (mq.matches) {
+            panel.appendChild(account);
+            document.body.classList.add('has-cmb');
+        } else {
+            homeParent.insertBefore(account, homeNext);
+            document.body.classList.remove('has-cmb');
+            setOpen(false);
+        }
+    }
+
+    toggle.addEventListener('click', function (e) {
+        e.stopPropagation();
+        setOpen(!bar.classList.contains('is-open'));
+    });
+    document.addEventListener('click', function (e) {
+        if (bar.classList.contains('is-open') && !bar.contains(e.target)) setOpen(false);
+    });
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') setOpen(false);
+    });
+
+    if (mq.addEventListener) mq.addEventListener('change', place); else mq.addListener(place);
+    place();
+})();
 </script>

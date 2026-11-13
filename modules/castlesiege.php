@@ -1,18 +1,16 @@
 <?php
-/**
- * WebEngine CMS
- * https://webenginecms.org/
- * 
- * @version 1.2.1
- * @author Lautaro Angelico <http://lautaroangelico.com/>
- * @copyright (c) 2013-2020 Lautaro Angelico, All Rights Reserved
- * 
- * Licensed under the MIT license
- * http://opensource.org/licenses/MIT
- */
 
 $castleSiege = new CastleSiege();
 $siegeData = $castleSiege->siegeData();
+
+// La cache (includes/cache/castle_siege.cache) la genera el cron "castle_siege".
+// Si todavia no existe, se genera ahora con datos en vivo, una sola vez.
+if(!is_array($siegeData)) {
+    try {
+        $castleSiege->updateSiegeCache();
+        $siegeData = $castleSiege->siegeData();
+    } catch (Exception $e) { }
+}
 if(!is_array($siegeData)) throw new Exception(lang('error_103'));
 if(!$castleSiege->moduleEnabled()) throw new Exception(lang('error_47'));
 
@@ -87,7 +85,8 @@ echo '<div class="row">';
 	//
 	if($castleSiege->showBattleCountdown()) {
 		echo '<h2>'.lang('castlesiege_txt_1').'</h2>';
-		echo '<div id="siegeTimer">.</div>';
+		echo '<div id="siegeTimer" class="siege-countdown">'.$siegeData['warfare_stage_countdown'].'</div>';
+		echo '<div class="siege-date">'.$castleSiege->friendlyDateFormat($siegeData['warfare_stage']['start_timestamp']).'</div>';
 		
 		echo '<hr>';
 	}

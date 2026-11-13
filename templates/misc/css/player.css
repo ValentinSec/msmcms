@@ -1,124 +1,123 @@
-/* --- CONTENEDORES --- */
-.profile-card {
+/* =========================================================
+   templates/misc/css/player.css
+   Perfil de personaje (default, classic y morpheus; canibal tiene el suyo).
+   La enlaza modules/profile/player.php.
+
+   Color de acento: variable --profile-accent (naranja por defecto).
+   Un template puede cambiarlo en su main.css con:
+   :root { --profile-accent: #c8a165; }
+   ========================================================= */
+
+.profile-wrapper {
+    --pf-accent: var(--profile-accent, #ff6600);
+    --pf-accent-soft: color-mix(in srgb, var(--pf-accent) 22%, transparent);
+    --pf-accent-mid: color-mix(in srgb, var(--pf-accent) 50%, transparent);
+    font-family: 'Cinzel', serif;
+    color: #fff;
+}
+
+/* --- Tarjetas --- */
+.profile-wrapper .profile-card {
     background: rgba(10, 10, 12, 0.95);
-    border: 1px solid rgba(255, 102, 0, 0.2);
+    border: 1px solid var(--pf-accent-soft);
     border-radius: 8px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
     transition: border-color 0.3s ease;
+    min-width: 0;
 }
+.profile-wrapper .profile-card:hover { border-color: var(--pf-accent-mid); }
 
-.profile-card:hover {
-    border-color: rgba(255, 102, 0, 0.5);
-}
-
-.section-title {
-    border-bottom: 1px solid rgba(255, 102, 0, 0.2);
+.profile-wrapper .section-title {
+    border-bottom: 1px solid var(--pf-accent-soft);
     padding-bottom: 10px;
     margin-bottom: 25px;
     font-size: 1.2rem;
 }
 
-.profile-wrapper { 
-    font-family: 'Cinzel', serif; 
-    color: #fff; 
+/* --- Tipografías y colores --- */
+.trajan-title {
+    font-family: 'Trajan Pro', 'Cinzel', serif;
+    color: var(--profile-accent, #ff6600);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+.profile-wrapper .text-orange { color: var(--pf-accent) !important; }
+.profile-wrapper .border-orange { border-color: var(--pf-accent) !important; }
+.cinzel-text { font-family: 'Cinzel', serif; color: #ffffff; }
+
+/* Nombre del personaje: tamaño adaptable (el HTML trae 2.5rem fijo) */
+.profile-wrapper h2.trajan-title {
+    font-size: clamp(1.7rem, 4vw, 2.5rem) !important;
+    overflow-wrap: anywhere;
+    text-shadow: 0 0 15px var(--pf-accent-soft) !important;
 }
 
-/* --- TIPOGRAFÍAS --- */
-.trajan-title { 
-    font-family: 'Trajan Pro', serif; 
-    color: #ff6600; 
-    text-transform: uppercase; 
-    letter-spacing: 1px; 
-}
+/* --- Estadísticas --- */
+.profile-wrapper .stats-header-box { gap: 20px; }
 
-.cinzel-text { 
-    font-family: 'Cinzel', serif; 
-    color: #ffffff; 
-}
-
-/* --- ESTADÍSTICAS --- */
-.stats-header-box {
-    gap: 20px;
-}
-
-.class-avatar-img {
+.profile-wrapper .class-avatar-img {
     width: 85px;
     height: 85px;
-    border: 1px solid #ff6600;
+    border: 1px solid var(--pf-accent);
     border-radius: 4px;
     object-fit: cover;
 }
 
-/* SEPARACIÓN DE COLUMNAS */
-.col-6:first-child {
-    padding-right: 25px !important; 
-    border-right: 1px solid rgba(255, 102, 0, 0.3); /* Línea naranja divisoria */
+/* Antes eran .col-6 globales: afectaban a cualquier columna de la página */
+.profile-wrapper .stats-container .col-6:first-child {
+    padding-right: 25px !important;
+    border-right: 1px solid var(--pf-accent-soft);
 }
+.profile-wrapper .stats-container .col-6:last-child { padding-left: 25px !important; }
+.profile-wrapper .stats-container .col-6 { padding: 0 10px; }
 
-.col-6:last-child {
-    padding-left: 25px !important;
-}
-
-/* Limpiamos el estilo anterior */
-.stat-line {
+.profile-wrapper .stat-line {
     display: flex;
-    justify-content: space-between; /* Nombre a la izquierda, número a la derecha */
+    justify-content: space-between;
     align-items: center;
+    gap: 6px;
     padding: 2px 0;
     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
     font-family: 'Cinzel', serif;
 }
-
-.stat-line span:first-child {
+.profile-wrapper .stat-line span:first-child {
     color: rgba(255, 255, 255, 0.6);
     font-size: 0.75rem;
     font-weight: normal;
 }
-
-.stat-line span.text-orange {
-    color: #ff6600 !important;
+.profile-wrapper .stat-line span.text-orange {
     font-weight: bold;
     font-size: 0.9rem;
     text-align: right;
 }
+.profile-wrapper .stat-avatar img { box-shadow: 0 0 10px rgba(0, 150, 255, 0.2); }
 
-/* Para que las columnas no estén pegadas */
-.stats-container .col-6 {
-    padding: 0 10px;
-}
-
-.stat-avatar img {
-    box-shadow: 0 0 10px rgba(0, 150, 255, 0.2);
-}
-
-/* --- EQUIPAMIENTO e INVENTARIO --- */
-.equipment-map {
+/* --- Equipamiento e inventario --- */
+.profile-wrapper .equipment-map {
     width: 100%;
     max-width: 320px;
     height: 380px;
-    background: url('<?php echo __BASE_URL__; ?>img/equipment.png') no-repeat center;
+    /* Ruta relativa a este archivo (templates/misc/css/ -> raíz del sitio) */
+    background: url('../../../img/equipment.png') no-repeat center;
     background-size: contain;
     position: relative;
     margin: 0 auto;
 }
-
-.equipment-display-area {
+.profile-wrapper .equipment-display-area {
     height: 380px;
     background-position: center;
     background-repeat: no-repeat;
     background-size: contain;
     margin-top: 10px;
 }
-
-.inventory-grid-1x3 {
+.profile-wrapper .inventory-grid-1x3 {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 15px;
     padding: 10px;
 }
-
-.inv-slot {
-    aspect-ratio: 1/1;
+.profile-wrapper .inv-slot {
+    aspect-ratio: 1 / 1;
     background: #050505;
     border: 1px solid #222;
     border-radius: 6px;
@@ -126,86 +125,67 @@
     align-items: center;
     justify-content: center;
 }
-
-.inv-slot.active {
-    border-color: #ff6600;
-    box-shadow: inset 0 0 10px rgba(255, 102, 0, 0.15);
+.profile-wrapper .inv-slot.active {
+    border-color: var(--pf-accent);
+    box-shadow: inset 0 0 10px var(--pf-accent-soft);
 }
 
-/* --- DIVISORES Y BARRAS --- */
-hr.border-orange {
-    border-top: 1px solid #ff6600 !important;
-    opacity: 0.3;
-}
+/* --- Divisores --- */
+.profile-wrapper hr.border-orange { border-top: 1px solid var(--pf-accent) !important; opacity: 0.3; }
+.profile-wrapper .profile-divider { border-color: var(--pf-accent) !important; opacity: 0.2; margin: 35px 0; }
 
-.profile-divider {
-    border-color: #ff6600 !important;
-    opacity: 0.2;
-    margin: 35px 0;
-}
-
-.exp-bar-bg { height: 6px; background: #1a1a1a; border-radius: 3px; overflow: hidden; }
-.exp-bar-fill { height: 100%; background: #ff6600; box-shadow: 0 0 8px #ff6600; }
-
-.exp-bar-container { height: 4px; background: #111; margin-top: 10px; border-radius: 2px; overflow: hidden; }
-.exp-bar-progress { width: 75%; height: 100%; background: #ff6600; box-shadow: 0 0 10px #ff6600; }
-
-/* --- LOG DE ACTIVIDAD --- */
-.activity-log {
-    overflow-y: auto;
-    max-height: 500px;
-    padding-right: 10px;
-}
-
-.activity-log::-webkit-scrollbar { width: 3px; }
-.activity-log::-webkit-scrollbar-thumb { background: #ff6600; }
-
-.log-scroll {
-    max-height: 450px;
-    overflow-y: auto;
-    padding-right: 10px;
-}
-
-.log-entry {
-    padding: 10px;
-    border-bottom: 1px solid rgba(255,255,255,0.05);
-    font-size: 0.85rem;
-}
-
-/* --- OTROS --- */
-.name-display { font-size: 2rem; margin-top: 15px; }
-
-.activity-log i {
-    font-style: normal;
-    color: #aaa;
-    font-size: 0.8rem;
-    display: inline-block;
-    margin-left: 4px;
-}
-
-.time-relative {
-    color: rgba(255, 255, 255, 0.4);
-    font-size: 0.8rem;
-    margin-left: 5px;
-    font-style: italic;
-}
-
-.log-item b {
-    color: #ff6600; /* Opcional: poner los nombres en naranja para que resalten */
-    font-weight: 600;
-}
-
-.exp-bar-container {
+/* --- Barra de progreso al reset --- */
+.profile-wrapper .exp-bar-container {
     height: 8px;
     background: rgba(255, 255, 255, 0.1);
     border-radius: 4px;
     overflow: hidden;
-    border: 1px solid rgba(255, 102, 0, 0.2);
+    border: 1px solid var(--pf-accent-soft);
+}
+.profile-wrapper .exp-bar-progress {
+    height: 100%;
+    background: linear-gradient(90deg, var(--pf-accent), #ffcc00);
+    box-shadow: 0 0 10px var(--pf-accent-mid);
+    transition: width 0.5s ease-in-out;
+}
+.profile-wrapper .exp-bar-bg { height: 6px; background: #1a1a1a; border-radius: 3px; overflow: hidden; }
+.profile-wrapper .exp-bar-fill { height: 100%; background: var(--pf-accent); box-shadow: 0 0 8px var(--pf-accent); }
+
+/* --- Historial PvP --- */
+.profile-wrapper .activity-log {
+    overflow-y: auto;
+    max-height: 500px;
+    padding-right: 10px;
+}
+.profile-wrapper .activity-log::-webkit-scrollbar { width: 3px; }
+.profile-wrapper .activity-log::-webkit-scrollbar-thumb { background: var(--pf-accent); }
+.profile-wrapper .log-scroll { max-height: 450px; overflow-y: auto; padding-right: 10px; }
+.profile-wrapper .log-entry { padding: 10px; border-bottom: 1px solid rgba(255, 255, 255, 0.05); font-size: 0.85rem; }
+.profile-wrapper .activity-log i { font-style: normal; color: #aaa; font-size: 0.8rem; display: inline-block; margin-left: 4px; }
+.profile-wrapper .time-relative { color: rgba(255, 255, 255, 0.4); font-size: 0.8rem; margin-left: 5px; font-style: italic; }
+.profile-wrapper .log-item b { color: var(--pf-accent); font-weight: 600; }
+.profile-wrapper .name-display { font-size: 2rem; margin-top: 15px; }
+
+/* =========================================================
+   ADAPTABLE
+   ========================================================= */
+
+/* Menos de 992px: modelo 3D más bajo, historial sin altura máxima */
+@media (max-width: 991.98px) {
+    .profile-wrapper #character-3d-container { min-height: 300px !important; }
+    .profile-wrapper .activity-log,
+    .profile-wrapper .log-scroll { max-height: none; }
 }
 
-.exp-bar-progress {
-    height: 100%;
-    background: linear-gradient(90deg, #ff6600, #ffcc00);
-    box-shadow: 0 0 10px rgba(255, 102, 0, 0.5);
-    transition: width 0.5s ease-in-out;
+/* Media pantalla: modelo y estadísticas lado a lado; historial PvP debajo, a todo el ancho */
+@media (min-width: 768px) and (max-width: 991.98px) {
+    .profile-wrapper > .row > .col-lg-4:nth-child(-n+2) { width: 50%; }
+}
+
+/* Celular */
+@media (max-width: 575.98px) {
+    .profile-wrapper { padding-top: 1rem !important; padding-bottom: 1rem !important; }
+    .profile-wrapper .profile-card { padding: 1.1rem !important; }
+    .profile-wrapper #character-3d-container { min-height: 260px !important; }
+    .profile-wrapper .stats-section .d-flex.gap-4 { gap: 1rem !important; flex-wrap: wrap; }
 }

@@ -1549,3 +1549,6 @@ body.page-info::before {
         linear-gradient(to bottom, rgba(10, 10, 15, 0.8) 0%, rgba(10, 10, 15, 0.95) 100%),
         url('../../../img/misc/forgot.jpg') center / cover no-repeat;
 }
+
+/* Perfil de personaje (player.css compartido): acento dorado */
+:root { --profile-accent: #c8a165; }

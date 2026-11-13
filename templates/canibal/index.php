@@ -253,7 +253,10 @@ if (file_exists($secConfigFile)) {
 }
 
 // 9. LOGICA DE LOGIN (Modificada para permanecer en el sitio)
-if((isset($_POST['msmLogin_user']) && !empty($_POST['msmLogin_user'])) || isset($_POST['msmLogin_submit'])) {
+// En /login el formulario lo procesa modules/login.php: no se valida dos veces
+// (cada validacion fallida cuenta como un intento).
+$msmIsLoginPage = (isset($_REQUEST['page']) && $_REQUEST['page'] === 'login');
+if(!$msmIsLoginPage && ((isset($_POST['msmLogin_user']) && !empty($_POST['msmLogin_user'])) || isset($_POST['msmLogin_submit']))) {
     $_POST['msmLogin_submit'] = 'submit';
     try {
         if(class_exists('login')) {
@@ -369,9 +372,8 @@ if(file_exists($cacheFilePath)) {
 $multOnline = (float)custom_config('fake_online');
 $displayOnline = round($realOnline * ($multOnline > 0 ? $multOnline : 1));
 
-// Configuraciones del template
-$muservermakerJsonPath = $_SERVER['DOCUMENT_ROOT'] . '/includes/config/muservermaker.json';
-$muservermakerParams = json_decode(file_get_contents($muservermakerJsonPath), true);
+// Configuración del núcleo (ya leída y cacheada por muservermakerConfigs)
+$muservermakerParams = muservermakerConfigs();
 $activeTplName = $muservermakerParams['website_template']; 
 $templateConfigPath = $_SERVER['DOCUMENT_ROOT'] . '/templates/' . $activeTplName . '/config.json';
 $tplData = ['hero_logo_width' => '300px']; // Default
@@ -387,8 +389,7 @@ if (file_exists($bmConfigFile)) {
     if (isset($bmConf['module_active']) && $bmConf['module_active'] == 'on') $bmActive = true;
 }
 
-$seoFile = __PATH_INCLUDES__ . 'config/muservermaker.json';
-        $seoData = file_exists($seoFile) ? json_decode(file_get_contents($seoFile), true) : [];
+$seoData = is_array($muservermakerParams) ? $muservermakerParams : [];
         
         $metaDesc = !empty($seoData['website_meta_description']) ? htmlspecialchars($seoData['website_meta_description']) : 'Bienvenido a ' . custom_config('server_name');
         $metaKeys = !empty($seoData['website_meta_keywords']) ? htmlspecialchars($seoData['website_meta_keywords']) : 'mu online, private server, mu server';
@@ -403,24 +404,34 @@ $seoFile = __PATH_INCLUDES__ . 'config/muservermaker.json';
     <meta name="author" content="MuServerMaker">
     <link rel="canonical" href="<?php echo __BASE_URL__; ?>">
     <title><?php echo custom_config('web_title'); ?></title>
-    <link rel="icon" type="image/x-icon" href="<?php echo __BASE_URL__; ?>templates/canibal/img/favicon.ico?v=<?php echo time(); ?>">
-    <link rel="shortcut icon" type="image/x-icon" href="<?php echo __BASE_URL__; ?>templates/canibal/img/favicon.ico?v=<?php echo time(); ?>">
+    <?php
+    // Versión de archivos estáticos = fecha de modificación (el navegador los guarda hasta que cambian)
+    if(!function_exists('msm_v')) {
+        function msm_v($relPath) { $t = @filemtime($relPath); return $t ? $t : 1; }
+    }
+    ?>
+    <link rel="icon" type="image/x-icon" href="<?php echo __BASE_URL__; ?>templates/canibal/img/favicon.ico?v=<?php echo msm_v('templates/canibal/img/favicon.ico'); ?>">
+    <link rel="shortcut icon" type="image/x-icon" href="<?php echo __BASE_URL__; ?>templates/canibal/img/favicon.ico?v=<?php echo msm_v('templates/canibal/img/favicon.ico'); ?>">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
-    <link href="<?php echo __BASE_URL__; ?>templates/canibal/css/main.css?v=<?php echo time(); ?>" rel="stylesheet">
-    <link href="<?php echo __BASE_URL__; ?>templates/canibal/css/casino.css?v=<?php echo time(); ?>" rel="stylesheet">
-    <link href="<?php echo __BASE_URL__; ?>templates/canibal/css/news.css?v=<?php echo time(); ?>" rel="stylesheet">
-    <link href="<?php echo __BASE_URL__; ?>templates/canibal/css/downloads.css?v=<?php echo time(); ?>" rel="stylesheet">
-    <link href="<?php echo __BASE_URL__; ?>templates/canibal/css/rankings.css?v=<?php echo time(); ?>" rel="stylesheet">
-    <link href="<?php echo __BASE_URL__; ?>templates/canibal/css/info.css?v=<?php echo time(); ?>" rel="stylesheet">
-    <link href="<?php echo __BASE_URL__; ?>templates/canibal/css/config.css?v=<?php echo time(); ?>" rel="stylesheet">
-    <link href="<?php echo __BASE_URL__; ?>templates/canibal/css/donate.css?v=<?php echo time(); ?>" rel="stylesheet">
-    <link href="<?php echo __BASE_URL__; ?>templates/canibal/css/vip.css?v=<?php echo time(); ?>" rel="stylesheet">
-    <?php 
-    // Al principio de tu index.php asegurate de tener $tplConfig = json_decode(file_get_contents($templateConfigPath), true);
-    $bgTop = isset($tplConfig['bg_top_img']) && !empty($tplConfig['bg_top_img']) ? __BASE_URL__.'templates/canibal/img/'.$tplConfig['bg_top_img'] : __BASE_URL__.'templates/canibal/img/bg-top.jpg';
-    $bgBot = isset($tplConfig['bg_bottom_img']) && !empty($tplConfig['bg_bottom_img']) ? __BASE_URL__.'templates/canibal/img/'.$tplConfig['bg_bottom_img'] : __BASE_URL__.'templates/canibal/img/bg-bottom.jpg';
+    <link href="<?php echo __BASE_URL__; ?>templates/canibal/css/main.css?v=<?php echo msm_v('templates/canibal/css/main.css'); ?>" rel="stylesheet">
+    <link href="<?php echo __BASE_URL__; ?>templates/canibal/css/casino.css?v=<?php echo msm_v('templates/canibal/css/casino.css'); ?>" rel="stylesheet">
+    <link href="<?php echo __BASE_URL__; ?>templates/canibal/css/news.css?v=<?php echo msm_v('templates/canibal/css/news.css'); ?>" rel="stylesheet">
+    <link href="<?php echo __BASE_URL__; ?>templates/canibal/css/downloads.css?v=<?php echo msm_v('templates/canibal/css/downloads.css'); ?>" rel="stylesheet">
+    <link href="<?php echo __BASE_URL__; ?>templates/canibal/css/rankings.css?v=<?php echo msm_v('templates/canibal/css/rankings.css'); ?>" rel="stylesheet">
+    <link href="<?php echo __BASE_URL__; ?>templates/canibal/css/info.css?v=<?php echo msm_v('templates/canibal/css/info.css'); ?>" rel="stylesheet">
+    <link href="<?php echo __BASE_URL__; ?>templates/canibal/css/config.css?v=<?php echo msm_v('templates/canibal/css/config.css'); ?>" rel="stylesheet">
+    <link href="<?php echo __BASE_URL__; ?>templates/canibal/css/donate.css?v=<?php echo msm_v('templates/canibal/css/donate.css'); ?>" rel="stylesheet">
+    <link    <link href="<?php echo __BASE_URL__; ?>templates/canibal/css/vip.css?v=<?php echo msm_v('templates/canibal/css/vip.css'); ?>" rel="stylesheet">
+    <link href="<?php echo __BASE_URL__; ?>templates/canibal/css/forgotpassword.css?v=<?php echo msm_v('templates/canibal/css/forgotpassword.css'); ?>" rel="stylesheet">
+   
+    <?php
+    // Fondos personalizados del editor de templates (la configuración está en $tplData)
+    $bgTop = !empty($tplData['bg_top_img']) ? __BASE_URL__.'templates/canibal/img/'.$tplData['bg_top_img'] : __BASE_URL__.'templates/canibal/img/bg-top.jpg';
+    $bgBot = !empty($tplData['bg_bottom_img']) ? __BASE_URL__.'templates/canibal/img/'.$tplData['bg_bottom_img'] : __BASE_URL__.'templates/canibal/img/bg-bottom.jpg';
     ?>
     <style>
         .bg-top { background: url('<?php echo $bgTop; ?>') top center no-repeat; background-size: cover; }
@@ -428,7 +439,7 @@ $seoFile = __PATH_INCLUDES__ . 'config/muservermaker.json';
     </style>
     
 </head>
-<body>
+<body class="page-<?php echo empty($_REQUEST['page']) ? 'home' : preg_replace('/[^a-zA-Z0-9_-]/', '', $_REQUEST['page']); ?>">
 
     <div class="bg-layer bg-top"></div>
     <div class="bg-layer bg-bottom"></div>
@@ -548,45 +559,71 @@ $seoFile = __PATH_INCLUDES__ . 'config/muservermaker.json';
                         <hr style="border-color: rgba(255,255,255,0.1); margin: 15px 0 0 0;">
                     </div>
 
-                    <?php 
+                    <?php
                     $csActive = custom_config('active_cs');
-                    if($csActive === 'on' || $csActive == '1' || $csActive === true): 
+                    if($csActive === 'on' || $csActive == '1' || $csActive === true):
+
+                        // --- Datos reales del Castle Siege ---
+                        $csOwner = ''; $csMaster = ''; $csMark = '';
+                        try {
+                            $csDb = Connection::Database('MuOnline');
+                            $csRow = $csDb->query_fetch_single("SELECT OWNER_GUILD FROM MuCastle_DATA");
+                            if(is_array($csRow) && !empty($csRow['OWNER_GUILD']) && $csRow['OWNER_GUILD'] != 'No Owner') {
+                                $csOwner = $csRow['OWNER_GUILD'];
+                                $csGuild = $csDb->query_fetch_single("SELECT G_Master, G_Mark FROM Guild WHERE G_Name = ?", array($csOwner));
+                                if(is_array($csGuild)) {
+                                    $csMaster = $csGuild['G_Master'];
+                                    $csMark = __BASE_URL__ . 'api/guildmark.php?data=' . bin2hex($csGuild['G_Mark']) . '&size=120';
+                                }
+                            }
+                        } catch (Throwable $e) { }
+
+                        // Próxima batalla (configuración del AdminCP)
+                        $csDays = array(1 => 'Lunes', 2 => 'Martes', 3 => 'Mi&eacute;rcoles', 4 => 'Jueves', 5 => 'Viernes', 6 => 'S&aacute;bado', 7 => 'Domingo');
+                        $csDayNum = (int)custom_config('cs_day');
+                        $csTime = trim((string)custom_config('cs_time'));
+                        $csNext = (isset($csDays[$csDayNum]) && $csTime !== '') ? $csDays[$csDayNum] . ' a las ' . htmlspecialchars($csTime) . 'hs' : 'Sin definir';
                     ?>
-                    <div class="home-cs-section mb-5 position-relative p-4" style="background: url('<?php echo __BASE_URL__; ?>img/cs-bg.jpg') center/cover no-repeat; border: 1px solid #2d323e; border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.6); overflow: hidden;">
-                        <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(10, 10, 12, 0.7);"></div>
-                        
-                        <div class="position-relative z-1">
-                            <h3 class="text-center text-white fw-bold mb-4" style="font-family: 'Cinzel', serif; text-shadow: 0 2px 5px rgba(0,0,0,0.8);">Castle Siege</h3>
-                            
-                            <div class="row align-items-center">
-                                <div class="col-md-4 text-center mb-3 mb-md-0">
-                                    <div class="cs-guild-logo mx-auto" style="width: 120px; height: 120px; background: #000; border: 1px solid #2d323e; box-shadow: 0 0 15px rgba(0,0,0,0.8);"></div>
+                    <div class="home-cs-section mb-5">
+                        <div class="cs-shade"></div>
+                        <div class="cs-inner">
+                            <h3 class="cs-heading">Castle Siege</h3>
+
+                            <div class="row align-items-center g-4">
+                                <div class="col-md-4 text-center">
+                                    <div class="cs-mark-box">
+                                        <?php if($csMark): ?>
+                                            <img src="<?php echo $csMark; ?>" alt="Emblema de la guild">
+                                        <?php else: ?>
+                                            <i class="fa fa-chess-rook"></i>
+                                        <?php endif; ?>
+                                    </div>
                                 </div>
-                                
+
                                 <div class="col-md-8">
-                                    <div class="row text-center text-md-center g-4">
+                                    <div class="row g-3 text-center">
                                         <div class="col-6">
-                                            <h6 style="color: #d9534f; font-weight: bold; font-size: 14px; margin-bottom: 5px;">Castle Owner:</h6>
-                                            <p class="text-white fw-bold m-0" style="font-size: 14px;">N/A</p>
+                                            <div class="cs-label">Due&ntilde;o del castillo</div>
+                                            <div class="cs-value"><?php echo $csOwner ? htmlspecialchars($csOwner) : 'Sin due&ntilde;o'; ?></div>
                                         </div>
                                         <div class="col-6">
-                                            <h6 style="color: #d9534f; font-weight: bold; font-size: 14px; margin-bottom: 5px;">Stage</h6>
-                                            <p class="text-white fw-bold m-0" style="font-size: 14px;">Sign Registration</p>
+                                            <div class="cs-label">Guild Master</div>
+                                            <div class="cs-value"><?php echo $csMaster ? htmlspecialchars($csMaster) : '&mdash;'; ?></div>
                                         </div>
                                         <div class="col-6">
-                                            <h6 style="color: #d9534f; font-weight: bold; font-size: 14px; margin-bottom: 5px;">Guild Master</h6>
-                                            <p class="text-white fw-bold m-0" style="font-size: 14px;">N/A</p>
+                                            <div class="cs-label">Pr&oacute;xima batalla</div>
+                                            <div class="cs-value"><?php echo $csNext; ?></div>
                                         </div>
                                         <div class="col-6">
-                                            <h6 style="color: #d9534f; font-weight: bold; font-size: 14px; margin-bottom: 5px;">Castle Siege Battle</h6>
-                                            <p class="text-white fw-bold m-0" style="font-size: 14px;">¡Castle Siege en progreso!</p>
+                                            <div class="cs-label">Estado</div>
+                                            <div class="cs-value"><?php echo $csOwner ? 'Defendido' : 'Vacante'; ?></div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            
-                            <a href="<?php echo __BASE_URL__; ?>castlesiege" class="btn w-100 mt-4 d-flex justify-content-center align-items-center" style="background: rgba(128, 128, 0, 0.3); border: 1px solid rgba(255, 255, 255, 0.2); color: #fff; border-radius: 4px; padding: 10px; font-weight: bold; transition: all 0.3s;" onmouseover="this.style.background='rgba(128, 128, 0, 0.5)';" onmouseout="this.style.background='rgba(128, 128, 0, 0.3)';">
-                                <i class="fa fa-info-circle me-2"></i> Click aquí para ver Mas info
+
+                            <a href="<?php echo __BASE_URL__; ?>castlesiege" class="btn-cs-more">
+                                <i class="fa fa-info-circle me-2"></i> M&aacute;s informaci&oacute;n
                             </a>
                         </div>
                     </div>
@@ -1122,6 +1159,6 @@ $seoFile = __PATH_INCLUDES__ . 'config/muservermaker.json';
         const baseUrl = '<?php echo __BASE_URL__; ?>';
     </script>
 
-    <script src="<?php echo __BASE_URL__; ?>templates/canibal/js/main.js?v=<?php echo time(); ?>"></script>
+    <script src="<?php echo __BASE_URL__; ?>templates/canibal/js/main.js?v=<?php echo msm_v('templates/canibal/js/main.js'); ?>"></script>
 </body>
 </html>

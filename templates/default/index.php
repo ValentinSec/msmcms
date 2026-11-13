@@ -198,7 +198,7 @@ if(isset($_POST['market_ajax']) && $_POST['market_ajax'] == 'true') {
         }
     ?>
 </head>
-<body>
+<body class="page-<?php echo empty($_REQUEST['page']) ? 'home' : preg_replace('/[^a-zA-Z0-9_-]/', '', $_REQUEST['page']); ?>">
 
     <div class="main-overlay"></div>
 

@@ -188,3 +188,29 @@
     }
     .btn-login-nav { margin-right: 0; }
 }
+
+/* =========================================================
+   BARRA: botón ADM con la misma altura que PANEL
+   (navbar.css compartido le daba relleno y letra más chicos)
+   ========================================================= */
+.balduneta-navbar-fluid .btn-admincp-nav {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px !important;
+    font-size: 13px !important;
+    line-height: 1.5;
+    border-radius: 6px;
+    white-space: nowrap;
+}
+
+/* Celular: mismas medidas compactas que PANEL */
+@media (max-width: 575.98px) {
+    .balduneta-navbar-fluid .btn-admincp-nav { padding: 6px 10px !important; font-size: 12px !important; }
+}
+
+/* Muy angosto: solo el ícono, como PANEL */
+@media (max-width: 399.98px) {
+    .balduneta-navbar-fluid .btn-admincp-nav { font-size: 0 !important; gap: 0; padding: 7px 10px !important; }
+    .balduneta-navbar-fluid .btn-admincp-nav i { font-size: 14px; margin: 0; }
+}

@@ -1,10 +1,10 @@
 <?php
 /**
  * Dynamic Navbar - Canibal Template
- * Basado en la lógica de navbar_config.json
+ * Basado en la l贸gica de navbar_config.json
  */
 
-// 1. Cargar Configuración del AdminCP
+// 1. Cargar Configuraci贸n del AdminCP
 $navConfigPath = __PATH_CONFIGS__ . 'navbar_config.json';
 $navConfig = [
     'show_info' => 1,
@@ -56,14 +56,14 @@ if (file_exists($navConfigPath)) {
 
         <?php if($navConfig['show_guides']): ?>
             <a href="<?php echo __BASE_URL__; ?>guides" class="nav-btn-custom">
-                <i class="fa fa-book"></i> GUÍAS
+                <i class="fa fa-book"></i> GU脥AS
             </a>
         <?php endif; ?>
 
         <?php if(!empty($navConfig['custom_links'])): ?>
             <?php foreach($navConfig['custom_links'] as $link): ?>
                 <?php 
-                // Saltar si no está activo
+                // Saltar si no est谩 activo
                 if(isset($link['active']) && $link['active'] == 0) continue; 
                 
                 // Determinar URL (Interna o Externa)
@@ -80,6 +80,5 @@ if (file_exists($navConfigPath)) {
                 <i class="fa fa-user-plus"></i> REGISTRO
             </a>
         <?php endif; ?>
-
     </div>
 </nav>

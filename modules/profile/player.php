@@ -222,8 +222,6 @@ echo '<div class="container-fluid py-5 profile-wrapper">';
 echo '</div>';
 
 // JavaScript Loader
-echo '<script src="https://cdn.jsdelivr.net/npm/three@0.150.1/build/three.min.js"></script>';
-echo '<script src="https://cdn.jsdelivr.net/npm/three@0.150.1/examples/js/loaders/GLTFLoader.js"></script>';
 echo '<script type="importmap">{"imports": {"three": "https://unpkg.com/three@0.150.1/build/three.module.js","three/addons/": "https://unpkg.com/three@0.150.1/examples/jsm/"}}</script>';
 echo '<script type="module">
 import * as THREE from "three";
@@ -277,7 +275,7 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 });
 </script>';
-echo '<link rel="stylesheet" href="' . __BASE_URL__ . 'templates/misc/inventory_viewer.css">';
+echo '<link rel="stylesheet" href="' . __BASE_URL__ . 'templates/misc/css/inventory_viewer.css">';
 echo '<div id="mu-tooltip"></div>';
-echo '<script src="' . __BASE_URL__ . 'templates/misc/inventory_tooltip.js"></script>';
+echo '<script src="' . __BASE_URL__ . 'templates/misc/js/inventory_tooltip.js"></script>';
 ?>
