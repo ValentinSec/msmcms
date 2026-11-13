@@ -10,10 +10,15 @@
 
 
 :root {
+    --ucp-accent: #ff6600;
+    --ucp-accent-rgb: 255, 102, 0;
+    --ucp-accent-2: #ff8c42;
+    --ucp-accent-deep: #ff4400;
+    --ucp-accent-ink: #ffffff;
     --bg-dark-panel: #120a08;
     --sidebar-bg: #140a09;
-    --accent-orange: #ff6600;
-    --primary-orange: #ff6600;
+    --accent-orange: var(--ucp-accent);
+    --primary-orange: var(--ucp-accent);
     --gold: #ffcc00;
     --blue: #3366ff;
     --green: #00cc66;
@@ -21,7 +26,7 @@
     --glass-border: rgba(255, 255, 255, 0.07);
     --text-main: #e2e2e2;
     --text-dim: #666666;
-    --glow-orange: 0 0 20px rgba(255, 102, 0, 0.25);
+    --glow-orange: 0 0 20px rgba(var(--ucp-accent-rgb), 0.25);
 }
 
 body.usercp-body {
@@ -35,7 +40,7 @@ body.usercp-body {
 /* SIDEBAR LAYOUT */
 .usercp-sidebar {
     background: var(--sidebar-bg);
-    border-right: 1px solid rgba(255, 102, 0, 0.05);
+    border-right: 1px solid rgba(var(--ucp-accent-rgb), 0.05);
     min-height: 100vh;
     display: flex;
     flex-direction: column;
@@ -58,12 +63,12 @@ body.usercp-body {
 .user-avatar {
     width: 75px;
     height: 75px;
-    background: linear-gradient(135deg, #ff8c42 0%, #ff6600 100%);
+    background: linear-gradient(135deg, var(--ucp-accent-2) 0%, var(--ucp-accent) 100%);
     border-radius: 50%;
     display: flex;
     justify-content: center;
     align-items: center;
-    box-shadow: 0 0 25px rgba(255, 102, 0, 0.35);
+    box-shadow: 0 0 25px rgba(var(--ucp-accent-rgb), 0.35);
 }
 
 .user-avatar i { font-size: 30px; color: white; }
@@ -161,14 +166,14 @@ body.usercp-body {
 }
 
 .nav-card.active {
-    background: linear-gradient(90deg, rgba(255, 102, 0, 0.08) 0%, transparent 100%) !important;
-    border: 1px solid rgba(255, 102, 0, 0.2) !important;
+    background: linear-gradient(90deg, rgba(var(--ucp-accent-rgb), 0.08) 0%, transparent 100%) !important;
+    border: 1px solid rgba(var(--ucp-accent-rgb), 0.2) !important;
     border-left: 3px solid var(--accent-orange) !important;
     box-shadow: var(--glow-orange) !important;
 }
 
 .nav-card.active .icon-box {
-    background: rgba(255, 102, 0, 0.15);
+    background: rgba(var(--ucp-accent-rgb), 0.15);
     color: var(--accent-orange);
 }
 
@@ -194,16 +199,16 @@ body.usercp-body {
 
 /* Account Details Banner */
 .account-details-banner {
-    background: linear-gradient(135deg, rgba(255, 73, 0, 0.08) 0%, rgba(20, 10, 9, 0.6) 100%);
-    border: 1px solid rgba(255, 102, 0, 0.15);
+    background: linear-gradient(135deg, rgba(var(--ucp-accent-rgb), 0.08) 0%, rgba(20, 10, 9, 0.6) 100%);
+    border: 1px solid rgba(var(--ucp-accent-rgb), 0.15);
     border-radius: 15px;
 }
 
 .icon-box-shield {
     width: 55px;
     height: 55px;
-    background: rgba(255, 102, 0, 0.15);
-    border: 1px solid rgba(255, 102, 0, 0.3);
+    background: rgba(var(--ucp-accent-rgb), 0.15);
+    border: 1px solid rgba(var(--ucp-accent-rgb), 0.3);
     border-radius: 12px;
     display: flex;
     align-items: center;
@@ -327,7 +332,7 @@ body.usercp-body {
     width: 96px; /* Equivale a w-24 (24 * 4px) */
     margin-top: 1rem; /* Equivale a mt-4 */
     border-radius: 9999px; /* Equivale a rounded-full */
-    background: linear-gradient(90deg, rgb(215, 73, 33) 0%, transparent 100%);
+    background: linear-gradient(90deg, var(--ucp-accent) 0%, transparent 100%);
 }
 
 .text-orange { color: var(--accent-orange); }
@@ -345,7 +350,7 @@ body.usercp-body {
     overflow: hidden;
     /* Estilo base de la tarjeta (puedes ajustar según tu diseño previo) */
     background: rgba(13, 12, 17, 0.6);
-    border: 1px solid rgba(215, 73, 33, 0.1);
+    border: 1px solid rgba(var(--ucp-accent-rgb), 0.1);
     border-radius: 1rem;
     transition: transform 0.3s ease, border-color 0.3s ease;
     z-index: 1;
@@ -357,7 +362,7 @@ body.usercp-body {
     position: absolute;
     inset: 0; /* Ocupa todo el contenedor */
     opacity: 0; /* Oculto por defecto */
-    background: radial-gradient(circle at 50% 0%, rgba(215, 73, 33, 0.15) 0%, transparent 70%);
+    background: radial-gradient(circle at 50% 0%, rgba(var(--ucp-accent-rgb), 0.15) 0%, transparent 70%);
     transition: opacity 0.5s ease; /* duration-500 */
     pointer-events: none; /* No interfiere con los clics en botones */
     z-index: -1; /* Se dibuja detrás del texto pero sobre el fondo */
@@ -370,7 +375,7 @@ body.usercp-body {
 
 /* Opcional: un sutil levantamiento de la tarjeta */
 .char-card-premium:hover {
-    border-color: rgba(215, 73, 33, 0.4);
+    border-color: rgba(var(--ucp-accent-rgb), 0.4);
     transform: translateY(-5px);
 }
 
@@ -438,7 +443,7 @@ body.usercp-body {
 
 /* Botones */
 .btn-orange-action {
-    background: linear-gradient(90deg, #ff7700, #ff4400);
+    background: linear-gradient(90deg, var(--ucp-accent-2), var(--ucp-accent-deep));
     color: white;
     border: none;
     border-radius: 8px;
@@ -451,14 +456,14 @@ body.usercp-body {
 
 .btn-dark-action {
     background: #2a2a32;
-    color: #ff8844;
-    border: 1px solid rgba(255, 136, 68, 0.2);
+    color: var(--ucp-accent-2);
+    border: 1px solid rgba(var(--ucp-accent-rgb), 0.2);
     border-radius: 8px;
     padding: 10px 15px;
     transition: 0.3s;
 }
 
-.btn-orange-action:hover { box-shadow: 0 0 15px rgba(255, 102, 0, 0.4); color: #fff; }
+.btn-orange-action:hover { box-shadow: 0 0 15px rgba(var(--ucp-accent-rgb), 0.4); color: #fff; }
 
 /* --- ESTÉTICA PREMIUM DE PERSONAJES (REPLICA) --- */
 .char-card-premium {
@@ -532,7 +537,7 @@ body.usercp-body {
 
 /* Botones de Acción */
 .btn-orange-action {
-    background: linear-gradient(90deg, #ff7700, #ff4400);
+    background: linear-gradient(90deg, var(--ucp-accent-2), var(--ucp-accent-deep));
     color: white !important;
     border: none;
     border-radius: 8px;
@@ -545,8 +550,8 @@ body.usercp-body {
 
 .btn-dark-action {
     background: #2a2a32;
-    color: #ff8844 !important;
-    border: 1px solid rgba(255, 136, 68, 0.2);
+    color: var(--ucp-accent-2) !important;
+    border: 1px solid rgba(var(--ucp-accent-rgb), 0.2);
     border-radius: 8px;
     padding: 10px 15px;
     font-size: 13px;
@@ -554,7 +559,7 @@ body.usercp-body {
 }
 
 .btn-orange-action:hover {
-    box-shadow: 0 0 15px rgba(255, 102, 0, 0.4);
+    box-shadow: 0 0 15px rgba(var(--ucp-accent-rgb), 0.4);
     transform: translateY(-1px);
 }
 
@@ -566,14 +571,14 @@ body.usercp-body {
 }
 
 .pack-card:hover {
-    background: rgba(255, 102, 0, 0.04);
-    border-color: rgba(255, 102, 0, 0.2) !important;
+    background: rgba(var(--ucp-accent-rgb), 0.04);
+    border-color: rgba(var(--ucp-accent-rgb), 0.2) !important;
     transform: translateY(-5px);
 }
 
 .payment-item.active {
-    background: rgba(255, 102, 0, 0.1) !important;
-    border: 1px solid rgba(255, 102, 0, 0.3) !important;
+    background: rgba(var(--ucp-accent-rgb), 0.1) !important;
+    border: 1px solid rgba(var(--ucp-accent-rgb), 0.3) !important;
     color: #fff !important;
 }
 
@@ -587,8 +592,8 @@ body.usercp-body {
 /* --- ESTÉTICA DE DONACIONES PREMIUM --- */
 
 .alert-donation-top {
-    background: rgba(255, 102, 0, 0.03);
-    border: 1px solid rgba(255, 102, 0, 0.15);
+    background: rgba(var(--ucp-accent-rgb), 0.03);
+    border: 1px solid rgba(var(--ucp-accent-rgb), 0.15);
     border-radius: 12px;
 }
 
@@ -617,7 +622,7 @@ body.usercp-body {
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #ff8844;
+    color: var(--ucp-accent-2);
     font-size: 18px;
     flex-shrink: 0;
 }
@@ -637,7 +642,7 @@ body.usercp-body {
 /* ESTADO ACTIVO: Borde dorado y check mark */
 .payment-card-premium.active {
     border: 1px solid rgba(255, 204, 0, 0.6) !important;
-    background: linear-gradient(90deg, rgba(255, 102, 0, 0.08) 0%, transparent 100%) !important;
+    background: linear-gradient(90deg, rgba(var(--ucp-accent-rgb), 0.08) 0%, transparent 100%) !important;
     box-shadow: 0 0 15px rgba(255, 204, 0, 0.1);
 }
 
@@ -679,7 +684,7 @@ body.usercp-body {
 
 .donation-packages-wrapper {
     background: rgba(0, 0, 0, 0.2);
-    border: 1px dashed rgba(255, 102, 0, 0.15) !important; /* Borde punteado naranja sutil */
+    border: 1px dashed rgba(var(--ucp-accent-rgb), 0.15) !important; /* Borde punteado naranja sutil */
     border-radius: 15px;
     min-height: 450px;
     display: flex;
@@ -689,12 +694,12 @@ body.usercp-body {
 .empty-wallet-icon {
     width: 100px;
     height: 100px;
-    background: rgba(255, 102, 0, 0.03);
+    background: rgba(var(--ucp-accent-rgb), 0.03);
     border-radius: 20px;
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 1px solid rgba(255, 102, 0, 0.1);
+    border: 1px solid rgba(var(--ucp-accent-rgb), 0.1);
 }
 
 .donation-packages-wrapper .tab-pane {
@@ -711,14 +716,14 @@ body.usercp-body {
     padding: 1.5rem; /* Equivale a p-6 */
     border-radius: 0.75rem; /* Equivale a rounded-xl (12px) */
     background: linear-gradient(135deg, rgba(26, 15, 16, 0.6) 0%, rgba(18, 9, 9, 0.4) 100%);
-    border: 1px solid rgba(215, 73, 33, 0.2);
+    border: 1px solid rgba(var(--ucp-accent-rgb), 0.2);
     box-shadow: rgba(0, 0, 0, 0.3) 0px 10px 40px;
 }
 
 /* --- ESTÉTICA DE DONACIONES PREMIUM --- */
 .alert-donation-top {
-    background: rgba(255, 102, 0, 0.03);
-    border: 1px solid rgba(255, 102, 0, 0.15);
+    background: rgba(var(--ucp-accent-rgb), 0.03);
+    border: 1px solid rgba(var(--ucp-accent-rgb), 0.15);
     border-radius: 12px;
 }
 
@@ -756,7 +761,7 @@ body.usercp-body {
 /* Mostrar check solo en la opción activa */
 .payment-card-premium.active {
     border: 1px solid rgba(255, 204, 0, 0.6) !important;
-    background: linear-gradient(90deg, rgba(255, 102, 0, 0.08) 0%, transparent 100%) !important;
+    background: linear-gradient(90deg, rgba(var(--ucp-accent-rgb), 0.08) 0%, transparent 100%) !important;
     box-shadow: 0 0 15px rgba(255, 204, 0, 0.1);
 }
 
@@ -772,7 +777,7 @@ body.usercp-body {
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #ff8844;
+    color: var(--ucp-accent-2);
     font-size: 18px;
 }
 
@@ -787,12 +792,12 @@ body.usercp-body {
 .empty-wallet-icon {
     width: 90px;
     height: 90px;
-    background: rgba(255, 102, 0, 0.03);
+    background: rgba(var(--ucp-accent-rgb), 0.03);
     border-radius: 20px;
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 1px solid rgba(255, 102, 0, 0.1);
+    border: 1px solid rgba(var(--ucp-accent-rgb), 0.1);
 }
 
 /* --- ESTILOS ESPECÍFICOS DE CONFIGURACIÓN (ANCHO UNIFICADO) --- */
@@ -827,7 +832,7 @@ body.usercp-body {
 
 /* Colores de cajas y botones */
 .border-orange { border-left: 4px solid var(--accent-orange); }
-.bg-orange-soft { background: rgba(255, 102, 0, 0.1); color: var(--accent-orange); }
+.bg-orange-soft { background: rgba(var(--ucp-accent-rgb), 0.1); color: var(--accent-orange); }
 
 .border-blue { border-left: 4px solid #3366ff; }
 .bg-blue-soft { background: rgba(51, 102, 255, 0.1); color: #3366ff; }
@@ -1026,7 +1031,7 @@ body.usercp-body {
     position: absolute;
     top: 10px;
     left: 10px;
-    background: rgba(243, 156, 18, 0.9);
+    background: rgba(var(--ucp-accent-rgb), 0.9);
     color: #000;
     padding: 2px 8px;
     border-radius: 4px;
@@ -1137,7 +1142,7 @@ body.usercp-body {
 }
 
 .nav-pills-coins .nav-link.active {
-    background: #f39c12; /* Tu color naranja */
+    background: var(--ucp-accent); /* Tu color naranja */
     color: #111;
 }
 
@@ -1170,9 +1175,9 @@ body.usercp-body {
     }
     .vip-tab-link:hover { color: #fff; background: rgba(255,255,255,0.02); }
     .vip-tab-link.active {
-        color: #f39c12;
-        border-bottom-color: #f39c12;
-        background: linear-gradient(to top, rgba(243, 156, 18, 0.1), transparent);
+        color: var(--ucp-accent);
+        border-bottom-color: var(--ucp-accent);
+        background: linear-gradient(to top, rgba(var(--ucp-accent-rgb), 0.1), transparent);
     }
 
     /* Contenido de los Tabs */
@@ -1203,7 +1208,354 @@ body.usercp-body {
     .pack-badge { font-size: 11px; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; padding: 4px 8px; border-radius: 4px; display: inline-block; margin-bottom: 10px; color: #000; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
     .pack-days { font-size: 28px; font-weight: bold; color: #fff; line-height: 1; margin-bottom: 10px; }
     .pack-days span { font-size: 12px; color: #888; display: block; text-transform: uppercase; font-weight: normal; margin-top: 5px; }
-    .pack-price { font-size: 22px; color: #f39c12; font-weight: bold; margin: 15px 0; font-family: 'Cinzel', serif; }
+    .pack-price { font-size: 22px; color: var(--ucp-accent); font-weight: bold; margin: 15px 0; font-family: 'Cinzel', serif; }
 
     .btn-pack-buy { width: 100%; padding: 10px; border: none; border-radius: 6px; font-weight: bold; text-transform: uppercase; color: #fff; background: #2d323e; transition: 0.3s; cursor: pointer; font-size: 13px; }
-    .btn-pack-buy:hover { background: #f39c12; color: #000; box-shadow: 0 0 15px rgba(243, 156, 18, 0.4); }
+    .btn-pack-buy:hover { background: var(--ucp-accent); color: #000; box-shadow: 0 0 15px rgba(var(--ucp-accent-rgb), 0.4); }
+
+/* ====================================================================
+   TEMA POR VARIABLES
+   La paleta se elige con la clase tpl-<template> que pone modules/usercp.php
+   ==================================================================== */
+body.usercp-body {
+    --accent-orange: var(--ucp-accent);
+    --primary-orange: var(--ucp-accent);
+    --glow-orange: 0 0 20px rgba(var(--ucp-accent-rgb), 0.25);
+}
+body.usercp-body.tpl-morpheus,
+body.usercp-body.tpl-canibal {
+    --ucp-accent: #c8a165;
+    --ucp-accent-rgb: 200, 161, 101;
+    --ucp-accent-2: #e2c084;
+    --ucp-accent-deep: #a8843f;
+    --ucp-accent-ink: #17120a;
+    --bg-dark-panel: #0d0e11;
+    --sidebar-bg: #101216;
+}
+body.usercp-body.tpl-classic {
+    --ucp-accent: #d32f2f;
+    --ucp-accent-rgb: 211, 47, 47;
+    --ucp-accent-2: #e35d5d;
+    --ucp-accent-deep: #8f1717;
+    --ucp-accent-ink: #ffffff;
+    --bg-dark-panel: #101013;
+    --sidebar-bg: #141418;
+}
+.btn-orange-action,
+.btn-orange-action:hover { color: var(--ucp-accent-ink) !important; }
+.char-level-badge,
+.badge.bg-orange,
+.nav-pills-coins .nav-link.active { color: var(--ucp-accent-ink); }
+
+/* --- Botones de estado (antes en un <style> dentro de usercp.php) --- */
+.quick-access-buttons { display: flex; gap: 15px; padding: 0 15px; margin-bottom: 20px; }
+.btn-quick {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 80px;
+    padding: 15px 10px;
+    border-radius: 8px;
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(var(--ucp-accent-rgb), 0.3);
+    color: #ccc;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+.btn-quick:hover {
+    background: rgba(var(--ucp-accent-rgb), 0.1);
+    border-color: rgba(var(--ucp-accent-rgb), 0.8);
+    transform: translateY(-2px);
+    color: #fff;
+}
+.btn-quick i { font-size: 1.5rem; margin-bottom: 8px; color: var(--ucp-accent-2); }
+.btn-quick span { font-size: 0.8rem; text-transform: uppercase; font-weight: 600; letter-spacing: 1px; }
+.btn-quick.offline-mode { border-color: rgba(220, 53, 69, 0.3); }
+.btn-quick.offline-mode i { color: #dc3545; }
+.btn-quick.offline-mode:hover { border-color: #dc3545; background: rgba(220, 53, 69, 0.1); }
+.payment-icon-box { width: 50px; height: 40px; overflow: hidden; padding: 4px; border-radius: 4px; }
+
+/* ====================================================================
+   DISENO ADAPTABLE
+   ==================================================================== */
+/* Escritorio: menu de ancho estable en lugar del 16,6% de col-lg-2 */
+@media (min-width: 992px) {
+    .usercp-wrapper > .row { flex-wrap: nowrap; }
+    .usercp-sidebar {
+        flex: 0 0 clamp(250px, 17vw, 320px);
+        width: clamp(250px, 17vw, 320px);
+        max-width: none;
+    }
+    .usercp-content { flex: 1 1 0; width: auto; max-width: none; min-width: 0; }
+}
+@media (min-width: 992px) and (max-width: 1399.98px) {
+    .usercp-content { padding: 28px !important; }
+}
+
+/* Media pantalla y celular: el menu pasa a ser una franja superior */
+@media (max-width: 991.98px) {
+    .usercp-wrapper > .row { min-height: 0 !important; }
+    .usercp-sidebar {
+        min-height: 0;
+        border-right: 0;
+        border-bottom: 1px solid var(--glass-border);
+    }
+    .user-profile-header { padding: 18px 16px 12px; }
+    .user-avatar { width: 48px; height: 48px; }
+    .user-avatar i { font-size: 20px; }
+    .header-info h3 { font-size: 1.05rem; }
+    .sidebar-divider { display: none; }
+
+    .quick-access-buttons { padding: 0 16px; margin-bottom: 12px; gap: 10px; }
+    .btn-quick { flex-direction: row; gap: 8px; min-height: 0; padding: 10px; }
+    .btn-quick i { font-size: 1rem; margin-bottom: 0; }
+
+    .usercp-nav-menu {
+        flex-direction: row !important;
+        flex-wrap: nowrap !important;
+        gap: 8px;
+        padding: 0 16px 12px;
+        overflow-x: auto;
+        scrollbar-width: none;
+        -webkit-overflow-scrolling: touch;
+    }
+    .usercp-nav-menu::-webkit-scrollbar { display: none; }
+    .usercp-nav-menu .nav-card {
+        flex: 0 0 auto;
+        width: auto;
+        padding: 9px 14px !important;
+        border: 1px solid var(--glass-border) !important;
+        white-space: nowrap;
+    }
+    .usercp-nav-menu .nav-card.active {
+        border-color: rgba(var(--ucp-accent-rgb), 0.5) !important;
+        box-shadow: none !important;
+    }
+    .nav-card .icon-box { width: 28px; height: 28px; margin-right: 8px; background: none; }
+    .nav-card .text-box h4 { font-size: 12px; }
+    .nav-card .text-box p,
+    .nav-card .arrow-icon { display: none; }
+
+    .logout-section { margin-top: 0; padding: 0 16px 14px; }
+    .btn-logout-custom { padding: 10px; }
+
+    .usercp-content { padding: 20px 14px !important; }
+    .balance-card .value { font-size: 26px; }
+    .donation-packages-wrapper { min-height: 0; }
+}
+
+
+/* --- Encabezado de cuenta: estado y ultima conexion --- */
+.avatar-wrapper { position: relative; flex-shrink: 0; }
+.online-status-dot {
+    position: absolute;
+    right: 2px;
+    bottom: 2px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    border: 3px solid var(--sidebar-bg);
+    background: #dc3545;
+}
+.online-status-dot.is-online { background: #22c55e; box-shadow: 0 0 10px rgba(34, 197, 94, 0.7); }
+.header-info { min-width: 0; }
+.header-info h3 { margin: 0 0 4px; }
+.account-status {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #e06c75;
+}
+.account-status::before {
+    content: "";
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: currentColor;
+}
+.account-status.is-online { color: #22c55e; }
+.account-last { margin-top: 2px; font-size: 11px; color: var(--text-dim); }
+
+/* La barra compartida es fija: en pantallas angostas tapaba el encabezado */
+@media (max-width: 991.98px) {
+    body.usercp-body:not(.page-usercp-morpheus) .usercp-wrapper { padding-top: 84px !important; }
+}
+
+
+/* Menu en pantallas angostas: grilla a la vista, sin desplazamiento lateral */
+@media (max-width: 991.98px) {
+    .usercp-nav-menu {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(104px, 1fr));
+        gap: 8px;
+        overflow: visible;
+    }
+    .usercp-nav-menu .nav-card {
+        flex-direction: column;
+        justify-content: center !important;
+        gap: 6px;
+        width: 100%;
+        padding: 12px 6px !important;
+        text-align: center !important;
+        white-space: normal;
+    }
+    .usercp-nav-menu .nav-card .icon-box { margin-right: 0; }
+    .usercp-nav-menu .nav-card .text-box { align-items: center; }
+    .usercp-nav-menu .nav-card .text-box h4 {
+        font-size: 11px;
+        line-height: 1.25;
+        letter-spacing: .5px;
+    }
+}
+
+
+/* Boton VIP junto al nombre de la cuenta */
+.user-profile-header { flex-wrap: wrap; row-gap: 10px; }
+.btn-vip-pill {
+    margin-left: auto;
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    border-radius: 20px;
+    border: 1px solid rgba(var(--ucp-accent-rgb), 0.45);
+    background: rgba(var(--ucp-accent-rgb), 0.1);
+    color: var(--ucp-accent-2);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background .2s, border-color .2s, color .2s;
+}
+.btn-vip-pill i { font-size: 11px; }
+.btn-vip-pill:hover {
+    background: rgba(var(--ucp-accent-rgb), 0.2);
+    border-color: var(--ucp-accent);
+    color: #fff;
+}
+/* En el menu lateral de escritorio no entra al lado del nombre: baja alineado con el texto */
+@media (min-width: 992px) {
+    .btn-vip-pill { margin-left: 90px; }
+}
+
+
+/* ====================================================================
+   PESTANAS INTERNAS (solo estilos; no se toca ningun modulo)
+   ==================================================================== */
+
+/* --- General --- */
+@media (max-width: 575.98px) {
+    .usercp-content .donation-main-container { padding: 14px !important; }
+    .usercp-content .module-title { margin-bottom: 16px !important; }
+}
+
+/* --- Cuenta --- */
+#pane-index .account-details-banner > .d-flex { flex-wrap: wrap; gap: 10px; }
+#pane-index .status-badge-disconnected { white-space: nowrap; }
+#pane-index .status-badge-disconnected.is-online {
+    color: #22c55e;
+    border-color: rgba(34, 197, 94, 0.35);
+    background: rgba(34, 197, 94, 0.08);
+}
+#pane-index .account-email-box { overflow-wrap: anywhere; }
+@media (max-width: 575.98px) {
+    #pane-index .account-details-banner { padding: 16px !important; margin-bottom: 24px !important; }
+    #pane-index .vip-status-container { padding: 16px !important; }
+}
+
+/* --- Personajes --- */
+#pane-characters .char-card-premium > .d-flex.gap-2 > a,
+#pane-characters .char-card-premium > .d-flex.gap-2 > button {
+    padding: 11px 14px !important;
+    font-size: 13px;
+    white-space: nowrap;
+    border-radius: 10px !important;
+}
+#pane-characters .char-card-premium > .d-flex.gap-2 > a {
+    background: linear-gradient(135deg, var(--ucp-accent-deep) 0%, var(--ucp-accent-2) 100%) !important;
+    box-shadow: 0 4px 16px rgba(var(--ucp-accent-rgb), 0.3) !important;
+    color: var(--ucp-accent-ink) !important;
+}
+#pane-characters .char-card-premium button[onclick*="unstuck"] {
+    background: rgba(var(--ucp-accent-rgb), 0.12) !important;
+    border-color: rgba(var(--ucp-accent-rgb), 0.4) !important;
+    color: var(--ucp-accent-2) !important;
+}
+@media (max-width: 575.98px) {
+    #pane-characters .char-card-premium { padding: 16px !important; }
+    #pane-characters .char-card-premium > .d-flex.gap-2 { flex-wrap: wrap; }
+    #pane-characters .char-card-premium > .d-flex.gap-2 > a { flex: 1 1 100%; }
+    #pane-characters .char-card-premium > .d-flex.gap-2 > button {
+        flex: 1 1 0;
+        padding-left: 8px !important;
+        padding-right: 8px !important;
+    }
+}
+
+/* --- WebShop --- */
+#pane-webshop .balance-item span { color: var(--ucp-accent-2); }
+#pane-webshop .ws-cat-btn.active { background: var(--ucp-accent); color: var(--ucp-accent-ink); }
+#pane-webshop .shop-card:hover { border-color: var(--ucp-accent); }
+#pane-webshop .shop-card-title span { color: var(--ucp-accent-2) !important; }
+#pane-webshop .shop-header-balance > div { flex-wrap: wrap; }
+#pane-webshop .modal-shop-box { max-width: calc(100vw - 24px); }
+@media (max-width: 991.98px) {
+    #pane-webshop .shop-header-balance { padding: 12px; border: 1px solid #2d323e; border-radius: 8px; }
+    #pane-webshop .ws-layout { flex-direction: column; gap: 14px; min-height: 0; padding-top: 14px; }
+    #pane-webshop .ws-sidebar {
+        width: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        padding: 0;
+        background: none;
+        border: 0;
+        overflow: visible;
+    }
+    #pane-webshop .ws-cat-head { flex: 0 0 100%; padding: 0 2px 6px; background: none; border-bottom: 0; }
+    #pane-webshop .ws-cat-btn {
+        width: auto;
+        padding: 7px 12px;
+        border: 1px solid #2d323e;
+        border-radius: 20px;
+        font-size: 12px;
+    }
+    #pane-webshop .ws-cat-btn i { width: auto; margin-right: 6px; }
+    #pane-webshop .ws-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
+    #pane-webshop .shop-card { min-height: 0; padding: 12px; }
+    #pane-webshop .shop-card-img-box { height: 80px; margin-bottom: 10px; }
+    #pane-webshop .shop-card-title { font-size: 13px; min-height: 34px; }
+    #pane-webshop .shop-price { font-size: 16px; }
+}
+
+/* --- Black Market --- */
+#pane-black-market {
+    --mu-gold: var(--ucp-accent-2);
+    --mu-gold-glow: rgba(var(--ucp-accent-rgb), 0.4);
+}
+#pane-black-market .modal-win { max-width: calc(100vw - 24px); }
+#pane-black-market .sale-row { flex-wrap: wrap; gap: 10px; }
+@media (max-width: 575.98px) {
+    #pane-black-market .bm-wrap { padding: 12px 8px; }
+    #pane-black-market .bm-head { flex-wrap: wrap; gap: 8px; padding-bottom: 10px; margin-bottom: 12px; }
+    #pane-black-market .bm-tab-container { flex: 1 1 100%; }
+    #pane-black-market .bm-btn-tab { flex: 1; padding: 10px 6px; }
+    #pane-black-market .tax-badge {
+        flex: 1 1 100%;
+        padding: 0;
+        border: 0;
+        background: none;
+        text-align: right;
+        font-size: 11px;
+        opacity: 0.85;
+    }
+}
+/* El baul mide 340px fijos: en celulares angostos se reduce en proporcion */
+@media (max-width: 400px) { #pane-black-market .wh-box { zoom: 0.9; } }
+@media (max-width: 350px) { #pane-black-market .wh-box { zoom: 0.8; } }

@@ -1,9 +1,9 @@
 <?php
-// Módulo: RESUMEN DE CUENTA
+// M贸dulo: RESUMEN DE CUENTA
 ?>
 <div class="module-title mb-4">
     <h2 class="text-color text-uppercase fw-bold">CUENTA</h2>
-    <p class="text-color small">Información de tu cuenta y estadísticas</p>
+    <p class="text-color small">Informaci贸n de tu cuenta y estad铆sticas</p>
     <div class="title-underline"></div>
 </div>
 
@@ -17,7 +17,7 @@
                     <small class="text-color">Detalles de la Cuenta</small>
                 </div>
             </div>
-            <div class="status-badge-disconnected"><i class="fa fa-circle me-1"></i> Desconectado</div>
+            <div class="status-badge-disconnected<?php echo !empty($isUserOnline) ? ' is-online' : ''; ?>"><i class="fa fa-circle me-1"></i> <?php echo !empty($isUserOnline) ? 'Conectado' : 'Desconectado'; ?></div>
         </div>
         <div class="account-email-box px-3 py-2">
             <i class="fa fa-envelope me-2 text-orange"></i> 
@@ -84,7 +84,7 @@
                     <i class="fa fa-crown"></i>
                 </div>
                 <div>
-                    <small class="text-white-50 d-block text-uppercase" style="font-size: 10px; letter-spacing: 1px;">Membresía Actual</small>
+                    <small class="text-white-50 d-block text-uppercase" style="font-size: 10px; letter-spacing: 1px;">Membres铆a Actual</small>
                     <h4 class="fw-bold m-0 text-uppercase" style="color: <?php echo $vipColor; ?>; text-shadow: 0 0 10px <?php echo $vipColor; ?>40;">
                         <?php echo $vipName; ?>
                     </h4>

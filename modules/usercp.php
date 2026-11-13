@@ -49,6 +49,29 @@ try {
     }
 } catch (Exception $e) { $isUserOnline = false; }
 
+// Datos del encabezado del menu: estado y ultima conexion
+$ucpUserSafe = htmlspecialchars((string)$_SESSION['username'], ENT_QUOTES, 'UTF-8');
+$ucpLastSeen = '';
+try {
+    $ucpLast = $dbMe->query_fetch_single("SELECT ConnectTM, DisConnectTM FROM MEMB_STAT WHERE memb___id = ?", [$_SESSION['username']]);
+    if(is_array($ucpLast)) {
+        $ucpRef = $isUserOnline ? $ucpLast['ConnectTM'] : (!empty($ucpLast['DisConnectTM']) ? $ucpLast['DisConnectTM'] : $ucpLast['ConnectTM']);
+        if(!empty($ucpRef)) {
+            $ucpDate = new DateTime((string)$ucpRef);
+            $ucpLastSeen = $ucpDate->format('d/m/Y H:i');
+        }
+    }
+} catch (Throwable $e) { $ucpLastSeen = ''; }
+$ucpStateClass = $isUserOnline ? 'is-online' : 'is-offline';
+$ucpStatusHtml = '<div class="account-status ' . $ucpStateClass . '">' . ($isUserOnline ? 'Conectado al juego' : 'Desconectado') . '</div>';
+if($ucpLastSeen !== '') {
+    $ucpStatusHtml .= '<div class="account-last">' . ($isUserOnline ? 'Desde' : '&Uacute;ltima conexi&oacute;n') . ': ' . $ucpLastSeen . '</div>';
+}
+
+$ucpVipHtml = $vipModuleActive
+    ? '<button type="button" class="btn-vip-pill" data-bs-toggle="modal" data-bs-target="#modalBuyVip"><i class="fa fa-star"></i><span>VIP</span></button>'
+    : '';
+
 /* --- 3. HELPER FUNCTIONS --- */
 if (!function_exists("getClassName")) {
     function getClassName($code) {
@@ -65,15 +88,16 @@ if (!function_exists("getClassIcon")) {
     }
 }
 
-// --- FIX: DETECCIÓN REAL DEL TEMPLATE DESDE LA CONFIGURACIÓN ---
+// --- TEMPLATE ACTIVO (configuracion cacheada del nucleo, sin releer el archivo) ---
 $isMorpheus = false;
-$sysConfigPath = __PATH_INCLUDES__ . 'config/muservermaker.json';
-if (file_exists($sysConfigPath)) {
-    $sysConf = json_decode(file_get_contents($sysConfigPath), true);
-    if (isset($sysConf['website_template']) && $sysConf['website_template'] === 'morpheus') {
-        $isMorpheus = true;
+$ucpTemplate = 'default';
+try {
+    $ucpCfg = muservermakerConfigs();
+    if(is_array($ucpCfg) && !empty($ucpCfg['website_template'])) {
+        $ucpTemplate = preg_replace('/[^a-z0-9_-]/', '', strtolower((string)$ucpCfg['website_template']));
     }
-}
+} catch (Throwable $e) { }
+if($ucpTemplate === 'morpheus') $isMorpheus = true;
 // ---------------------------------------------------------------
 
 // --- RENDERIZADO HTML SEGURO PARA OFUSCACIÓN (PURE PHP ECHO) ---
@@ -93,7 +117,7 @@ if($isMorpheus) {
 echo '
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="' . __BASE_URL__ . 'templates/misc/css/usercp.css" rel="stylesheet">
+    <link href="' . __BASE_URL__ . 'templates/misc/css/usercp.css?v=' . (int)@filemtime('templates/misc/css/usercp.css') . '" rel="stylesheet">
     ' . ($isMorpheus ? '' : '<link href="' . __BASE_URL__ . 'templates/misc/css/navbar.css" rel="stylesheet">') . '
     
     <style>
@@ -170,7 +194,7 @@ echo '
         .btn-pack-buy:hover { background: #f39c12; color: #000; box-shadow: 0 0 15px rgba(243, 156, 18, 0.4); }
     </style>
 </head>
-<body class="usercp-body' . ($isMorpheus ? ' page-usercp-morpheus' : '') . '">';
+<body class="usercp-body tpl-' . $ucpTemplate . ($isMorpheus ? ' page-usercp-morpheus' : '') . '">';
 
 if (!$isMorpheus) {
     include $_SERVER['DOCUMENT_ROOT'] . '/templates/misc/inc/modules/navbar.php'; 
@@ -186,35 +210,13 @@ echo '
                     <div class="user-profile-header">
                         <div class="avatar-wrapper">
                             <div class="user-avatar"><i class="fa fa-user"></i></div>
-                            <span class="online-status-dot"></span>
+                            <span class="online-status-dot ' . $ucpStateClass . '"></span>
                         </div>
                         <div class="header-info">
-                            <div class="account-label">Cuenta</div>
-                            <h3 class="text-truncate" title="' . $_SESSION["username"] . '">
-                                ' . $_SESSION["username"] . '
-                            </h3>
+                            <h3 class="text-truncate" title="' . $ucpUserSafe . '">' . $ucpUserSafe . '</h3>
+                            ' . $ucpStatusHtml . '
                         </div>
-                    </div>
-
-                    <div class="quick-access-buttons">';
-                        
-                        if($isUserOnline) {
-                            echo '<button class="btn-quick ' . (!$vipModuleActive ? 'w-100' : '') . '" style="cursor: default;">
-                                <i class="fa fa-clock"></i> <span>Online</span>
-                            </button>';
-                        } else {
-                            echo '<button class="btn-quick offline-mode ' . (!$vipModuleActive ? 'w-100' : '') . '" style="cursor: default;">
-                                <i class="fa fa-power-off"></i> <span>Offline</span>
-                            </button>';
-                        }
-                      
-                        if($vipModuleActive) {
-                            echo '<button type="button" class="btn-quick" data-bs-toggle="modal" data-bs-target="#modalBuyVip">
-                                <i class="fa fa-star"></i> <span>VIP</span>
-                            </button>';
-                        }
-                      
-echo '
+                        ' . $ucpVipHtml . '
                     </div>
                 </div>
                 
