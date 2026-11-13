@@ -374,7 +374,10 @@ if(!function_exists('bm_parse_item_index')) {
 // ====================================================================================
 // [LOGIN FUNCIONAL]
 // ====================================================================================
-if((isset($_POST['msmLogin_user']) && !empty($_POST['msmLogin_user'])) || isset($_POST['msmLogin_submit'])) {
+// En /login el formulario lo procesa modules/login.php: no se valida dos veces
+// (cada validacion fallida cuenta como un intento).
+$msmIsLoginPage = (isset($_REQUEST['page']) && $_REQUEST['page'] === 'login');
+if(!$msmIsLoginPage && ((isset($_POST['msmLogin_user']) && !empty($_POST['msmLogin_user'])) || isset($_POST['msmLogin_submit']))) {
     $_POST['msmLogin_submit'] = 'submit';
     try {
         if(class_exists('login')) {
@@ -459,7 +462,7 @@ if((isset($_POST['market_ajax']) && $_POST['market_ajax'] == 'true') || (isset($
                         } else {
                             $fname = getClassImageName($r['Class']);
                             $url = __BASE_URL__ . 'img/character-avatars/' . $fname . '.jpg';
-                            $img = "<img src='$url' style='width:25px;height:25px;border-radius:50%;border:1px solid #444;object-fit:cover;' onerror=\"this.src='".__BASE_URL__."img/character-avatars/default.jpg'\">";
+                            $img = "<img src='$url' style='width:25px;height:25px;border-radius:50%;border:1px solid #444;object-fit:cover;' onerror=\"this.onerror=null;this.src='".__BASE_URL__."img/character-avatars/avatar.jpg'\">";
                         }
                         $data[] = ['name'=>$r['Name'], 'val'=>number_format($r['Val']), 'race_html'=>$img];
                     }

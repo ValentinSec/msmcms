@@ -2367,3 +2367,25 @@ textarea.form-control-dark {
 .dash-rank-plain { color: #64748b; font-size: 11px; }
 #page-wrapper .dashboard-row-bottom > [class*="col-"] { margin-bottom: 20px; }
 #page-wrapper .dashboard-row-bottom .bottom-card { margin-bottom: 0; }
+
+/* ====================================================================
+   DASHBOARD: pestanas del grafico
+   ==================================================================== */
+.chart-tabs { display: flex; gap: 20px; }
+.chart-tab {
+    border: 0;
+    background: none;
+    padding: 0 0 8px;
+    color: #94a3b8;
+    font-size: 15px;
+    font-weight: 700;
+    border-bottom: 2px solid transparent;
+    cursor: pointer;
+    transition: color .15s, border-color .15s;
+}
+.chart-tab:hover { color: #e2e8f0; }
+.chart-tab.is-active { color: #fff; border-bottom-color: #4ade80; }
+@media (max-width: 575px) {
+    .chart-header { flex-wrap: wrap; gap: 8px; }
+    .chart-tab { font-size: 13px; }
+}

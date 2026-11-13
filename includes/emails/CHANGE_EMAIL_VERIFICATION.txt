@@ -4,7 +4,7 @@ Recibimos una solicitud para cambiar el correo de registro de tu cuenta desde la
 
 
 <span style="color:red;font-weight:bold;">ADVERTENCIA:<br />
-Si no solicitaste este cambio, por favor ignorá este mail y ponte en contacto con el Administardor.</span><br /><br />
+Si no solicitaste este cambio, por favor ignorá este mail y ponte en contacto con el Administrador.</span><br /><br />
 
 Saludos,<br />
 {SERVER_NAME}.

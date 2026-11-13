@@ -269,5 +269,12 @@ define('__PATH_TEMPLATE_CSS__', __PATH_TEMPLATE__ . 'css/');
 define('__PATH_TEMPLATE_JS__', __PATH_TEMPLATE__ . 'js/');
 define('__PATH_TEMPLATE_FONTS__', __PATH_TEMPLATE__ . 'fonts/');
 
+// Contador de visitas del sitio publico (grafico del Dashboard). Nunca debe frenar la pagina.
+if(defined('access') && access == 'index') {
+    try {
+        if(@include_once(__PATH_INCLUDES__ . 'visit.counter.php')) msm_count_visit();
+    } catch (Throwable $e) { }
+}
+
 $handler = new Handler();
 $handler->loadPage();

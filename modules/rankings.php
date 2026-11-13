@@ -54,8 +54,16 @@ if(isset($_GET['ajax']) && $_GET['ajax'] == 1) {
 
     $exclude_clause = "";
     if(!empty($rankings_config['exclude_list'])) {
-        $excluded_names = array_map('trim', explode(',', $rankings_config['exclude_list']));
-        $exclude_clause = "AND Name NOT IN ('" . implode("','", $excluded_names) . "')";
+        $excluded_names = array();
+        foreach(explode(',', (string)$rankings_config['exclude_list']) as $__n) {
+            $__n = trim($__n);
+            if($__n === '') continue;
+            $excluded_names[] = str_replace("'", "''", $__n);
+        }
+        unset($__n);
+        if(!empty($excluded_names)) {
+            $exclude_clause = "AND Name NOT IN ('" . implode("','", $excluded_names) . "')";
+        }
     }
 
     $basePath = __DIR__ . '/rankings/'; 

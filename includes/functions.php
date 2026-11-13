@@ -140,7 +140,11 @@ function lang($phrase, $return=true) {
 
 function langf($phrase, $args=array(), $print=false) {
 	global $lang;
-	$result = @vsprintf($lang[$phrase], $args);
+	try {
+		$result = @vsprintf(isset($lang[$phrase]) ? $lang[$phrase] : '', $args);
+	} catch (Throwable $e) {
+		$result = false;
+	}
 	if(!$result) $result = 'ERROR';
 	
 	if(config('language_debug',true)) {

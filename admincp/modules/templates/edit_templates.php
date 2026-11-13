@@ -242,7 +242,6 @@ $sfFile_wp = isset($tplConfig['soc_wp_img']) ? $tplConfig['soc_wp_img'] : 'socia
 $sfFile_yt = isset($tplConfig['soc_yt_img']) ? $tplConfig['soc_yt_img'] : 'social/youtube.jpg';
 
 $urlSocFb = getImgUrl($templateImgPath, $sfFile_fb, $webImgPath, $placeholderImg);
-$urlSocIg = getImgUrl($templateImgPath, $sfFile_ig, $webImgPath, $placeholderImg);
 $urlSocDc = getImgUrl($templateImgPath, $sfFile_dc, $webImgPath, $placeholderImg);
 $urlSocWp = getImgUrl($templateImgPath, $sfFile_wp, $webImgPath, $placeholderImg);
 $urlSocYt = getImgUrl($templateImgPath, $sfFile_yt, $webImgPath, $placeholderImg);

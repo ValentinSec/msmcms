@@ -135,6 +135,20 @@ for($i = 6; $i >= 0; $i--) {
     $regWeekTotal += $val;
 }
 
+// Serie de visitas (includes/visit.counter.php)
+$visitLabels = array(); $visitValues = array(); $visitWeekTotal = 0; $viewsWeekTotal = 0;
+try {
+    if(@include_once(__PATH_INCLUDES__ . 'visit.counter.php')) {
+        foreach(msm_visits_read(7) as $day => $v) {
+            $visitLabels[] = date('d/m', strtotime($day));
+            $visitValues[] = $v['visits'];
+            $visitWeekTotal += $v['visits'];
+            $viewsWeekTotal += $v['views'];
+        }
+    }
+} catch (Throwable $e) { }
+if(empty($visitLabels)) { $visitLabels = $chartLabels; $visitValues = array_fill(0, count($chartLabels), 0); }
+
 // =====================================================================
 // 3. ECONOMIA (joyas en circulacion). Cache de 1 hora.
 // =====================================================================
@@ -339,8 +353,11 @@ echo '<div class="row dashboard-row">';
     echo '<div class="col-lg-8 col-md-7 dashboard-col-right">';
         echo '<div class="chart-card">';
             echo '<div class="chart-header">';
-                echo '<div class="chart-title">Cuentas nuevas · últimos 7 días</div>';
-                echo '<div class="chart-updated">Total de la semana: ' . number_format($regWeekTotal) . '</div>';
+                echo '<div class="chart-tabs">';
+                    echo '<button type="button" class="chart-tab is-active" data-chart="visits">Visitas a la página</button>';
+                    echo '<button type="button" class="chart-tab" data-chart="regs">Cuentas nuevas</button>';
+                echo '</div>';
+                echo '<div class="chart-updated" id="dashChartTotal"></div>';
             echo '</div>';
             echo '<div class="chart-body"><canvas id="regChart"></canvas></div>';
         echo '</div>';
@@ -519,18 +536,41 @@ echo '<div class="row dashboard-row-bottom">';
 
 echo '</div>';
 
-// --- Grafico ---
+// --- Grafico (dos series: visitas y cuentas nuevas) ---
+$dashSeries = array(
+    'visits' => array(
+        'labels' => $visitLabels, 'values' => $visitValues, 'label' => 'Visitas',
+        'bg' => 'rgba(96, 165, 250, 0.35)', 'border' => '#60a5fa',
+        'total' => 'Visitas de la semana: ' . number_format($visitWeekTotal) . ' · Páginas vistas: ' . number_format($viewsWeekTotal)
+    ),
+    'regs' => array(
+        'labels' => $chartLabels, 'values' => $chartValues, 'label' => 'Cuentas nuevas',
+        'bg' => 'rgba(74, 222, 128, 0.35)', 'border' => '#4ade80',
+        'total' => 'Total de la semana: ' . number_format($regWeekTotal)
+    )
+);
 echo '<script>';
 echo 'document.addEventListener("DOMContentLoaded", function() {';
+echo 'var series = ' . json_encode($dashSeries, JSON_HEX_TAG | JSON_INVALID_UTF8_SUBSTITUTE) . ';';
 echo 'var el = document.getElementById("regChart");';
+echo 'var totalEl = document.getElementById("dashChartTotal");';
+echo 'var tabs = document.querySelectorAll(".chart-tab");';
+echo 'function setTotal(k) { if (totalEl) totalEl.textContent = series[k].total; }';
+echo 'setTotal("visits");';
 echo 'if (!el || typeof Chart === "undefined") return;';
-echo 'new Chart(el.getContext("2d"), {';
+echo 'function ds(k) { var s = series[k]; return { label: s.label, data: s.values, backgroundColor: s.bg, borderColor: s.border, borderWidth: 1, borderRadius: 6, maxBarThickness: 48 }; }';
+echo 'var chart = new Chart(el.getContext("2d"), {';
 echo 'type: "bar",';
-echo 'data: { labels: ' . json_encode($chartLabels) . ', datasets: [{ label: "Cuentas nuevas", data: ' . json_encode($chartValues) . ', backgroundColor: "rgba(74, 222, 128, 0.35)", borderColor: "#4ade80", borderWidth: 1, borderRadius: 6, maxBarThickness: 48 }] },';
+echo 'data: { labels: series.visits.labels, datasets: [ds("visits")] },';
 echo 'options: { responsive: true, maintainAspectRatio: false,';
 echo 'plugins: { legend: { display: false }, tooltip: { backgroundColor: "#1e293b", titleColor: "#fff", bodyColor: "#94a3b8", borderColor: "#334155", borderWidth: 1, displayColors: false } },';
 echo 'scales: { x: { grid: { display: false }, ticks: { color: "#94a3b8", font: { size: 11 } } }, y: { beginAtZero: true, suggestedMax: 5, grid: { color: "rgba(255, 255, 255, 0.05)" }, ticks: { color: "#94a3b8", font: { size: 11 }, precision: 0 } } }';
 echo '}';
 echo '});';
+echo 'tabs.forEach(function(t) { t.addEventListener("click", function() {';
+echo 'var k = t.getAttribute("data-chart"); if (!series[k]) return;';
+echo 'tabs.forEach(function(x) { x.classList.remove("is-active"); }); t.classList.add("is-active");';
+echo 'chart.data.labels = series[k].labels; chart.data.datasets = [ds(k)]; chart.update(); setTotal(k);';
+echo '}); });';
 echo '});';
 echo '</script>';

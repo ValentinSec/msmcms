@@ -6,6 +6,10 @@
 
 if(!defined('access') or !access) die();
 
+// Este archivo solo devuelve filas para modules/rankings.php.
+// Si se abre directamente, se envia al visitante a la pagina de rankings.
+if(!isset($db) || !is_object($db)) { redirect(1, 'rankings/'); return; }
+
 // --- 1. CONFIGURACIÓN DE CANTIDAD ---
 $max_limit = isset($max_limit) ? $max_limit : 100;
 $qty_g = (isset($rankings_config['qty_guilds']) && is_numeric($rankings_config['qty_guilds'])) ? min((int)$rankings_config['qty_guilds'], $max_limit) : 10;

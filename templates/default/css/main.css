@@ -12,6 +12,160 @@ body {
     -webkit-font-smoothing: antialiased;
 }
 
+/* PAGINA /castlesiege */
+body.page-castlesiege {
+    --cs-accent: var(--df-orange, #FF8A3B);
+    --cs-accent-2: var(--df-gold, #ffcc00);
+    --cs-line: rgba(255, 138, 59, .22);
+    --cs-text: var(--df-cream, #E6D6C6);
+    --cs-muted: var(--df-muted, #b1957b);
+}
+
+body.page-castlesiege .page-title {
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: .12em;
+    font-size: clamp(1.3rem, 3.5vw, 1.9rem);
+    font-weight: 700;
+    color: var(--cs-accent-2);
+    margin-bottom: 28px;
+}
+body.page-castlesiege .castle-siege-block {
+    max-width: 900px;
+    margin: 0 auto;
+    color: var(--cs-text);
+}
+body.page-castlesiege .castle-siege-block h2 {
+    margin: 0 0 16px;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    font-size: clamp(1.05rem, 2.6vw, 1.35rem);
+    font-weight: 600;
+    color: var(--cs-accent);
+}
+body.page-castlesiege .castle-siege-block hr {
+    height: 1px;
+    margin: 28px 0;
+    border: 0;
+    opacity: 1;
+    background: linear-gradient(90deg, transparent, var(--cs-line), transparent);
+}
+body.page-castlesiege .castle-siege-block a {
+    color: var(--cs-accent-2);
+    text-decoration: none;
+}
+body.page-castlesiege .castle-siege-block a:hover { color: #fff; }
+
+/* Dueno del castillo */
+body.page-castlesiege .castle-owner-panel .row { display: block; margin: 0; }
+body.page-castlesiege .castle-owner-panel [class*="col-xs-"] {
+    width: auto;
+    max-width: none;
+    padding: 0;
+    text-align: center;
+}
+body.page-castlesiege .castle-owner-panel .castle-owner-name {
+    display: block;
+    margin-bottom: 12px;
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+body.page-castlesiege .castle-owner-panel img {
+    display: block;
+    margin: 0 auto 14px;
+    border: 1px solid var(--cs-line);
+    border-radius: 6px;
+    background: #000;
+    image-rendering: pixelated;
+}
+body.page-castlesiege .castle-owner-panel h4 {
+    margin: 0 0 2px;
+    font-size: .72rem;
+    text-transform: uppercase;
+    letter-spacing: .14em;
+    color: var(--cs-muted);
+}
+body.page-castlesiege .castle-owner-panel p { margin: 0; font-size: 1.05rem; }
+
+/* Alianza */
+body.page-castlesiege .castle-owner-panel .castle-owner-ally-title,
+body.page-castlesiege .castle-owner-panel .castle-owner-ally {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--cs-line);
+}
+body.page-castlesiege .castle-owner-panel .castle-owner-ally-title {
+    margin-top: 18px;
+    font-size: .72rem;
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    color: var(--cs-accent);
+}
+body.page-castlesiege .castle-owner-panel .castle-owner-ally img {
+    display: inline-block;
+    margin: 0;
+}
+
+/* Contador */
+body.page-castlesiege .siege-countdown {
+    text-align: center;
+    font-size: clamp(1.6rem, 5vw, 2.4rem);
+    font-weight: 700;
+    line-height: 1.1;
+    color: var(--cs-accent-2);
+}
+body.page-castlesiege .siege-date {
+    margin-top: 6px;
+    text-align: center;
+    font-size: .9rem;
+    color: var(--cs-muted);
+}
+
+/* Tablas */
+body.page-castlesiege .castle-siege-block .table {
+    --bs-table-bg: transparent;
+    --bs-table-color: var(--cs-text);
+    --bs-table-striped-bg: rgba(255, 255, 255, .035);
+    --bs-table-striped-color: var(--cs-text);
+    --bs-table-border-color: var(--cs-line);
+    width: 100%;
+    margin: 0;
+    color: var(--cs-text);
+}
+body.page-castlesiege .castle-siege-block .table > * > tr > * {
+    padding: 10px 14px;
+    vertical-align: middle;
+    background-color: transparent;
+    color: var(--cs-text);
+    box-shadow: none;
+    border-bottom: 1px solid var(--cs-line);
+}
+body.page-castlesiege .castle-siege-block .table > tbody > tr:nth-of-type(odd) > * {
+    background-color: rgba(255, 255, 255, .035);
+}
+body.page-castlesiege .castle-siege-block .table > thead > tr > th {
+    font-size: .72rem;
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    white-space: nowrap;
+    color: var(--cs-accent);
+    border-bottom-color: var(--cs-accent);
+}
+body.page-castlesiege .castle-siege-block .table img {
+    vertical-align: middle;
+    background: #000;
+    border-radius: 3px;
+}
+@media (max-width: 575.98px) {
+    body.page-castlesiege .castle-siege-block .table > * > tr > * {
+        padding: 8px;
+        font-size: .82rem;
+    }
+}
+
 .content-section, 
 .usercp-wrapper, 
 main {

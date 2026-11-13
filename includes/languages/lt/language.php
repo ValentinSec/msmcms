@@ -248,7 +248,7 @@ $lang['login_txt_1'] = 'Vartotojo vardas:';
 $lang['login_txt_2'] = 'Slaptažodis:';
 $lang['login_txt_3'] = 'Prisijungti';
 $lang['login_txt_4'] = 'Pamiršai slaptažodį?';
-$lang['login_txt_5'] = '%S iš %s bandėte prisijungti. Panaudoję visus %s, negalėsite prisijungti 15 minučių.';
+$lang['login_txt_5'] = '%s iš %s bandėte prisijungti. Panaudoję visus %s, negalėsite prisijungti 15 minučių.';
 
 # account
 $lang['myaccount_txt_1'] = 'paskyros būsena:';

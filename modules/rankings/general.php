@@ -1,10 +1,11 @@
 <?php
-// L¨®gica para General, Resets y Master Resets
+// Lógica para General, Resets y Master Resets
 $qty_c = (isset($rankings_config['qty_chars']) && is_numeric($rankings_config['qty_chars'])) ? min((int)$rankings_config['qty_chars'], $max_limit) : 10;
 
-// [MODIFICADO] Agregamos AccountCharacter para saber CU¨¢L personaje est¨¢ usando la cuenta realmente
+// [MODIFICADO] Agregamos AccountCharacter para saber CUÁL personaje está usando la cuenta realmente
 $query = "SELECT TOP $qty_c Character.Name, ResetCount as Stat, cLevel as Extra, Class, MasterResetCount, 
-          MEMB_STAT.ConnectStat, AccountCharacter.GameIDC
+          MEMB_STAT.ConnectStat, AccountCharacter.GameIDC,
+          (SELECT TOP 1 GM.G_Name FROM GuildMember GM WHERE GM.Name = Character.Name) AS GuildName
           FROM Character 
           LEFT JOIN MEMB_STAT ON Character.AccountID = MEMB_STAT.memb___id 
           LEFT JOIN AccountCharacter ON Character.AccountID = AccountCharacter.Id
@@ -19,7 +20,7 @@ if(!is_array($rankingData)) {
     $i = 1;
     foreach($rankingData as $row) {
         $classCode = $row['Class'];
-        // L¨®gica de Avatar
+        // Lógica de Avatar
         $avatarImg = 'dw.jpg'; 
         if(in_array($classCode, [0, 1, 2, 3])) $avatarImg = 'dw.jpg';
         elseif(in_array($classCode, [16, 17, 18, 19])) $avatarImg = 'dk.jpg';
@@ -67,8 +68,7 @@ if(!is_array($rankingData)) {
 
         // Guild
         if($rankings_config['show_guild']) {
-            $checkGuild = $db->query_fetch_single("SELECT G_Name FROM GuildMember WHERE Name = ?", array($row['Name']));
-            $gName = ($checkGuild && isset($checkGuild['G_Name'])) ? $checkGuild['G_Name'] : false;
+            $gName = (isset($row['GuildName']) && trim((string)$row['GuildName']) !== '') ? htmlspecialchars((string)$row['GuildName'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') : false;
             echo $gName ? '<td class="text-white small text-center">'.$gName.'</td>' : '<td class="text-white small text-center"><i class="fa fa-shield-blank"></i> Sin Guild</td>';
         }
         echo '</tr>';

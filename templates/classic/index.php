@@ -368,17 +368,25 @@ if(isset($_POST['market_ajax']) && $_POST['market_ajax'] == 'true') {
     
     <link href="<?php echo __BASE_URL__; ?>templates/misc/css/navbar.css?v=2" rel="stylesheet">
     <link href="<?php echo __BASE_URL__; ?>templates/misc/css/sidebar.css" rel="stylesheet">
-    <link href="<?php echo __BASE_URL__; ?>templates/classic/css/footer.css?v=<?php echo time(); ?>" rel="stylesheet">
-    <link href="<?php echo __BASE_URL__; ?>templates/classic/css/login.css?v=<?php echo time(); ?>" rel="stylesheet">
-    <link href="<?php echo __BASE_URL__; ?>templates/classic/css/register.css?v=<?php echo time(); ?>" rel="stylesheet">
-    <link href="<?php echo __BASE_URL__; ?>templates/classic/css/main.css?v=<?php echo time(); ?>" rel="stylesheet">
-    <link href="<?php echo __BASE_URL__; ?>templates/classic/css/rankings.css?v=<?php echo time(); ?>" rel="stylesheet">
-    <link href="<?php echo __BASE_URL__; ?>templates/classic/css/news.css?v=<?php echo time(); ?>" rel="stylesheet">
-    <link href="<?php echo __BASE_URL__; ?>templates/classic/css/info.css?v=<?php echo time(); ?>" rel="stylesheet">
-    <link href="<?php echo __BASE_URL__; ?>templates/classic/css/guides.css?v=<?php echo time(); ?>" rel="stylesheet">
-    <link href="<?php echo __BASE_URL__; ?>templates/classic/css/downloads.css?v=<?php echo time(); ?>" rel="stylesheet">
-    <link rel="icon" type="image/x-icon" href="<?php echo __BASE_URL__; ?>templates/classic/img/favicon.ico?v=<?php echo time(); ?>">
-    
+    <?php
+    if(!function_exists('msm_v')) {
+        // Version de un archivo estatico = su fecha de modificacion.
+        function msm_v($ruta) {
+            $t = @filemtime(dirname(__DIR__, 2) . '/' . ltrim($ruta, '/'));
+            return $t ? $t : 1;
+        }
+    }
+    ?>
+    <link href="<?php echo __BASE_URL__; ?>templates/classic/css/footer.css?v=<?php echo msm_v('templates/classic/css/footer.css'); ?>" rel="stylesheet">
+    <link href="<?php echo __BASE_URL__; ?>templates/classic/css/login.css?v=<?php echo msm_v('templates/classic/css/login.css'); ?>" rel="stylesheet">
+    <link href="<?php echo __BASE_URL__; ?>templates/classic/css/register.css?v=<?php echo msm_v('templates/classic/css/register.css'); ?>" rel="stylesheet">
+    <link href="<?php echo __BASE_URL__; ?>templates/classic/css/main.css?v=<?php echo msm_v('templates/classic/css/main.css'); ?>" rel="stylesheet">
+    <link href="<?php echo __BASE_URL__; ?>templates/classic/css/rankings.css?v=<?php echo msm_v('templates/classic/css/rankings.css'); ?>" rel="stylesheet">
+    <link href="<?php echo __BASE_URL__; ?>templates/classic/css/news.css?v=<?php echo msm_v('templates/classic/css/news.css'); ?>" rel="stylesheet">
+    <link href="<?php echo __BASE_URL__; ?>templates/classic/css/info.css?v=<?php echo msm_v('templates/classic/css/info.css'); ?>" rel="stylesheet">
+    <link href="<?php echo __BASE_URL__; ?>templates/classic/css/guides.css?v=<?php echo msm_v('templates/classic/css/guides.css'); ?>" rel="stylesheet">
+    <link href="<?php echo __BASE_URL__; ?>templates/classic/css/downloads.css?v=<?php echo msm_v('templates/classic/css/downloads.css'); ?>" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="<?php echo __BASE_URL__; ?>templates/classic/img/favicon.ico?v=<?php echo msm_v('templates/classic/img/favicon.ico'); ?>">    
     <?php if(!empty($bgImage)): ?>
     <style>
         body {
@@ -614,7 +622,7 @@ if(isset($_POST['market_ajax']) && $_POST['market_ajax'] == 'true') {
             <?php
             function get_class_img($classCode) {
                 $c = (int)$classCode;
-                $img = 'default.jpg';
+                $img = 'avatar.jpg';
                 if ($c < 16) $img = 'dw.jpg'; elseif ($c < 32) $img = 'dk.jpg'; elseif ($c < 48) $img = 'elf.jpg';
                 elseif ($c < 64) $img = 'mg.jpg'; elseif ($c < 80) $img = 'dl.jpg'; elseif ($c < 96) $img = 'su.jpg';
                 elseif ($c < 112) $img = 'rf.jpg';
@@ -874,7 +882,7 @@ if(isset($_POST['market_ajax']) && $_POST['market_ajax'] == 'true') {
     
     document.addEventListener("DOMContentLoaded", function() {
         setTimeout(function() {
-            var cronUrl = "<?php echo __BASE_URL__; ?>api/cron.php?key=<?php echo isset($muservermakerParams['cron_api_key']) ? $muservermakerParams['cron_api_key'] : 'nx9m30cysglepr24v6jdt1w8qzfi5ouh'; ?>";
+            var cronUrl = "<?php echo __BASE_URL__; ?>api/cron.php";
             try {
                 fetch(cronUrl, {mode: 'no-cors'});
             } catch(e) {
@@ -923,7 +931,7 @@ if(isset($_POST['market_ajax']) && $_POST['market_ajax'] == 'true') {
             document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active')); if(btn) btn.classList.add('active');
             document.getElementById('wsLoader').style.display = 'flex';
             var formData = new FormData(); formData.append('market_ajax', 'true'); formData.append('action', 'load_category'); formData.append('category', catId);
-            fetch('<?php echo $_SERVER['REQUEST_URI']; ?>', { method:'POST', body:formData }).then(r => r.json()).then(data => {
+            fetch('<?php echo __BASE_URL__; ?>index.php', { method:'POST', body:formData }).then(r => r.json()).then(data => {
                 document.getElementById('wsLoader').style.display = 'none';
                 var grid = document.getElementById('wsItemGrid'); grid.innerHTML = '';
                 if(data.data.length == 0) { grid.innerHTML = '<div style="grid-column:1/-1; text-align:center; padding:50px; color:#666;">No hay items en esta categoría.</div>'; return; }

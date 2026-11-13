@@ -1,1 +1,7 @@
 deny from all
+
+# Los archivos de datos de los modulos no se sirven por web.
+# El panel los lee desde PHP, que no pasa por esta regla.
+<FilesMatch "\.json$">
+    Require all denied
+</FilesMatch>
