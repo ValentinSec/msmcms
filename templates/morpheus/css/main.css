@@ -1706,3 +1706,30 @@ body.page-castlesiege .castle-siege-block .table img {
         font-size: .82rem;
     }
 }
+
+/* 15. AVISOS DEL LOGIN DE LA BARRA */
+.msm-login-alerts {
+    position: fixed;
+    top: 78px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10060;
+    width: min(92vw, 460px);
+    display: grid;
+    gap: 8px;
+}
+.msm-login-alerts .alert {
+    margin: 0;
+    padding: 10px 12px;
+    font-size: 13px;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, .55);
+}
+/* Dentro del cuadro de login */
+.msm-login-alerts.in-modal {
+    position: static;
+    transform: none;
+    width: auto;
+    margin: 0 0 16px;
+}
+.msm-login-alerts.in-modal .alert { box-shadow: none; }

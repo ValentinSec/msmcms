@@ -374,6 +374,12 @@ if(!function_exists('bm_parse_item_index')) {
 // ====================================================================================
 // [LOGIN FUNCIONAL]
 // ====================================================================================
+$msmLoginAlerts = '';
+// Avisos de un login fallido anterior: se muestran una sola vez
+if(isset($_SESSION['msm_login_alerts'])) {
+    $msmLoginAlerts = (string)$_SESSION['msm_login_alerts'];
+    unset($_SESSION['msm_login_alerts']);
+}
 // En /login el formulario lo procesa modules/login.php: no se valida dos veces
 // (cada validacion fallida cuenta como un intento).
 $msmIsLoginPage = (isset($_REQUEST['page']) && $_REQUEST['page'] === 'login');
@@ -382,12 +388,24 @@ if(!$msmIsLoginPage && ((isset($_POST['msmLogin_user']) && !empty($_POST['msmLog
     try {
         if(class_exists('login')) {
             $userLogin = new login();
-            $userLogin->validateLogin($_POST['msmLogin_user'], $_POST['msmLogin_pwd']);
-            ob_clean();
-            header("Location: " . __BASE_URL__ . "usercp");
-            exit;
+            $userLogin->validateLogin($_POST['msmLogin_user'], isset($_POST['msmLogin_pwd']) ? $_POST['msmLogin_pwd'] : '');
         }
+    } catch (Exception $ex) {
+        message('error', $ex->getMessage());
     } catch (Throwable $ex) { }
+
+    if(isLoggedIn()) {
+        ob_clean();
+        header("Location: " . __BASE_URL__ . "usercp");
+        exit;
+    }
+
+    // Login fallido: se guardan los avisos y se recarga la misma pagina con un pedido
+    // normal, para que F5 no reenvie el formulario ni sume intentos.
+    $_SESSION['msm_login_alerts'] = (string)ob_get_contents();
+    ob_clean();
+    header('Location: /' . ltrim((string)$request_path, '/'));
+    exit;
 }
 
 // ====================================================================================
@@ -693,7 +711,24 @@ if(isRankActiveLocal('active_rank_elo', $rankConfig)) $activeRanks['ELO'] = 'PVP
     </style>
 </head>
 <body class="page-<?php echo empty($_REQUEST['page']) ? 'home' : preg_replace('/[^a-zA-Z0-9_-]/', '', $_REQUEST['page']); ?>">
-
+<?php if(!empty($msmLoginAlerts)): ?>
+<div class="msm-login-alerts" id="msmLoginAlerts" style="display:none;"><?php echo $msmLoginAlerts; ?></div>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var box = document.getElementById('msmLoginAlerts');
+    if (!box) return;
+    // Sin el cuadro de login disponible, los avisos se muestran flotando
+    if (typeof openLoginModal !== 'function') { box.style.display = ''; return; }
+    openLoginModal();
+    var form = document.querySelector('#jsLoginModal form');
+    if (form) {
+        box.classList.add('in-modal');
+        form.parentNode.insertBefore(box, form);
+    }
+    box.style.display = '';
+});
+</script>
+<?php endif; ?>
     <?php include 'templates/morpheus/inc/modules/navbar.php'; ?>
 
     <div class="morpheus-wrapper">
@@ -756,7 +791,7 @@ if(isRankActiveLocal('active_rank_elo', $rankConfig)) $activeRanks['ELO'] = 'PVP
                                     </div>
                                 </div>
                                 <div class="carousel-item">
-                                    <div class="slider-content" style="background-image: url('<?php echo __BASE_URL__; ?>templates/morpheus/img/<?php echo $s2_img; ?>?v=<?php echo msm_v('templates/morpheus/img/' . $s2_img); ?>');">');">
+                                    <div class="slider-content" style="background-image: url('<?php echo __BASE_URL__; ?>templates/morpheus/img/<?php echo $s2_img; ?>?v=<?php echo msm_v('templates/morpheus/img/' . $s2_img); ?>');">
                                         <div class="slider-overlay"></div>
                                         <div class="slider-text">
                                             <h2 class="slider-title"><?php echo $s2_title; ?></h2>
