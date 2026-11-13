@@ -20,3 +20,5 @@ includes/cache/recovery_tokens.json
 includes/cache/cron.lock
 *.roto
 *.bak
+
+admincp/modules/plugins/config_payments.json
