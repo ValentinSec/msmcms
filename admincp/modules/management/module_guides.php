@@ -45,11 +45,14 @@ if(isset($_POST['save_guide'])) {
         $targetDir = __DIR__ . "/../../../img/guides/";
         if (!is_dir($targetDir)) mkdir($targetDir, 0777, true);
         
-        $fileName = $guideId . '_' . basename($_FILES['guide_img']['name']);
-        $targetFilePath = $targetDir . $fileName;
-        
-        if (move_uploaded_file($_FILES['guide_img']['tmp_name'], $targetFilePath)) {
-            $imagePath = "img/guides/" . $fileName;
+        $gInfo = @getimagesize($_FILES['guide_img']['tmp_name']);
+        $gMap = array(IMAGETYPE_JPEG => 'jpg', IMAGETYPE_PNG => 'png', IMAGETYPE_GIF => 'gif', IMAGETYPE_WEBP => 'webp');
+        if (is_array($gInfo) && isset($gMap[$gInfo[2]])) {
+            $fileName = preg_replace('/[^A-Za-z0-9_]/', '', (string)$guideId) . '_' . uniqid() . '.' . $gMap[$gInfo[2]];
+            $targetFilePath = $targetDir . $fileName;
+            if (move_uploaded_file($_FILES['guide_img']['tmp_name'], $targetFilePath)) {
+                $imagePath = "img/guides/" . $fileName;
+            }
         }
     }
 

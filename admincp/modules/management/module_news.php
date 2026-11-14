@@ -40,13 +40,15 @@ if(isset($_POST['save_news'])) {
         
         $fileTmp = $_FILES['news_img']['tmp_name'];
         $fileNameOriginal = $_FILES['news_img']['name'];
-        $fileExt = strtolower(pathinfo($fileNameOriginal, PATHINFO_EXTENSION));
+        $nInfo = @getimagesize($fileTmp);
+        $nMap = array(IMAGETYPE_JPEG => 'jpg', IMAGETYPE_PNG => 'png', IMAGETYPE_GIF => 'gif', IMAGETYPE_WEBP => 'webp');
+        $fileExt = (is_array($nInfo) && isset($nMap[$nInfo[2]])) ? $nMap[$nInfo[2]] : '';
         
         // 1. Validamos extensiones permitidas (Whitelist)
         $allowedExts = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
         
         if (in_array($fileExt, $allowedExts)) {
-            $newFileName = $newsId . '_' . uniqid() . '.' . $fileExt;
+            $newFileName = preg_replace('/[^A-Za-z0-9_]/', '', (string)$newsId) . '_' . uniqid() . '.' . $fileExt;
             $targetFilePath = $targetDir . $newFileName;
             
             if (move_uploaded_file($fileTmp, $targetFilePath)) {

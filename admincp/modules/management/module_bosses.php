@@ -70,19 +70,19 @@ if(isset($_POST['process_boss'])) {
                 default: throw new Exception("Error desconocido al subir archivo.");
             }
 
-            $ext = strtolower(pathinfo($_FILES['boss_image']['name'], PATHINFO_EXTENSION));
-            $allowed = ['jpg', 'jpeg', 'png', 'webp', 'gif'];
-            
-            if (!in_array($ext, $allowed)) {
+            $bInfo = @getimagesize($_FILES['boss_image']['tmp_name']);
+            $bMap = array(IMAGETYPE_JPEG => 'jpg', IMAGETYPE_PNG => 'png', IMAGETYPE_GIF => 'gif', IMAGETYPE_WEBP => 'webp');
+            if (!is_array($bInfo) || !isset($bMap[$bInfo[2]])) {
                 throw new Exception("Formato no permitido. Solo JPG, PNG, WEBP, GIF.");
             }
+            $ext = $bMap[$bInfo[2]];
 
-            $newFileName = $monsterIndex . '_' . uniqid() . '.' . $ext;
+            $newFileName = preg_replace('/[^A-Za-z0-9_]/', '', (string)$monsterIndex) . '_' . uniqid() . '.' . $ext;
             $targetFile = $uploadDir . $newFileName;
             
             if (move_uploaded_file($_FILES['boss_image']['tmp_name'], $targetFile)) {
-                if (!empty($imageFilename) && file_exists($uploadDir . $imageFilename)) {
-                    @unlink($uploadDir . $imageFilename);
+                if (!empty($imageFilename) && file_exists($uploadDir . basename($imageFilename))) {
+                    @unlink($uploadDir . basename($imageFilename));
                 }
                 $imageFilename = $newFileName;
             } else {
