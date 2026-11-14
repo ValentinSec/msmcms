@@ -310,51 +310,55 @@ class Account extends common {
         }
     }
     
-    public function passwordRecoveryVerificationProcess($ui, $ue, $key) {
-        if(!check_value($ui)) throw new Exception(lang('error_31',true));
-        if(!check_value($ue)) throw new Exception(lang('error_31',true));
-        if(!check_value($key)) throw new Exception(lang('error_31',true));
-        
-        $user_id = $ui; // user id (numerico o nombre de cuenta, segun el tipo de server files)
-        if(!is_scalar($user_id) || !preg_match('/^[A-Za-z0-9_]{1,20}$/', (string)$user_id)) throw new Exception(lang('error_31',true));
-        
-        $user_email = $ue; // email address
-        if(!$this->emailExists($user_email)) throw new Exception(lang('error_31',true));
-        
-        $accountData = $this->accountInformation($user_id);
-        if(!is_array($accountData)) throw new Exception(lang('error_31',true));
-        
-        # el email del enlace tiene que ser el de ESTA cuenta
-        if(strcasecmp(trim((string)$accountData[_CLMN_EMAIL_]), trim((string)$user_email)) !== 0) throw new Exception(lang('error_31',true));
-        
-        $username = $accountData[_CLMN_USERNM_];
-        
-        # codigo aleatorio, con vencimiento y de un solo uso
-        if(!$this->consumeAccountRecoveryCode($user_id, $key)) throw new Exception(lang('error_31',true));
-        
-        # update user password
-        $alphabet = 'abcdefghjkmnpqrstuvwxyz23456789';
-        $new_password = '';
-        for($i = 0; $i < 10; $i++) { $new_password .= $alphabet[random_int(0, strlen($alphabet) - 1)]; }
-        $update_pass = $this->changePassword($user_id, $username, $new_password);
-        if(!$update_pass) throw new Exception(lang('error_23',true));
+    // Valida el enlace de recuperacion SIN consumirlo. Devuelve los datos de la cuenta.
+    public function passwordRecoveryCheck($ui, $ue, $key) {
+        if(!check_value($ui) || !check_value($ue) || !check_value($key)) throw new Exception(lang('error_31',true));
+        if(!is_scalar($ui) || !preg_match('/^[A-Za-z0-9_]{1,20}$/', (string)$ui)) throw new Exception(lang('error_31',true));
+        if(!is_string($ue) || !$this->emailExists($ue)) throw new Exception(lang('error_31',true));
 
+        $accountData = $this->accountInformation($ui);
+        if(!is_array($accountData)) throw new Exception(lang('error_31',true));
+
+        # el email del enlace tiene que ser el de ESTA cuenta
+        if(strcasecmp(trim((string)$accountData[_CLMN_EMAIL_]), trim((string)$ue)) !== 0) throw new Exception(lang('error_31',true));
+
+        # codigo vigente (no se consume aca)
+        if(!$this->peekAccountRecoveryCode($ui, $key)) throw new Exception(lang('error_31',true));
+
+        return $accountData;
+    }
+
+    // Guarda la contrasena elegida por el usuario y consume el codigo.
+    public function passwordRecoveryComplete($ui, $ue, $key, $newPassword, $confirmPassword) {
+        $accountData = $this->passwordRecoveryCheck($ui, $ue, $key);
+        $username = $accountData[_CLMN_USERNM_];
+
+        if(!is_string($newPassword) || !is_string($confirmPassword)) throw new Exception('Complet&aacute; los dos campos.');
+
+        $cfg = muservermakerConfigs();
+        $min = (isset($cfg['password_min_len']) && (int)$cfg['password_min_len'] > 0) ? (int)$cfg['password_min_len'] : 4;
+        $max = (isset($cfg['password_max_len']) && (int)$cfg['password_max_len'] > 0) ? (int)$cfg['password_max_len'] : 20;
+
+        if(strlen($newPassword) < $min || strlen($newPassword) > $max) throw new Exception('La contrase&ntilde;a debe tener entre ' . $min . ' y ' . $max . ' caracteres.');
+        if(!preg_match('/^[A-Za-z0-9]+$/', $newPassword)) throw new Exception('La contrase&ntilde;a solo puede tener letras y n&uacute;meros.');
+        if($newPassword !== $confirmPassword) throw new Exception('Las dos contrase&ntilde;as no coinciden.');
+
+        # recien ahora se consume el codigo: es de un solo uso
+        if(!$this->consumeAccountRecoveryCode($ui, $key)) throw new Exception(lang('error_31',true));
+
+        if(!$this->changePassword($ui, $username, $newPassword)) throw new Exception(lang('error_23',true));
+
+        # aviso por correo, sin la contrasena. Si falla el envio, el cambio ya quedo hecho.
         try {
             $email = new Email();
             $email->setTemplate('PASSWORD_RECOVERY_COMPLETED');
             $email->addVariable('{USERNAME}', $username);
-            $email->addVariable('{NEW_PASSWORD}', $new_password);
+            $email->addVariable('{DATE}', date("d/m/Y H:i"));
             $email->addAddress($accountData[_CLMN_EMAIL_]);
             $email->send();
-            
-            message('success', lang('success_7',true));
-        } catch (Exception $ex) {
-            if($this->_debug) {
-                throw new Exception($ex->getMessage());
-            } else {
-                throw new Exception(lang('error_23',true));
-            }
-        }
+        } catch (Exception $ex) { }
+
+        return true;
     }
     
     public function changeEmailAddress($accountId, $newEmail, $ipAddress) {

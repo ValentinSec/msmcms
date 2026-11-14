@@ -158,6 +158,66 @@ class CronManager {
 		return join('', $return);
 	}
 	
+		// ---------- Motor unico de ejecucion ----------
+	public function runDue() {
+		$executed = array();
+		$list = $this->getCronList();
+		if(!is_array($list)) return $executed;
+		$lock = @fopen(__PATH_INCLUDES__ . 'cache/cron.lock', 'c');
+		if($lock && !flock($lock, LOCK_EX | LOCK_NB)) { fclose($lock); return $executed; }
+		foreach($list as $cron) {
+			if((int)$cron['cron_status'] !== 1) continue;
+			$next = (int)$cron['cron_last_run'] + max(60, (int)$cron['cron_run_time']);
+			if(time() < $next) continue;
+			$this->_execute($cron);
+			$executed[] = $cron['cron_file_run'];
+		}
+		if($lock) { flock($lock, LOCK_UN); fclose($lock); }
+		return $executed;
+	}
+
+	public function runOne($id) {
+		$cron = $this->memuonline->query_fetch_single("SELECT * FROM MUSERVERMAKER_CRON WHERE cron_id = ?", array((int)$id));
+		if(!is_array($cron)) return null;
+		return $this->_execute($cron);
+	}
+
+	public function getStatus() {
+		$data = json_decode((string)@file_get_contents(__PATH_INCLUDES__ . 'cache/cron_status.json'), true);
+		return is_array($data) ? $data : array();
+	}
+
+	private function _execute($cron) {
+		$file = basename((string)$cron['cron_file_run']);
+		$path = __PATH_CRON__ . $file;
+		$start = microtime(true);
+		$ok = false; $msg = '';
+		if($file === 'cron.php' || strtolower(pathinfo($file, PATHINFO_EXTENSION)) !== 'php' || !is_file($path)) {
+			$msg = 'Archivo no encontrado';
+		} else {
+			ob_start();
+			try {
+				self::_includeIsolated($path);
+				$ok = true;
+			} catch (Throwable $e) {
+				$msg = substr($e->getMessage(), 0, 200);
+			}
+			ob_end_clean();
+		}
+		$ms = (int)round((microtime(true) - $start) * 1000);
+		$this->memuonline->query("UPDATE MUSERVERMAKER_CRON SET cron_last_run = ? WHERE cron_id = ?", array(time(), (int)$cron['cron_id']));
+
+		$status = $this->getStatus();
+		$status[strtolower($file)] = array('t' => time(), 'ok' => $ok, 'msg' => $msg, 'ms' => $ms);
+		@file_put_contents(__PATH_INCLUDES__ . 'cache/cron_status.json', json_encode($status, JSON_INVALID_UTF8_SUBSTITUTE), LOCK_EX);
+
+		return array('ok' => $ok, 'message' => $msg, 'ms' => $ms);
+	}
+
+	private static function _includeIsolated($__cronPath) {
+		include($__cronPath);
+	}
+	
 	protected function _cronFileExists($file) {
 		if(!file_exists(__PATH_CRON__ . $file)) return;
 		return true;

@@ -880,16 +880,6 @@ if(isset($_POST['market_ajax']) && $_POST['market_ajax'] == 'true') {
         }
     }
     
-    document.addEventListener("DOMContentLoaded", function() {
-        setTimeout(function() {
-            var cronUrl = "<?php echo __BASE_URL__; ?>api/cron.php";
-            try {
-                fetch(cronUrl, {mode: 'no-cors'});
-            } catch(e) {
-                console.error("Error auto-cron", e);
-            }
-        }, 3000);
-    });
     </script>
     <?php endif; ?>
     <script>
@@ -931,7 +921,7 @@ if(isset($_POST['market_ajax']) && $_POST['market_ajax'] == 'true') {
             document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active')); if(btn) btn.classList.add('active');
             document.getElementById('wsLoader').style.display = 'flex';
             var formData = new FormData(); formData.append('market_ajax', 'true'); formData.append('action', 'load_category'); formData.append('category', catId);
-            fetch('<?php echo __BASE_URL__; ?>index.php', { method:'POST', body:formData }).then(r => r.json()).then(data => {
+            fetch('<?php echo $_SERVER['REQUEST_URI']; ?>', { method:'POST', body:formData }).then(r => r.json()).then(data => {
                 document.getElementById('wsLoader').style.display = 'none';
                 var grid = document.getElementById('wsItemGrid'); grid.innerHTML = '';
                 if(data.data.length == 0) { grid.innerHTML = '<div style="grid-column:1/-1; text-align:center; padding:50px; color:#666;">No hay items en esta categoría.</div>'; return; }
@@ -950,5 +940,6 @@ if(isset($_POST['market_ajax']) && $_POST['market_ajax'] == 'true') {
             });
         }
     </script>
+    <?php @include(__DIR__ . '/../misc/inc/cron_trigger.php'); ?>
 </body>
 </html>

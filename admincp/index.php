@@ -274,7 +274,59 @@ HTML;
     // =================================================================================
     // FIN SISTEMA DE SEGURIDAD
     // =================================================================================
+    // Respuestas AJAX del panel (JSON, sin el HTML del panel). Nombre fijo, sin rutas armadas.
+    if(isset($_GET['ajax']) && $_GET['ajax'] === 'search_character') {
+        include(__DIR__ . '/inc/ajax_search_character.php');
+        exit();
+    }
+    
+        // =================================================================================
+    // FOTO DE PERFIL DEL ADMINISTRADOR (menu del usuario de la barra superior)
+    // =================================================================================
+    if(isset($_POST['admincp_avatar_action']) && is_string($_POST['admincp_avatar_action'])) {
+        $avDir = __DIR__ . '/img/avatars/';
+        $avKey = md5(strtolower(trim((string)$_SESSION['username'])));
+        $avError = '';
+        $avOld = glob($avDir . $avKey . '.*');
+        if(!is_array($avOld)) $avOld = array();
 
+        if($_POST['admincp_avatar_action'] === 'delete') {
+            foreach($avOld as $avFile) { @unlink($avFile); }
+        } elseif($_POST['admincp_avatar_action'] === 'upload') {
+            $avUp = (isset($_FILES['admincp_avatar']) && is_array($_FILES['admincp_avatar'])) ? $_FILES['admincp_avatar'] : null;
+            $avTypes = array(IMAGETYPE_JPEG => 'jpg', IMAGETYPE_PNG => 'png', IMAGETYPE_WEBP => 'webp');
+            $avInfo = false;
+            if($avUp === null || !isset($avUp['error']) || is_array($avUp['error']) || $avUp['error'] !== UPLOAD_ERR_OK || !is_uploaded_file($avUp['tmp_name'])) {
+                $avError = 'No se recibi&oacute; ninguna imagen (el l&iacute;mite es de 2 MB).';
+            } elseif((int)$avUp['size'] > 2097152) {
+                $avError = 'La imagen supera los 2 MB.';
+            } elseif(!is_array($avInfo = @getimagesize($avUp['tmp_name'])) || !isset($avTypes[$avInfo[2]])) {
+                $avError = 'Formato no permitido. Us&aacute; JPG, PNG o WEBP.';
+            } elseif(!is_dir($avDir) && !@mkdir($avDir, 0755, true)) {
+                $avError = 'No se pudo crear la carpeta admincp/img/avatars/.';
+            } else {
+                foreach($avOld as $avFile) { @unlink($avFile); }
+                $avSaved = false;
+                // Con GD: recorte al centro y guardado en 160x160
+                $avSrc = function_exists('imagecreatefromstring') ? @imagecreatefromstring((string)@file_get_contents($avUp['tmp_name'])) : false;
+                if($avSrc) {
+                    $avW = imagesx($avSrc); $avH = imagesy($avSrc); $avSide = min($avW, $avH);
+                    $avDst = imagecreatetruecolor(160, 160);
+                    imagealphablending($avDst, false);
+                    imagesavealpha($avDst, true);
+                    imagecopyresampled($avDst, $avSrc, 0, 0, (int)(($avW - $avSide) / 2), (int)(($avH - $avSide) / 2), 160, 160, $avSide, $avSide);
+                    $avSaved = @imagepng($avDst, $avDir . $avKey . '.png');
+                }
+                if(!$avSaved) $avSaved = @move_uploaded_file($avUp['tmp_name'], $avDir . $avKey . '.' . $avTypes[$avInfo[2]]);
+                if(!$avSaved) $avError = 'No se pudo guardar la imagen. Revis&aacute; los permisos de admincp/img/.';
+            }
+        }
+        // Post/Redirect/Get: F5 no reenvia la subida
+        $_SESSION['admincp_avatar_error'] = $avError;
+        $avBack = isset($_GET['module']) ? preg_replace('/[^a-zA-Z0-9_]/', '', (string)$_GET['module']) : '';
+        header('Location: index.php' . ($avBack !== '' ? '?module=' . $avBack : ''));
+        exit();
+    }
     // Load AdminCP Tools
     if(!@include_once(__PATH_ADMINCP_INC__ . 'functions.php')) throw new Exception('Could not load AdminCP functions.');
     
@@ -303,6 +355,66 @@ $baseUrl = __BASE_URL__;
 $adminName = admincp_base();
 $usernameInitial = htmlspecialchars(strtoupper(substr($_SESSION['username'], 0, 1)), ENT_QUOTES, 'UTF-8');
 $admincpCssVer = (int)@filemtime(__DIR__ . '/css/admincp.css');
+
+
+// --- Barra superior: menu del usuario ---
+$adminUserSafe = htmlspecialchars(trim((string)$_SESSION['username']), ENT_QUOTES, 'UTF-8');
+$pinUrl = admincp_base('settings_connection');
+$avatarHtml = $usernameInitial;
+$avatarDeleteHtml = '';
+$avatarFiles = glob(__DIR__ . '/img/avatars/' . md5(strtolower(trim((string)$_SESSION['username']))) . '.*');
+if(is_array($avatarFiles) && !empty($avatarFiles)) {
+    $avatarHtml = '<img src="img/avatars/' . basename($avatarFiles[0]) . '?v=' . (int)@filemtime($avatarFiles[0]) . '" alt="">';
+    $avatarDeleteHtml = '<form method="post" action=""><input type="hidden" name="admincp_avatar_action" value="delete"><button type="submit" class="um-photo-del">Quitar foto</button></form>';
+}
+$avatarNoticeHtml = '';
+if(!empty($_SESSION['admincp_avatar_error']) && is_string($_SESSION['admincp_avatar_error'])) {
+    $avatarNoticeHtml = '<div class="um-toast">' . $_SESSION['admincp_avatar_error'] . '</div>';
+}
+unset($_SESSION['admincp_avatar_error']);
+
+// --- Barra superior: indice del buscador de configuraciones (palabras clave sin acentos) ---
+$searchKeywords = array(
+    'home'                => 'inicio dashboard estadisticas visitas online economia',
+    'templates'           => 'tema plantilla diseno apariencia',
+    'edit_templates'      => 'logo favicon fondo imagenes slider redes video',
+    'popup'               => 'popup aviso anuncio',
+    'settings'            => 'general sitio ajustes',
+    'settings_connection' => 'sql base de datos conexion contrasena pin administradores encriptacion',
+    'settings_download'   => 'descargas cliente enlaces',
+    'settings_register'   => 'registro cuentas alta',
+    'settings_tables'     => 'tablas columnas',
+    'settings_smtp'       => 'correo correos email mail gmail remitente',
+    'module_events'       => 'eventos horarios',
+    'module_rankings'     => 'rankings top',
+    'module_bosses'       => 'bosses jefes invasiones',
+    'module_info'         => 'informacion servidor',
+    'module_news'         => 'noticias novedades',
+    'module_guides'       => 'guias tutoriales',
+    'module_security'     => 'seguridad recaptcha captcha analytics ddos ip bloqueo trafico',
+    'module_navbar'       => 'menu navegacion barra enlaces',
+    'my_plugins'          => 'plugins webshop casino vip votos mercado streams baneos coins',
+    'tools_account'       => 'cuenta usuario editar',
+    'tools_character'     => 'personaje pj editar',
+    'tools_coins'         => 'coins monedas creditos cargar',
+    'tools_ip'            => 'ip direccion buscar',
+    'tools_itemdb'        => 'items objetos',
+    'tools_cronjob'       => 'cron tareas programadas',
+    'tools_countdown'     => 'cuenta regresiva apertura contador',
+);
+$searchIndex = array();
+foreach($admincpSidebar as $sItem) {
+    if(is_array($sItem[1])) {
+        foreach($sItem[1] as $sMod => $sTitle) {
+            $searchIndex[] = array('t' => $sTitle, 'g' => $sItem[0], 'u' => admincp_base($sMod), 'k' => isset($searchKeywords[$sMod]) ? $searchKeywords[$sMod] : '');
+        }
+    } else {
+        $searchIndex[] = array('t' => $sItem[0], 'g' => '', 'u' => admincp_base($sItem[1]), 'k' => isset($searchKeywords[$sItem[1]]) ? $searchKeywords[$sItem[1]] : '');
+    }
+}
+$searchIndexJson = json_encode($searchIndex, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_INVALID_UTF8_SUBSTITUTE);
+if($searchIndexJson === false) $searchIndexJson = '[]';
+
 
 // --- RENDERIZADO DEL PANEL PRINCIPAL (PHP PURO) ---
 
@@ -393,22 +505,40 @@ echo <<<HTML
             <div class="header-right">
                 <div class="header-search">
                     <i class="fa fa-search"></i>
-                    <input type="text" id="playerSearchInput" placeholder="Buscar Jugador..." autocomplete="off">
-                    <div id="playerSearchResults" class="search-results-overlay"></div>
+                    <input type="text" id="configSearchInput" placeholder="Buscar configuraci&oacute;n..." autocomplete="off">
+                    <div id="configSearchResults" class="search-results-overlay"></div>
                 </div>
 
                 <a href="{$baseUrl}" target="_blank" class="header-btn" title="Ir a la web">
                     <i class="fa fa-home"></i>
                 </a>
 
-                <div class="user-profile">
-                    <button class="user-profile-btn">
-                        <div class="user-avatar">
-                            {$usernameInitial}
-                        </div>
+                <div class="user-profile" id="userMenu">
+                    <button type="button" class="user-profile-btn" id="userMenuBtn" aria-haspopup="true" aria-expanded="false">
+                        <div class="user-avatar">{$avatarHtml}</div>
                     </button>
+                    <div class="user-menu" id="userMenuPanel">
+                        <div class="um-head">
+                            <form method="post" action="" enctype="multipart/form-data" id="umPhotoForm" class="um-avatar-form">
+                                <input type="hidden" name="admincp_avatar_action" value="upload">
+                                <input type="file" name="admincp_avatar" id="umPhotoInput" class="um-file" accept="image/jpeg,image/png,image/webp" tabindex="-1">
+                                <button type="button" class="user-avatar um-avatar um-avatar-btn" id="umPhotoBtn" title="Cambiar foto de perfil">
+                                    {$avatarHtml}
+                                    <span class="um-avatar-plus"><i class="fa fa-plus"></i></span>
+                                </button>
+                            </form>
+                            <div class="um-id"><strong>{$adminUserSafe}</strong><span>Administrador</span>{$avatarDeleteHtml}</div>
+                        </div>
+                        <a class="um-item" href="{$pinUrl}"><i class="fa fa-key fa-fw"></i> Modificar PIN de Acceso</a>
+                        <a class="um-item" href="https://app.muservermaker.com/updates/cms" target="_blank" rel="noopener"><i class="fa fa-refresh fa-fw"></i> Buscar actualizaciones</a>
+                        <a class="um-item" href="https://wa.me/5491137054305" target="_blank" rel="noopener"><i class="fa fa-whatsapp fa-fw"></i> Soporte</a>
+                        <div class="um-sep"></div>
+                        <a class="um-item" href="index.php?action=lock"><i class="fa fa-lock fa-fw"></i> Bloquear panel</a>
+                        <a class="um-item um-danger" href="{$baseUrl}logout"><i class="fa fa-sign-out fa-fw"></i> Cerrar sesi&oacute;n</a>
+                    </div>
                 </div>
             </div>
+            {$avatarNoticeHtml}
         </header>
 
         <div class="navbar-default sidebar" role="navigation">
@@ -549,6 +679,101 @@ echo <<<HTML
     <script src="https://cdn.datatables.net/2.2.2/js/dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/2.2.2/js/dataTables.bootstrap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/tinymce@7.7.0/tinymce.min.js"></script>
+    
+    <script>
+    (function() {
+        // --- Buscador de configuraciones (filtra en el navegador) ---
+        var IDX = {$searchIndexJson};
+        var input = document.getElementById("configSearchInput");
+        var box = document.getElementById("configSearchResults");
+        var active = -1;
+        function norm(s) { return String(s || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, ""); }
+        var items = IDX.map(function(it) { return { t: it.t, g: it.g, u: it.u, h: norm(it.t + " " + it.g + " " + it.k) }; });
+
+        function render(q) {
+            box.innerHTML = "";
+            active = -1;
+            var words = norm(q).split(" ").filter(function(w) { return w.length > 0; });
+            if (!words.length) { box.style.display = "none"; return; }
+            var found = items.filter(function(it) {
+                return words.every(function(w) { return it.h.indexOf(w) !== -1; });
+            }).slice(0, 8);
+            if (!found.length) {
+                var empty = document.createElement("div");
+                empty.className = "csr-empty";
+                empty.textContent = "Sin resultados";
+                box.appendChild(empty);
+            }
+            found.forEach(function(it) {
+                var a = document.createElement("a");
+                a.className = "csr-item";
+                a.href = it.u;
+                var t = document.createElement("span");
+                t.className = "csr-title";
+                t.textContent = it.t;
+                a.appendChild(t);
+                if (it.g) {
+                    var g = document.createElement("span");
+                    g.className = "csr-group";
+                    g.textContent = it.g;
+                    a.appendChild(g);
+                }
+                box.appendChild(a);
+            });
+            box.style.display = "block";
+        }
+
+        if (input && box) {
+            input.addEventListener("input", function() { render(input.value); });
+            input.addEventListener("focus", function() { if (input.value) render(input.value); });
+            input.addEventListener("keydown", function(e) {
+                var links = box.querySelectorAll(".csr-item");
+                if (e.key === "ArrowDown" || e.key === "ArrowUp") {
+                    if (!links.length) return;
+                    e.preventDefault();
+                    active = (e.key === "ArrowDown") ? (active + 1) % links.length : (active - 1 + links.length) % links.length;
+                    Array.prototype.forEach.call(links, function(l, i) { l.classList.toggle("is-active", i === active); });
+                } else if (e.key === "Enter") {
+                    var target = links[active >= 0 ? active : 0];
+                    if (target) { e.preventDefault(); window.location.href = target.href; }
+                } else if (e.key === "Escape") {
+                    box.style.display = "none";
+                    input.blur();
+                }
+            });
+        }
+
+        // --- Menu del usuario ---
+        var menu = document.getElementById("userMenu");
+        var menuBtn = document.getElementById("userMenuBtn");
+        function closeMenu() {
+            if (menu) { menu.classList.remove("is-open"); menuBtn.setAttribute("aria-expanded", "false"); }
+        }
+        if (menu && menuBtn) {
+            menuBtn.addEventListener("click", function(e) {
+                e.stopPropagation();
+                var open = menu.classList.toggle("is-open");
+                menuBtn.setAttribute("aria-expanded", open ? "true" : "false");
+            });
+        }
+        document.addEventListener("click", function(e) {
+            if (menu && !menu.contains(e.target)) closeMenu();
+            if (box && !e.target.closest(".header-search")) box.style.display = "none";
+        });
+        document.addEventListener("keydown", function(e) { if (e.key === "Escape") closeMenu(); });
+
+        // --- Foto de perfil: al elegir el archivo se envia sola ---
+        var photoBtn = document.getElementById("umPhotoBtn");
+        var photoInput = document.getElementById("umPhotoInput");
+        var photoForm = document.getElementById("umPhotoForm");
+        if (photoBtn && photoInput && photoForm) {
+            photoBtn.addEventListener("click", function() { photoInput.click(); });
+            photoInput.addEventListener("change", function() {
+                if (photoInput.files && photoInput.files.length) photoForm.submit();
+            });
+        }
+    })();
+    </script>
     
     <script>
     $(document).ready(function() {

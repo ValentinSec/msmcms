@@ -35,14 +35,14 @@ class BlackMarket {
         return $tax;
     }
 
-    private static function dbName() {
+    public static function dbName() {
         $serverData = muservermakerConfigs();
         $dbName = isset($serverData['SQL_DB_NAME']) ? $serverData['SQL_DB_NAME'] : 'MuOnline';
         // Lista blanca: solo caracteres validos de identificador
         return preg_match('/^[A-Za-z0-9_]+$/', (string)$dbName) ? $dbName : null;
     }
 
-    private static function pdoFrom($db) {
+    public static function pdoFrom($db) {
         try {
             $ref = new ReflectionClass($db);
             $prop = $ref->getProperty('db');
@@ -52,7 +52,7 @@ class BlackMarket {
         return ($pdo instanceof PDO) ? $pdo : null;
     }
 
-    private static function isOnline($db, $username) {
+    public static function isOnline($db, $username) {
         $online = $db->query_fetch_single("SELECT ConnectStat FROM MEMB_STAT WHERE memb___id = ? AND ConnectStat = 1", array($username));
         return is_array($online);
     }
@@ -68,7 +68,7 @@ class BlackMarket {
         return "Item ($group-$id)";
     }
 
-    private static function vaultSql($dbName) {
+    public static function vaultSql($dbName) {
         // Solo se evalua la zona visible del baul (120 casilleros). Lo que el
         // servidor del juego guarde mas alla no se mira ni se modifica.
         $vis = self::VISIBLE_SLOTS * self::ITEM_BYTES;
@@ -86,7 +86,7 @@ class BlackMarket {
      * Arma la escritura del item en el PRIMER casillero del baul.
      * El resto del baul queda como estaba.
      */
-    private static function vaultPut($dbName, $targetHex, $whBytes) {
+    public static function vaultPut($dbName, $targetHex, $whBytes) {
         $itemHexLen = self::ITEM_BYTES * 2;
         if(!ctype_xdigit($targetHex) || strlen($targetHex) !== $itemHexLen) throw new Exception("Item inv\u{00E1}lido.");
 

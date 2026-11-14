@@ -201,7 +201,7 @@ if(isset($_POST['ajax_action'])) {
         }
 
         if($_POST['ajax_action'] == 'load_sales') {
-            $list = $db->query_fetch("SELECT id, seller_account, CONVERT(varchar(max), item_hex, 2) as item_hex, item_name, item_img, price, currency, date_posted FROM MUSERVERMAKER_MARKET_SELL WHERE seller_account = '$username' ORDER BY date_posted DESC");
+                        $list = $db->query_fetch("SELECT id, seller_account, CONVERT(varchar(max), item_hex, 2) as item_hex, item_name, item_img, price, currency, date_posted FROM MUSERVERMAKER_MARKET_SELL WHERE seller_account = ? ORDER BY date_posted DESC", array($username));
             $out = array();
             if(is_array($list)) {
                 foreach($list as $i) {
@@ -298,7 +298,7 @@ echo '<style>
 
     /* --- MODALES --- */
     .modal-mask { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:9000; align-items:center; justify-content:center; backdrop-filter: blur(3px); }
-    .modal-win { background: var(--mu-bg-panel); width: 380px; text-align: center; border: 1px solid var(--mu-border); border-radius: 8px; color: #fff; overflow: hidden; box-shadow: 0 10px 40px rgba(0,0,0,0.9); }
+    .modal-win { background: var(--mu-bg-panel); width: 380px; max-width: calc(100vw - 24px); text-align: center; border: 1px solid var(--mu-border); border-radius: 8px; color: #fff; overflow: hidden; box-shadow: 0 10px 40px rgba(0,0,0,0.9); }
     .modal-head { padding: 18px; font-family: "Cinzel", serif; font-size: 18px; font-weight: bold; background: #0a0b0e; border-bottom: 1px solid var(--mu-border); color: var(--mu-gold); letter-spacing: 1px; }
     .modal-body { padding: 25px; color: #ccc; }
     .modal-foot { padding: 15px; border-top: 1px solid var(--mu-border); background: #0a0b0e; display: flex; justify-content: center; gap: 15px; }
@@ -333,7 +333,7 @@ echo '<div class="bm-wrap">
     
     <div id="viewSell">
         <div style="text-align:center; padding:10px; font-size:13px; color:#888;">
-            <i class="fa fa-mouse-pointer" style="color: var(--mu-gold);"></i> Click derecho en un item para vender.
+            <i class="fa fa-mouse-pointer" style="color: var(--mu-gold);"></i> Hac&eacute; clic en un item para vender.
         </div>
         <div class="wh-box">
             <div class="wh-grid">'; for($i=0;$i<120;$i++) echo '<div class="wh-cell"></div>'; echo '</div>
@@ -423,7 +423,7 @@ echo '<script>
                     const img = document.createElement("img"); img.src = "' . __BASE_URL__ . '" + item.img; d.appendChild(img);
                     d.onmouseenter = e => bm_tt(e, item); d.onmouseleave = () => document.getElementById("bm-tt").style.display="none";
                     d.onmousemove = e => { const t = document.getElementById("bm-tt"); t.style.left = (e.clientX+15)+"px"; t.style.top = (e.clientY+15)+"px"; };
-                    d.oncontextmenu = e => { e.preventDefault(); bm_openSell(item); };
+                    d.onclick = () => { document.getElementById("bm-tt").style.display = "none"; bm_openSell(item); };
                     layer.appendChild(d);
                 });
             } else {

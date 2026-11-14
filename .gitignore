@@ -22,3 +22,5 @@ includes/cache/cron.lock
 *.bak
 
 admincp/modules/plugins/config_payments.json
+
+admincp/img/avatars/

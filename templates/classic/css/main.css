@@ -1033,3 +1033,12 @@ button:focus-visible {
     background-color: var(--cl-ink, #141416);
     border-radius: 4px;
 }
+
+/* Perfil de guild: acento rojo y sin la caja blanca alrededor de las tarjetas */
+.guild-profile { --profile-accent: #d32f2f; }
+.content-box-clean:has(.guild-profile) {
+    background: transparent;
+    border: 0;
+    box-shadow: none;
+    padding: 0;
+}

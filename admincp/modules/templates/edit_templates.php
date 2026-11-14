@@ -53,6 +53,16 @@ if(isset($_POST['save_template_settings'])) {
                 $config[$configKey] = ''; 
             }
         };
+        
+        // Extension tomada del contenido real de la imagen, nunca del nombre del archivo subido
+        $safeImgExt = function($fileKey) {
+            $map = array(IMAGETYPE_JPEG => 'jpg', IMAGETYPE_PNG => 'png', IMAGETYPE_GIF => 'gif', IMAGETYPE_WEBP => 'webp');
+            $info = @getimagesize($_FILES[$fileKey]['tmp_name']);
+            if(!is_array($info) || !isset($map[$info[2]])) {
+                throw new Exception('Uno de los archivos subidos no es una imagen v&aacute;lida (JPG, PNG, GIF o WEBP). No se guard&oacute; ning&uacute;n cambio de configuraci&oacute;n.');
+            }
+            return $map[$info[2]];
+        };
 
         // Ejecutar borrados (Generales)
         $processDelete('delete_favicon', 'favicon', 'favicon.ico', $currentConfig, $templateImgPath);
@@ -86,7 +96,7 @@ if(isset($_POST['save_template_settings'])) {
             $currentConfig['logo_img'] = 'logo.png';
         }
         if(!empty($_FILES['hero_upload']['name']) && $_FILES['hero_upload']['error'] === UPLOAD_ERR_OK) {
-            $ext = pathinfo($_FILES['hero_upload']['name'], PATHINFO_EXTENSION);
+            $ext = $safeImgExt('hero_upload');
             $heroName = 'hero_custom_' . time() . '.' . $ext; 
             if(move_uploaded_file($_FILES['hero_upload']['tmp_name'], $templateImgPath . $heroName)) {
                 if(isset($currentConfig['hero_image']) && file_exists($templateImgPath.$currentConfig['hero_image'])) { @unlink($templateImgPath.$currentConfig['hero_image']); }
@@ -94,7 +104,7 @@ if(isset($_POST['save_template_settings'])) {
             }
         }
         if(!empty($_FILES['background_upload']['name']) && $_FILES['background_upload']['error'] === UPLOAD_ERR_OK) {
-            $ext = pathinfo($_FILES['background_upload']['name'], PATHINFO_EXTENSION);
+            $ext = $safeImgExt('background_upload');
             $bgName = 'bg_custom_' . time() . '.' . $ext;
             if(move_uploaded_file($_FILES['background_upload']['tmp_name'], $templateImgPath . $bgName)) {
                 if(isset($currentConfig['background_image']) && file_exists($templateImgPath.$currentConfig['background_image'])) { @unlink($templateImgPath.$currentConfig['background_image']); }
@@ -106,7 +116,7 @@ if(isset($_POST['save_template_settings'])) {
         if($targetTemplate == 'canibal') {
             // Fondos
             if(!empty($_FILES['bg_top_upload']['name']) && $_FILES['bg_top_upload']['error'] === UPLOAD_ERR_OK) {
-                $ext = pathinfo($_FILES['bg_top_upload']['name'], PATHINFO_EXTENSION);
+                $ext = $safeImgExt('bg_top_upload');
                 $bgTopName = 'bg_top_' . time() . '.' . $ext; 
                 if(move_uploaded_file($_FILES['bg_top_upload']['tmp_name'], $templateImgPath . $bgTopName)) {
                     if(isset($currentConfig['bg_top_img']) && file_exists($templateImgPath.$currentConfig['bg_top_img'])) { @unlink($templateImgPath.$currentConfig['bg_top_img']); }
@@ -114,7 +124,7 @@ if(isset($_POST['save_template_settings'])) {
                 }
             }
             if(!empty($_FILES['bg_bottom_upload']['name']) && $_FILES['bg_bottom_upload']['error'] === UPLOAD_ERR_OK) {
-                $ext = pathinfo($_FILES['bg_bottom_upload']['name'], PATHINFO_EXTENSION);
+                $ext = $safeImgExt('bg_bottom_upload');
                 $bgBotName = 'bg_bottom_' . time() . '.' . $ext; 
                 if(move_uploaded_file($_FILES['bg_bottom_upload']['tmp_name'], $templateImgPath . $bgBotName)) {
                     if(isset($currentConfig['bg_bottom_img']) && file_exists($templateImgPath.$currentConfig['bg_bottom_img'])) { @unlink($templateImgPath.$currentConfig['bg_bottom_img']); }
@@ -159,16 +169,15 @@ if(isset($_POST['save_template_settings'])) {
             $handleSocialUpload('soc_yt_upload', 'soc_yt_img', 'yt');
         }
 
-        // Textos (Aplica a todos)
-        if(isset($_POST['hero_logo_width'])) {
-            // Textos (Aplica a todos)
-        $cleanWidth = preg_replace('/[^0-9]/', '', $_POST['hero_logo_width']);
-        $currentConfig['hero_logo_width'] = (!empty($cleanWidth) ? $cleanWidth : '300') . 'px';
-
-        if(isset($_POST['hero_video_url'])) $currentConfig['hero_video_url'] = $_POST['hero_video_url'];
+        // Tamano del logo: Canibal usa su propio control; el resto, el general
+        $widthField = ($targetTemplate == 'canibal' && isset($_POST['hero_logo_width_canibal'])) ? 'hero_logo_width_canibal' : 'hero_logo_width';
+        if(isset($_POST[$widthField]) && is_string($_POST[$widthField])) {
+            $cleanWidth = (int)preg_replace('/[^0-9]/', '', $_POST[$widthField]);
+            if($cleanWidth < 50 || $cleanWidth > 1000) $cleanWidth = 300;
+            $currentConfig['hero_logo_width'] = $cleanWidth . 'px';
         }
-        if(isset($_POST['hero_video_url'])) {
-            $currentConfig['hero_video_url'] = $_POST['hero_video_url'];
+        if(isset($_POST['hero_video_url']) && is_string($_POST['hero_video_url'])) {
+            $currentConfig['hero_video_url'] = trim($_POST['hero_video_url']);
         }
 
         // Slider (Aplica a Morpheus)
@@ -188,9 +197,13 @@ if(isset($_POST['save_template_settings'])) {
             }
         }
 
-        if(file_put_contents($templateConfigPath, json_encode($currentConfig, JSON_PRETTY_PRINT))) {
-            $msgContent = '<div class="alert-success-custom">Cambios guardados correctamente en <b>'.ucfirst($targetTemplate).'</b>.</div>';
+                $jsonOut = json_encode($currentConfig, JSON_PRETTY_PRINT | JSON_INVALID_UTF8_SUBSTITUTE);
+        if($jsonOut === false) throw new Exception('No se pudo generar la configuraci&oacute;n del template.');
+        if(@file_put_contents($templateConfigPath, $jsonOut, LOCK_EX) === false) {
+            throw new Exception('No se pudo escribir templates/' . htmlspecialchars($targetTemplate) . '/config.json. Revis&aacute; los permisos de ese archivo.');
         }
+        $savedWidth = isset($currentConfig['hero_logo_width']) ? htmlspecialchars((string)$currentConfig['hero_logo_width']) : '-';
+        $msgContent = '<div class="alert-success-custom">Cambios guardados correctamente en <b>' . htmlspecialchars(ucfirst($targetTemplate)) . '</b>. Tama&ntilde;o del logo: <b>' . $savedWidth . '</b>.</div>';
     } catch (Exception $e) {
         $msgContent = '<div class="alert alert-danger">Error: '.$e->getMessage().'</div>';
     }
@@ -288,6 +301,7 @@ echo '<div class="container-fluid">';
                                 echo '<option value="' . $tplName . '" ' . $sel . '>' . ucfirst($tplName) . '</option>';
                             }
                         echo '</select>';
+                                                echo '<button type="submit" name="save_template_settings" class="btn-save-green"><i class="fa fa-save"></i> Guardar Cambios</button>';
                     echo '</div>';
                 echo '</div>';
             echo '</div>';
@@ -407,7 +421,7 @@ echo '<div class="container-fluid">';
                                 echo '<label class="settings-label" style="font-size: 15px; color: #fff;">Ajuste Tamaño Logo Central:</label>';
                                 echo '<label class="settings-label">Tamaño: <span id="widthValCanibal" style="color:#c8a165;">' . $currWidth . 'px</span></label>';
                             echo '</div>';
-                            echo '<input type="range" id="hero_logo_width_canibal" min="50" max="1000" value="' . $currWidth . '" class="form-control" oninput="updateLogoSizeCanibal(this.value)">';
+                            echo '<input type="range" id="hero_logo_width_canibal" name="hero_logo_width_canibal" min="50" max="1000" value="' . $currWidth . '" class="form-control" oninput="updateLogoSizeCanibal(this.value)">';
                         echo '</div>';
 
                         echo '<hr style="border-color:#333; margin: 25px 0;">';

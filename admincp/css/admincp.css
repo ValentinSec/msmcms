@@ -3065,3 +3065,60 @@ textarea.form-control-dark {
     /* Con el menu abierto, la hamburguesa de la barra no se muestra */
     #wrapper.toggled #sidebarToggle { visibility: hidden; }
 }
+
+/* ====================================================================
+   BARRA SUPERIOR: buscador de configuraciones y menu del usuario
+   ==================================================================== */
+.header-search .search-results-overlay {
+    width: 100%; min-width: 250px; max-height: 340px; overflow-y: auto;
+    margin-top: 6px; padding: 6px;
+    border: 1px solid #334155; border-radius: 10px;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.45); z-index: 1250;
+}
+.csr-item { display: flex; flex-direction: column; gap: 2px; padding: 8px 10px; border-radius: 7px; text-decoration: none !important; }
+.csr-item:hover, .csr-item.is-active { background: rgba(16, 185, 129, 0.14); }
+.csr-title { color: #e5e7eb; font-size: 13px; font-weight: 600; }
+.csr-group { color: #8b95a7; font-size: 11px; }
+.csr-empty { color: #8b95a7; font-size: 12px; padding: 10px; }
+
+.user-profile { position: relative; }
+.user-profile-btn { padding: 0; }
+.user-avatar { overflow: hidden; }
+.user-avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+.user-menu {
+    display: none; position: absolute; top: calc(100% + 10px); right: 0; width: 260px;
+    background: #0f1115; border: 1px solid #1f2733; border-radius: 10px;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5); padding: 8px; z-index: 1250;
+}
+.user-profile.is-open .user-menu { display: block; }
+.um-head { display: flex; align-items: center; gap: 12px; padding: 8px 8px 10px; }
+.um-avatar { width: 48px; height: 48px; flex: 0 0 48px; font-size: 18px; }
+.um-id { min-width: 0; }
+.um-id strong { display: block; color: #e5e7eb; font-size: 14px; overflow: hidden; text-overflow: ellipsis; }
+.um-id span { color: #8b95a7; font-size: 11px; }
+.um-item { display: flex; align-items: center; gap: 8px; padding: 9px 10px; border-radius: 7px; color: #cbd5e1; font-size: 13px; text-decoration: none !important; }
+.um-item:hover, .um-item:focus { background: #1e293b; color: #fff; }
+.um-item.um-danger { color: #ef4444; }
+.um-sep { height: 1px; background: #1f2733; margin: 6px 0; }
+.um-toast {
+    position: absolute; top: 78px; right: 20px; z-index: 1250;
+    background: #0f1115; border: 1px solid #1f2733; border-left: 3px solid #ef4444;
+    color: #e5e7eb; padding: 10px 14px; border-radius: 8px; font-size: 13px;
+    animation: umToastOut 0.4s ease 6s forwards;
+}
+@keyframes umToastOut { to { opacity: 0; visibility: hidden; } }
+
+.user-menu input[type="file"].um-file { display: none !important; }
+.um-avatar-form { margin: 0; flex: 0 0 48px; }
+.um-avatar-btn { position: relative; border: 0; padding: 0; cursor: pointer; }
+.um-avatar-plus {
+    position: absolute; top: 0; right: 0; bottom: 0; left: 0; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    background: rgba(0, 0, 0, 0.55); color: #fff; font-size: 16px;
+    opacity: 0; transition: opacity 0.15s;
+}
+.um-avatar-btn:hover .um-avatar-plus, .um-avatar-btn:focus .um-avatar-plus { opacity: 1; }
+@media (hover: none) { .um-avatar-plus { opacity: 1; background: rgba(0, 0, 0, 0.35); } }
+.um-id form { margin: 0; }
+.um-id .um-photo-del { display: block; background: none; border: 0; padding: 0; margin-top: 4px; color: #ef4444; font-size: 11px; cursor: pointer; }

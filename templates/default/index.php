@@ -876,22 +876,10 @@ if ($stActive):
         }
     }
     
-    document.addEventListener("DOMContentLoaded", function() {
-        setTimeout(function() {
-            // PHP inyecta la URL base y la Key automáticamente aquí:
-            var cronUrl = "<?php echo __BASE_URL__; ?>api/cron.php";            
-            // Ejecutamos el cron silenciosamente
-            try {
-                fetch(cronUrl, {mode: 'no-cors'});
-                console.log("Auto-Cron ejecutado en: " + cronUrl);
-            } catch(e) {
-                console.error("Error auto-cron", e);
-            }
-        }, 3000);
-    });
 </script>
 <?php endif; ?>
 <?php include('includes/popup_modal.php'); ?>
 <?php include 'templates/misc/countdown.php'; ?>
+<?php @include(__DIR__ . '/../misc/inc/cron_trigger.php'); ?>
 </body>
 </html>

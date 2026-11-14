@@ -1148,3 +1148,6 @@ body.page-castlesiege .castle-siege-block .table img { image-rendering: pixelate
     body.page-castlesiege .castle-siege-block .table { font-size: 12.5px; }
     body.page-castlesiege .castle-siege-block .table > :not(caption) > * > * { padding: 8px 6px; }
 }
+
+/* Perfil de guild: acento dorado de canibal */
+.guild-profile { --profile-accent: #c8a165; }

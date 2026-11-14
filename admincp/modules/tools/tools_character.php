@@ -4,11 +4,10 @@
  * PREPARED FOR OBFUSCATION (Pure PHP Version)
  */
 
-// Lógica para procesar el envío del formulario
-if(isset($_POST['search_character']) && !empty($_POST['character_name'])) {
-    $charName = htmlspecialchars($_POST['character_name']);
-    // Redirigir al módulo editchar
-    echo '<script>window.location="index.php?module=editchar&name=' . $charName . '";</script>';
+// Envio del formulario: redirige al editor del personaje
+if(isset($_POST['search_character']) && isset($_POST['character_name']) && is_string($_POST['character_name']) && trim($_POST['character_name']) !== '') {
+    $charUrl = 'index.php?module=editchar&name=' . rawurlencode(trim($_POST['character_name']));
+    echo '<script>window.location=' . json_encode($charUrl) . ';</script>';
 }
 
 // --- RENDERIZADO HTML (PHP PURO) ---
@@ -116,37 +115,49 @@ echo '<script>
 $(document).ready(function() {
     var inputField = $("#LiveSearchInput");
     var resultsDiv = $("#LiveSearchResults");
+    var timer = null;
+    var lastRequest = 0;
 
-    inputField.on("keyup", function() {
-        var query = $(this).val();
-        if (query.length >= 1) {
-            $.ajax({
-                url: "ajax_search_character.php",
-                method: "POST",
-                data: { term: query },
-                dataType: "json",
-                success: function(data) {
-                    resultsDiv.empty();
-                    if (data && data.length > 0) {
-                        $.each(data, function(index, name) {
-                            resultsDiv.append("<div class=\'st-item\'>" + name + "</div>");
-                        });
-                        resultsDiv.show();
-                    } else {
-                        resultsDiv.hide();
-                    }
-                }
-            });
-        } else {
-            resultsDiv.hide();
-        }
+    function goToCharacter(name) {
+        window.location.href = "index.php?module=editchar&name=" + encodeURIComponent(name);
+    }
+
+    function runSearch() {
+        var query = $.trim(inputField.val());
+        if (query.length < 1) { lastRequest++; resultsDiv.empty().hide(); return; }
+        var requestId = ++lastRequest;
+        $.ajax({
+            url: "index.php?ajax=search_character",
+            method: "POST",
+            data: { term: query },
+            dataType: "json"
+        }).done(function(data) {
+            if (requestId !== lastRequest) return;
+            resultsDiv.empty();
+            if ($.isArray(data) && data.length > 0) {
+                $.each(data, function(index, name) {
+                    $("<div>").addClass("st-item").text(name).appendTo(resultsDiv);
+                });
+            } else {
+                $("<div>").addClass("st-item st-empty").text("Sin resultados").appendTo(resultsDiv);
+            }
+            resultsDiv.show();
+        }).fail(function() {
+            if (requestId !== lastRequest) return;
+            resultsDiv.empty().hide();
+        });
+    }
+
+    inputField.on("input", function() {
+        clearTimeout(timer);
+        timer = setTimeout(runSearch, 180);
     });
 
-    $(document).on("click", ".st-item", function() {
+    $(document).on("click", ".st-item:not(.st-empty)", function() {
         var selectedName = $(this).text();
         inputField.val(selectedName);
         resultsDiv.hide();
-        window.location.href = "index.php?module=editchar&name=" + selectedName;
+        goToCharacter(selectedName);
     });
 
     $(document).click(function(e) {

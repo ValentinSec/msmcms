@@ -7,89 +7,19 @@
 
 if (!defined("access") or !access) die();
 
-// --- 1. BACKEND: PROCESAMIENTO AJAX (Blindado) ---
 if (isset($_POST['ajax_action']) && $_POST['ajax_action'] == 'buy_item') {
     while (ob_get_level() > 0) { ob_end_clean(); }
-    @ini_set('display_errors', 0);
-    @error_reporting(0);
     header('Content-Type: application/json; charset=utf-8');
-    
-    try {
-        if (!isLoggedIn()) throw new Exception('Tu sesión ha expirado.');
-        $fileShopList = __PATH_INCLUDES__ . 'config/webshop_list.json';
-        $fileSettings = __PATH_INCLUDES__ . 'config/custom_settings.json';
-        $uid = isset($_POST['uid']) ? $_POST['uid'] : '';
-        $username = $_SESSION['username'];
 
-        if (!file_exists($fileShopList)) throw new Exception("Error: Base de datos no encontrada.");
-        $shopItems = json_decode(file_get_contents($fileShopList), true);
-        $targetItem = null;
-        if (is_array($shopItems)) {
-            foreach ($shopItems as $item) { if ($item['uid'] === $uid) { $targetItem = $item; break; } }
-        }
-        if (!$targetItem) throw new Exception("Item no encontrado.");
+    if(!class_exists('WebShop')) @include_once(__PATH_INCLUDES__ . 'classes/class.webshop.php');
 
-        $settings = file_exists($fileSettings) ? json_decode(file_get_contents($fileSettings), true) : array();
-        $currencyName = preg_replace('/[^a-zA-Z0-9_]/', '', $targetItem['currency']); 
-        $coinTable = isset($settings['table_coins']) ? preg_replace('/[^a-zA-Z0-9_]/', '', $settings['table_coins']) : 'CashShopData';
-        $userCol = isset($settings['col_user']) ? preg_replace('/[^a-zA-Z0-9_]/', '', $settings['col_user']) : 'AccountId';
-        if(strtolower($coinTable) == 'memb_info' && strtolower($userCol) == 'accountid') $userCol = 'memb___id';
-
-        $db = Connection::Database('Me_MuOnline');
-        
-        // --- VERIFICACIÓN ANTI-DUPE / ANTI-DESYNC ---
-        $onlineCheck = $db->query_fetch_single("SELECT ConnectStat FROM MEMB_STAT WHERE memb___id = ?", array($username));
-        if ($onlineCheck && $onlineCheck['ConnectStat'] == 1) {
-            throw new Exception("<b>¡CUENTA CONECTADA!</b><br>Debes desconectarte del juego para realizar compras.");
-        }
-
-        $warehouseData = $db->query_fetch_single("SELECT CAST(Items AS VARBINARY(MAX)) as Items FROM warehouse WHERE AccountId = ?", array($username));
-        if (!$warehouseData) throw new Exception("Baúl no inicializado.");
-
-        $itemsHex = bin2hex($warehouseData['Items']);
-        // FIX: Se admiten tanto letras f como ceros para identificar un slot vacío
-        if (strlen($itemsHex) > 0 && !preg_match('/^[fF0]+$/', $itemsHex)) {
-            throw new Exception("<b>¡BAÚL OCUPADO!</b><br>Vacía tu baúl para comprar.");
-        }
-
-        // Generar Item Hex Inline
-        $id = (int)$targetItem['id']; $group = (int)$targetItem['group']; $level = (int)$targetItem['level'];
-        $skill = (int)$targetItem['skill']; $luck = (int)$targetItem['luck']; $opt = (int)$targetItem['option'];  
-        $excByte = 0;
-        if(isset($targetItem['exc_opts'])){ foreach($targetItem['exc_opts'] as $ex){ $excByte += (1 << (int)$ex['id']); } }
-        $optVal = 0;
-        if ($skill) $optVal += 128;
-        if ($luck) $optVal += 4;
-        $optVal += ($opt & 3); 
-        if ($opt > 3) $excByte += 64; 
-        
-        $byte9 = ($group << 4) & 0xF0;
-        if (isset($targetItem['op380']) && $targetItem['op380'] == 1) $byte9 |= 8;
-        
-        $newItemHex = sprintf("%02X", $id & 255) . sprintf("%02X", $optVal | ($level << 3)) . "FF00000000" . sprintf("%02X", $excByte) . "00" . sprintf("%02X", $byte9) . sprintf("%02X", isset($targetItem['harmony']['val']) ? (int)$targetItem['harmony']['val'] : 0);
-        for($k=0; $k<5; $k++){ $newItemHex .= sprintf("%02X", isset($targetItem['sockets'][$k]['val']) ? (int)$targetItem['sockets'][$k]['val'] : 255); }
-
-        $targetLength = (strlen($itemsHex) > 0) ? strlen($itemsHex) : 3840; 
-        $binaryData = "0x" . $newItemHex . str_repeat('F', $targetLength - strlen($newItemHex));
-
-        $price = (int)$targetItem['price'];
-        $checkBal = $db->query_fetch_single("SELECT [$currencyName] FROM [$coinTable] WHERE [$userCol] = ?", array($username));
-        $currentBalance = (int)$checkBal[$currencyName];
-
-        if ($currentBalance < $price) {
-            echo json_encode(array('status' => 'no_funds', 'balance' => $currentBalance, 'price' => $price, 'currency' => $currencyName));
-            exit;
-        }
-
-        $db->query("UPDATE [$coinTable] SET [$currencyName] = [$currencyName] - ? WHERE [$userCol] = ?", array($price, $username));
-        $db->query("UPDATE warehouse SET Items = $binaryData WHERE AccountId = ?", array($username));
-        $db->query("INSERT INTO MUSERVERMAKER_WEBSHOP_LOG (account_id, item_name, item_uid, price, currency, balance_before, balance_after, date_log) VALUES (?, ?, ?, ?, ?, ?, ?, GETDATE())", 
-            array($username, $targetItem['name'], $uid, $price, $currencyName, $currentBalance, $currentBalance - $price));
-
-        echo json_encode(array('status' => 'success'));
-    } catch (Exception $e) {
-        echo json_encode(array('status' => 'error', 'message' => $e->getMessage()));
+    if(!isLoggedIn() || !class_exists('WebShop')) {
+        echo json_encode(array('status' => 'error', 'message' => 'Tu sesi&oacute;n ha expirado.'));
+        exit;
     }
+
+    $wsUid = (isset($_POST['uid']) && is_string($_POST['uid'])) ? $_POST['uid'] : '';
+    echo json_encode(WebShop::buyItem($_SESSION['username'], $wsUid), JSON_INVALID_UTF8_SUBSTITUTE);
     exit;
 }
 

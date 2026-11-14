@@ -280,6 +280,18 @@ class common {
 		return hash_equals((string)$entry['uid'], (string)$userid);
 	}
 
+	// Valida el codigo SIN consumirlo (para mostrar el formulario de nueva clave).
+	public function peekAccountRecoveryCode($userid,$token) {
+		if(!check_value($userid)) return false;
+		if(!is_string($token) || !preg_match('/^[a-f0-9]{64}$/', $token)) return false;
+		$store = $this->_recoveryStore();
+		$key = hash('sha256', $token);
+		if(!isset($store[$key]) || !is_array($store[$key])) return false;
+		$entry = $store[$key];
+		if(!isset($entry['exp'], $entry['uid']) || (int)$entry['exp'] < time()) return false;
+		return hash_equals((string)$entry['uid'], (string)$userid);
+	}
+
 	// Lee o guarda los codigos pendientes (solo se guarda su hash, nunca el codigo).
 	protected function _recoveryStore($newData = null) {
 		$file = __PATH_INCLUDES__ . 'cache/recovery_tokens.json';

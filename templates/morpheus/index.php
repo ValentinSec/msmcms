@@ -1218,20 +1218,12 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
-    // Auto Cron integrado
-    document.addEventListener("DOMContentLoaded", function() {
-        setTimeout(function() {
-                        var cronUrl = "<?php echo __BASE_URL__; ?>api/cron.php";
-            try {
-                fetch(cronUrl, {mode: 'no-cors'});
-            } catch(e) { }
-        }, 3000);
-    });
     </script>
     <?php endif; ?>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>const baseUrl = '<?php echo __BASE_URL__; ?>';</script>
     <script src="<?php echo __BASE_URL__; ?>templates/morpheus/js/main.js?v=<?php echo msm_v('templates/morpheus/js/main.js'); ?>"></script>
     <?php include 'templates/misc/countdown.php'; ?>
+    <?php @include(__DIR__ . '/../misc/inc/cron_trigger.php'); ?>
 </body>
 </html>

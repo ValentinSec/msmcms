@@ -447,7 +447,7 @@ $seoData = is_array($muservermakerParams) ? $muservermakerParams : [];
 
     <div class="canibal-header-logo" style="position: absolute; top: 170px; left: 0; width: 100%; text-align: center; z-index: 9999; pointer-events: none;">
         <a href="<?php echo __BASE_URL__; ?>" style="display: inline-block; pointer-events: auto;">
-            <img src="<?php echo __BASE_URL__; ?>templates/canibal/img/logo.png" alt="Server Logo" class="canibal-hero-logo" style="width: <?php echo isset($tplData['hero_logo_width']) ? $tplData['hero_logo_width'] : '320px'; ?> !important; max-width: 100%; height: auto; filter: drop-shadow(0 5px 15px rgba(0,0,0,0.8)); transition: transform 0.3s ease;" onmouseover="this.style.transform='scale(1.05)';" onmouseout="this.style.transform='scale(1)';">
+            <img src="<?php echo __BASE_URL__; ?>templates/canibal/img/logo.png" alt="Server Logo" class="canibal-hero-logo" style="width: <?php echo max(50, min(1000, (int)(isset($tplData['hero_logo_width']) ? $tplData['hero_logo_width'] : 320))); ?>px !important; max-width: 100%; height: auto; filter: drop-shadow(0 5px 15px rgba(0,0,0,0.8)); transition: transform 0.3s ease;" onmouseover="this.style.transform='scale(1.05)';" onmouseout="this.style.transform='scale(1)';">
         </a>
     </div>
     <div class="main-wrapper">
@@ -1160,5 +1160,6 @@ $seoData = is_array($muservermakerParams) ? $muservermakerParams : [];
     </script>
 
     <script src="<?php echo __BASE_URL__; ?>templates/canibal/js/main.js?v=<?php echo msm_v('templates/canibal/js/main.js'); ?>"></script>
+<?php @include(__DIR__ . '/../misc/inc/cron_trigger.php'); ?>
 </body>
 </html>
