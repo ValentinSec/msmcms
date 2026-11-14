@@ -11,10 +11,12 @@ $myJsonFile = __PATH_CONFIGS__ . 'smtp_settings.json';
 // --- LÓGICA DE GUARDADO ---
 if(isset($_POST['save_smtp_settings'])) {
     try {
+        $oldSmtp = file_exists($myJsonFile) ? json_decode(file_get_contents($myJsonFile), true) : [];
+        $newPass = isset($_POST['smtp_pass']) ? trim($_POST['smtp_pass']) : '';
         $smtpConfig = [
             'smtp_host'   => trim($_POST['smtp_host']),
             'smtp_user'   => trim($_POST['smtp_user']),
-            'smtp_pass'   => trim($_POST['smtp_pass']),
+            'smtp_pass'   => ($newPass !== '') ? $newPass : (isset($oldSmtp['smtp_pass']) ? $oldSmtp['smtp_pass'] : ''),
             'smtp_port'   => (int)$_POST['smtp_port'],
             'smtp_crypto' => trim($_POST['smtp_crypto']),
             'smtp_active' => isset($_POST['smtp_active']) ? true : false
@@ -48,7 +50,7 @@ if(isset($_POST['test_smtp_email'])) {
     if(filter_var($target, FILTER_VALIDATE_EMAIL)) {
         // Usamos la función nativa del CMS
         if(msm_send_mail($target, "Test de Conexión - " . config('server_name'), "<h1>Conexión Exitosa</h1><p>Si estás leyendo esto, tu SMTP está funcionando perfectamente.</p>")) {
-            echo '<div class="alert alert-success-custom"><i class="fa fa-envelope"></i> Correo de prueba enviado exitosamente a <b>'.$target.'</b>.</div>';
+            echo '<div class="alert alert-success-custom"><i class="fa fa-envelope"></i> Correo de prueba enviado exitosamente a <b>'.htmlspecialchars($target, ENT_QUOTES, 'UTF-8').'</b>.</div>';
         } else {
             echo '<div class="alert alert-danger"><i class="fa fa-times-circle"></i> Fallo en el envío. Revisa los logs de error de PHP o verifica credenciales.</div>';
         }
@@ -113,7 +115,7 @@ echo '<div class="container-fluid">';
 
                         echo '<div class="form-group">';
                             echo '<label class="settings-label">Contraseña / App Password</label>';
-                            echo '<input type="password" name="smtp_pass" class="form-control-dark" value="' . getS('smtp_pass', $conf) . '" placeholder="••••••••••••••••">';
+                            echo '<input type="password" name="smtp_pass" class="form-control-dark" value="" placeholder="Dejar vacío para no cambiarla" autocomplete="new-password">';
                             echo '<small class="text-muted">Si usas Gmail, aquí va la <b>Contraseña de Aplicación</b>, no tu clave normal.</small>';
                         echo '</div>';
 

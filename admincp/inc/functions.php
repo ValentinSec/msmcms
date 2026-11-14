@@ -42,7 +42,7 @@ function checkVersion() {
     
     // 2. Datos que le enviamos a tu panel
     $fields = array(
-        'version' => urlencode(__MUSERVERMAKER_VERSION__), // La versi¨®n que tiene el cliente
+        'version' => urlencode(__MUSERVERMAKER_VERSION__), // La versión que tiene el cliente
         'baseurl' => urlencode(__BASE_URL__),              // Su dominio (sirve para validar licencia)
         'license' => defined('__LICENSE_KEY__') ? __LICENSE_KEY__ : '' // Opcional: si usas key
     );
@@ -61,7 +61,7 @@ function checkVersion() {
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_USERAGENT, 'MuServerMaker-Updater'); // Tu propio agente
     
-    // Si tu panel de licencias no tiene SSL certificado a¨²n, descomenta esto:
+    // Si tu panel de licencias no tiene SSL certificado aún, descomenta esto:
     // curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false); 
 
     $result = curl_exec($ch);
@@ -75,7 +75,7 @@ function checkVersion() {
     // Si tu API dice que hay update, devolvemos true
     if(isset($resultArray['update']) && $resultArray['update'] == true) {
         return true; 
-        // O podr¨ªas devolver $resultArray['version_nueva'] si quer¨¦s mostrar el n¨²mero
+        // O podrías devolver $resultArray['version_nueva'] si querés mostrar el número
     }
     
     return false;
@@ -167,14 +167,14 @@ function weekDaySelectOptions($selected='Monday') {
 }
 
 function msm_send_mail($to, $subject, $message_content, $username = "Jugador") {
-    // 1. Cargar configuraciÃ³n SMTP
+    // 1. Cargar configuraci?n SMTP
     $smtpFile = __DIR__ . '/../../includes/config/smtp_settings.json';
     if(!file_exists($smtpFile)) return false;
     
     $smtp = json_decode(file_get_contents($smtpFile), true);
     if(!is_array($smtp) || !isset($smtp['smtp_active']) || !$smtp['smtp_active']) return false;
 
-    // 2. Cargar librerÃ­as (verificando que existan)
+    // 2. Cargar librer?as (verificando que existan)
     if(file_exists(__PATH_CLASSES__ . 'phpmailer/PHPMailer.php')) {
         require_once(__PATH_CLASSES__ . 'phpmailer/PHPMailer.php');
         require_once(__PATH_CLASSES__ . 'phpmailer/SMTP.php');
@@ -184,7 +184,13 @@ function msm_send_mail($to, $subject, $message_content, $username = "Jugador") {
 
         try {
             $mail->isSMTP();
-            $mail->Host       = $smtp['smtp_host'];
+            $smtpHost4 = gethostbyname($smtp['smtp_host']);
+            if($smtpHost4 !== $smtp['smtp_host']) {
+                $mail->Host = $smtpHost4;
+                $mail->SMTPOptions = array('ssl' => array('peer_name' => $smtp['smtp_host']));
+            } else {
+                $mail->Host = $smtp['smtp_host'];
+            }
             $mail->SMTPAuth   = true;
             $mail->Username   = $smtp['smtp_user'];
             $mail->Password   = $smtp['smtp_pass'];
