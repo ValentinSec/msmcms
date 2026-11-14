@@ -890,18 +890,7 @@ if(isset($_POST['market_ajax']) && $_POST['market_ajax'] == 'true') {
         function openMarketModal() { var m = document.getElementById('wsMarketModal'); m.style.display = 'flex'; if (m.dataset.loaded) return; m.dataset.loaded = '1'; var b = m.querySelector('.cat-btn[onclick*="wsLoadCat(-1,"]') || m.querySelector('.cat-btn'); if (b) b.click(); }
         function closeMarketModal() { document.getElementById('wsMarketModal').style.display = 'none'; }
         function openDirectBuy(id, price) { selectedBuyId = id; document.getElementById('buyPriceLabel').innerText = price; document.getElementById('buyConfirmModal').style.display = 'flex'; }
-        function bm_buy_loader(show) {
-            var el = document.getElementById('bmBuyLoader');
-            if(!el) {
-                el = document.createElement('div');
-                el.id = 'bmBuyLoader';
-                el.style.cssText = 'display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.85);z-index:100001;align-items:center;justify-content:center;flex-direction:column;';
-                el.innerHTML = '<i class="fa fa-spinner fa-spin fa-3x" style="color:#FF8A3B;margin-bottom:12px;"></i><span style="color:#fff;font-size:13px;font-weight:bold;letter-spacing:1px;">PROCESANDO COMPRA...</span>';
-                document.body.appendChild(el);
-            }
-            el.style.display = show ? 'flex' : 'none';
-        }
-
+window.BM_LOADER_COLOR = '#d32f2f';
         document.getElementById('btnDoBuy').addEventListener('click', function() {
             if(selectedBuyId == 0) return;
             document.getElementById('buyConfirmModal').style.display = 'none';
@@ -940,6 +929,7 @@ if(isset($_POST['market_ajax']) && $_POST['market_ajax'] == 'true') {
             });
         }
     </script>
+    <script src="<?php echo __BASE_URL__; ?>templates/misc/js/bm_loader.js?v=<?php echo msm_v('templates/misc/js/bm_loader.js'); ?>"></script>
     <?php @include(__DIR__ . '/../misc/inc/cron_trigger.php'); ?>
 </body>
 </html>

@@ -31,7 +31,7 @@ $casinoActive = (isset($cSettings['module_casino_active']) && $cSettings['module
 $bmConfigFile = __PATH_INCLUDES__ . 'config/black_market_config.json';
 $bmData = file_exists($bmConfigFile) ? json_decode(file_get_contents($bmConfigFile), true) : [];
 $blackMarketActive = (isset($bmData['module_active']) && $bmData['module_active'] === 'on');
-
+$ucpOpenBm = ($blackMarketActive && isset($_GET['tab']) && $_GET['tab'] === 'black-market');
 // B. Configuración Donaciones (Coins)
 $donCfgFile = __PATH_INCLUDES__ . 'config/donation_config.json';
 $donCfg = file_exists($donCfgFile) ? json_decode(file_get_contents($donCfgFile), true) : [];
@@ -223,7 +223,7 @@ echo '
                 <div class="sidebar-divider"></div>
 
                 <nav class="usercp-nav-menu flex-grow-1 nav nav-pills flex-column" id="usercpTab" role="tablist">
-                    <button class="nav-link nav-card active" id="index-tab" data-bs-toggle="pill" data-bs-target="#pane-index" type="button" role="tab">
+                    <button class="nav-link nav-card' . ($ucpOpenBm ? '' : ' active') . '" id="index-tab" data-bs-toggle="pill" data-bs-target="#pane-index" type="button" role="tab">
                         <div class="icon-box"><i class="fa fa-user-circle"></i></div>
                         <div class="text-box"><h4>Cuenta</h4><p>Información de tu cuenta y...</p></div>
                         <i class="fa fa-chevron-right arrow-icon"></i>
@@ -276,7 +276,7 @@ echo '
                     }
                     
                     if($blackMarketActive) {
-                        echo '<button class="nav-link nav-card" id="bm-tab" data-bs-toggle="pill" data-bs-target="#pane-black-market" type="button" role="tab">
+                        echo '<button class="nav-link nav-card' . ($ucpOpenBm ? ' active' : '') . '" id="bm-tab" data-bs-toggle="pill" data-bs-target="#pane-black-market" type="button" role="tab">
                             <div class="icon-box"><i class="fas fa-user-secret" style="color: #9b59b6;"></i></div>
                             <div class="text-box"><h4>Black Market</h4><p>Mercado de usuarios...</p></div>
                             <i class="fa fa-chevron-right arrow-icon"></i>
@@ -301,7 +301,7 @@ echo '
             </aside>
             <main class="col-lg-10 usercp-content p-5">
                 <div class="tab-content" id="usercpTabContent">
-                    <div class="tab-pane fade show active" id="pane-index" role="tabpanel">'; include 'modules/usercp/overview.php'; echo '</div>
+                    <div class="tab-pane fade' . ($ucpOpenBm ? '' : ' show active') . '" id="pane-index" role="tabpanel">'; include 'modules/usercp/overview.php'; echo '</div>
                     <div class="tab-pane fade" id="pane-characters" role="tabpanel">'; include 'modules/usercp/characters.php'; echo '</div>';
                     
                     if($webshopActive) {
@@ -325,7 +325,7 @@ echo '
                     }
 
                     if($blackMarketActive) {
-                        echo '<div class="tab-pane fade" id="pane-black-market" role="tabpanel">'; include 'modules/usercp/black_market.php'; echo '</div>';
+                        echo '<div class="tab-pane fade' . ($ucpOpenBm ? ' show active' : '') . '" id="pane-black-market" role="tabpanel">'; include 'modules/usercp/black_market.php'; echo '</div>';
                     }
 
 echo '
@@ -394,6 +394,7 @@ echo '
             });
         }
     </script>
+    
 </body>
 </html>';
 ?>

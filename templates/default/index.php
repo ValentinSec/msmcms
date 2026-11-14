@@ -691,20 +691,7 @@ function executeBuy() {
         show_modal_alert("Error", "Ocurrió un problema de conexión. Intenta de nuevo.");
     });
 }
-
-// Loader de compra (overlay a pantalla completa)
-function showBuyLoader(show) {
-    var loader = document.getElementById('buyLoaderOverlay');
-    if(!loader) {
-        loader = document.createElement('div');
-        loader.id = 'buyLoaderOverlay';
-        loader.style.cssText = 'display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:100010; align-items:center; justify-content:center; flex-direction:column;';
-        loader.innerHTML = '<div class="spinner" style="width:40px; height:40px; border:4px solid rgba(255,255,255,0.3); border-radius:50%; border-top-color:#FF8A3B; animation:spin 1s linear infinite;"></div><span style="color:#fff; margin-top:15px; font-size:13px; font-weight:600; letter-spacing:1px;">PROCESANDO COMPRA...</span>';
-        document.body.appendChild(loader);
-    }
-    loader.style.display = show ? 'flex' : 'none';
-}
-
+window.BM_LOADER_COLOR = '#FF8A3B';
     // --- CATEGORY LOADER (MODAL GRANDE) ---
     function wsLoadCat(catId, btn) {
         document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
@@ -880,6 +867,7 @@ if ($stActive):
 <?php endif; ?>
 <?php include('includes/popup_modal.php'); ?>
 <?php include 'templates/misc/countdown.php'; ?>
+<script src="<?php echo __BASE_URL__; ?>templates/misc/js/bm_loader.js?v=<?php echo msm_v('templates/misc/js/bm_loader.js'); ?>"></script>
 <?php @include(__DIR__ . '/../misc/inc/cron_trigger.php'); ?>
 </body>
 </html>

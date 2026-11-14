@@ -173,10 +173,10 @@ class BlackMarket {
         // 380 Option (pendiente: validar contra la lista blanca de ItemsManager)
         $is380 = false;
         $op380Names = [];
-        if (!$isSocketItem && $group != 13) {
-            $is380 = (($byte9 & 16) > 0) || (($byte9 & 8) > 0);
-            if ($is380 && class_exists('ItemsManager') && method_exists('ItemsManager', 'get380Options')) {
+        if (!$isSocketItem && $group != 13 && class_exists('ItemsManager') && method_exists('ItemsManager', 'get380Options')) {
+            if (($byte9 & 8) > 0) {
                 $op380Names = ItemsManager::get380Options($group, $id);
+                $is380 = !empty($op380Names);
             }
         }
 

@@ -500,7 +500,7 @@ $seoData = is_array($muservermakerParams) ? $muservermakerParams : [];
                         define('USERCP_CLEAN', true);
                         
                         // Obtenemos la subpágina (por defecto config si está vacío)
-                        $sub = isset($_REQUEST['subpage']) ? $_REQUEST['subpage'] : 'config';
+                        $sub = isset($_REQUEST['subpage']) ? preg_replace('/[^a-z0-9_]/', '', strtolower((string)$_REQUEST['subpage'])) : 'config'; if ($sub === '') $sub = 'config';
                         $targetFile = 'modules/usercp/' . $sub . '.php';
                 
                         if(file_exists($targetFile)) {
@@ -1040,17 +1040,7 @@ $seoData = is_array($muservermakerParams) ? $muservermakerParams : [];
                 document.getElementById('buyConfirmModal').style.display = 'flex';
             }
 
-            function bm_buy_loader(show) {
-                var el = document.getElementById('bmBuyLoader');
-                if(!el) {
-                    el = document.createElement('div');
-                    el.id = 'bmBuyLoader';
-                    el.style.cssText = 'display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.85);z-index:100001;align-items:center;justify-content:center;flex-direction:column;';
-                    el.innerHTML = '<i class="fa fa-spinner fa-spin fa-3x" style="color:#c8a165;margin-bottom:12px;"></i><span style="color:#fff;font-size:13px;font-weight:bold;letter-spacing:1px;">PROCESANDO COMPRA...</span>';
-                    document.body.appendChild(el);
-                }
-                el.style.display = show ? 'flex' : 'none';
-            }
+window.BM_LOADER_COLOR = '#c8a165';
 
             function executeBuy() {
                 document.getElementById('buyConfirmModal').style.display = 'none';
@@ -1170,6 +1160,7 @@ $seoData = is_array($muservermakerParams) ? $muservermakerParams : [];
 </div>
 <script>setTimeout(function(){ var t = document.getElementById("msmLoginToast"); if(t) t.remove(); }, 8000);</script>
 <?php endif; ?>
+<script src="<?php echo __BASE_URL__; ?>templates/misc/js/bm_loader.js?v=<?php echo msm_v('templates/misc/js/bm_loader.js'); ?>"></script>
 <?php @include(__DIR__ . '/../misc/inc/cron_trigger.php'); ?>
 </body>
 </html>

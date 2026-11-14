@@ -133,7 +133,7 @@ $blackMarketActive = (isset($bmData['module_active']) && $bmData['module_active'
             <?php endif; ?>
 
             <?php if($blackMarketActive): ?>
-                <a href="<?php echo __BASE_URL__; ?>usercp/black_market" class="btn-login-custom <?php if(strpos($_SERVER['REQUEST_URI'], 'usercp/black_market') !== false) echo 'active-sidebar'; ?>">
+<a href="<?php echo __BASE_URL__; ?>usercp?subpage=black_market" class="btn-login-custom <?php if(isset($_REQUEST['subpage']) && $_REQUEST['subpage'] === 'black_market') echo 'active-sidebar'; ?>">
                     <i class="fa fa-mask me-2"></i> BLACK MARKET
                 </a>
             <?php endif; ?>
