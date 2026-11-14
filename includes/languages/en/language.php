@@ -1,15 +1,4 @@
 <?php
-/**
- * WebEngine CMS
- * https://webenginecms.org/
- * 
- * @version 1.2.6
- * @author Lautaro Angelico <http://lautaroangelico.com/>
- * @copyright (c) 2013-2025 Lautaro Angelico, All Rights Reserved
- * 
- * Licensed under the MIT license
- * http://opensource.org/licenses/MIT
- */
 
 # general
 $lang['server_time'] = 'Server Time';
@@ -523,3 +512,15 @@ $lang['footer_info'] = 'Server Information';
 $lang['footer_contact'] = 'Contact Us';
 $lang['footer_copyright'] = '%s &copy; %s, ALL RIGHTS RESERVED.';
 $lang['footer_webzen_copyright'] = 'This site is in no way associated with or endorsed by Webzen Inc.';
+
+# forgot password
+$lang['forgotpass_new_1'] = 'New password';
+$lang['forgotpass_new_2'] = 'Repeat password';
+$lang['forgotpass_new_3'] = 'Between %s and %s characters. Letters and numbers only.';
+$lang['forgotpass_new_4'] = 'Save password';
+$lang['forgotpass_new_5'] = 'Your password has been changed. You can now <a href="%s">log in</a>.';
+$lang['forgotpass_new_6'] = 'The link is invalid or has expired. <a href="%s">Request a new one</a>.';
+$lang['forgotpass_new_7'] = 'Fill in both fields.';
+$lang['forgotpass_new_8'] = 'The password must be between %s and %s characters.';
+$lang['forgotpass_new_9'] = 'The password can only contain letters and numbers.';
+$lang['forgotpass_new_10'] = 'The two passwords do not match.';

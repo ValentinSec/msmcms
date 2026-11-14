@@ -1,20 +1,5 @@
 <?php
-/**
- * WebEngine CMS
- * https://webenginecms.org/
- * 
- * @version 1.2.2
- * @author Lautaro Angelico <http://lautaroangelico.com/>
- * @copyright (c) 2013-2020 Lautaro Angelico, All Rights Reserved
- * 
- * Licensed under the MIT license
- * http://opensource.org/licenses/MIT
- */
 
-/**
- * Spanish Translation
- * By: Supay, Lautaro
- */
 
 # General
 $lang['server_time'] = 'Hora del Servidor';
@@ -507,3 +492,15 @@ $lang['footer_info'] = 'Información del Servidor';
 $lang['footer_contact'] = 'Contactanos';
 $lang['footer_copyright'] = '%s © %s, TODOS LOS DERECHOS RESERVADOS.';
 $lang['footer_webzen_copyright'] = 'Este sitio no está asociado ni respaldado de ninguna manera por Webzen Inc.';
+
+# recuperación de contraseña
+$lang['forgotpass_new_1'] = 'Nueva contraseña';
+$lang['forgotpass_new_2'] = 'Repetir contraseña';
+$lang['forgotpass_new_3'] = 'Entre %s y %s caracteres. Solo letras y números.';
+$lang['forgotpass_new_4'] = 'Guardar contraseña';
+$lang['forgotpass_new_5'] = 'Tu contraseña fue cambiada. Ya podés <a href="%s">iniciar sesión</a>.';
+$lang['forgotpass_new_6'] = 'El enlace no es válido o ya venció. <a href="%s">Pedí uno nuevo</a>.';
+$lang['forgotpass_new_7'] = 'Completá los dos campos.';
+$lang['forgotpass_new_8'] = 'La contraseña debe tener entre %s y %s caracteres.';
+$lang['forgotpass_new_9'] = 'La contraseña solo puede tener letras y números.';
+$lang['forgotpass_new_10'] = 'Las dos contraseñas no coinciden.';

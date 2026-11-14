@@ -333,15 +333,15 @@ class Account extends common {
         $accountData = $this->passwordRecoveryCheck($ui, $ue, $key);
         $username = $accountData[_CLMN_USERNM_];
 
-        if(!is_string($newPassword) || !is_string($confirmPassword)) throw new Exception('Complet&aacute; los dos campos.');
+        if(!is_string($newPassword) || !is_string($confirmPassword)) throw new Exception(lang('forgotpass_new_7', true));
 
         $cfg = muservermakerConfigs();
         $min = (isset($cfg['password_min_len']) && (int)$cfg['password_min_len'] > 0) ? (int)$cfg['password_min_len'] : 4;
         $max = (isset($cfg['password_max_len']) && (int)$cfg['password_max_len'] > 0) ? (int)$cfg['password_max_len'] : 20;
 
-        if(strlen($newPassword) < $min || strlen($newPassword) > $max) throw new Exception('La contrase&ntilde;a debe tener entre ' . $min . ' y ' . $max . ' caracteres.');
-        if(!preg_match('/^[A-Za-z0-9]+$/', $newPassword)) throw new Exception('La contrase&ntilde;a solo puede tener letras y n&uacute;meros.');
-        if($newPassword !== $confirmPassword) throw new Exception('Las dos contrase&ntilde;as no coinciden.');
+        if(strlen($newPassword) < $min || strlen($newPassword) > $max) throw new Exception(sprintf(lang('forgotpass_new_8', true), $min, $max));
+        if(!preg_match('/^[A-Za-z0-9]+$/', $newPassword)) throw new Exception(lang('forgotpass_new_9', true));
+        if($newPassword !== $confirmPassword) throw new Exception(lang('forgotpass_new_10', true));
 
         # recien ahora se consume el codigo: es de un solo uso
         if(!$this->consumeAccountRecoveryCode($ui, $key)) throw new Exception(lang('error_31',true));

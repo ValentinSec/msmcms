@@ -59,7 +59,7 @@ try {
                             echo '<label for="msmPassConfirm" class="col-sm-4 control-label">Repetir contrase&ntilde;a</label>';
                             echo '<div class="col-sm-8">';
                                 echo '<input type="password" class="form-control" id="msmPassConfirm" name="msmPass_confirm" minlength="' . $fpMin . '" maxlength="' . $fpMax . '" autocomplete="new-password" required>';
-                                echo '<small style="display:block; margin-top:6px; opacity:0.7;">Entre ' . $fpMin . ' y ' . $fpMax . ' caracteres. Solo letras y n&uacute;meros.</small>';
+                                echo '<small style="display:block; margin-top:6px; opacity:0.7;">' . sprintf(lang('forgotpass_new_3', true), $fpMin, $fpMax) . '</small>';
                             echo '</div>';
                         echo '</div>';
 
