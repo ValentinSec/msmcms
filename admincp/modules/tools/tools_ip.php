@@ -109,7 +109,7 @@ echo '<div class="container-fluid">';
                                     $ipAddr = !empty($row['IP']) ? $row['IP'] : 'Sin registro';
 
                                     echo '<tr>';
-                                        echo '<td><a href="index.php?module=tools_account&id=' . $row['memb___id'] . '" style="color: #10b981; font-weight: 600;">' . $row['memb___id'] . '</a></td>';
+                                        echo '<td><a href="index.php?module=tools_account&id=' . rawurlencode(trim($row['memb___id'])) . '" style="color: #10b981; font-weight: 600;">' . htmlspecialchars(trim($row['memb___id']), ENT_QUOTES, 'UTF-8') . '</a></td>';
                                         echo '<td>' . $status . '</td>';
                                         echo '<td>' . $ipAddr . '</td>';
                                         echo '<td>' . $lastConn . '</td>';

@@ -412,7 +412,6 @@ $searchKeywords = array(
     'tools_character'     => 'personaje pj editar',
     'tools_coins'         => 'coins monedas creditos cargar',
     'tools_ip'            => 'ip direccion buscar',
-    'tools_itemdb'        => 'items objetos',
     'tools_cronjob'       => 'cron tareas programadas',
     'tools_countdown'     => 'cuenta regresiva apertura contador',
 );

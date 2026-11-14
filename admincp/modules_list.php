@@ -44,7 +44,6 @@ $admincpSidebar = array(
 		"tools_character" => "Editar Personaje",
 		"tools_coins" => "Cargar Coins",
 		"tools_ip" => "Buscar IP",
-		"tools_itemdb" => "Item DB",
 		"tools_cronjob" => "Cron Job",
 		"tools_countdown" => "Cuenta regresiva",
 	), "fa-wrench"),
