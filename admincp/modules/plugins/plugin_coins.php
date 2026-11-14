@@ -191,7 +191,7 @@ for($i=1; $i<=3; $i++) {
 
 // --- RENDERIZADO HTML (PHP PURO) ---
 
-echo '<div class="row">';
+echo '<div class="row pc-wrap">';
     
     // COLUMNA IZQUIERDA (CONFIGURACIÓN)
     echo '<div class="col-md-4">';
@@ -577,41 +577,75 @@ document.addEventListener("DOMContentLoaded", function(){
 
 // --- CSS ---
 echo '<style>
-    .nav-tabs-custom { background: #1c1f26; border-radius: 8px 8px 0 0; border: none; margin-bottom: 0; display: flex; gap: 5px; padding: 10px 10px 0 10px; }
-    .nav-tabs-custom .nav-link { background: #2d323e; color: #8a8d93; border: none; border-radius: 6px 6px 0 0; padding: 10px 20px; font-weight: 600; text-transform: uppercase; font-size: 11px; transition: 0.3s; }
-    .nav-tabs-custom .nav-link.active { background: #f39c12; color: #15171c; }
-    .tab-content-custom { background: #1c1f26; border: 1px solid #2d323e; border-top: none; border-radius: 0 0 8px 8px; padding: 25px; }
-    .currency-badge { background: rgba(243, 156, 18, 0.1); color: #f39c12; padding: 5px 12px; border-radius: 4px; font-size: 12px; font-weight: bold; margin-bottom: 20px; display: inline-block; border: 1px solid rgba(243, 156, 18, 0.2); }
-    .table-dark-custom { width: 100%; border-collapse: separate; border-spacing: 0 8px; }
-    .table-dark-custom th { color: #8a8d93; font-size: 11px; text-transform: uppercase; padding: 10px; border-bottom: 2px solid #2d323e; }
-    .table-dark-custom td { background: #242830; padding: 15px; color: #fff; font-weight: 500; }
-    .table-dark-custom td:first-child { border-radius: 6px 0 0 6px; }
-    .table-dark-custom td:last-child { border-radius: 0 6px 6px 0; }
-    .btn-action { padding: 5px 10px; border-radius: 4px; border: none; font-size: 12px; cursor: pointer; transition: 0.2s; }
-    .btn-delete { background: #e74c3c; color: #fff; }
-    .btn-nav { background: #34495e; color: #fff; margin-left: 2px; }
-    .btn-action:hover { opacity: 0.8; transform: translateY(-1px); }
-    
-    .custom-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 9999; justify-content: center; align-items: center; backdrop-filter: blur(5px); }
-    .modal-content { background: #1c1f26; padding: 30px; border-radius: 12px; border: 1px solid #2d323e; width: 90%; max-width: 500px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); position: relative; }
-    .currency-option:hover { border-color: #f39c12 !important; background: #373d4a !important; }
-    .image-selector-container { display: flex; flex-wrap: wrap; gap: 5px; background: #1c1f26; padding: 10px; border-radius: 4px; border: 1px solid #2d323e; }
-    .pack-img-option { width: 50px; height: 50px; border: 2px solid transparent; border-radius: 4px; cursor: pointer; margin: 2px; }
-    .pack-img-option.selected { border-color: #f39c12; background: rgba(243, 156, 18, 0.1); }
+    /* --- Columna de configuracion --- */
+    .pc-wrap .settings-section hr { border-color: var(--ad-line, #1f2733) !important; margin: 24px 0 !important; }
+    #page-wrapper .pc-wrap .settings-section .btn-save-green { float: none !important; width: 100%; }
+    .pc-wrap > [class*="col-"] { margin-bottom: 20px; }
 
-    .alert-success-custom { background: #1b1b28; border-left: 4px solid #00d084; color: #fff; padding: 15px; margin-bottom: 20px; border-radius: 4px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
+    /* --- Pestanas de metodos: pasan a dos renglones si no entran --- */
+    #page-wrapper .pc-wrap .nav-tabs-custom { display: flex; flex-wrap: wrap; gap: 0 4px; margin: 0; padding: 4px 12px 0; background: var(--ad-surface, #0f1115); border: 1px solid var(--ad-line, #1f2733); border-radius: 10px 10px 0 0; }
+    #page-wrapper .pc-wrap .nav-tabs-custom::before,
+    #page-wrapper .pc-wrap .nav-tabs-custom::after { display: none; }
+    #page-wrapper .pc-wrap .nav-tabs-custom > li { float: none; margin: 0 0 -1px; }
+    #page-wrapper .pc-wrap .nav-tabs-custom > li > a { margin: 0; padding: 12px 12px; border: 0 !important; border-bottom: 2px solid transparent !important; border-radius: 0; background: transparent !important; color: var(--ad-muted, #8b95a7); font-size: 12px; font-weight: 700; letter-spacing: .3px; white-space: nowrap; outline: none; box-shadow: none; }
+    #page-wrapper .pc-wrap .nav-tabs-custom > li > a:hover { color: #fff; }
+    #page-wrapper .pc-wrap .nav-tabs-custom > li.active > a,
+    #page-wrapper .pc-wrap .nav-tabs-custom > li.active > a:hover,
+    #page-wrapper .pc-wrap .nav-tabs-custom > li.active > a:focus { color: #fff !important; border-bottom-color: var(--ad-accent, #10b981) !important; background: transparent !important; }
 
-    .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); z-index: 9999; justify-content: center; align-items: center; backdrop-filter: blur(2px); }
-    .modal-box { background: #1b1b28; border: 1px solid #2b2b40; border-radius: 8px; width: 400px; max-width: 90%; box-shadow: 0 10px 30px rgba(0,0,0,0.5); animation: fadeInModal 0.2s ease-out; overflow: hidden; }
-    .modal-header { padding: 15px 20px; border-bottom: 1px solid #2b2b40; font-weight: bold; color: #fff; font-size: 16px; display: flex; align-items: center; gap: 10px; }
-    .modal-header i { color: #f59e0b; }
-    .modal-body { padding: 20px; color: #a1a5b7; text-align: center; }
-    .modal-subtext { display: block; font-size: 12px; color: #565674; margin-top: 5px; }
-    .modal-footer { padding: 15px 20px; background: #151521; display: flex; justify-content: flex-end; gap: 10px; border-top: 1px solid #2b2b40; }
-    .btn-modal-cancel { background: transparent; border: 1px solid #323248; color: #a1a5b7; padding: 8px 16px; border-radius: 4px; cursor: pointer; transition: all 0.2s; font-size: 13px; }
-    .btn-modal-cancel:hover { background: #323248; color: #fff; }
-    .btn-modal-confirm { background: #f1416c; border: none; color: #fff; padding: 8px 16px; border-radius: 4px; text-decoration: none; font-size: 13px; font-weight: 500; transition: background 0.2s; }
-    .btn-modal-confirm:hover { background: #d9214e; color: #fff; }
+    /* --- Contenido: un solo recuadro junto con las pestanas --- */
+    #page-wrapper .pc-wrap .tab-content-custom { background: var(--ad-surface, #0f1115); border: 1px solid var(--ad-line, #1f2733); border-top: 0; border-radius: 0 0 10px 10px; padding: 20px; }
+    .pc-wrap .tab-pane > div:first-child { flex-wrap: wrap; gap: 10px; margin-bottom: 12px !important; }
+    .pc-wrap .currency-badge { margin: 0; padding: 6px 12px; border-radius: 999px; background: rgba(245, 158, 11, 0.1); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.3); font-size: 11px; font-weight: 700; }
+    #page-wrapper .pc-wrap .tab-pane .btn-success { display: inline-flex; align-items: center; height: 34px; padding: 0 14px; font-size: 12px; font-weight: 700; border-radius: 8px; }
+
+    /* --- Lista de packs: filas separadas por una linea, sin recuadros internos --- */
+    .pc-wrap .table-dark-custom { width: 100%; border-collapse: collapse; border-spacing: 0; }
+    .pc-wrap .table-dark-custom thead tr { border-bottom: 1px solid var(--ad-line-strong, #2a3545) !important; }
+    .pc-wrap .table-dark-custom th { color: var(--ad-muted, #8b95a7); font-size: 11px; text-transform: uppercase; padding: 10px 8px; border-bottom: 0; }
+    .pc-wrap .table-dark-custom tbody tr { background: transparent !important; border-bottom: 1px solid var(--ad-line, #1f2733) !important; }
+    .pc-wrap .table-dark-custom tbody tr:last-child { border-bottom: 0 !important; }
+    .pc-wrap .table-dark-custom td { background: transparent !important; padding: 12px 8px !important; border-radius: 0 !important; color: var(--ad-text, #e5e7eb); vertical-align: middle; }
+    .pc-wrap .table-dark-custom td:nth-child(2) { color: #f59e0b !important; white-space: nowrap; }
+    .pc-wrap .table-dark-custom td:last-child { white-space: nowrap; }
+
+    /* --- Botones de cada pack --- */
+    .pc-wrap .btn-action { display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; padding: 0; margin-left: 4px; border-radius: 8px; font-size: 12px; text-decoration: none; cursor: pointer; transition: 0.2s; }
+    .pc-wrap .btn-nav { background: transparent; border: 1px solid var(--ad-line-strong, #2a3545); color: var(--ad-text, #e5e7eb); }
+    .pc-wrap .btn-nav:hover { border-color: var(--ad-info, #3b82f6); color: #fff; }
+    .pc-wrap .btn-delete { background: var(--ad-danger, #ef4444); border: 1px solid var(--ad-danger, #ef4444); color: #fff; }
+    .pc-wrap .btn-delete:hover { filter: brightness(1.1); color: #fff; }
+
+    /* --- Ventana "Agregar pack" --- */
+    .custom-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; padding: 16px; background: rgba(0,0,0,0.7); z-index: 9999; justify-content: center; align-items: center; }
+    #modal-add-pack .modal-content { background: #0f1115; padding: 26px; border-radius: 10px; border: 1px solid #2a3545; width: 100%; max-width: 500px; box-shadow: 0 20px 60px rgba(0,0,0,0.6); position: relative; }
+    #modal-add-pack h4 { color: #fff !important; font-size: 16px; font-weight: 700; }
+    #modal-add-pack label { color: #8b95a7; font-size: 12px; font-weight: 600; }
+    #modal-add-pack .currency-option { background: #0b0d12 !important; border: 1px solid #2a3545 !important; }
+    #modal-add-pack .currency-option:hover { border-color: #10b981 !important; background: rgba(16, 185, 129, 0.08) !important; }
+    #modal-add-pack .currency-option i { color: #10b981 !important; }
+    #modal-add-pack .fa-coins:before { content: "\f0d6"; }
+    #modal-add-pack .fa-circle-notch:before { content: "\f1ce"; }
+    #modal-add-pack .fa-circle-notch { color: #10b981 !important; }
+    #modal-add-pack .image-selector-container { display: flex; flex-wrap: wrap; gap: 5px; background: #0b0d12; padding: 10px; border-radius: 8px; border: 1px solid #2a3545; }
+    #modal-add-pack .pack-img-option { width: 50px; height: 50px; border: 2px solid transparent; border-radius: 6px; cursor: pointer; margin: 2px; }
+    #modal-add-pack .pack-img-option.selected { border-color: #10b981; background: rgba(16, 185, 129, 0.1); }
+    #modal-add-pack .btn-cancel { background: transparent !important; border: 1px solid #2a3545 !important; color: #e5e7eb !important; height: 38px; padding: 0 16px !important; border-radius: 8px !important; cursor: pointer; }
+    #modal-add-pack .btn-save { background: #10b981 !important; height: 38px; padding: 0 18px !important; border-radius: 8px !important; cursor: pointer; }
+    #modal-add-pack .btn-save:hover { background: #0ea371 !important; }
+
+    /* --- Ventana de borrado --- */
+    .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); z-index: 9999; justify-content: center; align-items: center; }
+    #customDeleteModal .modal-box { background: #0f1115; border: 1px solid #2a3545; border-radius: 10px; width: 400px; max-width: 90%; box-shadow: 0 20px 60px rgba(0,0,0,0.6); animation: fadeInModal 0.2s ease-out; overflow: hidden; }
+    #customDeleteModal .modal-header { padding: 15px 20px; border-bottom: 1px solid #1f2733; font-weight: bold; color: #fff; font-size: 16px; display: flex; align-items: center; gap: 10px; }
+    #customDeleteModal .modal-header i { color: #ef4444; }
+    #customDeleteModal .modal-body { padding: 20px; color: #8b95a7; text-align: center; }
+    #customDeleteModal .modal-subtext { display: block; font-size: 12px; color: #5b6677; margin-top: 5px; }
+    #customDeleteModal .modal-footer { padding: 15px 20px; background: transparent; display: flex; justify-content: flex-end; gap: 10px; border-top: 1px solid #1f2733; }
+    .btn-modal-cancel { background: transparent; border: 1px solid #2a3545; color: #e5e7eb; height: 38px; padding: 0 16px; border-radius: 8px; cursor: pointer; font-size: 13px; }
+    .btn-modal-cancel:hover { border-color: #8b95a7; }
+    .btn-modal-confirm { display: inline-flex; align-items: center; background: #ef4444; border: none; color: #fff; height: 38px; padding: 0 16px; border-radius: 8px; text-decoration: none; font-size: 13px; font-weight: 600; }
+    .btn-modal-confirm:hover { background: #dc2626; color: #fff; text-decoration: none; }
     @keyframes fadeInModal { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
 </style>';
 ?>

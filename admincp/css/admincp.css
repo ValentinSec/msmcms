@@ -1,8 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&display=swap');
 
+/* ====================================================================
+   BASE
+   ==================================================================== */
 body {
     font-family: 'Public Sans', sans-serif;
-    background-color: #0f1115;
+    background-color: #0f1115 !important;
     color: #94a3b8;
 }
 
@@ -11,10 +14,9 @@ body {
     overflow-x: hidden;
 }
 
-/* =========================================
-   --- SIDEBAR & NAVIGATION ---
-   ========================================= */
-
+/* ====================================================================
+   MENU LATERAL
+   ==================================================================== */
 .navbar-default.sidebar {
     background-color: #0f1115 !important;
     width: 260px;
@@ -27,62 +29,24 @@ body {
     transition: all 0.3s ease;
 }
 
-/* =========================================
-   CORRECCIÓN SIDEBAR COLAPSADO
-   ========================================= */
-
-/* 1. Achicar el Sidebar cuando el Wrapper tiene la clase 'toggled' */
-#wrapper.toggled .navbar-default.sidebar {
-    width: 80px;
-}
-
-/* 2. Achicar el Logo */
-#wrapper.toggled .sidebar-logo-area img {
-    max-width: 40px;
-}
-
-/* 3. Ocultar Textos, Flechas y Footer */
+/* Menu achicado (escritorio) */
+#wrapper.toggled .navbar-default.sidebar { width: 80px; }
+#wrapper.toggled .sidebar-logo-area img { max-width: 40px; }
 #wrapper.toggled .nav-link-text,
-#wrapper.toggled .arrow,
-#wrapper.toggled .upgrade-card,
-#wrapper.toggled .sidebar-footer {
-    display: none !important;
-}
-
-/* 4. Centrar los íconos */
-#wrapper.toggled #side-menu > li > a {
-    justify-content: center;
-    padding: 15px;
-}
-
-#wrapper.toggled #side-menu > li > a i {
-    margin-right: 0;
-    font-size: 20px;
-}
-
-/* 5. Ajustar el Header Superior */
-#wrapper.toggled .top-header {
-    left: 80px; /* Se mueve a la izquierda */
-}
-
-/* 6. Ajustar el Contenido Principal (Page Wrapper) */
-#wrapper.toggled #page-wrapper {
-    margin-left: 80px; /* Se mueve a la izquierda */
-}
-
-/* 7. Ocultar submenús abiertos para que no floten */
+#wrapper.toggled .arrow { display: none !important; }
+#wrapper.toggled #side-menu > li > a { justify-content: center; padding: 15px; }
+#wrapper.toggled #side-menu > li > a i { margin-right: 0; font-size: 20px; }
+#wrapper.toggled .top-header { left: 80px; }
+#wrapper.toggled #page-wrapper { margin-left: 80px; }
 #wrapper.toggled .nav-second-level,
-#wrapper.toggled .nav-third-level {
-    display: none !important;
-}
+#wrapper.toggled .nav-third-level { display: none !important; }
 
-/* Sidebar Logo Area */
+/* Logo */
 .sidebar-logo-area {
     padding: 30px 20px;
     text-align: center;
     background: transparent;
 }
-
 .sidebar-logo-area img {
     max-width: 160px;
     height: auto;
@@ -91,24 +55,21 @@ body {
     transition: max-width 0.3s;
 }
 
-/* Sidebar Menu Container */
+/* Lista */
 .sidebar-menu-container {
     flex-grow: 1;
     overflow-y: auto;
     padding: 0 15px;
 }
-
 #side-menu {
     border: none;
     padding: 0;
     margin: 0;
 }
-
 #side-menu > li {
     border: none;
     margin-bottom: 5px;
 }
-
 #side-menu > li > a {
     color: #94a3b8;
     font-size: 14px;
@@ -122,7 +83,6 @@ body {
     white-space: nowrap;
     overflow: hidden;
 }
-
 #side-menu > li > a i {
     margin-right: 12px;
     font-size: 16px;
@@ -131,13 +91,11 @@ body {
     color: #64748b;
     transition: margin 0.3s;
 }
-
 #side-menu > li > a:hover,
 #side-menu > li.active > a {
     background-color: rgba(255, 255, 255, 0.05);
     color: #f8fafc;
 }
-
 #side-menu > li > a:hover i,
 #side-menu > li.active > a i {
     color: #38bdf8;
@@ -145,23 +103,32 @@ body {
 
 /* Submenu */
 .nav-second-level {
-    background: transparent;
+    background-color: transparent !important;
     border: none;
-    padding-left: 35px;
+    padding-left: 0 !important;
 }
-
 .nav-second-level li a {
-    color: #64748b;
+    background-color: transparent !important;
+    background: none !important;
+    color: #94a3b8 !important;
+    border: none !important;
     font-size: 13px;
     padding: 8px 0;
+    padding-left: 20px !important;
+    text-align: left !important;
     text-decoration: none;
-    display: block;
-    transition: color 0.2s;
+    display: block !important;
+    width: 100% !important;
+    transition: all 0.2s ease;
 }
-
-.nav-second-level li a:hover {
-    color: #fff;
-    background: transparent;
+.nav-second-level li a:hover,
+.nav-second-level li a:focus,
+.nav-second-level li.active > a {
+    background-color: rgba(255, 255, 255, 0.05) !important;
+    color: #ffffff !important;
+    text-decoration: none !important;
+    text-align: left !important;
+    padding-left: 20px !important;
 }
 
 .arrow {
@@ -169,72 +136,11 @@ body {
     font-size: 10px;
 }
 
-/* Sidebar Footer (Upgrade Card) */
-.sidebar-footer {
-    padding: 20px;
-}
-
-.upgrade-card {
-    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-    border: 1px solid #334155;
-    border-radius: 12px;
-    padding: 20px;
-    text-align: center;
-    position: relative;
-    overflow: hidden;
-}
-
-.upgrade-card h4 {
-    color: #fff;
-    font-size: 14px;
-    font-weight: 600;
-    margin: 10px 0 5px;
-}
-
-.upgrade-card p {
-    color: #94a3b8;
-    font-size: 12px;
-    line-height: 1.4;
-    margin-bottom: 15px;
-}
-
-.upgrade-btn {
-    display: inline-block;
-    background-color: #22c55e;
-    color: #fff;
-    font-size: 12px;
-    font-weight: 500;
-    padding: 8px 16px;
-    border-radius: 6px;
-    text-decoration: none;
-    transition: background 0.2s;
-}
-
-.upgrade-btn:hover {
-    background-color: #16a34a;
-    color: #fff;
-    text-decoration: none;
-}
-
-.upgrade-icon {
-    width: 32px;
-    height: 32px;
-    background: rgba(34, 197, 94, 0.1);
-    color: #22c55e;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto;
-    font-size: 14px;
-}
-
-/* =========================================
-   TOP HEADER
-   ========================================= */
-
+/* ====================================================================
+   BARRA SUPERIOR
+   ==================================================================== */
 .top-header {
-    background-color: #0f1115;
+    background-color: #0f1115 !important;
     height: 70px;
     padding: 0 30px;
     display: flex;
@@ -248,10 +154,7 @@ body {
     transition: left 0.3s ease;
     border-bottom: 1px solid #1e293b;
 }
-
-.top-header.toggled {
-    left: 80px;
-}
+.top-header.toggled { left: 80px; }
 
 .header-left {
     display: flex;
@@ -271,7 +174,6 @@ body {
     align-items: center;
     justify-content: center;
 }
-
 .toggle-btn:hover {
     color: #fff;
     background: #334155;
@@ -283,11 +185,8 @@ body {
     gap: 15px;
 }
 
-/* Search Bar */
-.header-search {
-    position: relative;
-}
-
+/* Buscador */
+.header-search { position: relative; }
 .header-search input {
     background-color: #1e293b;
     border: 1px solid #334155;
@@ -299,12 +198,10 @@ body {
     font-size: 13px;
     transition: width 0.3s;
 }
-
 .header-search input:focus {
     border-color: #38bdf8;
     width: 300px;
 }
-
 .header-search i {
     position: absolute;
     left: 12px;
@@ -313,8 +210,21 @@ body {
     color: #64748b;
     font-size: 12px;
 }
+.search-results-overlay {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 250px;
+    background: #1e293b;
+    border: 1px solid #334155;
+    border-top: none;
+    border-radius: 0 0 8px 8px;
+    z-index: 1000;
+    display: none;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+}
 
-/* Header Buttons */
+/* Botones */
 .header-btn {
     background-color: #1e293b;
     color: #94a3b8;
@@ -327,7 +237,6 @@ body {
     text-decoration: none !important;
     transition: all 0.2s;
 }
-
 .header-btn:hover {
     background-color: #334155;
     color: #fff;
@@ -339,9 +248,9 @@ body {
     gap: 10px;
     background: transparent;
     border: none;
+    padding: 0;
     cursor: pointer;
 }
-
 .user-avatar {
     width: 40px;
     height: 40px;
@@ -353,26 +262,23 @@ body {
     justify-content: center;
     font-weight: bold;
     font-size: 16px;
+    overflow: hidden;
 }
 
-/* =========================================
-   DASHBOARD / PAGE CONTENT
-   ========================================= */
-
+/* ====================================================================
+   CONTENIDO
+   ==================================================================== */
 #page-wrapper {
     margin-left: 260px;
     padding-top: 90px;
-    background-color: #0f1115;
+    background-color: #0f1115 !important;
     min-height: 100vh;
     border: none;
+    border-left: 1px solid #1e293b;
     transition: margin-left 0.3s ease;
 }
+#page-wrapper.toggled { margin-left: 80px; }
 
-#page-wrapper.toggled {
-    margin-left: 80px;
-}
-
-/* Layout Grid System */
 @media (min-width: 992px) {
     .dashboard-row {
         display: flex;
@@ -390,24 +296,22 @@ body {
     }
 }
 
-/* --- DASHBOARD CARDS (Top Stats) --- */
+/* ====================================================================
+   DASHBOARD: tarjetas
+   ==================================================================== */
 .dashboard-card {
     border-radius: 10px;
     padding: 15px 20px !important;
     position: relative;
     overflow: hidden;
-    margin-bottom: 15px; 
+    margin-bottom: 15px;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    min-height: 85px !important; 
+    min-height: 85px !important;
     border: 1px solid rgba(255,255,255,0.05);
 }
-
-/* Eliminar margen inferior del último card en la columna izquierda para alinear */
-.dashboard-col-left .dashboard-card:last-child {
-    margin-bottom: 0 !important;
-}
+.dashboard-col-left .dashboard-card:last-child { margin-bottom: 0 !important; }
 
 .card-title-text {
     font-size: 20px !important;
@@ -417,7 +321,6 @@ body {
     z-index: 2;
     line-height: 1.2;
 }
-
 .card-subtitle-text {
     font-size: 12px !important;
     color: rgba(255,255,255,0.7);
@@ -425,7 +328,6 @@ body {
     font-weight: 500;
     z-index: 2;
 }
-
 .card-icon-bg {
     position: absolute;
     right: 15px;
@@ -442,15 +344,14 @@ body {
     background: rgba(255,255,255,0.15);
 }
 
-/* Estilos Específicos de Cards */
 .card-welcome {
     background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-    min-height: 100px !important; 
+    min-height: 100px !important;
 }
 .welcome-badge {
-    color: #4ade80; 
-    font-weight: 600; 
-    font-size: 11px; 
+    color: #4ade80;
+    font-weight: 600;
+    font-size: 11px;
     text-transform: uppercase;
     margin-bottom: 4px;
     display: block;
@@ -469,48 +370,41 @@ body {
 
 .card-blue-1 { background: linear-gradient(135deg, #1e293b 0%, #172554 100%); border-left: 3px solid #3b82f6; }
 .card-blue-1 .card-icon-bg { background-color: #3b82f6; }
-
 .card-blue-2 { background: linear-gradient(135deg, #1e293b 0%, #1e3a8a 100%); border-left: 3px solid #2563eb; }
 .card-blue-2 .card-icon-bg { background-color: #2563eb; }
-
 .card-blue-3 { background: linear-gradient(135deg, #1e293b 0%, #1e40af 100%); border-left: 3px solid #1d4ed8; }
 .card-blue-3 .card-icon-bg { background-color: #1d4ed8; }
-
 .card-blue-4 { background: linear-gradient(135deg, #1e293b 0%, #312e81 100%); border-left: 3px solid #4338ca; }
 .card-blue-4 .card-icon-bg { background-color: #4338ca; }
 
-/* --- CHART CARD --- */
+/* Grafico */
 .chart-card {
     background-color: #0f1115;
     border: 1px solid #1e293b;
     border-radius: 12px;
     padding: 20px;
-    margin-bottom: 0;
+    margin-bottom: 20px;
     flex-grow: 1;
     display: flex;
     flex-direction: column;
     height: 100%;
-    min-height: 500px !important; /* Altura calculada para alinear con la izquierda */
+    min-height: 500px !important;
 }
-
 .chart-header {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
     margin-bottom: 15px;
 }
-
 .chart-title {
     color: #fff;
     font-size: 16px;
     font-weight: 600;
 }
-
 .chart-updated {
     color: #64748b;
     font-size: 12px;
 }
-
 .chart-body {
     flex-grow: 1;
     position: relative;
@@ -518,17 +412,13 @@ body {
     min-height: 0;
 }
 
-/* =========================================
-   --- BOTTOM PANNELS ---
-   ========================================= */
-
+/* Paneles inferiores */
 .dashboard-row-bottom {
     margin-top: 20px;
     display: flex;
     flex-wrap: wrap;
     align-items: stretch;
 }
-
 .bottom-card {
     background-color: #0f1115;
     border: 1px solid #1e293b;
@@ -539,30 +429,25 @@ body {
     flex-direction: column;
     margin-bottom: 20px;
 }
-
-.bottom-card-header {
-    margin-bottom: 20px;
-}
-
+.bottom-card-header { margin-bottom: 20px; }
 .bottom-card-title {
     color: #fff;
     font-size: 16px;
     font-weight: 600;
     margin: 0;
 }
-
 .bottom-card-subtitle {
     color: #64748b;
     font-size: 12px;
     margin-top: 5px;
+    margin-bottom: 15px;
 }
 
-/* General Tables */
+/* Tablas generales */
 .table-registrations, .table-economy, .table-donators {
     width: 100%;
     margin-bottom: 0;
 }
-
 .table th {
     color: #64748b;
     font-size: 12px;
@@ -570,7 +455,6 @@ body {
     border-bottom: 1px solid #1e293b !important;
     padding: 10px !important;
 }
-
 .table td {
     color: #94a3b8;
     font-size: 13px;
@@ -578,14 +462,12 @@ body {
     padding: 12px 10px !important;
     vertical-align: middle !important;
 }
-
-/* Table Text Colors */
 .reg-user, .economy-holder, .donator-user {
     color: #fff;
     font-weight: 500;
 }
 
-/* Status Badges */
+/* Estados */
 .status-badge {
     padding: 4px 8px;
     border-radius: 4px;
@@ -597,48 +479,42 @@ body {
 .status-offline { background-color: rgba(239, 68, 68, 0.1); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.2); }
 .country-flag { width: 20px; border-radius: 2px; }
 
-/* Donations Grid (Bars) */
+/* Donaciones */
 .donations-grid {
     display: flex;
     flex-direction: column;
     gap: 15px;
 }
-
 .donation-item {
     border-radius: 8px;
     padding: 15px;
+    margin-bottom: 15px;
     border: 1px solid transparent;
     position: relative;
     overflow: hidden;
 }
-
 .donation-header {
     display: flex;
     align-items: center;
     gap: 10px;
     margin-bottom: 5px;
 }
-
 .donation-icon { font-size: 14px; }
 .donation-name { font-size: 13px; font-weight: 500; color: #fff; }
 .donation-amount { font-size: 20px; font-weight: 700; color: #fff; margin-bottom: 8px; }
 .donation-progress { height: 4px; width: 100%; background-color: rgba(0,0,0,0.3); border-radius: 2px; overflow: hidden; }
 .donation-bar { height: 100%; border-radius: 2px; }
 
-/* Donation Providers Colors */
 .dm-mp { background-color: rgba(16, 185, 129, 0.1); border-color: rgba(16, 185, 129, 0.2); }
 .dm-mp .donation-bar { background-color: #10b981; }
-
 .dm-binance { background-color: rgba(245, 158, 11, 0.1); border-color: rgba(245, 158, 11, 0.2); }
 .dm-binance .donation-bar { background-color: #f59e0b; }
-
 .dm-paypal { background-color: rgba(59, 130, 246, 0.1); border-color: rgba(59, 130, 246, 0.2); }
 .dm-paypal .donation-bar { background-color: #3b82f6; }
-
 .dm-stripe { background-color: rgba(139, 92, 246, 0.1); border-color: rgba(139, 92, 246, 0.2); }
 .dm-stripe .donation-bar { background-color: #8b5cf6; }
 
-/* Economy Panel Assets */
+/* Economia */
 .jewel-img {
     width: 24px;
     height: 24px;
@@ -647,26 +523,23 @@ body {
     vertical-align: middle;
 }
 
-/* =========================================
-   --- INFO GUILDS PANEL ---
-   ========================================= */
+/* Guilds */
 .info-header-bar {
     background-color: #10b981;
     color: #fff;
-    padding: 5px 10px;
+    padding: 5px;
     border-radius: 15px;
     font-size: 12px;
     font-weight: 600;
     text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
     text-transform: uppercase;
     letter-spacing: 0.5px;
 }
-
 .guild-stat-row {
     display: flex;
     justify-content: space-between;
-    padding: 10px 0;
+    padding: 8px 0;
     border-bottom: 1px solid rgba(255,255,255,0.05);
     font-size: 13px;
 }
@@ -675,7 +548,7 @@ body {
 .guild-stat-value { color: #fff; font-weight: 600; }
 .guild-stat-value.highlight { color: #f59e0b; }
 
-/* Top Donators Ranking Badge */
+/* Top donadores */
 .rank-badge {
     width: 24px;
     height: 24px;
@@ -688,32 +561,27 @@ body {
     font-size: 11px;
     font-weight: 700;
 }
-.rank-1 { background-color: #f59e0b; color: #000; } /* Gold */
-.rank-2 { background-color: #94a3b8; color: #000; } /* Silver */
-.rank-3 { background-color: #b45309; color: #fff; } /* Bronze */
+.rank-1 { background-color: #f59e0b; color: #000; }
+.rank-2 { background-color: #94a3b8; color: #000; }
+.rank-3 { background-color: #b45309; color: #fff; }
 
-/* =========================================
-   TEMPLATES MODULE (Compact Style)
-   ========================================= */
-
+/* ====================================================================
+   TEMPLATES
+   ==================================================================== */
 .templates-header {
     text-align: center;
-    margin-bottom: 40px;
-    margin-top: 10px;
+    margin: 20px 0 40px;
 }
-
 .templates-title {
     font-size: 22px;
     color: #fff;
     font-weight: 500;
-    margin-bottom: 8px;
+    margin-bottom: 5px;
 }
-
 .templates-subtitle {
     color: #64748b;
     font-size: 13px;
 }
-
 .template-card {
     background-color: #0f1115;
     border: 1px solid #1e293b;
@@ -728,23 +596,20 @@ body {
     position: relative;
     overflow: hidden;
 }
-
 .template-card:hover {
     transform: translateY(-3px);
     border-color: #38bdf8;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
 }
-
 .template-thumb-container {
     width: 100%;
     height: 130px;
     border-radius: 6px;
     overflow: hidden;
-    margin-bottom: 12px;
+    margin-bottom: 10px;
     background-color: #1e293b;
     position: relative;
 }
-
 .template-thumb {
     width: 100%;
     height: 100%;
@@ -752,11 +617,7 @@ body {
     display: block;
     transition: transform 0.3s;
 }
-
-.template-card:hover .template-thumb {
-    transform: scale(1.05);
-}
-
+.template-card:hover .template-thumb { transform: scale(1.05); }
 .template-name {
     color: #fff;
     font-size: 15px;
@@ -764,38 +625,35 @@ body {
     margin-bottom: 15px;
     margin-top: 5px;
 }
-
-/* Template Action Buttons */
 .btn-template-select {
     display: block;
     width: 100%;
-    padding: 8px 0;
+    padding: 8px;
     border-radius: 4px;
     font-weight: 500;
     font-size: 12px;
     border: none;
-    background-color: #10b981; /* Green */
+    background-color: #10b981;
     color: #fff;
     text-transform: uppercase;
     letter-spacing: 0.5px;
     transition: background 0.2s;
     text-decoration: none !important;
+    text-align: center;
 }
-
 .btn-template-select:hover {
     background-color: #059669;
     color: #fff;
 }
-
 .btn-template-active {
     display: block;
     width: 100%;
-    padding: 8px 0;
+    padding: 8px;
     border-radius: 4px;
     font-weight: 500;
     font-size: 12px;
     border: none;
-    background-color: #3b82f6; /* Blue */
+    background-color: #3b82f6;
     color: #fff;
     cursor: default;
     opacity: 0.8;
@@ -803,58 +661,54 @@ body {
     letter-spacing: 0.5px;
     text-decoration: none !important;
 }
-
 .btn-template-active:hover {
     background-color: #3b82f6;
     color: #fff;
 }
 
-/* --- EDIT TEMPLATES MODULE --- */
-
-/* Contenedores de Sección */
+/* ====================================================================
+   CONFIGURACION: secciones, campos y botones base
+   ==================================================================== */
 .settings-section {
     background-color: #0f1115;
     border: 1px solid #1e293b;
     border-radius: 8px;
-    padding: 25px;
-    margin-bottom: 30px;
+    padding: 20px;
+    margin-bottom: 20px;
+    height: 100%;
 }
-
 .settings-title {
     color: #fff;
-    font-size: 16px;
+    font-size: 15px;
     font-weight: 600;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
     border-bottom: 1px solid #1e293b;
     padding-bottom: 10px;
 }
-
 .settings-label {
     color: #94a3b8;
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 500;
-    margin-bottom: 8px;
+    margin-bottom: 5px;
     display: block;
 }
 
-/* Inputs Oscuros */
 .form-control-dark {
-    background-color: transparent;
+    background-color: #0f1115;
     border: 1px solid #334155;
     color: #fff;
     border-radius: 4px;
-    height: 40px;
+    height: 38px;
     padding: 6px 12px;
     width: 100%;
-    transition: border-color 0.2s;
+    display: block;
+    transition: border 0.2s;
 }
-
 .form-control-dark:focus {
-    border-color: #10b981; /* Green focus like button */
+    border-color: #10b981;
     outline: none;
     box-shadow: none;
 }
-
 .form-control-file-dark {
     background-color: #1e293b;
     border: 1px solid #334155;
@@ -865,43 +719,38 @@ body {
     font-size: 12px;
 }
 
-/* Color Picker Preview */
 .color-preview-box {
     width: 60px;
     height: 40px;
     border: 1px solid #334155;
     border-radius: 4px;
-    background-color: #000; /* Default black */
+    background-color: #000;
     cursor: pointer;
 }
 
-/* Image Previews */
 .preview-container {
-    background-color: #020617; /* Even darker for contrast */
+    background-color: #020617;
     padding: 20px;
     border-radius: 6px;
     text-align: center;
     margin-bottom: 15px;
     border: 1px dashed #334155;
 }
-
 .preview-img-logo {
     max-width: 300px;
     height: auto;
 }
-
 .preview-img-bg {
     max-width: 100%;
     height: auto;
     border-radius: 4px;
 }
 
-/* Carousel Tabs */
+/* Pestanas */
 .nav-tabs-custom {
     border-bottom: 1px solid #1e293b;
     margin-bottom: 20px;
 }
-
 .nav-tabs-custom > li > a {
     color: #64748b;
     font-weight: 600;
@@ -911,22 +760,20 @@ body {
     padding: 10px 20px;
     text-transform: uppercase;
 }
-
-.nav-tabs-custom > li.active > a, 
-.nav-tabs-custom > li.active > a:hover, 
+.nav-tabs-custom > li.active > a,
+.nav-tabs-custom > li.active > a:hover,
 .nav-tabs-custom > li.active > a:focus {
     color: #fff;
     background: transparent;
     border: none;
-    border-bottom: 2px solid #10b981; /* Green indicator */
+    border-bottom: 2px solid #10b981;
 }
-
 .nav-tabs-custom > li > a:hover {
     color: #fff;
     background: transparent;
 }
 
-/* Carousel Image Item */
+/* Carrusel */
 .carousel-item-box {
     background-color: #1e293b;
     padding: 10px;
@@ -935,7 +782,6 @@ body {
     display: inline-block;
     position: relative;
 }
-
 .carousel-thumb {
     height: 80px;
     width: auto;
@@ -943,174 +789,29 @@ body {
     display: block;
     margin-bottom: 5px;
 }
-
 .carousel-actions {
     color: #94a3b8;
     font-size: 12px;
 }
 
-/* Botón Guardar (Flotante o fijo) */
+/* Boton guardar */
 .btn-save-green {
     background-color: #10b981;
     color: #fff;
     font-weight: 600;
-    padding: 10px 25px;
+    padding: 8px 20px;
+    font-size: 13px;
     border: none;
     border-radius: 6px;
     transition: background 0.2s;
     float: right;
 }
-
 .btn-save-green:hover {
     background-color: #059669;
     color: #fff;
 }
 
-/* ==========================================================================
-   --- DASHBOARD, TEMPLATES Y CONFIGURACIÓN (DARK MODE) ---
-   ========================================================================== */
-
-body {
-    background-color: #0f1115 !important;
-    color: #94a3b8;
-    font-family: 'Public Sans', sans-serif;
-}
-
-#page-wrapper {
-    background-color: #0f1115 !important;
-    border-left: 1px solid #1e293b;
-}
-
-.navbar-default.sidebar {
-    background-color: #0f1115 !important;
-    border-right: 1px solid #1e293b;
-}
-
-.top-header {
-    background-color: #0f1115 !important;
-    border-bottom: 1px solid #1e293b;
-}
-
-/* =========================================
-   --- DASHBOARD, CARDS & STATS ---
-   ========================================= */
-.dashboard-card {
-    border-radius: 10px;
-    padding: 15px 20px;
-    margin-bottom: 15px;
-    border: 1px solid rgba(255,255,255,0.05);
-    min-height: 85px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    position: relative;
-    overflow: hidden;
-}
-
-.card-title-text { font-size: 20px; font-weight: 700; color: #fff; margin: 0; z-index: 2; }
-.card-subtitle-text { font-size: 12px; color: rgba(255,255,255,0.7); margin-top: 2px; z-index: 2; }
-.card-icon-bg {
-    position: absolute; right: 15px; top: 50%; transform: translateY(-50%);
-    width: 40px; height: 40px; border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 18px; color: #fff; background: rgba(255,255,255,0.15);
-}
-
-/* Colores Dashboard */
-.card-welcome { background: linear-gradient(135deg, #10b981 0%, #059669 100%); min-height: 100px !important; }
-.welcome-badge { color: #4ade80; font-weight: 600; font-size: 11px; text-transform: uppercase; display: block; }
-.welcome-title { font-size: 16px; color: white; font-weight: 600; margin: 0; }
-.welcome-subtitle { margin: 3px 0 0; color: rgba(255,255,255,0.8); font-size: 12px; }
-
-.card-blue-1 { background: linear-gradient(135deg, #1e293b 0%, #172554 100%); border-left: 3px solid #3b82f6; }
-.card-blue-1 .card-icon-bg { background-color: #3b82f6; }
-.card-blue-2 { background: linear-gradient(135deg, #1e293b 0%, #1e3a8a 100%); border-left: 3px solid #2563eb; }
-.card-blue-2 .card-icon-bg { background-color: #2563eb; }
-.card-blue-3 { background: linear-gradient(135deg, #1e293b 0%, #1e40af 100%); border-left: 3px solid #1d4ed8; }
-.card-blue-3 .card-icon-bg { background-color: #1d4ed8; }
-.card-blue-4 { background: linear-gradient(135deg, #1e293b 0%, #312e81 100%); border-left: 3px solid #4338ca; }
-.card-blue-4 .card-icon-bg { background-color: #4338ca; }
-
-/* Gráfico */
-.chart-card {
-    background-color: #0f1115; border: 1px solid #1e293b; border-radius: 12px;
-    padding: 20px; margin-bottom: 20px; min-height: 500px;
-}
-.chart-header { display: flex; justify-content: space-between; margin-bottom: 15px; }
-.chart-title { color: #fff; font-size: 16px; font-weight: 600; }
-.chart-updated { color: #64748b; font-size: 12px; }
-
-/* Tablas y Paneles Inferiores */
-.bottom-card {
-    background-color: #0f1115; border: 1px solid #1e293b; border-radius: 12px;
-    padding: 20px; margin-bottom: 20px; height: 100%;
-}
-.bottom-card-title { color: #fff; font-size: 16px; font-weight: 600; margin: 0; }
-.bottom-card-subtitle { color: #64748b; font-size: 12px; margin-top: 5px; margin-bottom: 15px; }
-
-.table th { border-bottom: 1px solid #1e293b !important; color: #64748b; font-size: 12px; }
-.table td { border-top: 1px solid rgba(255,255,255,0.05) !important; color: #94a3b8; font-size: 13px; vertical-align: middle; }
-
-/* Badges y Elementos */
-.status-badge { padding: 4px 8px; border-radius: 4px; font-size: 10px; font-weight: 600; text-transform: uppercase; }
-.status-online { background: rgba(34,197,94,0.1); color: #4ade80; border: 1px solid rgba(34,197,94,0.2); }
-.status-offline { background: rgba(239,68,68,0.1); color: #f87171; border: 1px solid rgba(239,68,68,0.2); }
-
-.donation-item { border-radius: 8px; padding: 15px; margin-bottom: 15px; border: 1px solid transparent; }
-.donation-amount { font-size: 20px; font-weight: 700; color: #fff; }
-.dm-mp { background: rgba(16,185,129,0.1); border-color: rgba(16,185,129,0.2); }
-.dm-mp .donation-bar { background: #10b981; }
-.dm-binance { background: rgba(245,158,11,0.1); border-color: rgba(245,158,11,0.2); }
-.dm-binance .donation-bar { background: #f59e0b; }
-.dm-paypal { background: rgba(59,130,246,0.1); border-color: rgba(59,130,246,0.2); }
-.dm-paypal .donation-bar { background: #3b82f6; }
-.donation-progress { height: 4px; background: rgba(0,0,0,0.3); border-radius: 2px; }
-.donation-bar { height: 100%; border-radius: 2px; }
-
-/* Info Guilds */
-.info-header-bar { background: #10b981; color: #fff; padding: 5px; border-radius: 15px; text-align: center; font-size: 12px; text-transform: uppercase; margin-bottom: 15px; }
-.guild-stat-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 13px; }
-.rank-badge { width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: bold; }
-.rank-1 { background: #f59e0b; color: #000; }
-.rank-2 { background: #94a3b8; color: #000; }
-.rank-3 { background: #b45309; color: #fff; }
-
-/* =========================================
-   --- TEMPLATES MODULE ---
-   ========================================= */
-.templates-header { text-align: center; margin: 20px 0 40px; }
-.templates-title { font-size: 22px; color: #fff; margin-bottom: 5px; }
-.template-card {
-    background-color: #0f1115; border: 1px solid #1e293b; border-radius: 8px;
-    padding: 12px; margin-bottom: 25px; transition: all 0.2s;
-}
-.template-card:hover { transform: translateY(-3px); border-color: #38bdf8; }
-.template-thumb-container { height: 130px; border-radius: 6px; overflow: hidden; margin-bottom: 10px; }
-.template-thumb { width: 100%; height: 100%; object-fit: cover; }
-.btn-template-select { display: block; width: 100%; padding: 8px; border-radius: 4px; background: #10b981; color: #fff; border: none; font-size: 12px; text-transform: uppercase; text-decoration: none !important; text-align: center; }
-.btn-template-active { display: block; width: 100%; padding: 8px; border-radius: 4px; background: #3b82f6; color: #fff; border: none; font-size: 12px; text-transform: uppercase; opacity: 0.8; cursor: default; }
-
-/* --- SETTINGS & CONFIG MODULES (Inputs Dark) --- */
-.settings-section {
-    background-color: #0f1115; border: 1px solid #1e293b; border-radius: 8px;
-    padding: 20px; margin-bottom: 20px; height: 100%;
-}
-.settings-title { color: #fff; font-size: 15px; font-weight: 600; margin-bottom: 15px; border-bottom: 1px solid #1e293b; padding-bottom: 10px; }
-.settings-label { color: #94a3b8; font-size: 12px; font-weight: 500; margin-bottom: 5px; display: block; }
-
-.form-control-dark {
-    background-color: #0f1115; border: 1px solid #334155; color: #fff;
-    border-radius: 4px; height: 38px; padding: 6px 12px; width: 100%; display: block; transition: border 0.2s;
-}
-.form-control-dark:focus { border-color: #10b981; outline: none; }
-
-.btn-save-green {
-    background-color: #10b981; color: #fff; font-weight: 600; padding: 8px 20px;
-    border: none; border-radius: 6px; font-size: 13px; transition: background 0.2s;
-}
-.btn-save-green:hover { background-color: #059669; }
-
-/* --- SWITCHES (iOS Style) --- */
+/* Interruptores */
 .switch-container { display: flex; align-items: center; margin-bottom: 10px; }
 .switch { position: relative; display: inline-block; width: 40px; height: 22px; margin-bottom: 0; vertical-align: middle; }
 .switch input { opacity: 0; width: 0; height: 0; }
@@ -1120,15 +821,13 @@ input:checked + .slider { background-color: #10b981; }
 input:checked + .slider:before { transform: translateX(18px); }
 .switch-label { color: #94a3b8; font-size: 12px; margin-left: 10px; }
 
-/* =========================================
-   --- DOWNLOADS MODULE CSS ---
-   ========================================= */
-
+/* ====================================================================
+   DESCARGAS
+   ==================================================================== */
 .downloads-table {
     width: 100%;
     border-collapse: collapse;
 }
-
 .downloads-table th {
     text-align: left;
     color: #64748b;
@@ -1138,7 +837,6 @@ input:checked + .slider:before { transform: translateX(18px); }
     padding: 15px;
     border-bottom: 1px solid #1e293b;
 }
-
 .downloads-table td {
     padding: 15px;
     color: #fff;
@@ -1146,12 +844,8 @@ input:checked + .slider:before { transform: translateX(18px); }
     border-bottom: 1px solid rgba(255,255,255,0.05);
     vertical-align: middle;
 }
+.downloads-table tr:last-child td { border-bottom: none; }
 
-.downloads-table tr:last-child td {
-    border-bottom: none;
-}
-
-/* Botones de acción (Editar/Borrar) */
 .action-btn {
     display: inline-flex;
     align-items: center;
@@ -1166,14 +860,12 @@ input:checked + .slider:before { transform: translateX(18px); }
     margin-right: 5px;
     text-decoration: none !important;
 }
-
 .action-btn:hover {
     color: #fff;
     border-color: #fff;
 }
-
 .action-btn.delete:hover {
-    color: #ef4444; /* Rojo */
+    color: #ef4444;
     border-color: #ef4444;
     background-color: rgba(239,68,68,0.1);
 }
@@ -1183,26 +875,23 @@ input:checked + .slider:before { transform: translateX(18px); }
     color: #fff;
     border: none;
     border-radius: 6px;
-    padding: 9px 20px; /* Ajuste vertical para alinear con inputs */
+    padding: 9px 20px;
     font-weight: 600;
     font-size: 13px;
-    height: 38px; /* Misma altura que form-control-dark */
+    height: 38px;
     display: inline-flex;
     align-items: center;
     gap: 5px;
     transition: background 0.2s;
 }
-
 .btn-add-download:hover {
     background-color: #059669;
     color: #fff;
 }
 
-/* =========================================
-   --- REGISTER SETTINGS CSS ---
-   ========================================= */
-
-/* Utilidad para igualar alturas de las tarjetas */
+/* ====================================================================
+   FILAS DE ALTURA IGUAL (registro, tablas)
+   ==================================================================== */
 .row-flex {
     display: -webkit-box;
     display: -webkit-flex;
@@ -1210,20 +899,14 @@ input:checked + .slider:before { transform: translateX(18px); }
     display: flex;
     flex-wrap: wrap;
 }
-
 .row-flex > [class*='col-'] {
     display: flex;
     flex-direction: column;
 }
-
 .row-flex .settings-section {
-    flex: 1; /* Esto hace que el contenedor ocupe todo el alto disponible */
-    height: auto; /* Reseteamos altura fija si existiera */
+    flex: 1;
+    height: auto;
 }
-
-/* =========================================
-   --- TABLES SETTINGS CSS (GRID FIX) ---
-   ========================================= */
 
 .row-tables-flex {
     display: -webkit-box;
@@ -1232,25 +915,21 @@ input:checked + .slider:before { transform: translateX(18px); }
     display: flex;
     flex-wrap: wrap;
 }
-
 .row-tables-flex > [class*='col-'] {
     display: flex;
     flex-direction: column;
-    margin-bottom: 20px; /* Espacio vertical entre filas */
+    margin-bottom: 20px;
 }
-
 .row-tables-flex .settings-section {
-    flex: 1; /* Esto estira la tarjeta para ocupar todo el alto disponible */
+    flex: 1;
     height: 100%;
     width: 100%;
-    margin-bottom: 0; /* Quitamos margen interno porque lo maneja la columna */
+    margin-bottom: 0;
 }
 
-/* =========================================
-   --- NEWS MODULE CSS ---
-   ========================================= */
-
-/* Tabla de Noticias */
+/* ====================================================================
+   NOTICIAS
+   ==================================================================== */
 .news-thumb {
     width: 40px;
     height: 40px;
@@ -1258,24 +937,21 @@ input:checked + .slider:before { transform: translateX(18px); }
     object-fit: cover;
     background-color: #1e293b;
 }
-
 .news-title {
     color: #fff;
     font-weight: 500;
     font-size: 13px;
 }
-
 .badge-announce {
     background-color: rgba(239, 68, 68, 0.2);
     color: #ef4444;
     border: 1px solid rgba(239, 68, 68, 0.3);
     padding: 3px 10px;
-    border-radius: 15px; /* Redondeado tipo píldora */
+    border-radius: 15px;
     font-size: 10px;
     text-transform: uppercase;
     font-weight: 700;
 }
-
 .btn-edit-news {
     width: 32px;
     height: 32px;
@@ -1289,13 +965,12 @@ input:checked + .slider:before { transform: translateX(18px); }
     transition: all 0.2s;
     text-decoration: none !important;
 }
-
 .btn-edit-news:hover {
     background-color: #10b981;
     color: #fff;
 }
 
-/* Selector de Diseño (Derecha) */
+/* Selector de diseno */
 .layout-options-container {
     display: flex;
     justify-content: space-between;
@@ -1303,32 +978,24 @@ input:checked + .slider:before { transform: translateX(18px); }
     border-bottom: 1px solid #1e293b;
     margin-bottom: 20px;
 }
-
 .layout-option {
     text-align: center;
     cursor: pointer;
     position: relative;
     width: 30%;
 }
-
 .layout-icon-box {
     font-size: 32px;
     margin-bottom: 10px;
     transition: transform 0.2s;
 }
-
-.layout-option:hover .layout-icon-box {
-    transform: translateY(-3px);
-}
-
+.layout-option:hover .layout-icon-box { transform: translateY(-3px); }
 .layout-name {
     color: #94a3b8;
     font-size: 12px;
     margin-bottom: 10px;
     display: block;
 }
-
-/* Radio Button Customizado (Punto Verde) */
 .custom-radio {
     width: 16px;
     height: 16px;
@@ -1337,12 +1004,10 @@ input:checked + .slider:before { transform: translateX(18px); }
     display: inline-block;
     position: relative;
 }
-
 .layout-option.active .custom-radio {
     border-color: #10b981;
     background-color: transparent;
 }
-
 .layout-option.active .custom-radio::after {
     content: '';
     width: 8px;
@@ -1355,28 +1020,24 @@ input:checked + .slider:before { transform: translateX(18px); }
     transform: translate(-50%, -50%);
 }
 
-/* Botón Crear Noticia (Header) */
 .btn-create-news {
     background-color: rgba(16, 185, 129, 0.1);
     border: 1px solid #10b981;
-    color: #10b981; /* Texto verde para coincidir con la imagen */
+    color: #10b981;
     padding: 6px 15px;
     border-radius: 6px;
     font-size: 12px;
     font-weight: 600;
     transition: all 0.2s;
 }
-
 .btn-create-news:hover {
     background-color: #10b981;
     color: #fff;
 }
 
-/* =========================================
-   --- MODULE INFO (REPLICATED DESIGN) ---
-   ========================================= */
-
-/* Sección de Formularios Superiores */
+/* ====================================================================
+   INFORMACION DEL SERVIDOR
+   ==================================================================== */
 .add-info-container {
     background-color: #0f1115;
     border: 1px solid #1e293b;
@@ -1384,8 +1045,6 @@ input:checked + .slider:before { transform: translateX(18px); }
     padding: 25px;
     margin-bottom: 30px;
 }
-
-/* Tarjetas de Categoría (Abajo) */
 .info-category-card {
     background-color: #1a1d21;
     border: 1px solid #2d3135;
@@ -1394,9 +1053,8 @@ input:checked + .slider:before { transform: translateX(18px); }
     margin-bottom: 25px;
     height: 100%;
 }
-
 .info-category-header {
-    background-color: #10b981; /* Verde intenso como en la imagen */
+    background-color: #10b981;
     color: #fff;
     padding: 10px;
     text-align: center;
@@ -1406,20 +1064,13 @@ input:checked + .slider:before { transform: translateX(18px); }
     letter-spacing: 0.5px;
     border-bottom: 3px solid #059669;
 }
-
-.info-category-body {
-    padding: 20px;
-}
-
-/* Cabeceras de columnas dentro de la tarjeta */
+.info-category-body { padding: 20px; }
 .info-col-header {
     font-size: 12px;
     color: #94a3b8;
     margin-bottom: 10px;
     font-weight: 500;
 }
-
-/* Fila de datos */
 .info-data-row {
     display: flex;
     align-items: center;
@@ -1428,14 +1079,11 @@ input:checked + .slider:before { transform: translateX(18px); }
     padding-bottom: 15px;
     border-bottom: 1px solid rgba(255,255,255,0.05);
 }
-
 .info-data-row:last-child {
     border-bottom: none;
     margin-bottom: 0;
     padding-bottom: 0;
 }
-
-/* Inputs de solo lectura estilizados */
 .info-read-input {
     background-color: #0f1115;
     border: 1px solid #334155;
@@ -1445,22 +1093,19 @@ input:checked + .slider:before { transform: translateX(18px); }
     font-size: 13px;
     width: 100%;
 }
-
-/* Botones de Acción Mejorados (Clean) */
 .info-actions-group {
     display: flex;
     gap: 5px;
-    min-width: 100px; /* Para asegurar espacio */
+    min-width: 100px;
     justify-content: flex-end;
 }
-
 .btn-info-action {
     width: 32px;
     height: 32px;
     border-radius: 6px;
     border: 1px solid #334155;
     background-color: #1e293b;
-    color: #38bdf8; /* Azulito para flechas */
+    color: #38bdf8;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1468,18 +1113,15 @@ input:checked + .slider:before { transform: translateX(18px); }
     cursor: pointer;
     font-size: 12px;
 }
-
 .btn-info-action:hover {
     background-color: #38bdf8;
     color: #fff;
     border-color: #38bdf8;
 }
-
 .btn-info-action.delete {
-    color: #ef4444; /* Rojo para borrar */
+    color: #ef4444;
     border-color: rgba(239,68,68,0.3);
 }
-
 .btn-info-action.delete:hover {
     background-color: #ef4444;
     color: #fff;
@@ -1487,23 +1129,19 @@ input:checked + .slider:before { transform: translateX(18px); }
 }
 
 /* ====================================================================
-   --- MODULE GUIDES CSS ---
+   GUIAS
    ==================================================================== */
-
-/* Texto de estado vacío (Opps...) */
 .empty-state-text {
     color: #94a3b8;
     font-size: 14px;
     padding: 30px 10px;
     font-weight: 500;
 }
-
-/* Botón Cuadrado Azul para Categorías [+] */
 .btn-square-blue-add {
-    width: 40px; /* Mismo alto que el input estándar */
+    width: 40px;
     height: 40px;
-    background-color: #1e3a8a; /* Azul oscuro base */
-    border: 1px solid #3b82f6; /* Borde azul brillante */
+    background-color: #1e3a8a;
+    border: 1px solid #3b82f6;
     color: #fff;
     border-radius: 4px;
     display: flex;
@@ -1513,24 +1151,16 @@ input:checked + .slider:before { transform: translateX(18px); }
     cursor: pointer;
     transition: all 0.2s;
 }
-
 .btn-square-blue-add:hover {
     background-color: #3b82f6;
     box-shadow: 0 0 10px rgba(59, 130, 246, 0.3);
 }
-
-/* Ajuste para inputs en grupos (Input Group) */
 .input-group-custom {
     display: flex;
     gap: 10px;
     align-items: center;
 }
-
-.input-group-custom .form-control-dark {
-    flex-grow: 1;
-}
-
-/* Estilo para la lista vacía de categorías */
+.input-group-custom .form-control-dark { flex-grow: 1; }
 .category-list-empty {
     color: #64748b;
     font-size: 13px;
@@ -1539,62 +1169,8 @@ input:checked + .slider:before { transform: translateX(18px); }
 }
 
 /* ====================================================================
-   --- MODULE GUIDES CSS ---
+   EVENTOS (base; la capa unificada ajusta mas abajo)
    ==================================================================== */
-
-/* Texto de estado vacío (Opps...) */
-.empty-state-text {
-    color: #94a3b8;
-    font-size: 14px;
-    padding: 30px 10px;
-    font-weight: 500;
-}
-
-/* Botón Cuadrado Azul para Categorías [+] */
-.btn-square-blue-add {
-    width: 40px; /* Mismo alto que el input estándar */
-    height: 40px;
-    background-color: #1e3a8a; /* Azul oscuro base */
-    border: 1px solid #3b82f6; /* Borde azul brillante */
-    color: #fff;
-    border-radius: 4px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 14px;
-    cursor: pointer;
-    transition: all 0.2s;
-}
-
-.btn-square-blue-add:hover {
-    background-color: #3b82f6;
-    box-shadow: 0 0 10px rgba(59, 130, 246, 0.3);
-}
-
-/* Ajuste para inputs en grupos (Input Group) */
-.input-group-custom {
-    display: flex;
-    gap: 10px;
-    align-items: center;
-}
-
-.input-group-custom .form-control-dark {
-    flex-grow: 1;
-}
-
-/* Estilo para la lista vacía de categorías */
-.category-list-empty {
-    color: #64748b;
-    font-size: 13px;
-    margin-top: 15px;
-    font-style: italic;
-}
-
-/* =========================================
-   --- MODULE EVENTS CSS ---
-   ========================================= */
-
-/* Badge para el Tipo de Evento (Daily/Special) */
 .badge-event-type {
     display: inline-block;
     padding: 4px 10px;
@@ -1603,15 +1179,13 @@ input:checked + .slider:before { transform: translateX(18px); }
     font-weight: 700;
     text-transform: uppercase;
     color: #fff;
-    background-color: #10b981; /* Verde brillante como en la foto */
+    background-color: #10b981;
     border: 1px solid rgba(16, 185, 129, 0.4);
     min-width: 60px;
     text-align: center;
 }
-
-/* Botón Eliminar Rojo */
 .btn-delete-red {
-    background-color: #ef4444; /* Rojo */
+    background-color: #ef4444;
     color: #fff;
     border: none;
     border-radius: 4px;
@@ -1623,13 +1197,10 @@ input:checked + .slider:before { transform: translateX(18px); }
     text-decoration: none !important;
     display: inline-block;
 }
-
 .btn-delete-red:hover {
     background-color: #dc2626;
     color: #fff;
 }
-
-/* Input de lectura para el nombre del evento en la lista */
 .event-name-box {
     background-color: #1e293b;
     border: 1px solid #334155;
@@ -1640,14 +1211,11 @@ input:checked + .slider:before { transform: translateX(18px); }
     width: 100%;
     display: block;
 }
-
-/* Ajuste para la tabla de eventos */
 .table-events td {
     vertical-align: middle !important;
     padding: 12px 10px !important;
     border-top: 1px solid rgba(255,255,255,0.05) !important;
 }
-
 .table-events th {
     color: #94a3b8;
     font-size: 12px;
@@ -1656,43 +1224,30 @@ input:checked + .slider:before { transform: translateX(18px); }
     padding-bottom: 10px !important;
 }
 
-/* =========================================
-   --- MODULE RANKINGS CSS ---
-   ========================================= */
-
-/* Ajuste específico para textarea oscuro */
+/* ====================================================================
+   RANKINGS
+   ==================================================================== */
 textarea.form-control-dark {
     height: auto;
-    resize: vertical; /* Permite cambiar alto pero no ancho */
+    resize: vertical;
     min-height: 100px;
     font-family: 'Public Sans', sans-serif;
     line-height: 1.5;
 }
-
-/* Espaciado para los switches en lista */
 .switch-list-item {
     display: flex;
     align-items: center;
-    margin-bottom: 15px; /* Separación entre items */
-    justify-content: space-between; /* Switch a la izquierda, texto o al revés */
+    margin-bottom: 15px;
+    justify-content: space-between;
 }
-
-/* En la imagen el switch está a la izquierda y el texto a la derecha */
-.switch-list-item .switch {
-    margin-right: 12px;
-}
-
+.switch-list-item .switch { margin-right: 12px; }
 .switch-list-item .switch-label-text {
     color: #fff;
     font-size: 13px;
     font-weight: 500;
     flex-grow: 1;
 }
-
-/* Contenedor de Inputs pequeños en columna derecha */
-.quantity-input-group {
-    margin-bottom: 15px;
-}
+.quantity-input-group { margin-bottom: 15px; }
 .quantity-input-group label {
     font-size: 12px;
     color: #94a3b8;
@@ -1701,112 +1256,34 @@ textarea.form-control-dark {
 }
 
 /* ====================================================================
-   --- SIDEBAR MENU FIX (CORRECCIÓN FINAL) ---
-   (Fondo transparente + Alineación a la Izquierda)
+   SEGURIDAD
    ==================================================================== */
-
-/* 1. Ajuste del contenedor de la lista */
-.nav-second-level {
-    background-color: transparent !important;
-    padding-left: 0 !important; /* Elimina sangría excesiva de la lista */
-}
-
-/* 2. Estilo de los enlaces (Items del menú) */
-.nav-second-level li a {
-    background-color: transparent !important;
-    background: none !important;
-    color: #94a3b8 !important;
-    border: none !important;
-    transition: all 0.2s ease;
-    
-    /* --- ALINEACIÓN A LA IZQUIERDA --- */
-    text-align: left !important; /* Fuerza el texto a la izquierda */
-    padding-left: 20px !important; /* Reduce la sangría. Prueba 15px si lo quieres más a la orilla */
-    display: block !important;
-    width: 100% !important;
-}
-
-/* 3. Estilo Hover / Activo */
-.nav-second-level li a:hover,
-.nav-second-level li a:focus,
-.nav-second-level li.active > a {
-    background-color: rgba(255, 255, 255, 0.05) !important;
-    color: #ffffff !important;
-    text-decoration: none !important;
-    
-    /* Mantenemos la alineación al pasar el mouse */
-    text-align: left !important;
-    padding-left: 20px !important; 
-}
-
-/* ====================================================================
-   --- SIDEBAR MENU FIX (CORRECCIÓN FONDO BLANCO) ---
-   (Elimina el bloque blanco en el menú desplegable lateral)
-   ==================================================================== */
-
-/* Asegura que el contenedor del submenú sea transparente/oscuro */
-.nav-second-level {
-    background-color: transparent !important;
-}
-
-/* Estilo base de los enlaces del submenú */
-.nav-second-level li a {
-    background-color: transparent !important; /* FUERZA a quitar el blanco */
-    background: none !important;
-    color: #94a3b8 !important; /* Texto gris */
-    border: none !important;
-    transition: all 0.2s ease;
-}
-
-/* Estilo al pasar el mouse (Hover) o item Activo */
-.nav-second-level li a:hover,
-.nav-second-level li a:focus,
-.nav-second-level li.active > a {
-    background-color: rgba(255, 255, 255, 0.05) !important; /* Fondo sutil oscuro */
-    color: #ffffff !important; /* Texto blanco */
-    text-decoration: none !important;
-}
-
-/* =========================================
-   --- MODULE SECURITY CSS ---
-   (Agregado para module_security.php)
-   ========================================= */
-
-/* Contenedor del Gráfico */
 .chart-container-box {
     position: relative;
-    height: 300px; /* Alto fijo para el gráfico */
+    height: 300px;
     width: 100%;
     margin-top: 15px;
 }
-
-/* Texto de "Updated 1 min ago" */
 .chart-update-text {
     float: right;
     color: #64748b;
     font-size: 12px;
-    margin-top: -25px; /* Subir para alinear con el título */
+    margin-top: -25px;
 }
-
-/* Ajuste para inputs largos (Keys) */
 .input-key {
-    font-family: 'Courier New', monospace; /* Fuente monoespaciada para keys */
+    font-family: 'Courier New', monospace;
     font-size: 12px;
     color: #cbd5e1;
     letter-spacing: 0.5px;
 }
 
-/* =========================================
-   --- MODULE PLUGINS CSS ---
-   (Agregado para mis_plugins.php)
-   ========================================= */
-
-/* Tabla de Plugins */
+/* ====================================================================
+   PLUGINS
+   ==================================================================== */
 .table-plugins {
     width: 100%;
     border-collapse: collapse;
 }
-
 .table-plugins th {
     text-align: center;
     color: #cbd5e1;
@@ -1815,27 +1292,20 @@ textarea.form-control-dark {
     padding: 20px;
     border-bottom: 1px solid #1e293b;
 }
-
 .table-plugins td {
     padding: 20px;
     vertical-align: middle;
-    border-bottom: 1px solid #1e293b; /* Línea separadora sutil */
+    border-bottom: 1px solid #1e293b;
     color: #fff;
     font-size: 14px;
 }
-
-/* Alineación específica para la primera columna (Nombre) */
 .table-plugins td:first-child {
     text-align: left;
-    padding-left: 40px; /* Indentación para que se vea centrado visualmente */
+    padding-left: 40px;
 }
-
 .table-plugins td:nth-child(2),
-.table-plugins td:nth-child(3) {
-    text-align: center;
-}
+.table-plugins td:nth-child(3) { text-align: center; }
 
-/* Iconos de los Plugins */
 .plugin-icon-box {
     display: inline-flex;
     align-items: center;
@@ -1843,16 +1313,13 @@ textarea.form-control-dark {
     width: 30px;
     margin-right: 15px;
     font-size: 16px;
-    color: #fbbf24; /* Color dorado/amarillo por defecto como en la imagen */
+    color: #fbbf24;
 }
-
-/* Colores específicos para variar un poco (opcional) */
 .icon-gold { color: #fbbf24; }
 .icon-blue { color: #60a5fa; }
 .icon-purple { color: #c084fc; }
 .icon-green { color: #4ade80; }
 
-/* Botón Configurar (Estilo Outline Green) */
 .btn-config-outline {
     display: inline-flex;
     align-items: center;
@@ -1868,27 +1335,19 @@ textarea.form-control-dark {
     transition: all 0.2s;
     min-width: 120px;
 }
-
 .btn-config-outline i {
     margin-right: 8px;
-    color: #10b981; /* Icono verde */
+    color: #10b981;
 }
-
 .btn-config-outline:hover {
     background-color: #10b981;
     color: #fff;
 }
+.btn-config-outline:hover i { color: #fff; }
 
-.btn-config-outline:hover i {
-    color: #fff;
-}
-
-/* =========================================
-   --- TOOLS ACCOUNT CSS ---
-   (Agregado para tools_account.php)
-   ========================================= */
-
-/* Contenedor de Controles Superiores (Show entries / Search) */
+/* ====================================================================
+   HERRAMIENTAS: cuentas
+   ==================================================================== */
 .dt-controls-row {
     display: flex;
     justify-content: space-between;
@@ -1897,8 +1356,6 @@ textarea.form-control-dark {
     color: #cbd5e1;
     font-size: 13px;
 }
-
-/* Inputs de búsqueda y select */
 .dt-input-dark {
     background-color: #0f1115;
     border: 1px solid #334155;
@@ -1907,20 +1364,15 @@ textarea.form-control-dark {
     border-radius: 4px;
     font-size: 13px;
 }
-
 .dt-input-dark:focus {
     border-color: #10b981;
     outline: none;
 }
-
-/* TABLA DE CUENTAS */
 .table-accounts {
     width: 100%;
     border-collapse: collapse;
-    background-color: #1a1d21; /* Fondo de la tabla */
+    background-color: #1a1d21;
 }
-
-/* Cabeceras con iconos de ordenamiento */
 .table-accounts th {
     background-color: #15171a;
     color: #fff;
@@ -1932,33 +1384,23 @@ textarea.form-control-dark {
     cursor: pointer;
     position: relative;
 }
-
-/* Iconos de ordenamiento simulados con CSS/FontAwesome */
 .sort-icon {
     float: right;
     color: #475569;
     font-size: 12px;
 }
-
-/* Filas y Celdas */
 .table-accounts td {
     padding: 12px 15px;
     color: #94a3b8;
     font-size: 13px;
     vertical-align: middle;
-    /* LÍNEA PUNTEADA (Dashed) como en la imagen */
-    border-bottom: 1px dashed #334155; 
+    border-bottom: 1px dashed #334155;
 }
+.table-accounts tr:hover td { background-color: rgba(255, 255, 255, 0.02); }
 
-/* Hover en filas */
-.table-accounts tr:hover td {
-    background-color: rgba(255, 255, 255, 0.02);
-}
-
-/* Botón Editar (Estilo Cyan/Turquesa) */
 .btn-edit-cyan {
     display: inline-block;
-    border: 1px solid #22d3ee; /* Color Cyan */
+    border: 1px solid #22d3ee;
     color: #22d3ee;
     background-color: transparent;
     padding: 4px 15px;
@@ -1968,13 +1410,11 @@ textarea.form-control-dark {
     text-decoration: none !important;
     transition: all 0.2s;
 }
-
 .btn-edit-cyan:hover {
     background-color: #22d3ee;
-    color: #000; /* Texto negro al pasar el mouse */
+    color: #000;
 }
 
-/* Paginación Inferior */
 .dt-footer-row {
     display: flex;
     justify-content: space-between;
@@ -1983,12 +1423,10 @@ textarea.form-control-dark {
     color: #64748b;
     font-size: 12px;
 }
-
 .pagination-box {
     display: flex;
     gap: 5px;
 }
-
 .page-link-dark {
     padding: 6px 12px;
     border-radius: 4px;
@@ -1998,23 +1436,16 @@ textarea.form-control-dark {
     text-decoration: none !important;
     transition: all 0.2s;
 }
-
-.page-link-dark:hover {
-    background-color: #334155;
-}
-
+.page-link-dark:hover { background-color: #334155; }
 .page-link-dark.active {
     background-color: #fff;
     color: #000;
     font-weight: 600;
 }
 
-/* =========================================
-   --- TOOLS CHARACTER CSS ---
-   (Agregado para tools_character.php)
-   ========================================= */
-
-/* Contenedor centrado para el formulario */
+/* ====================================================================
+   HERRAMIENTAS: personajes
+   ==================================================================== */
 .char-edit-container {
     display: flex;
     flex-direction: column;
@@ -2023,8 +1454,6 @@ textarea.form-control-dark {
     padding: 60px 20px;
     text-align: center;
 }
-
-/* Título Principal Centrado */
 .char-edit-heading {
     color: #fff;
     font-size: 22px;
@@ -2032,32 +1461,24 @@ textarea.form-control-dark {
     margin-bottom: 30px;
     letter-spacing: 0.5px;
 }
-
-/* Input Grande Personalizado */
 .input-char-large {
-    background-color: transparent; /* Fondo transparente como en la imagen */
-    border: 1px solid #10b981; /* Borde Verde */
+    background-color: transparent;
+    border: 1px solid #10b981;
     color: #fff;
     padding: 15px 20px;
     font-size: 15px;
     border-radius: 6px;
     width: 100%;
-    max-width: 450px; /* Ancho máximo controlado */
+    max-width: 450px;
     margin-bottom: 25px;
     transition: all 0.3s ease;
     text-align: left;
 }
-
 .input-char-large:focus {
-    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.15); /* Resplandor verde al escribir */
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.15);
     outline: none;
 }
-
-.input-char-large::placeholder {
-    color: #64748b;
-}
-
-/* Botón Editar Ahora (Grande y Outline) */
+.input-char-large::placeholder { color: #64748b; }
 .btn-edit-large {
     background-color: transparent;
     border: 1px solid #10b981;
@@ -2066,26 +1487,22 @@ textarea.form-control-dark {
     border-radius: 6px;
     font-size: 14px;
     font-weight: 600;
-    text-transform: uppercase; /* Opcional, se ve bien */
+    text-transform: uppercase;
     cursor: pointer;
     transition: all 0.3s;
 }
-
 .btn-edit-large:hover {
     background-color: #10b981;
     color: #fff;
     box-shadow: 0 0 15px rgba(16, 185, 129, 0.3);
 }
 
-/* =========================================
-   --- TOOLS COIN CSS ---
-   (Agregado para tools_coin.php)
-   ========================================= */
-
-/* Botón Agregar Coins (Azul/Outline) */
+/* ====================================================================
+   HERRAMIENTAS: coins
+   ==================================================================== */
 .btn-add-blue {
     background-color: transparent;
-    border: 1px solid #3b82f6; /* Azul brillante */
+    border: 1px solid #3b82f6;
     color: #fff;
     padding: 8px 15px;
     border-radius: 4px;
@@ -2097,24 +1514,17 @@ textarea.form-control-dark {
     align-items: center;
     gap: 5px;
 }
-
 .btn-add-blue:hover {
     background-color: #3b82f6;
     box-shadow: 0 0 10px rgba(59, 130, 246, 0.4);
 }
-
-/* Estilos de Monedas en la Tabla */
-
-/* WebCoins: Texto Verde + Icono */
 .coin-val-green {
-    color: #4ade80; /* Verde neón */
+    color: #4ade80;
     font-weight: 600;
     display: flex;
     align-items: center;
     gap: 6px;
 }
-
-/* WCoin Normal: Blanco + Icono pequeño */
 .coin-val-white {
     color: #fff;
     font-weight: 600;
@@ -2122,8 +1532,6 @@ textarea.form-control-dark {
     align-items: center;
     gap: 6px;
 }
-
-/* WCoin Destacado: Cápsula Blanca (Pill) */
 .coin-pill-white {
     background-color: #fff;
     color: #000;
@@ -2134,21 +1542,16 @@ textarea.form-control-dark {
     display: inline-block;
     box-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
 }
-
-/* Ajuste de icono pequeño dentro del valor */
 .coin-icon-sm {
     font-size: 14px;
     opacity: 0.8;
 }
 
-/* =========================================
-   --- TOOLS IP CSS ---
-   (Agregado para tools_ip.php)
-   ========================================= */
-
-/* Botón Buscar IP (Azul Oscuro) */
+/* ====================================================================
+   HERRAMIENTAS: busqueda por IP
+   ==================================================================== */
 .btn-search-darkblue {
-    background-color: #1e3a8a; /* Azul oscuro */
+    background-color: #1e3a8a;
     border: 1px solid #1e40af;
     color: #fff;
     padding: 8px 20px;
@@ -2158,17 +1561,14 @@ textarea.form-control-dark {
     width: 100%;
     transition: all 0.2s;
 }
-
 .btn-search-darkblue:hover {
     background-color: #1e40af;
     box-shadow: 0 0 10px rgba(30, 58, 138, 0.4);
 }
-
-/* Botón Buscar Usuarios (Cyan/Turquesa) */
 .btn-search-cyan-filled {
-    background-color: #22d3ee; /* Cyan brillante */
+    background-color: #22d3ee;
     border: 1px solid #06b6d4;
-    color: #fff; /* Texto blanco */
+    color: #fff;
     padding: 8px 20px;
     border-radius: 4px;
     font-size: 13px;
@@ -2177,22 +1577,17 @@ textarea.form-control-dark {
     transition: all 0.2s;
     text-shadow: 0 1px 2px rgba(0,0,0,0.1);
 }
-
 .btn-search-cyan-filled:hover {
     background-color: #06b6d4;
     box-shadow: 0 0 10px rgba(34, 211, 238, 0.4);
 }
-
-/* Ajuste de alineación vertical para los formularios de búsqueda */
 .search-row-box {
-    border: 1px dashed #334155; /* Borde punteado sutil alrededor de la fila */
+    border: 1px dashed #334155;
     padding: 15px;
     border-radius: 6px;
     margin-bottom: 20px;
-    background-color: rgba(15, 17, 21, 0.5); /* Fondo ligeramente más oscuro */
+    background-color: rgba(15, 17, 21, 0.5);
 }
-
-/* Títulos de sección específicos */
 .section-subtitle {
     font-size: 18px;
     color: #fff;
@@ -2202,52 +1597,12 @@ textarea.form-control-dark {
     padding-bottom: 10px;
 }
 
-/* Estilos para el buscador dinámico */
-.header-search { position: relative; }
-
-.search-results-overlay {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    width: 250px;
-    background: #1e293b;
-    border: 1px solid #334155;
-    border-top: none;
-    border-radius: 0 0 8px 8px;
-    z-index: 1000;
-    display: none;
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
-}
-
-.search-result-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 15px;
-    color: #cbd5e1;
-    text-decoration: none !important;
-    border-bottom: 1px solid #334155;
-    transition: background 0.2s;
-}
-
-.search-result-item:hover {
-    background: #334155;
-    color: #fff;
-}
-
-.res-name { display: block; font-weight: 600; font-size: 13px; }
-.res-details { display: block; font-size: 11px; color: #94a3b8; }
-.search-no-results { padding: 15px; color: #64748b; font-size: 12px; text-align: center; }
-
 /* ====================================================================
-   DISEÑO ADAPTABLE (pantallas de menos de 992px)
-   - El menu lateral se oculta y se abre encima del contenido con el boton.
-   - El contenido usa todo el ancho.
-   - Las tarjetas dejan de encogerse al tamaño de su contenido.
+   DISENO ADAPTABLE (menos de 992px)
    ==================================================================== */
 @media (max-width: 991px) {
 
-    /* --- Menu lateral: oculto por defecto, se abre con el boton --- */
+    /* Menu lateral: oculto por defecto, se abre con el boton */
     .navbar-default.sidebar {
         width: 260px;
         transform: translateX(-100%);
@@ -2259,7 +1614,7 @@ textarea.form-control-dark {
         transform: translateX(0);
     }
 
-    /* Abierto en pantalla angosta se ve completo, no en modo "solo iconos" */
+    /* Abierto en pantalla angosta: completo, no en modo "solo iconos" */
     #wrapper.toggled .sidebar .nav-link-text { display: inline !important; }
     #wrapper.toggled .sidebar .arrow { display: inline-block !important; }
     #wrapper.toggled .sidebar #side-menu > li > a { justify-content: flex-start; padding: 12px 15px; }
@@ -2277,7 +1632,7 @@ textarea.form-control-dark {
         z-index: 1050;
     }
 
-    /* --- Encabezado y contenido a todo el ancho --- */
+    /* Encabezado y contenido a todo el ancho */
     .top-header,
     #wrapper.toggled .top-header {
         left: 0;
@@ -2295,7 +1650,7 @@ textarea.form-control-dark {
     .header-search input:focus { width: 100%; }
     .search-results-overlay { width: 100%; }
 
-    /* --- Filas del panel: las columnas vuelven a ocupar todo el renglon --- */
+    /* Filas: las columnas vuelven a ocupar todo el renglon */
     #page-wrapper .dashboard-row,
     #page-wrapper .dashboard-row-bottom,
     #page-wrapper .row-flex,
@@ -2310,7 +1665,7 @@ textarea.form-control-dark {
     }
     #page-wrapper .dashboard-row-bottom { margin-top: 0; }
 
-    /* --- Dashboard: tarjetas de totales en dos columnas --- */
+    /* Dashboard: tarjetas de totales en dos columnas */
     #page-wrapper .dashboard-col-left {
         display: grid;
         grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -2320,7 +1675,7 @@ textarea.form-control-dark {
     #page-wrapper .dashboard-col-left .dashboard-card { margin-bottom: 0 !important; }
     #page-wrapper .dashboard-col-left .card-welcome { grid-column: 1 / -1; }
 
-    /* --- Grafico: alto razonable en pantallas chicas --- */
+    /* Grafico */
     #page-wrapper .chart-card {
         min-height: 340px !important;
         height: auto;
@@ -2328,7 +1683,7 @@ textarea.form-control-dark {
     }
     #page-wrapper .chart-body { height: 260px; }
 
-    /* --- Contenido ancho (tablas): se desplaza en vez de cortarse --- */
+    /* Contenido ancho: se desplaza en vez de cortarse */
     #page-wrapper .container-fluid { overflow-x: auto; }
 }
 
@@ -2368,9 +1723,7 @@ textarea.form-control-dark {
 #page-wrapper .dashboard-row-bottom > [class*="col-"] { margin-bottom: 20px; }
 #page-wrapper .dashboard-row-bottom .bottom-card { margin-bottom: 0; }
 
-/* ====================================================================
-   DASHBOARD: pestanas del grafico
-   ==================================================================== */
+/* Pestanas del grafico */
 .chart-tabs { display: flex; gap: 20px; }
 .chart-tab {
     border: 0;
@@ -2390,9 +1743,7 @@ textarea.form-control-dark {
     .chart-tab { font-size: 13px; }
 }
 
-/* ====================================================================
-   TABLAS: sin el recuadro claro que Bootstrap agrega en pantallas angostas
-   ==================================================================== */
+/* Tablas: sin el recuadro claro que Bootstrap agrega en pantallas angostas */
 @media screen and (max-width: 767px) {
     #page-wrapper .table-responsive { border: 0; margin-bottom: 0; }
 }
@@ -2417,7 +1768,7 @@ textarea.form-control-dark {
     --ad-radius: 10px;
 }
 
-/* --- Contenedores --- */
+/* Contenedores */
 #page-wrapper .settings-section,
 #page-wrapper .account-list-container,
 #page-wrapper .search-tool-container {
@@ -2427,7 +1778,7 @@ textarea.form-control-dark {
     box-shadow: none;
     font-family: inherit;
 }
-/* Sin contenedor dentro de contenedor: los recuadros internos pasan a ser una division */
+/* Sin contenedor dentro de contenedor */
 #page-wrapper .btn-config-box {
     background: transparent;
     border: 0;
@@ -2436,7 +1787,7 @@ textarea.form-control-dark {
     padding: 14px 0 0;
 }
 
-/* --- Titulos y etiquetas --- */
+/* Titulos y etiquetas */
 #page-wrapper .settings-title,
 #page-wrapper .list-title {
     color: #fff;
@@ -2468,7 +1819,7 @@ textarea.form-control-dark {
     margin-bottom: 6px;
 }
 
-/* --- Campos, desplegables y areas de texto --- */
+/* Campos */
 #page-wrapper .form-control-dark,
 #page-wrapper .form-control,
 #page-wrapper .st-input {
@@ -2493,8 +1844,7 @@ textarea.form-control-dark {
 #page-wrapper .st-input::placeholder { color: #5b6677; }
 #page-wrapper .search-box { background: var(--ad-field); border-color: var(--ad-line-strong); border-radius: 8px; }
 
-/* --- Botones --- */
-/* Principal: guardar, agregar, confirmar */
+/* Boton principal: guardar, agregar, confirmar */
 #page-wrapper .btn-save-green,
 #page-wrapper .st-btn,
 #page-wrapper .btn-success {
@@ -2506,14 +1856,6 @@ textarea.form-control-dark {
     text-shadow: none;
     transition: background .2s, border-color .2s;
 }
-#page-wrapper .btn-save-green,
-#page-wrapper .st-btn {
-    padding: 10px 20px;
-    font-size: 13px;
-    font-weight: 600;
-    letter-spacing: 0;
-    text-transform: none;
-}
 #page-wrapper .btn-save-green:hover,
 #page-wrapper .st-btn:hover,
 #page-wrapper .btn-success:hover {
@@ -2521,7 +1863,7 @@ textarea.form-control-dark {
     border-color: var(--ad-accent-hover) !important;
     box-shadow: none;
 }
-/* Secundario: editar, volver, cancelar */
+/* Boton secundario: editar, volver, cancelar */
 #page-wrapper .btn-edit,
 #page-wrapper .btn-back-outline,
 #page-wrapper .btn-default {
@@ -2540,7 +1882,7 @@ textarea.form-control-dark {
     color: #fff;
     box-shadow: none;
 }
-/* Riesgo: borrar, expulsar */
+/* Boton de riesgo: borrar, expulsar */
 #page-wrapper .btn-kick-red,
 #page-wrapper .btn-danger {
     background: var(--ad-danger);
@@ -2553,7 +1895,7 @@ textarea.form-control-dark {
 #page-wrapper .btn-kick-red:hover,
 #page-wrapper .btn-danger:hover { filter: brightness(1.1); box-shadow: none; }
 
-/* --- Avisos de exito, error y advertencia --- */
+/* Avisos */
 #page-wrapper .alert,
 #page-wrapper .alert-success-custom {
     background: var(--ad-surface) !important;
@@ -2572,11 +1914,11 @@ textarea.form-control-dark {
 #page-wrapper .alert-warning { border-left-color: var(--ad-warn) !important; }
 #page-wrapper .alert-info { border-left-color: var(--ad-info) !important; }
 
-/* --- Interruptores --- */
+/* Interruptores */
 #page-wrapper .slider { background-color: var(--ad-line-strong); }
 #page-wrapper input:checked + .slider { background-color: var(--ad-accent); }
 
-/* --- Tablas propias de los modulos --- */
+/* Tablas propias de los modulos */
 #page-wrapper .custom-table th,
 #page-wrapper .admin-table th,
 #page-wrapper .char-table th { color: var(--ad-muted); border-bottom-color: var(--ad-line); }
@@ -2586,7 +1928,7 @@ textarea.form-control-dark {
 #page-wrapper .custom-table td { white-space: nowrap; }
 #page-wrapper .list-footer { border-top-color: var(--ad-line); }
 
-/* --- Pantallas angostas --- */
+/* Pantallas angostas: contenedores, tablas y Countdown */
 @media (max-width: 767px) {
     #page-wrapper .settings-section,
     #page-wrapper .account-list-container { padding: 18px 16px; }
@@ -2595,10 +1937,7 @@ textarea.form-control-dark {
     #page-wrapper .custom-table td { padding: 10px 8px; font-size: 12px; }
     #page-wrapper .search-box,
     #page-wrapper .search-input { width: 100%; }
-}
 
-/* --- Countdown: previsualizacion en una sola fila --- */
-@media (max-width: 767px) {
     #page-wrapper .countdown-wrapper { width: 100%; padding: 22px 12px; }
     #page-wrapper .countdown-wrapper .event-title { font-size: 18px; letter-spacing: 1px; margin-bottom: 14px; }
     #page-wrapper .countdown-wrapper .timer-flex { flex-wrap: nowrap; gap: 6px; }
@@ -2608,12 +1947,11 @@ textarea.form-control-dark {
     #page-wrapper .countdown-wrapper .timer-separator { font-size: 20px; margin-top: -12px; }
 }
 
-/* --- Ventana emergente: la vista previa mide 500px fijos; se reduce en proporcion --- */
+/* Ventana emergente: la vista previa mide 500px fijos; se reduce en proporcion */
 @media (max-width: 575px) { #page-wrapper .popup-preview-container { zoom: 0.8; } }
 @media (max-width: 470px) { #page-wrapper .popup-preview-container { zoom: 0.65; } }
 @media (max-width: 399px) { #page-wrapper .popup-preview-container { zoom: 0.55; } }
 @media (max-width: 339px) { #page-wrapper .popup-preview-container { zoom: 0.47; } }
-
 
 /* ====================================================================
    BOTONES DE ACCION: misma forma y tamano en todo el panel
@@ -2638,7 +1976,7 @@ textarea.form-control-dark {
     white-space: nowrap;
     vertical-align: middle;
 }
-/* Accion destacada que no es guardar (por ejemplo "Agregar Boss", "Enviar") */
+/* Accion destacada que no es guardar ("Agregar Boss", "Enviar") */
 #page-wrapper .btn-primary {
     background: var(--ad-info) !important;
     border: 1px solid var(--ad-info) !important;
@@ -2647,12 +1985,48 @@ textarea.form-control-dark {
     text-shadow: none;
 }
 #page-wrapper .btn-primary:hover { filter: brightness(1.1); }
-/* Boton pegado a un campo: conserva la union con el campo */
+/* Boton pegado a un campo */
 #page-wrapper .input-group .input-group-btn > .btn.btn-primary,
 #page-wrapper .input-group .input-group-btn > .btn.btn-success {
     border-radius: 0 8px 8px 0 !important;
 }
 
+/* "Agregar Coins" */
+#page-wrapper .btn-add-blue {
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    height: 40px !important;
+    padding: 0 20px !important;
+    font-size: 13px !important;
+    font-weight: 600 !important;
+    line-height: 1 !important;
+    border-radius: 8px !important;
+    background: var(--ad-info) !important;
+    border: 1px solid var(--ad-info) !important;
+    color: #fff !important;
+    white-space: nowrap;
+}
+#page-wrapper .btn-add-blue:hover { filter: brightness(1.1); }
+
+/* "Crear una Nueva Noticia" */
+#page-wrapper .btn-create-news {
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    height: 40px !important;
+    padding: 0 20px !important;
+    background: var(--ad-accent) !important;
+    border: 1px solid var(--ad-accent) !important;
+    border-radius: 8px !important;
+    color: #fff !important;
+    font-size: 13px !important;
+    font-weight: 600 !important;
+    line-height: 1 !important;
+    white-space: nowrap;
+}
+#page-wrapper .btn-create-news:hover { background: var(--ad-accent-hover) !important; border-color: var(--ad-accent-hover) !important; }
 
 /* ====================================================================
    EVENTOS: cronograma
@@ -2702,7 +2076,12 @@ textarea.form-control-dark {
 }
 #page-wrapper .btn-delete-red:hover { filter: brightness(1.1); color: #fff; }
 
+/* ====================================================================
+   TABLAS DE MODULOS EN PANTALLAS ANGOSTAS (fichas en vez de barra lateral)
+   ==================================================================== */
 @media (max-width: 767px) {
+
+    /* Eventos */
     #page-wrapper .table-dark-custom:has(.event-name-box) thead { display: none; }
     #page-wrapper .table-dark-custom:has(.event-name-box),
     #page-wrapper .table-dark-custom:has(.event-name-box) tbody { display: block; width: 100%; }
@@ -2724,35 +2103,8 @@ textarea.form-control-dark {
     #page-wrapper .table-dark-custom:has(.event-name-box) td:nth-child(3),
     #page-wrapper .table-dark-custom:has(.event-name-box) td:nth-child(4) { grid-column: 1 / -1; }
     #page-wrapper .table-dark-custom:has(.event-name-box) td:nth-child(4) { display: flex; gap: 8px; }
-}
 
-
-/* ====================================================================
-   BLOQUE B: tablas de modulos en pantallas angostas (sin barra lateral)
-   ==================================================================== */
-
-/* Boton "Agregar Coins": misma forma que los demas botones de accion */
-#page-wrapper .btn-add-blue {
-    display: inline-flex !important;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    height: 40px !important;
-    padding: 0 20px !important;
-    font-size: 13px !important;
-    font-weight: 600 !important;
-    line-height: 1 !important;
-    border-radius: 8px !important;
-    background: var(--ad-info) !important;
-    border: 1px solid var(--ad-info) !important;
-    color: #fff !important;
-    white-space: nowrap;
-}
-#page-wrapper .btn-add-blue:hover { filter: brightness(1.1); }
-
-@media (max-width: 767px) {
-
-    /* --- Coins: una ficha por cuenta --- */
+    /* Coins: una ficha por cuenta */
     #page-wrapper .table-accounts thead { display: none; }
     #page-wrapper .table-accounts,
     #page-wrapper .table-accounts tbody { display: block; width: 100%; }
@@ -2784,7 +2136,7 @@ textarea.form-control-dark {
         text-transform: uppercase;
     }
 
-    /* --- Plugins: nombre en una linea; "Configurar" queda como icono --- */
+    /* Plugins: nombre en una linea */
     #page-wrapper .table-plugins th { font-size: 11px; padding-left: 8px !important; padding-right: 8px; }
     #page-wrapper .table-plugins td { padding-left: 8px; padding-right: 8px; }
     #page-wrapper .table-plugins td:first-child {
@@ -2793,15 +2145,8 @@ textarea.form-control-dark {
         white-space: nowrap;
     }
     #page-wrapper .table-plugins td:first-child i { font-size: 16px !important; margin-right: 8px !important; }
-}
-@media (max-width: 575px) {
-    #page-wrapper .table-plugins .btn-config-outline { font-size: 0; padding: 8px 12px; }
-    #page-wrapper .table-plugins .btn-config-outline i { font-size: 14px; margin: 0; }
-}
 
-@media (max-width: 767px) {
-
-    /* --- Descargas agregadas: link arriba, datos y borrar debajo --- */
+    /* Descargas: link arriba, datos y borrar debajo */
     #page-wrapper .downloads-table thead { display: none; }
     #page-wrapper .downloads-table,
     #page-wrapper .downloads-table tbody { display: block; width: 100%; }
@@ -2822,7 +2167,7 @@ textarea.form-control-dark {
     }
     #page-wrapper .downloads-table td:nth-child(1) { grid-column: 1 / -1; font-size: 12px; overflow-wrap: anywhere; }
 
-    /* --- Noticias: imagen, titulo con fecha debajo, acciones a la derecha --- */
+    /* Noticias: imagen, titulo con fecha debajo, acciones a la derecha */
     #page-wrapper .table:has(.news-thumb) thead { display: none; }
     #page-wrapper .table:has(.news-thumb),
     #page-wrapper .table:has(.news-thumb) tbody { display: block; width: 100%; }
@@ -2845,102 +2190,8 @@ textarea.form-control-dark {
     #page-wrapper .table:has(.news-thumb) td:nth-child(2) { grid-column: 2; }
     #page-wrapper .table:has(.news-thumb) td:nth-child(3) { grid-column: 2; grid-row: 2; }
     #page-wrapper .table:has(.news-thumb) td:nth-child(4) { grid-column: 3; grid-row: 1 / span 2; }
-}
 
-
-/* ====================================================================
-   EDITOR DE TEMPLATES
-   ==================================================================== */
-#page-wrapper h3, #page-wrapper h5, #page-wrapper h6 { font-family: inherit; }
-#page-wrapper .config-card {
-    background: var(--ad-surface);
-    border: 1px solid var(--ad-line);
-    border-radius: var(--ad-radius);
-    box-shadow: none;
-    padding: 22px;
-    margin-bottom: 20px;
-}
-#page-wrapper .config-card .section-header {
-    display: block;
-    color: #fff;
-    font-size: 16px;
-    font-weight: 700;
-    letter-spacing: 0;
-    text-transform: none;
-    border-bottom: 1px solid var(--ad-line);
-    padding-bottom: 14px;
-    margin-bottom: 18px;
-}
-#page-wrapper .config-card .row > [class*="col-"] { margin-bottom: 14px; }
-/* Encabezado: alineado con las secciones y con el mismo contenedor */
-#page-wrapper .col-12:has(#templateSelector) { padding: 0 15px; margin-bottom: 20px; }
-#page-wrapper .col-12:has(#templateSelector) > div {
-    background: var(--ad-surface) !important;
-    border: 1px solid var(--ad-line) !important;
-    border-radius: var(--ad-radius) !important;
-    padding: 18px 22px !important;
-    flex-wrap: wrap;
-    gap: 12px;
-}
-#page-wrapper .col-12:has(#templateSelector) small { color: var(--ad-muted) !important; }
-#page-wrapper #templateSelector { max-width: 100%; }
-#page-wrapper .img-preview-box {
-    background: var(--ad-field);
-    border: 1px dashed var(--ad-line-strong);
-    border-radius: 8px;
-}
-
-/* ====================================================================
-   SELECTOR DE ARCHIVOS: igual en todos los modulos
-   ==================================================================== */
-#page-wrapper .form-control-file-dark,
-#page-wrapper input[type="file"].form-control-dark {
-    display: block;
-    width: 100%;
-    padding: 8px 10px;
-    background: var(--ad-field) !important;
-    border: 1px solid var(--ad-line-strong) !important;
-    border-radius: 8px;
-    color: var(--ad-muted) !important;
-    font-size: 12px;
-}
-#page-wrapper input[type="file"]::file-selector-button {
-    margin-right: 10px;
-    padding: 6px 12px;
-    background: transparent;
-    border: 1px solid var(--ad-line-strong);
-    border-radius: 6px;
-    color: var(--ad-text);
-    font-size: 12px;
-    font-weight: 600;
-    cursor: pointer;
-}
-#page-wrapper input[type="file"]::file-selector-button:hover { border-color: var(--ad-info); }
-
-/* ====================================================================
-   NOTICIAS: boton "Crear una Nueva Noticia"
-   ==================================================================== */
-#page-wrapper .btn-create-news {
-    display: inline-flex !important;
-    align-items: center;
-    justify-content: center;
-    height: 40px !important;
-    padding: 0 20px !important;
-    background: var(--ad-accent) !important;
-    border: 1px solid var(--ad-accent) !important;
-    border-radius: 8px !important;
-    color: #fff !important;
-    font-size: 13px !important;
-    font-weight: 600 !important;
-    line-height: 1 !important;
-    white-space: nowrap;
-}
-#page-wrapper .btn-create-news:hover { background: var(--ad-accent-hover) !important; border-color: var(--ad-accent-hover) !important; }
-
-/* ====================================================================
-   DASHBOARD: Ultimos Registros y Actividad Reciente en pantallas angostas
-   ==================================================================== */
-@media (max-width: 767px) {
+    /* Dashboard: Ultimos Registros y Actividad Reciente */
     #page-wrapper .table-registrations thead { display: none; }
     #page-wrapper .table-registrations,
     #page-wrapper .table-registrations tbody { display: block; width: 100%; }
@@ -2982,22 +2233,87 @@ textarea.form-control-dark {
         text-align: center !important;
     }
 }
-
+@media (max-width: 575px) {
+    #page-wrapper .table-plugins .btn-config-outline { font-size: 0; padding: 8px 12px; }
+    #page-wrapper .table-plugins .btn-config-outline i { font-size: 14px; margin: 0; }
+}
 
 /* ====================================================================
-   MENU LATERAL: submenus visibles tambien mientras se despliegan
-   (antes quedaban ocultos durante la animacion y aparecian de golpe)
+   EDITOR DE TEMPLATES
    ==================================================================== */
+#page-wrapper h3, #page-wrapper h5, #page-wrapper h6 { font-family: inherit; }
+#page-wrapper .config-card {
+    background: var(--ad-surface);
+    border: 1px solid var(--ad-line);
+    border-radius: var(--ad-radius);
+    box-shadow: none;
+    padding: 22px;
+    margin-bottom: 20px;
+}
+#page-wrapper .config-card .section-header {
+    display: block;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 0;
+    text-transform: none;
+    border-bottom: 1px solid var(--ad-line);
+    padding-bottom: 14px;
+    margin-bottom: 18px;
+}
+#page-wrapper .config-card .row > [class*="col-"] { margin-bottom: 14px; }
+#page-wrapper .col-12:has(#templateSelector) { padding: 0 15px; margin-bottom: 20px; }
+#page-wrapper .col-12:has(#templateSelector) > div {
+    background: var(--ad-surface) !important;
+    border: 1px solid var(--ad-line) !important;
+    border-radius: var(--ad-radius) !important;
+    padding: 18px 22px !important;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+#page-wrapper .col-12:has(#templateSelector) small { color: var(--ad-muted) !important; }
+#page-wrapper #templateSelector { max-width: 100%; }
+#page-wrapper .img-preview-box {
+    background: var(--ad-field);
+    border: 1px dashed var(--ad-line-strong);
+    border-radius: 8px;
+}
+
+/* Selector de archivos: igual en todos los modulos */
+#page-wrapper .form-control-file-dark,
+#page-wrapper input[type="file"].form-control-dark {
+    display: block;
+    width: 100%;
+    padding: 8px 10px;
+    background: var(--ad-field) !important;
+    border: 1px solid var(--ad-line-strong) !important;
+    border-radius: 8px;
+    color: var(--ad-muted) !important;
+    font-size: 12px;
+}
+#page-wrapper input[type="file"]::file-selector-button {
+    margin-right: 10px;
+    padding: 6px 12px;
+    background: transparent;
+    border: 1px solid var(--ad-line-strong);
+    border-radius: 6px;
+    color: var(--ad-text);
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+}
+#page-wrapper input[type="file"]::file-selector-button:hover { border-color: var(--ad-info); }
+
+/* ====================================================================
+   MENU LATERAL: despliegue, seleccion y flecha de cierre
+   ==================================================================== */
+/* Submenus visibles tambien mientras se despliegan */
 @media (max-width: 991px) {
     #wrapper.toggled .sidebar .nav-second-level.collapsing,
     #wrapper.toggled .sidebar .nav-third-level.collapsing,
     #wrapper.toggled .sidebar .nav-third-level.in { display: block !important; }
 }
 
-
-/* ====================================================================
-   MENU LATERAL: sin fondos claros al hacer clic; marca discreta de la seccion actual
-   ==================================================================== */
 /* El ultimo elemento cliqueado no queda resaltado */
 .sidebar #side-menu a:focus,
 .sidebar #side-menu a:active {
@@ -3010,12 +2326,11 @@ textarea.form-control-dark {
     background: transparent !important;
     color: #fff !important;
 }
-/* Al pasar el cursor */
 .sidebar #side-menu > li > a:hover {
     background: rgba(255, 255, 255, 0.06) !important;
     color: #fff !important;
 }
-/* Seccion en la que se esta: barra verde a la izquierda */
+/* Seccion actual: barra verde a la izquierda */
 .sidebar #side-menu > li > a.active {
     background: rgba(16, 185, 129, 0.10) !important;
     color: #fff !important;
@@ -3028,10 +2343,7 @@ textarea.form-control-dark {
     box-shadow: inset 2px 0 0 #10b981;
 }
 
-/* ====================================================================
-   MENU LATERAL: flecha de cierre por fuera del borde derecho del menu
-   (solo en pantallas angostas y con el menu abierto)
-   ==================================================================== */
+/* Flecha de cierre por fuera del borde derecho del menu (pantallas angostas) */
 .sidebar-close-float { display: none; }
 @media (max-width: 991px) {
     .sidebar-close-float {
@@ -3062,7 +2374,6 @@ textarea.form-control-dark {
         transform: translateX(0);
     }
     .sidebar-close-float:hover { background: #334155; }
-    /* Con el menu abierto, la hamburguesa de la barra no se muestra */
     #wrapper.toggled #sidebarToggle { visibility: hidden; }
 }
 
@@ -3082,8 +2393,6 @@ textarea.form-control-dark {
 .csr-empty { color: #8b95a7; font-size: 12px; padding: 10px; }
 
 .user-profile { position: relative; }
-.user-profile-btn { padding: 0; }
-.user-avatar { overflow: hidden; }
 .user-avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
 .user-menu {
@@ -3122,3 +2431,74 @@ textarea.form-control-dark {
 @media (hover: none) { .um-avatar-plus { opacity: 1; background: rgba(0, 0, 0, 0.35); } }
 .um-id form { margin: 0; }
 .um-id .um-photo-del { display: block; background: none; border: 0; padding: 0; margin-top: 4px; color: #ef4444; font-size: 11px; cursor: pointer; }
+
+/* ====================================================================
+   ENCABEZADOS DE MODULO EN CELULAR: titulo arriba, botones debajo
+   (fila con un titulo h3 y botones de accion: Bosses, SMTP, Rankings, Votos...)
+   ==================================================================== */
+@media (max-width: 767px) {
+    #page-wrapper .row:has(> [class*="col-"] > h3):has(> [class*="col-"] > :is(.btn-save-green, .btn-primary, .btn-add-blue, .btn-create-news)) {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        row-gap: 12px;
+        margin-bottom: 20px !important;
+    }
+    #page-wrapper .row:has(> [class*="col-"] > h3):has(> [class*="col-"] > :is(.btn-save-green, .btn-primary, .btn-add-blue, .btn-create-news))::before,
+    #page-wrapper .row:has(> [class*="col-"] > h3):has(> [class*="col-"] > :is(.btn-save-green, .btn-primary, .btn-add-blue, .btn-create-news))::after {
+        display: none;
+    }
+    #page-wrapper .row:has(> [class*="col-"] > h3):has(> [class*="col-"] > :is(.btn-save-green, .btn-primary, .btn-add-blue, .btn-create-news)) > [class*="col-"] {
+        width: 100%;
+        float: none;
+        text-align: left !important;
+    }
+    #page-wrapper .row:has(> [class*="col-"] > h3) > [class*="col-"] > h3 { margin: 0 !important; }
+    /* Columna de botones: uno al lado del otro, mismo ancho */
+    #page-wrapper .row:has(> [class*="col-"] > h3) > [class*="col-"]:has(> :is(.btn-save-green, .btn-primary, .btn-add-blue, .btn-create-news)) {
+        display: flex;
+        gap: 10px;
+    }
+    #page-wrapper .row:has(> [class*="col-"] > h3) > [class*="col-"] > :is(.btn-save-green, .btn-primary, .btn-add-blue, .btn-create-news) {
+        flex: 1 1 0;
+        margin: 0 !important;
+        float: none !important;
+    }
+
+    /* Editor de templates: selector y "Guardar" sin salirse del recuadro */
+    #page-wrapper .col-12:has(#templateSelector) > div,
+    #page-wrapper .col-12:has(#templateSelector) div:has(> #templateSelector) {
+        display: flex !important;
+        flex-wrap: wrap !important;
+        align-items: center;
+        gap: 10px;
+        width: 100%;
+    }
+    #page-wrapper #templateSelector { flex: 1 1 160px; min-width: 0; width: auto; }
+    #page-wrapper .col-12:has(#templateSelector) :is(button, .btn-save-green) {
+        flex: 1 1 100%;
+        width: 100%;
+        float: none !important;
+        margin: 0 !important;
+    }
+}
+
+/* ====================================================================
+   PLUGINS EN CELULAR: la tabla entra completa, sin barra lateral
+   ==================================================================== */
+@media (max-width: 575px) {
+    #page-wrapper .table-plugins th,
+    #page-wrapper .table-plugins td { padding: 12px 6px !important; }
+    #page-wrapper .table-plugins td:first-child {
+        padding-left: 4px !important;
+        white-space: normal;
+        line-height: 1.3;
+    }
+    #page-wrapper .table-plugins .btn-config-outline {
+        min-width: 0;
+        width: 40px;
+        height: 36px;
+        padding: 0 !important;
+    }
+    #page-wrapper .table-responsive:has(.table-plugins) { overflow-x: visible; }
+}
