@@ -1569,3 +1569,5 @@ body.page-forgotpassword .btn-primary:hover { filter: brightness(1.1); }
 .content-wrapper-clean .alert-success { background: rgba(0, 200, 120, 0.10);  border-color: rgba(0, 200, 120, 0.40);  color: #a6f5cf; }
 .content-wrapper-clean .alert-warning { background: rgba(255, 204, 0, 0.10);  border-color: rgba(255, 204, 0, 0.40);  color: #ffe08a; }
 .content-wrapper-clean .alert-info    { background: rgba(255, 138, 59, 0.10); border-color: rgba(255, 138, 59, 0.40); color: #ffc9a3; }
+.remember-mini { display: flex; align-items: center; gap: 6px; margin: 2px 0 10px; font-size: 12px; color: #E6D6C6; cursor: pointer; }
+.remember-mini input { margin: 0; accent-color: #FF8A3B; }

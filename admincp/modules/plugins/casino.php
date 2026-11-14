@@ -4,6 +4,8 @@
  * PREPARED FOR OBFUSCATION (Pure PHP Version)
  */
 
+if(!defined('access') or !access) die();
+
 // 1. CONFIGURACIÓN Y DEPENDENCIAS
 $basePath = __DIR__ . '/../../../includes/config/';
 $itemsManager = $basePath . 'items_manager.php';
@@ -62,19 +64,23 @@ if(isset($_POST['save_config'])) {
 
 // Crear Caja
 if(isset($_POST['create_box'])) {
-    $imgName = $_POST['box_img'];
-    if(strpos($imgName, '/') === false) $imgName = 'img/boxes/' . $imgName;
+    $boxName = trim((string)$_POST['box_name']);
+    $boxName = function_exists('mb_substr') ? mb_substr($boxName, 0, 60) : substr($boxName, 0, 60);
+    $boxCurrency = in_array($_POST['box_currency'], array('WCoinC', 'WCoinP', 'GoblinPoint', 'Zen'), true) ? $_POST['box_currency'] : 'WCoinC';
+    $imgName = preg_replace('/[^A-Za-z0-9_.\-]/', '', basename((string)$_POST['box_img']));
+    if(!preg_match('/\.(png|jpe?g|gif|webp)$/i', $imgName)) $imgName = '';
 
-    $newBox = [
-        'id' => uniqid(),
-        'name' => $_POST['box_name'],
-        'cost' => (int)$_POST['box_cost'],
-        'currency' => $_POST['box_currency'],
-        'img' => $imgName,
-        'rewards' => [] 
-    ];
-    $boxes[] = $newBox;
-    file_put_contents($casinoFile, json_encode($boxes, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+    if($boxName !== '') {
+        $boxes[] = [
+            'id' => uniqid(),
+            'name' => $boxName,
+            'cost' => max(1, (int)$_POST['box_cost']),
+            'currency' => $boxCurrency,
+            'img' => ($imgName !== '') ? 'img/boxes/' . $imgName : '',
+            'rewards' => []
+        ];
+        file_put_contents($casinoFile, json_encode($boxes, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+    }
     header("Location: ".$moduleUrl."&status=created");
     exit;
 }
@@ -124,7 +130,7 @@ if(isset($_POST['add_reward'])) {
                 'harmony_type' => $harmType,
                 'harmony_level' => $harmLvl,
                 'sockets' => $sockets,
-                'chance' => (float)$_POST['item_chance']
+                'chance' => max(0.01, min(100, (float)$_POST['item_chance']))
             ];
         }
     }
@@ -133,21 +139,23 @@ if(isset($_POST['add_reward'])) {
     exit;
 }
 
-// Eliminar
-if(isset($_GET['delete_box'])) {
-    $boxes = array_filter($boxes, function($b) { return $b['id'] !== $_GET['delete_box']; });
+// Eliminar (solo por POST: queda cubierto por el token anti-CSRF del panel)
+if(isset($_POST['delete_box'])) {
+    $delId = (string)$_POST['delete_box'];
+    $boxes = array_filter($boxes, function($b) use ($delId) { return $b['id'] !== $delId; });
     file_put_contents($casinoFile, json_encode(array_values($boxes), JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
     header("Location: ".$moduleUrl."&status=deleted");
     exit;
 }
-if(isset($_GET['delete_reward'])) {
-    $boxId = $_GET['box'];
-    $rewId = $_GET['delete_reward'];
+if(isset($_POST['delete_reward'])) {
+    $boxId = isset($_POST['box']) ? (string)$_POST['box'] : '';
+    $rewId = (string)$_POST['delete_reward'];
     foreach($boxes as &$box) {
         if($box['id'] === $boxId) {
-            $box['rewards'] = array_filter($box['rewards'], function($r) use ($rewId) { return $r['id'] !== $rewId; });
+            $box['rewards'] = array_values(array_filter($box['rewards'], function($r) use ($rewId) { return $r['id'] !== $rewId; }));
         }
     }
+    unset($box);
     file_put_contents($casinoFile, json_encode(array_values($boxes), JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
     header("Location: ".$moduleUrl."&status=deleted_reward");
     exit;
@@ -157,56 +165,76 @@ if(isset($_GET['delete_reward'])) {
 
 // CSS Styles
 echo '<style>
-    :root { --c-bg: #0d1117; --c-card: #161b22; --c-border: #30363d; --c-accent: #f39c12; --c-text: #c9d1d9; --c-muted: #8b949e; }
-    .msm-wrapper { font-family: "Segoe UI", sans-serif; color: var(--c-text); }
-    .form-control-dark, .form-select-dark { background-color: #0d1117; border: 1px solid var(--c-border); color: #fff; padding: 8px 12px; border-radius: 4px; width: 100%; font-size: 13px; outline: none; transition: 0.2s; }
-    .form-control-dark:focus, .form-select-dark:focus { border-color: var(--c-accent); }
-    .msm-label { color: var(--c-muted); font-size: 11px; font-weight: 700; text-transform: uppercase; margin-bottom: 4px; display: block; }
-    .create-card { background: var(--c-card); border: 1px solid var(--c-border); border-radius: 8px; padding: 20px; margin-bottom: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
-    .cc-title { font-size: 18px; color: #fff; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid var(--c-border); padding-bottom: 10px; }
-    .boxes-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(600px, 1fr)); gap: 20px; }
-    
-    .box-card { background: var(--c-card); border: 1px solid var(--c-border); border-radius: 8px; overflow: visible; transition: transform 0.2s, box-shadow 0.2s; display: flex; flex-direction: column; position: relative; z-index: 1; }
-    .box-card:hover, .box-card:focus-within { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(0,0,0,0.5); border-color: #58a6ff; z-index: 100; }
-
-    .bc-header { background: linear-gradient(90deg, rgba(22,27,34,1) 0%, rgba(33,38,45,1) 100%); padding: 15px; border-bottom: 1px solid var(--c-border); display: flex; align-items: center; justify-content: space-between; border-top-left-radius: 8px; border-top-right-radius: 8px; }
-    .bc-content { padding: 15px; flex: 1; display: flex; flex-direction: column; border-bottom-left-radius: 8px; border-bottom-right-radius: 8px; }
-    .bc-info { display: flex; align-items: center; gap: 15px; }
-    .bc-img { width: 50px; height: 50px; object-fit: contain; filter: drop-shadow(0 0 5px rgba(255,255,255,0.2)); }
-    .bc-title h4 { margin: 0; font-size: 16px; color: #fff; font-weight: 700; }
-    .bc-cost { font-size: 12px; color: var(--c-accent); font-weight: 600; background: rgba(243, 156, 18, 0.1); padding: 2px 8px; border-radius: 4px; border: 1px solid rgba(243, 156, 18, 0.3); }
-    .bc-actions a { color: #f85149; font-size: 14px; padding: 5px; opacity: 0.7; transition: 0.2s; }
-    .bc-actions a:hover { opacity: 1; transform: scale(1.1); }
-    
-    .add-reward-form { background: rgba(0,0,0,0.2); padding: 10px; border-radius: 6px; border: 1px dashed var(--c-border); margin-bottom: 15px; }
+    :root { --c-bg: #0b0d12; --c-card: #0f1115; --c-border: #1f2733; --c-accent: #10b981; --c-text: #e5e7eb; --c-muted: #8b95a7; }
+    .msm-wrapper { color: var(--c-text); }
+    #page-wrapper .msm-wrapper .form-control-dark, #page-wrapper .msm-wrapper .form-select-dark { background-color: var(--c-bg); border: 1px solid #2a3545; color: #fff; padding: 0 12px; height: 40px; border-radius: 8px; width: 100%; font-size: 13px; outline: none; box-shadow: none; transition: 0.2s; }
+    #page-wrapper .msm-wrapper .form-control-dark:focus, #page-wrapper .msm-wrapper .form-select-dark:focus { border-color: var(--c-accent); }
+    .msm-wrapper .form-select-dark option { background: #0b0d12; color: #fff; }
+    .msm-label { color: var(--c-muted); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; margin: 10px 0 6px; display: block; }
+    .create-card { background: var(--c-card); border: 1px solid var(--c-border); border-radius: 10px; padding: 22px; margin-bottom: 24px; box-shadow: none; }
+    .cc-title { font-size: 16px; font-weight: 600; color: #fff; margin-bottom: 8px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid var(--c-border); padding-bottom: 12px; }
+    .cc-title .fa { color: var(--c-muted); }
+    .cc-title .fa-dice:before { content: "\f1b2"; }
+    .boxes-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 560px), 1fr)); gap: 20px; }
+    .box-card { background: var(--c-card); border: 1px solid var(--c-border); border-radius: 10px; overflow: visible; transition: border-color 0.2s; display: flex; flex-direction: column; position: relative; z-index: 1; }
+    .box-card:hover, .box-card:focus-within { border-color: #2a3545; z-index: 100; }
+    .bc-header { background: transparent; padding: 16px 18px; border-bottom: 1px solid var(--c-border); display: flex; align-items: center; justify-content: space-between; }
+    .bc-content { padding: 18px; flex: 1; display: flex; flex-direction: column; }
+    .bc-info { display: flex; align-items: center; gap: 14px; }
+    .bc-img { width: 50px; height: 50px; object-fit: contain; }
+    .bc-title h4 { margin: 0 0 4px; font-size: 15px; color: #fff; font-weight: 700; }
+    .bc-cost { font-size: 12px; color: #f59e0b; font-weight: 600; background: rgba(245, 158, 11, 0.1); padding: 2px 10px; border-radius: 999px; border: 1px solid rgba(245, 158, 11, 0.3); }
+    .bc-actions a { color: #ef4444; font-size: 14px; width: 32px; height: 32px; display: inline-flex; align-items: center; justify-content: center; border: 1px solid #2a3545; border-radius: 8px; transition: 0.2s; }
+    .bc-actions a:hover { background: #ef4444; border-color: #ef4444; color: #fff; }
+    .add-reward-form { background: transparent; padding: 0 0 16px; border: 0; border-bottom: 1px solid var(--c-border); border-radius: 0; margin-bottom: 16px; }
+    .add-reward-form .row { margin-left: -6px; margin-right: -6px; }
+    .add-reward-form [class*="col-"] { padding-left: 6px; padding-right: 6px; }
+    .add-reward-form .mt-2 { margin-top: 12px; }
     .rewards-table { width: 100%; border-collapse: collapse; font-size: 12px; }
-    .rewards-table th { text-align: left; color: var(--c-muted); padding: 8px; border-bottom: 1px solid var(--c-border); }
-    .rewards-table td { padding: 8px; color: var(--c-text); border-bottom: 1px solid #21262d; vertical-align: middle; }
+    .rewards-table th { text-align: left; color: var(--c-muted); font-size: 11px; text-transform: uppercase; padding: 8px; border-bottom: 1px solid #2a3545; }
+    .rewards-table td { padding: 8px; color: var(--c-text); border-bottom: 1px solid var(--c-border); vertical-align: middle; }
     .rewards-table tr:last-child td { border-bottom: none; }
-    .b-prob { color: #2ea043; font-weight: 700; }
-    .b-opt { font-size: 10px; color: #8b949e; display: inline-block; margin-right: 3px; background: rgba(255,255,255,0.05); padding: 1px 4px; border-radius: 3px; }
+    .b-prob { color: #10b981; font-weight: 700; }
+    .b-opt { font-size: 10px; color: #8b95a7; display: inline-block; margin-right: 3px; background: rgba(255,255,255,0.05); padding: 1px 5px; border-radius: 3px; }
     .b-exc { font-size: 10px; color: #00ff88; display: inline-block; margin-right: 2px; }
-    .b-special { font-size: 10px; color: #e74c3c; background: rgba(231, 76, 60, 0.1); padding: 1px 4px; border-radius: 3px; display: inline-block; margin-right: 2px; }
-    .b-sock { font-size: 10px; color: #9b59b6; display: inline-block; margin-right: 2px; }
-    
-    .btn-grad { background: linear-gradient(180deg, #1f6feb, #1158c7); border: 1px solid #1f6feb; color: #fff; padding: 8px 20px; border-radius: 6px; font-weight: 600; cursor: pointer; transition: 0.2s; }
-    .btn-grad:hover { opacity: 0.9; }
-    .btn-add-item { background: #238636; border: 1px solid #238636; color: #fff; font-size: 12px; font-weight: 600; padding: 6px 12px; border-radius: 4px; cursor: pointer; width: 100%; transition: 0.2s; }
-    .btn-add-item:hover { background: #2ea043; }
-
+    .b-special { font-size: 10px; color: #ef4444; background: rgba(239, 68, 68, 0.1); padding: 1px 5px; border-radius: 3px; display: inline-block; margin-right: 2px; }
+    .b-sock { font-size: 10px; color: #a78bfa; display: inline-block; margin-right: 2px; }
+    .btn-grad, .btn-add-item, .btn-save-cfg { display: inline-flex; align-items: center; justify-content: center; gap: 8px; width: 100%; height: 40px; padding: 0 20px; border: 0; border-radius: 8px; color: #fff; font-size: 13px; font-weight: 600; cursor: pointer; transition: background 0.2s; }
+    .btn-grad, .btn-add-item { background: #3b82f6; }
+    .btn-grad:hover, .btn-add-item:hover { background: #2f6fe0; }
+    .btn-save-cfg { background: #10b981; }
+    .btn-save-cfg:hover { background: #0ea371; }
     .chk-row { display: flex; gap: 15px; margin-top: 5px; flex-wrap: wrap; }
-    .chk-label { font-size: 11px; cursor: pointer; display: flex; align-items: center; gap: 4px; color: #c9d1d9; }
-    
-    /* DROPDOWN FLOTANTE */
-    .dropdown-options-box { background: #0d1117; padding: 15px; border-radius: 6px; border: 1px solid #30363d; margin-top: 5px; box-shadow: 0 15px 40px rgba(0,0,0,0.9); position: absolute; width: 100%; left: 0; z-index: 1000; }
+    .chk-label { font-size: 11px; cursor: pointer; display: flex; align-items: center; gap: 4px; color: #e5e7eb; }
+    .dropdown-options-box { background: #0f1115; padding: 16px; border-radius: 10px; border: 1px solid #2a3545; margin-top: 6px; box-shadow: 0 15px 40px rgba(0,0,0,0.9); position: absolute; width: 100%; left: 0; z-index: 1000; }
     .exc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; }
     .socket-row { display: flex; gap: 5px; margin-bottom: 5px; }
-    .toggle-opt-btn { background: #21262d; border: 1px solid #30363d; color: #c9d1d9; font-size: 11px; padding: 4px 8px; border-radius: 4px; cursor: pointer; width: 100%; text-align: left; display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
-    .toggle-opt-btn:hover { background: #30363d; }
-    .btn-save-cfg { background: #8e44ad; border: 1px solid #8e44ad; color: #fff; padding: 8px 20px; border-radius: 6px; font-weight: 600; cursor: pointer; width: 100%; }
+    .toggle-opt-btn { background: transparent; border: 1px solid #2a3545; color: #e5e7eb; font-size: 12px; height: 36px; padding: 0 12px; border-radius: 8px; cursor: pointer; width: 100%; text-align: left; display: flex; justify-content: space-between; align-items: center; margin: 0; }
+    .toggle-opt-btn:hover { border-color: #8b95a7; }
+    .msm-wrapper .alert-success-custom { background: #0f1115; border: 1px solid #1f2733; border-left: 3px solid #10b981; color: #e5e7eb; padding: 12px 16px; margin-bottom: 20px; border-radius: 8px; box-shadow: none; }
+    .bc-actions form { margin: 0; }
+    .bc-actions button { color: #ef4444; background: transparent; font-size: 14px; width: 32px; height: 32px; display: inline-flex; align-items: center; justify-content: center; border: 1px solid #2a3545; border-radius: 8px; cursor: pointer; transition: 0.2s; }
+    .bc-actions button:hover { background: #ef4444; border-color: #ef4444; color: #fff; }
+    .rw-del { background: transparent; border: 0; color: #ef4444; cursor: pointer; padding: 4px 6px; }
+    .rw-del:hover { color: #fff; }
+    .cgc-modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 2000; padding: 16px; background: rgba(0,0,0,0.7); align-items: center; justify-content: center; }
+    .cgc-modal.is-open { display: flex; }
+    .cgc-box { width: 100%; max-width: 380px; background: #0f1115; border: 1px solid #2a3545; border-radius: 10px; padding: 26px 22px; text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,0.6); }
+    .cgc-icon { width: 52px; height: 52px; margin: 0 auto 14px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: rgba(239,68,68,0.12); color: #ef4444; font-size: 22px; }
+    .cgc-box h4 { color: #fff; font-size: 16px; font-weight: 700; margin: 0 0 6px; }
+    .cgc-box p { color: #8b95a7; font-size: 13px; margin: 0; }
+    .cgc-btns { display: flex; justify-content: center; gap: 10px; margin-top: 22px; }
+    .cgc-btns button { height: 38px; padding: 0 18px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; }
+    .cgc-no { background: transparent; border: 1px solid #2a3545; color: #e5e7eb; }
+    .cgc-no:hover { border-color: #8b95a7; }
+    .cgc-yes { background: #ef4444; border: 0; color: #fff; }
+    .cgc-yes:hover { background: #dc2626; }
+
 </style>';
 
 echo '<div class="msm-wrapper">';
+    $casinoMsgs = array('config_saved' => 'Configuraci&oacute;n guardada correctamente.', 'created' => 'Caja creada correctamente.', 'reward_added' => 'Premio agregado correctamente.', 'deleted' => 'Caja eliminada.', 'deleted_reward' => 'Premio eliminado.');
+    if(isset($_GET['status']) && isset($casinoMsgs[$_GET['status']])) echo '<div class="alert-success-custom">' . $casinoMsgs[$_GET['status']] . '</div>';
 
     // 1. Configuración General
     echo '<div class="create-card">';
@@ -247,9 +275,9 @@ echo '<div class="msm-wrapper">';
                     echo '<div class="bc-header">';
                         echo '<div class="bc-info">';
                             echo '<img src="' . $boxImg . '" class="bc-img" onerror="this.src=\'https://placehold.co/50x50/333/ccc?text=BOX\'">';
-                            echo '<div class="bc-title"><h4>' . htmlspecialchars($box['name']) . '</h4><span class="bc-cost">' . number_format($box['cost']) . ' ' . $box['currency'] . '</span></div>';
+                            echo '<div class="bc-title"><h4>' . htmlspecialchars($box['name']) . '</h4><span class="bc-cost">' . number_format($box['cost']) . ' ' . htmlspecialchars($box['currency']) . '</span></div>';
                         echo '</div>';
-                        echo '<div class="bc-actions"><a href="' . $moduleUrl . '&delete_box=' . $box['id'] . '" onclick="return confirm(\'¿Borrar caja?\')" title="Eliminar"><i class="fa fa-trash"></i></a></div>';
+                                                echo '<div class="bc-actions"><form method="post" action="' . $moduleUrl . '" class="js-cg-confirm" data-title="Borrar caja" data-msg="Se eliminar&aacute; la caja y todos sus premios. Esta acci&oacute;n no se puede deshacer."><input type="hidden" name="delete_box" value="' . htmlspecialchars($box['id']) . '"><button type="submit" title="Eliminar"><i class="fa fa-trash"></i></button></form></div>';
                     echo '</div>';
 
                     // Content Card
@@ -264,7 +292,8 @@ echo '<div class="msm-wrapper">';
                                     echo '<label class="msm-label">Categoría</label>';
                                     echo '<select name="item_group" id="grp_' . $box['id'] . '" class="form-select-dark" onchange="loadCasinoItems(this.value, \'' . $box['id'] . '\'); checkHarmony(this.value, \'' . $box['id'] . '\'); updateExcOptions(this.value, \'' . $box['id'] . '\')" required>';
                                         echo '<option value="">...</option>';
-                                        for($i=0; $i<=15; $i++) echo "<option value='$i'>Cat $i</option>";
+                                        $casinoCats = array(0=>'Swords', 1=>'Axes', 2=>'Maces &amp; Scepters', 3=>'Spears', 4=>'Bows &amp; Crossbows', 5=>'Staffs', 6=>'Shields', 7=>'Helms', 8=>'Armors', 9=>'Pants', 10=>'Gloves', 11=>'Boots', 12=>'Wings &amp; Orbs', 13=>'Rings, Pendants &amp; Pets', 14=>'Jewels &amp; Consumables', 15=>'Scrolls');
+                                        foreach($casinoCats as $i => $catName) echo "<option value='$i'>$catName</option>";
                                     echo '</select>';
                                 echo '</div>';
                                 echo '<div class="col-md-4 px-1">';
@@ -370,7 +399,7 @@ echo '<div class="msm-wrapper">';
                                             $colorStyle = ($isExc) ? 'color:#00ff88;' : '';
                                             
                                             echo '<tr>';
-                                                echo '<td><span style="' . $colorStyle . '">' . $rew['name'] . ' <b style="color:#fff;">+' . $rew['level'] . '</b></span></td>';
+                                                echo '<td><span style="' . $colorStyle . '">' . htmlspecialchars($rew['name']) . ' <b style="color:#fff;">+' . $rew['level'] . '</b></span></td>';
                                                 echo '<td>';
                                                     if($rew['luck']) echo '<span class="b-opt">Luck</span>';
                                                     if($rew['skill']) echo '<span class="b-opt">Skill</span>';
@@ -381,7 +410,7 @@ echo '<div class="msm-wrapper">';
                                                     if(!empty($rew['exc_opts'])) echo '<span class="b-exc" title="' . implode(', ', $rew['exc_opts']) . '">Exc(' . count($rew['exc_opts']) . ')</span>';
                                                 echo '</td>';
                                                 echo '<td class="b-prob">' . $rew['chance'] . '%</td>';
-                                                echo '<td style="text-align:right;"><a href="' . $moduleUrl . '&box=' . $box['id'] . '&delete_reward=' . $rew['id'] . '" style="color:#f85149;"><i class="fa fa-times"></i></a></td>';
+                                                                                 echo '<td style="text-align:right;"><form method="post" action="' . $moduleUrl . '" class="js-cg-confirm" data-title="Quitar premio" data-msg="&iquest;Quitar este premio de la caja?" style="margin:0;"><input type="hidden" name="box" value="' . htmlspecialchars($box['id']) . '"><input type="hidden" name="delete_reward" value="' . htmlspecialchars($rew['id']) . '"><button type="submit" class="rw-del" title="Quitar premio"><i class="fa fa-times"></i></button></form></td>';
                                             echo '</tr>';
                                         }
                                     }
@@ -594,4 +623,41 @@ window.onclick = function(event) {
         document.querySelectorAll(".dropdown-options-box").forEach(el => el.style.display = "none");
     }
 }
+<div id="cgcModal" class="cgc-modal" role="dialog" aria-modal="true">
+    <div class="cgc-box">
+        <div class="cgc-icon"><i class="fa fa-trash"></i></div>
+        <h4 id="cgcTitle">Confirmar</h4>
+        <p id="cgcText"></p>
+        <div class="cgc-btns">
+            <button type="button" class="cgc-no" id="cgcNo">Cancelar</button>
+            <button type="button" class="cgc-yes" id="cgcYes">Eliminar</button>
+        </div>
+    </div>
+</div>
+<script>
+(function(){
+    var modal = document.getElementById("cgcModal"), pendingForm = null;
+    function closeModal(){ modal.classList.remove("is-open"); pendingForm = null; }
+    document.addEventListener("submit", function(e){
+        var f = e.target;
+        if(!f.classList || !f.classList.contains("js-cg-confirm")) return;
+        if(f.getAttribute("data-ok") === "1") return;
+        e.preventDefault();
+        pendingForm = f;
+        document.getElementById("cgcTitle").textContent = f.getAttribute("data-title") || "Confirmar";
+        document.getElementById("cgcText").textContent = f.getAttribute("data-msg") || "";
+        modal.classList.add("is-open");
+    }, true);
+    document.getElementById("cgcNo").onclick = closeModal;
+    document.getElementById("cgcYes").onclick = function(){
+        var f = pendingForm;
+        closeModal();
+        if(!f) return;
+        f.setAttribute("data-ok", "1");
+        if(f.requestSubmit) f.requestSubmit(); else f.submit();
+    };
+    modal.addEventListener("click", function(e){ if(e.target === modal) closeModal(); });
+    document.addEventListener("keydown", function(e){ if(e.key === "Escape" && modal.classList.contains("is-open")) closeModal(); });
+})();
+</script>
 </script>

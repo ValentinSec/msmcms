@@ -96,11 +96,6 @@ class CronManager {
 		return true;
 	}
 	
-	public function getCronApiUrl($id=null) {
-		if(check_value($id)) return __PATH_API__ . $this->_api . '?key=' . config('cron_api_key',true) . '&id=' . $id;
-		return __PATH_API__ . $this->_api . '?key=' . config('cron_api_key',true);
-	}
-	
 	public function addCron() {
 		if(!check_value($this->_name)) throw new Exception(lang('error_106'));
 		if(!check_value($this->_file)) throw new Exception(lang('error_106'));

@@ -114,6 +114,20 @@ try {
         if(!hash_equals($csrfToken, $sentToken)) admincp_csrf_fail();
     }
 
+    // Acciones por enlace (GET) que modifican datos: exigen el token en la URL.
+    // El script del <head> lo agrega solo a esos enlaces al hacer clic.
+    if($_SERVER['REQUEST_METHOD'] !== 'POST') {
+        $csrfGetNeeded = false;
+        foreach(array('delete', 'delete_item', 'delete_cat', 'move', 'revoke', 'delete_pack') as $csrfKey) {
+            if(isset($_GET[$csrfKey])) { $csrfGetNeeded = true; break; }
+        }
+        if(isset($_GET['action']) && $_GET['action'] !== 'lock') $csrfGetNeeded = true;
+        if($csrfGetNeeded) {
+            $sentGetToken = (isset($_GET['csrf_token']) && is_string($_GET['csrf_token'])) ? $_GET['csrf_token'] : (isset($_SERVER['HTTP_X_CSRF_TOKEN']) ? (string)$_SERVER['HTTP_X_CSRF_TOKEN'] : '');
+            if(!hash_equals($csrfToken, $sentGetToken)) admincp_csrf_fail();
+        }
+    }
+
     // =================================================================================
     // INICIO SISTEMA DE SEGURIDAD AVANZADO (PIN INDIVIDUAL + AUTO-LOCK)
     // =================================================================================
@@ -444,15 +458,46 @@ echo <<<HTML
         function sameOrigin(u) {
             try { return new URL(u, window.location.href).origin === window.location.origin; } catch (e) { return false; }
         }
+        var GET_KEYS = ["delete", "delete_item", "delete_cat", "move", "revoke", "delete_pack", "action"];
+        function tokenUrl(u) {
+            try {
+                var url = new URL(u, window.location.href);
+                if (url.origin !== window.location.origin || url.searchParams.has("csrf_token")) return null;
+                for (var i = 0; i < GET_KEYS.length; i++) {
+                    var k = GET_KEYS[i];
+                    if (!url.searchParams.has(k)) continue;
+                    if (k === "action" && url.searchParams.get("action") === "lock") continue;
+                    return url;
+                }
+            } catch (e) {}
+            return null;
+        }
+        function tagLink(a) {
+            if (!a || !a.getAttribute) return;
+            var href = a.getAttribute("href");
+            if (!href || href.charAt(0) === "#" || /^javascript:/i.test(href)) return;
+            var url = tokenUrl(href);
+            if (url) { url.searchParams.set("csrf_token", T); a.setAttribute("href", url.pathname + url.search + url.hash); }
+        }
         function addField(f) {
             if (!f || !f.getAttribute) return;
             var method = (f.getAttribute('method') || 'get').toLowerCase();
-            if (method !== 'post') return;
             if (!sameOrigin(f.getAttribute('action') || window.location.href)) return;
+            if (method !== 'post') {
+                var hasKey = GET_KEYS.some(function(k) { return !!f.querySelector('[name="' + k + '"]'); });
+                if (!hasKey) return;
+            }
             var i = f.querySelector('input[name="csrf_token"]');
             if (!i) { i = document.createElement('input'); i.type = 'hidden'; i.name = 'csrf_token'; f.appendChild(i); }
             i.value = T;
         }
+        document.addEventListener('click', function(e) {
+            var a = e.target.closest ? e.target.closest('a[href]') : null;
+            if (a) tagLink(a);
+        }, true);
+        document.addEventListener('DOMContentLoaded', function() {
+            Array.prototype.forEach.call(document.querySelectorAll('a[href]'), tagLink);
+        });
         document.addEventListener('submit', function(e) { addField(e.target); }, true);
         var nativeSubmit = HTMLFormElement.prototype.submit;
         HTMLFormElement.prototype.submit = function() { addField(this); return nativeSubmit.call(this); };
@@ -466,7 +511,7 @@ echo <<<HTML
                 var isString = (typeof input === 'string');
                 var url = isString ? input : ((input && input.url) || '');
                 var method = String(init.method || (!isString && input && input.method) || 'GET').toUpperCase();
-                if (method !== 'GET' && sameOrigin(url)) {
+                if (sameOrigin(url) && (method !== 'GET' || tokenUrl(url))) {
                     var h = new Headers(init.headers || (!isString && input && input.headers) || {});
                     h.set('X-CSRF-Token', T);
                     init.headers = h;
@@ -477,7 +522,7 @@ echo <<<HTML
         var xhrOpen = XMLHttpRequest.prototype.open;
         var xhrSend = XMLHttpRequest.prototype.send;
         XMLHttpRequest.prototype.open = function(method, url) {
-            this._csrfNeeded = (String(method).toUpperCase() !== 'GET' && sameOrigin(url));
+            this._csrfNeeded = sameOrigin(url) && (String(method).toUpperCase() !== 'GET' || !!tokenUrl(url));
             return xhrOpen.apply(this, arguments);
         };
         XMLHttpRequest.prototype.send = function() {

@@ -1151,3 +1151,9 @@ body.page-castlesiege .castle-siege-block .table img { image-rendering: pixelate
 
 /* Perfil de guild: acento dorado de canibal */
 .guild-profile { --profile-accent: #c8a165; }
+
+/* AVISO DE LOGIN FALLIDO */
+.msm-login-toast { position: fixed; top: 24px; left: 50%; transform: translateX(-50%); z-index: 10060; width: 420px; max-width: 92%; padding: 14px 42px 14px 16px; background: #14110c; border: 1px solid #c8a165; border-left: 4px solid #e74c3c; border-radius: 8px; color: #f1e6d2; font-size: 14px; line-height: 1.5; box-shadow: 0 12px 30px rgba(0,0,0,0.6); }
+.msm-login-toast button { position: absolute; top: 8px; right: 10px; background: none; border: 0; color: #c8a165; font-size: 20px; line-height: 1; cursor: pointer; }
+.remember-mini { display: flex; align-items: center; gap: 6px; margin: 2px 0 10px; font-size: 12px; color: #c9b28a; cursor: pointer; }
+.remember-mini input { margin: 0; accent-color: #c8a165; }

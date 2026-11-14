@@ -11,6 +11,7 @@ if(!isLoggedIn()) {
             echo '<form action="'.__BASE_URL__.'login" method="post">';
                 echo '<div class="form-group"><input type="text" class="form-control" name="msmLogin_user" placeholder="Usuario" required></div>';
                 echo '<div class="form-group"><input type="password" class="form-control" name="msmLogin_pwd" placeholder="Contraseña" required></div>';
+                echo '<label class="remember-mini"><input type="checkbox" name="msmLogin_remember" value="1"> Recordarme</label>';
                 echo '<button type="submit" name="msmLogin_submit" value="submit" class="btn btn-primary btn-block">'.lang('login_txt_3').'</button>';
             echo '</form>';
         echo '</div>';

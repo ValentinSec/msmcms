@@ -47,6 +47,12 @@ class login {
 			$_SESSION['userid'] = $userId;
 			$_SESSION['username'] = $accountData[_CLMN_USERNM_];
 			
+						# recordarme (casilla msmLogin_remember)
+			if(!empty($_POST['msmLogin_remember'])) {
+				if(!class_exists('Remember')) @include_once(__PATH_CLASSES__ . 'class.remember.php');
+				if(class_exists('Remember')) Remember::issue($_SESSION['username']);
+			}
+			
 			# redirect to usercp
 			redirect(1,'usercp/');
 			
@@ -115,6 +121,8 @@ class login {
 	}
 	
 	public function logout() {
+		if(!class_exists('Remember')) @include_once(__PATH_CLASSES__ . 'class.remember.php');
+		if(class_exists('Remember')) Remember::forget();
 		$_SESSION = array();
 		session_destroy();
 		redirect();

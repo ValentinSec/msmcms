@@ -252,28 +252,31 @@ if (file_exists($secConfigFile)) {
     }
 }
 
-// 9. LOGICA DE LOGIN (Modificada para permanecer en el sitio)
-// En /login el formulario lo procesa modules/login.php: no se valida dos veces
-// (cada validacion fallida cuenta como un intento).
+// 9. LOGICA DE LOGIN (Post/Redirect/Get: vuelve siempre a la misma pagina del sitio)
+// En /login el formulario lo procesa modules/login.php: no se valida dos veces.
 $msmIsLoginPage = (isset($_REQUEST['page']) && $_REQUEST['page'] === 'login');
-if(!$msmIsLoginPage && ((isset($_POST['msmLogin_user']) && !empty($_POST['msmLogin_user'])) || isset($_POST['msmLogin_submit']))) {
+if(!$msmIsLoginPage && isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] === 'POST'
+   && ((isset($_POST['msmLogin_user']) && !empty($_POST['msmLogin_user'])) || isset($_POST['msmLogin_submit']))) {
     $_POST['msmLogin_submit'] = 'submit';
+    $msmBack = parse_url(isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '/', PHP_URL_PATH);
+    $msmBack = '/' . ltrim(is_string($msmBack) ? $msmBack : '', '/');
     try {
         if(class_exists('login')) {
             $userLogin = new login();
-            $userLogin->validateLogin($_POST['msmLogin_user'], $_POST['msmLogin_pwd']);
-            
-            // En lugar de redirigir a /usercp, recargamos la ubicación actual 
-            // para que se actualicen los estados de login en el sidebar.
-            ob_clean();
-            header("Location: " . $_SERVER['HTTP_REFERER']); 
-            exit;
+            $userLogin->validateLogin(isset($_POST['msmLogin_user']) ? $_POST['msmLogin_user'] : '', isset($_POST['msmLogin_pwd']) ? $_POST['msmLogin_pwd'] : '');
         }
     } catch (Throwable $ex) {
-        // Opcional: podrías guardar el error en una sesión para mostrarlo en el sidebar
+        $_SESSION['msm_login_error'] = $ex->getMessage();
     }
+    while(ob_get_level()) ob_end_clean();
+    header('Location: ' . $msmBack);
+    exit;
 }
-
+$msmLoginError = '';
+if(isset($_SESSION['msm_login_error'])) {
+    $msmLoginError = (string)$_SESSION['msm_login_error'];
+    unset($_SESSION['msm_login_error']);
+}
 // 10. HANDLERS AJAX (Ranking y Mercado)
 if((isset($_POST['market_ajax']) && $_POST['market_ajax'] == 'true') || (isset($_POST['ranking_ajax']) && $_POST['ranking_ajax'] == 'true')) {
     while (ob_get_level()) ob_end_clean();
@@ -1160,6 +1163,13 @@ $seoData = is_array($muservermakerParams) ? $muservermakerParams : [];
     </script>
 
     <script src="<?php echo __BASE_URL__; ?>templates/canibal/js/main.js?v=<?php echo msm_v('templates/canibal/js/main.js'); ?>"></script>
+<?php if($msmLoginError !== ''): ?>
+<div id="msmLoginToast" class="msm-login-toast" role="alert">
+    <?php echo htmlspecialchars(html_entity_decode(strip_tags($msmLoginError), ENT_QUOTES, 'UTF-8'), ENT_QUOTES, 'UTF-8'); ?>
+    <button type="button" onclick="this.parentNode.remove()" aria-label="Cerrar">&times;</button>
+</div>
+<script>setTimeout(function(){ var t = document.getElementById("msmLoginToast"); if(t) t.remove(); }, 8000);</script>
+<?php endif; ?>
 <?php @include(__DIR__ . '/../misc/inc/cron_trigger.php'); ?>
 </body>
 </html>

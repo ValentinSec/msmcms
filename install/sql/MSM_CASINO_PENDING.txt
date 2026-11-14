@@ -1,0 +1,13 @@
+CREATE TABLE [dbo].[{TABLE_PREFIX}CASINO_PENDING](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[account_id] [varchar](10) NOT NULL,
+	[box_name] [varchar](100) NOT NULL,
+	[prize_name] [varchar](100) NOT NULL,
+	[item_hex] [varchar](32) NOT NULL,
+	[item_group] [smallint] NOT NULL,
+	[item_index] [smallint] NOT NULL,
+	[item_level] [tinyint] NOT NULL DEFAULT 0,
+	[date_won] [datetime] NOT NULL DEFAULT GETDATE(),
+ CONSTRAINT [PK_{TABLE_PREFIX}CASINO_PENDING] PRIMARY KEY CLUSTERED ([id] ASC)
+) ON [PRIMARY];
+CREATE INDEX [IX_{TABLE_PREFIX}CASINO_PENDING_ACC] ON [dbo].[{TABLE_PREFIX}CASINO_PENDING] ([account_id]);

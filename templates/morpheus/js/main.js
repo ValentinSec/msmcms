@@ -263,7 +263,7 @@ function openLoginModal() {
                         </div>
                         <button type="submit" class="login-btn-enter" id="btnLoginSubmit">Entrar</button>
                         <div class="login-options">
-                            <input type="checkbox" id="chkRemember" name="remember" class="login-checkbox">
+                            <input type="checkbox" id="chkRemember" name="msmLogin_remember" value="1" class="login-checkbox">
                             <label for="chkRemember">Remember me</label>
                         </div>
                         <div class="login-footer">

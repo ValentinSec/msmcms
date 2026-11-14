@@ -78,7 +78,7 @@ $blackMarketActive = (isset($bmData['module_active']) && $bmData['module_active'
         <form action="<?php echo __BASE_URL__; ?>login" method="post" style="width:100%;" onsubmit="doAjaxLogin(event, this);">
             <input type="text" name="msmLogin_user" class="login-input" placeholder="Usuario" required>
             <input type="password" name="msmLogin_pwd" class="login-input" placeholder="Contraseña" required>
-            
+            <label class="remember-mini"><input type="checkbox" name="msmLogin_remember" value="1"> Recordarme</label>
             <button type="submit" name="msmLogin_submit" class="btn-login-custom" style="transition: all 0.3s ease;">
                 INGRESAR <i class="fa fa-chevron-right ms-2"></i>
             </button>

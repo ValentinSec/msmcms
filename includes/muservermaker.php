@@ -269,6 +269,11 @@ define('__PATH_TEMPLATE_CSS__', __PATH_TEMPLATE__ . 'css/');
 define('__PATH_TEMPLATE_JS__', __PATH_TEMPLATE__ . 'js/');
 define('__PATH_TEMPLATE_FONTS__', __PATH_TEMPLATE__ . 'fonts/');
 
+// Recordarme: si no hay sesion pero el navegador trae una llave valida, se restaura la sesion
+if(defined('access') && (access == 'index' || access == 'admincp')) {
+    try { if(@include_once(__PATH_CLASSES__ . 'class.remember.php')) Remember::restore(); } catch (Throwable $e) { }
+}
+
 // Contador de visitas del sitio publico (grafico del Dashboard). Nunca debe frenar la pagina.
 if(defined('access') && access == 'index') {
     try {

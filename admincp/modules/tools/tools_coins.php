@@ -5,14 +5,14 @@
  */
 if(!defined('access')) die();
 
-// 1. CARGAR CONFIGURACI?N
+// 1. CARGAR CONFIGURACI車N
 $fileSettings = __DIR__ . '/../../../includes/config/custom_settings.json';
 $config = [];
 if(file_exists($fileSettings)) {
     $config = json_decode(file_get_contents($fileSettings), true);
 }
 
-// Funci?n helper para obtener valor o default
+// Funci車n helper para obtener valor o default
 function getConf($key, $arr, $default) {
     return (isset($arr[$key]) && !empty($arr[$key])) ? $arr[$key] : $default;
 }
@@ -22,22 +22,28 @@ $tableCoins = getConf('table_coins', $config, 'CashShopData');
 $col1       = getConf('col_coin_1', $config, 'WCoinC');
 $col2       = getConf('col_coin_2', $config, 'WCoinP');
 $col3       = getConf('col_coin_3', $config, 'GoblinPoint');
-
+$tableCoins = preg_replace('/[^A-Za-z0-9_]/', '', $tableCoins);
+$col1 = preg_replace('/[^A-Za-z0-9_]/', '', $col1);
+$col2 = preg_replace('/[^A-Za-z0-9_]/', '', $col2);
+$col3 = preg_replace('/[^A-Za-z0-9_]/', '', $col3);
 // Auto-detectar columna de usuario (Compatibilidad MEMB_STAT vs CashShopData)
 $colUser = 'AccountID';
 if(in_array(strtolower($tableCoins), ['memb_info', 'memb_stat', 'character'])) {
     $colUser = 'memb___id';
 }
 
-// 3. L?GICA
+// 3. L車GICA
 $alertMessage = '';
 try {
     $db = Connection::Database('Me_MuOnline');
     
     if(isset($_POST['add_coins'])) {
-        $account = $_POST['account'];
+        $account = trim((string)$_POST['account']);
         $amount  = (int)$_POST['amount'];
-        $type    = $_POST['type']; // Esto traer? el nombre real de la columna (ej: WCoinC)
+        $type    = in_array((string)$_POST['type'], array($col1, $col2, $col3), true) ? (string)$_POST['type'] : '';
+        if($type === '') throw new Exception('Tipo de moneda inv&aacute;lido.');
+        if($account === '' || strlen($account) > 10) throw new Exception('La cuenta ingresada no existe.');
+        if($amount === 0 || abs($amount) > 2000000000) throw new Exception('Cantidad inv&aacute;lida.');
 
         // Verificar cuenta en MEMB_INFO (siempre fija para validar existencia)
         $checkAccount = $db->query_fetch_single("SELECT memb___id FROM MEMB_INFO WHERE memb___id = ?", [$account]);
@@ -54,7 +60,7 @@ try {
             $db->query("INSERT INTO $tableCoins ($colUser, $type) VALUES (?, ?)", [$account, $amount]);
         }
         
-        $alertMessage = '<div class="alert-success-custom">Se cargaron <b>'.$amount.'</b> <b>'.$type.'</b> a la cuenta <b>'.$account.'</b>.</div>';
+        $alertMessage = '<div class="alert-success-custom">Se cargaron <b>'.$amount.'</b> <b>'.$type.'</b> a la cuenta <b>'.htmlspecialchars($account).'</b>.</div>';
     }
 
     // Listar (Ordenado por la primera moneda)
@@ -104,7 +110,7 @@ echo '<div class="bottom-card" style="padding: 0;">';
                 foreach($accounts as $acc) {
                     echo '<tr>';
                         echo '<td>' . $i++ . '</td>';
-                        echo '<td><span class="donator-user">' . $acc[$colUser] . '</span></td>';
+                        echo '<td><span class="donator-user">' . htmlspecialchars((string)$acc[$colUser]) . '</span></td>';
                         echo '<td data-label="' . htmlspecialchars($col1, ENT_QUOTES) . '"><span class="coin-pill-white">' . number_format((int)$acc[$col1]) . '</span></td>';
                         echo '<td data-label="' . htmlspecialchars($col2, ENT_QUOTES) . '"><span class="coin-val-white"><i class="fa fa-diamond coin-icon-sm"></i> ' . number_format((int)$acc[$col2]) . '</span></td>';
                         echo '<td data-label="' . htmlspecialchars($col3, ENT_QUOTES) . '"><span class="coin-val-green"><i class="fa fa-bolt coin-icon-sm"></i> ' . number_format((int)$acc[$col3]) . '</span></td>';
@@ -172,7 +178,7 @@ echo '</div>';
 
 // CSS
 echo '<style>
-    /* ESTILO MENSAJE ?XITO CUSTOM */
+    /* ESTILO MENSAJE 谷XITO CUSTOM */
     .alert-success-custom { background: #1b1b28; border-left: 4px solid #00d084; color: #fff; padding: 15px; margin-bottom: 20px; border-radius: 4px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
 </style>';
 ?>

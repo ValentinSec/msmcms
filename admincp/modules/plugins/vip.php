@@ -3,6 +3,8 @@
  * Módulo de Gestión de Packs VIP (In-Game Currency Version)
  * Fix: Botones Borrar/Ordenar, Limpieza de Buffer, Modales y Warnings de Array
  */
+ 
+ if(!defined('access') or !access) die();
 
 // ====================================================================================
 // 1. CARGA INTELIGENTE DE CONFIGURACIONES
@@ -76,12 +78,20 @@ if (file_exists($vipConfigPath)) {
 if($_SERVER['REQUEST_METHOD'] === 'POST') {
     
     if(isset($_POST['action']) && $_POST['action'] === 'add_vip') {
+        $vLevel = (int)(isset($_POST['vip_level']) ? $_POST['vip_level'] : 0);
+        $vDays  = (int)(isset($_POST['days']) ? $_POST['days'] : 0);
+        $vCost  = (int)(isset($_POST['cost']) ? $_POST['cost'] : 0);
+        $vCur   = isset($_POST['currency']) ? (string)$_POST['currency'] : '';
+        if(!in_array($vLevel, array(1, 2, 3), true) || $vDays < 1 || $vDays > 3650 || $vCost < 1 || !in_array($vCur, $activeCurrencies, true)) {
+            echo '<script>window.location.href="index.php?module=vip&error=invalid";</script>';
+            exit;
+        }
         $newPack = [
             'id' => uniqid('vip_'),
-            'vip_level' => $_POST['vip_level'],
-            'days' => (int)$_POST['days'],
-            'cost' => (int)$_POST['cost'],
-            'currency' => isset($_POST['currency']) ? $_POST['currency'] : $activeCurrencies[0],
+            'vip_level' => (string)$vLevel,
+            'days' => $vDays,
+            'cost' => $vCost,
+            'currency' => $vCur,
             'order' => count($vipPackages)
         ];
         $vipPackages[] = $newPack;
@@ -140,30 +150,54 @@ $vipNames = [
 // --- RENDERIZADO HTML ---
 
 echo '<style>
-    #vip-admin-wrapper { background-color: #0f1217 !important; color: #ffffff !important; padding: 25px !important; border-radius: 8px !important; font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif !important; }
-    #vip-admin-wrapper h3 { color: #ffffff !important; font-weight: 700 !important; margin-top: 0 !important; text-transform: uppercase !important; }
-    .btn-vip-add { background: #f39c12 !important; border: 1px solid #e67e22 !important; color: #fff !important; padding: 10px 20px !important; font-weight: bold !important; text-transform: uppercase !important; border-radius: 5px !important; cursor: pointer !important; display: inline-block !important; transition: all 0.3s ease !important; }
-    .btn-vip-add:hover { background: #d35400 !important; box-shadow: 0 0 10px rgba(243, 156, 18, 0.5) !important; text-decoration: none !important; color: #fff !important; }
-    .vip-table-container { background: #15171c !important; border: 1px solid #2d323e !important; border-radius: 8px !important; margin-top: 20px !important; overflow: hidden !important; }
+    #vip-admin-wrapper { background: transparent !important; color: var(--ad-text, #e5e7eb) !important; padding: 0 !important; }
+    #vip-admin-wrapper h3 { color: #fff !important; font-weight: 700 !important; margin: 0 0 4px !important; text-transform: none !important; }
+    #vip-admin-wrapper h3 .fa-crown { color: var(--ad-accent, #10b981) !important; }
+    #vip-admin-wrapper h3 .fa-crown:before { content: "\f219"; }
+    #vip-admin-wrapper p { color: var(--ad-muted, #8b95a7) !important; }
+    .btn-vip-add { display: inline-flex !important; align-items: center !important; gap: 8px !important; height: 40px !important; padding: 0 20px !important; background: var(--ad-info, #3b82f6) !important; border: 0 !important; color: #fff !important; font-size: 13px !important; font-weight: 600 !important; text-transform: none !important; border-radius: 8px !important; cursor: pointer !important; white-space: nowrap !important; transition: background 0.2s !important; }
+    .btn-vip-add:hover { background: #2f6fe0 !important; color: #fff !important; text-decoration: none !important; }
+    .vip-table-container { background: var(--ad-surface, #0f1115) !important; border: 1px solid var(--ad-line, #1f2733) !important; border-radius: 10px !important; margin-top: 20px !important; overflow-x: auto !important; }
     .vip-table { width: 100% !important; border-collapse: collapse !important; }
-    .vip-table th { background: rgba(0,0,0,0.3) !important; color: #888 !important; font-weight: 700 !important; text-transform: uppercase !important; font-size: 11px !important; padding: 15px !important; border-bottom: 2px solid #2d323e !important; text-align: left !important; }
-    .vip-table td { padding: 15px !important; border-bottom: 1px solid rgba(255,255,255,0.05) !important; color: #ccc !important; vertical-align: middle !important; }
-    .vip-badge { padding: 4px 8px !important; border-radius: 4px !important; font-weight: bold !important; font-size: 11px !important; border: 1px solid !important; }
-    .btn-vip-action { width: 30px !important; height: 30px !important; border: none !important; border-radius: 4px !important; color: #fff !important; cursor: pointer !important; margin-left: 2px !important; display: inline-flex !important; align-items: center !important; justify-content: center !important; }
-    .b-up { background: #3498db !important; } .b-down { background: #3498db !important; } .b-del { background: #e74c3c !important; }
-    .custom-dark-modal .modal-content { background-color: #1a1d24 !important; border: 1px solid #f39c12 !important; color: #fff !important; box-shadow: 0 0 50px rgba(0,0,0,0.7) !important; }
-    .custom-dark-modal .modal-header { border-bottom: 1px solid #2d323e !important; }
-    .custom-dark-modal .modal-footer { border-top: 1px solid #2d323e !important; }
-    .custom-dark-modal .close { color: #fff !important; opacity: 1 !important; text-shadow: none !important; }
-    .custom-dark-modal input, .custom-dark-modal select { background: #0f1217 !important; border: 1px solid #2d323e !important; color: #fff !important; height: 40px !important; }
-    .custom-dark-modal input:focus, .custom-dark-modal select:focus { border-color: #f39c12 !important; }
-    .alert-success-custom { background: #1b1b28 !important; border-left: 4px solid #00d084 !important; color: #fff !important; padding: 15px !important; margin-bottom: 20px !important; border-radius: 4px !important; box-shadow: 0 4px 10px rgba(0,0,0,0.2) !important; }
+    .vip-table th { background: transparent !important; color: var(--ad-muted, #8b95a7) !important; font-weight: 700 !important; text-transform: uppercase !important; font-size: 11px !important; letter-spacing: 0.5px !important; padding: 14px 18px !important; border-bottom: 1px solid var(--ad-line-strong, #2a3545) !important; text-align: left !important; }
+    .vip-table td { padding: 14px 18px !important; border-bottom: 1px solid var(--ad-line, #1f2733) !important; color: var(--ad-text, #e5e7eb) !important; vertical-align: middle !important; }
+    .vip-table tr:last-child td { border-bottom: 0 !important; }
+    .vip-table td[colspan] { color: var(--ad-muted, #8b95a7) !important; }
+    .vip-badge { padding: 4px 10px !important; border-radius: 999px !important; font-weight: 700 !important; font-size: 11px !important; border: 1px solid !important; }
+    .btn-vip-action { width: 32px !important; height: 32px !important; padding: 0 !important; border: 1px solid var(--ad-line-strong, #2a3545) !important; background: transparent !important; border-radius: 8px !important; color: var(--ad-text, #e5e7eb) !important; cursor: pointer !important; margin-left: 4px !important; display: inline-flex !important; align-items: center !important; justify-content: center !important; transition: 0.2s !important; }
+    .btn-vip-action:hover { border-color: var(--ad-info, #3b82f6) !important; color: #fff !important; }
+    .btn-vip-action.b-del { background: var(--ad-danger, #ef4444) !important; border-color: var(--ad-danger, #ef4444) !important; color: #fff !important; }
+    .btn-vip-action.b-del:hover { background: #dc2626 !important; border-color: #dc2626 !important; }
+    .custom-dark-modal .modal-dialog { margin-top: 12vh !important; }
+    .custom-dark-modal .modal-content { background-color: var(--ad-surface, #0f1115) !important; border: 1px solid var(--ad-line-strong, #2a3545) !important; border-radius: 10px !important; color: var(--ad-text, #e5e7eb) !important; box-shadow: 0 20px 60px rgba(0,0,0,0.6) !important; }
+    .custom-dark-modal .modal-header { display: flex !important; align-items: center !important; justify-content: space-between !important; border-bottom: 1px solid var(--ad-line, #1f2733) !important; }
+    .custom-dark-modal .modal-header:before, .custom-dark-modal .modal-header:after { display: none !important; }
+    .custom-dark-modal .modal-title { color: #fff !important; font-weight: 700 !important; font-size: 15px !important; margin: 0 !important; }
+    .custom-dark-modal .modal-footer { border-top: 1px solid var(--ad-line, #1f2733) !important; }
+    .custom-dark-modal .close { float: none !important; margin: 0 !important; color: var(--ad-muted, #8b95a7) !important; opacity: 1 !important; text-shadow: none !important; }
+    .custom-dark-modal label { color: var(--ad-muted, #8b95a7) !important; font-size: 12px !important; font-weight: 600 !important; text-transform: uppercase !important; }
+    .custom-dark-modal input, .custom-dark-modal select { background: var(--ad-field, #0b0d12) !important; border: 1px solid var(--ad-line-strong, #2a3545) !important; border-radius: 8px !important; color: #fff !important; height: 40px !important; box-shadow: none !important; }
+    .custom-dark-modal input:focus, .custom-dark-modal select:focus { border-color: var(--ad-accent, #10b981) !important; }
+    .custom-dark-modal .btn-secondary { background: transparent !important; border: 1px solid var(--ad-line-strong, #2a3545) !important; color: var(--ad-text, #e5e7eb) !important; border-radius: 8px !important; height: 40px !important; padding: 0 18px !important; font-size: 13px !important; font-weight: 600 !important; }
+    .custom-dark-modal .btn-secondary:hover { border-color: var(--ad-muted, #8b95a7) !important; color: #fff !important; }
+    .custom-dark-modal .btn-success { background: var(--ad-accent, #10b981) !important; border: 0 !important; color: #fff !important; }
+    .custom-dark-modal .btn-success:hover { background: var(--ad-accent-hover, #0ea371) !important; }
+    #modalDeleteVip .modal-body { padding: 28px 20px !important; }
+    #modalDeleteVip h5 { color: #fff !important; font-weight: 700 !important; font-size: 16px !important; margin: 14px 0 6px !important; }
+    #modalDeleteVip p { color: var(--ad-muted, #8b95a7) !important; margin: 0 !important; }
+    #modalDeleteVip .d-flex { display: flex !important; justify-content: center !important; gap: 10px !important; margin-top: 20px !important; }
+    #modalDeleteVip .btn { height: 36px !important; padding: 0 18px !important; border-radius: 8px !important; font-size: 13px !important; font-weight: 600 !important; }
+    .alert-success-custom { background: var(--ad-surface, #0f1115) !important; border: 1px solid var(--ad-line, #1f2733) !important; border-left: 3px solid var(--ad-accent, #10b981) !important; color: var(--ad-text, #e5e7eb) !important; padding: 12px 16px !important; margin-bottom: 20px !important; border-radius: 8px !important; box-shadow: none !important; }
 </style>';
 
 echo '<div id="vip-admin-wrapper">';
     
     if(isset($_GET['success']) && $_GET['success'] == 'created') {
         echo '<div class="alert-success-custom">Cambios guardados correctamente.</div>';
+    }
+    
+        if(isset($_GET['error']) && $_GET['error'] == 'invalid') {
+        echo '<div class="alert-success-custom" style="border-left-color:#ef4444 !important;">Datos inv&aacute;lidos: revis&aacute; nivel, d&iacute;as, costo y moneda.</div>';
     }
 
     echo '<div style="display: flex; justify-content: space-between; align-items: center;">';

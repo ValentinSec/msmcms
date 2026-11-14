@@ -34,9 +34,9 @@ $allowedSites = [
 $successMsg = '';
 if(isset($_POST['save_votes'])) {
     $dataToSave = [
-        'vote_reward'   => isset($_POST['vote_reward']) ? $_POST['vote_reward'] : 0,
-        'vote_currency' => isset($_POST['vote_currency']) ? $_POST['vote_currency'] : '',
-        'vote_interval' => isset($_POST['vote_interval']) ? $_POST['vote_interval'] : 12,
+        'vote_reward'   => isset($_POST['vote_reward']) ? max(0, (int)$_POST['vote_reward']) : 0,
+        'vote_currency' => isset($_POST['vote_currency']) ? preg_replace('/[^A-Za-z0-9_]/', '', (string)$_POST['vote_currency']) : '',
+        'vote_interval' => (isset($_POST['vote_interval']) && in_array((int)$_POST['vote_interval'], array(1, 6, 12, 24), true)) ? (int)$_POST['vote_interval'] : 12,
         'links'         => []
     ];
 
@@ -48,12 +48,14 @@ if(isset($_POST['save_votes'])) {
         $active = isset($_POST['active_' . $key]) ? 1 : 0;
         
         // Validación de dominio
-        if(!empty($url)) {
+        $url = trim((string)$url);
+        if($url !== '' && !preg_match('#^https?://#i', $url)) $url = 'https://' . $url;
+        if($url !== '') {
             $parsed = parse_url($url);
-            $host = isset($parsed['host']) ? $parsed['host'] : '';
-            if(strpos($host, $domain) === false) {
-                $url = ""; 
-            }
+            $scheme = isset($parsed['scheme']) ? strtolower($parsed['scheme']) : '';
+            $host = isset($parsed['host']) ? strtolower($parsed['host']) : '';
+            $okHost = ($host === $domain || substr($host, -strlen('.' . $domain)) === '.' . $domain);
+            if(!in_array($scheme, array('http', 'https'), true) || !$okHost) $url = '';
         }
 
         $dataToSave['links'][$domain] = [
@@ -127,6 +129,9 @@ echo '<style>
     .modal-text { color: #a1a5b7; margin-bottom: 20px; font-size: 0.9rem; }
     .modal-btn { background: #f1416c; color: white; border: none; padding: 10px 25px; border-radius: 6px; cursor: pointer; font-weight: bold; }
     .modal-btn:hover { background: #d9214e; }
+    #votesForm > .row.mb-4 { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin: 0 0 20px; }
+    #votesForm > .row.mb-4:before, #votesForm > .row.mb-4:after { display: none; }
+    #page-wrapper #votesForm > .row.mb-4 .btn-save-green { float: none !important; margin: 0 !important; }
 </style>';
 
 echo '<div class="container-fluid">';
@@ -157,7 +162,7 @@ echo '<div class="container-fluid">';
                 echo '<div class="col-md-3">';
                     echo '<div class="form-group">';
                         echo '<label class="settings-label">Premio Votos</label>';
-                        echo '<input type="number" name="vote_reward" class="form-control-dark" value="' . getVoteVal('vote_reward', $votesConfig, 10) . '" placeholder="0">';
+                        echo '<input type="number" name="vote_reward" class="form-control-dark" value="' . (int)getVoteVal('vote_reward', $votesConfig, 10) . '" placeholder="0">';
                     echo '</div>';
                 echo '</div>';
                 
@@ -171,7 +176,7 @@ echo '<div class="container-fluid">';
                             } else {
                                 foreach($activeCoins as $val => $text) {
                                     $sel = (getVoteVal('vote_currency', $votesConfig) == $val) ? 'selected' : '';
-                                    echo '<option value="' . $val . '" ' . $sel . '>' . $text . '</option>';
+                                    echo '<option value="' . htmlspecialchars($val) . '" ' . $sel . '>' . htmlspecialchars($text) . '</option>';
                                 }
                             }
                         echo '</select>';
@@ -182,7 +187,7 @@ echo '<div class="container-fluid">';
                 echo '<div class="col-md-3">';
                     echo '<div class="form-group">';
                         echo '<label class="settings-label">Tabla Moneda</label>';
-                        echo '<input type="text" class="form-control-dark" value="' . $tableCoins . '" readonly title="Dato extraído de Settings Tables">';
+                        echo '<input type="text" class="form-control-dark" value="' . htmlspecialchars($tableCoins) . '" readonly title="Dato extraído de Settings Tables">';
                     echo '</div>';
                 echo '</div>';
 
@@ -218,7 +223,7 @@ echo '<div class="container-fluid">';
                     echo '<div class="vote-name">' . $siteName . '</div>';
                     
                     echo '<div class="vote-input-container">';
-                        echo '<input type="text" id="' . $inputId . '" name="' . $inputId . '" class="form-control-dark vote-url-input" value="' . $currentUrl . '" placeholder="https://' . $domain . '/..." data-domain="' . $domain . '">';
+                        echo '<input type="text" id="' . $inputId . '" name="' . $inputId . '" class="form-control-dark vote-url-input" value="' . htmlspecialchars($currentUrl) . '" placeholder="https://' . $domain . '/..." data-domain="' . $domain . '">';
                     echo '</div>';
                     
                     echo '<div class="vote-actions">';
@@ -230,7 +235,7 @@ echo '<div class="container-fluid">';
                         echo '<button type="button" class="btn-action" onclick="enableEdit(\'' . $inputId . '\')"><i class="fa fa-pencil"></i> Editar</button>';
                         
                         if(!empty($currentUrl)) {
-                            echo '<a href="' . $currentUrl . '" target="_blank" class="btn-action btn-visit"><i class="fa fa-external-link"></i> Visitar Sitio</a>';
+                            echo '<a href="' . htmlspecialchars($currentUrl) . '" rel="noopener" target="_blank" class="btn-action btn-visit"><i class="fa fa-external-link"></i> Visitar Sitio</a>';
                         } else {
                             echo '<button type="button" class="btn-action" style="opacity:0.5; cursor: default;">Visitar Sitio</button>';
                         }

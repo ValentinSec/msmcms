@@ -52,6 +52,11 @@ $tables = [
     
     // Sistema Casino
     'MSM_CASINO_LOG.txt'             => 'CASINO_LOG',
+	
+	'MSM_CASINO_PENDING.txt'         => 'CASINO_PENDING',
+
+    // Sistema de Cuentas: Recordarme
+    'MSM_REMEMBER.txt'               => 'REMEMBER',
 ];
 
 $procedures = [

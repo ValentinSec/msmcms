@@ -56,7 +56,7 @@ try {
     // Opciones (Remember / Forgot)
     echo '<div class="form-options">';
     echo '<label class="remember-me">';
-    echo '<input type="checkbox"> <span>Recordarme</span>';
+    echo '<input type="checkbox" name="msmLogin_remember" value="1"> <span>Recordarme</span>';
     echo '</label>';
     echo '<a href="' . $baseUrl . 'forgotpassword/" class="forgot-link">¿Olvidaste tu contraseña?</a>';
     echo '</div>';

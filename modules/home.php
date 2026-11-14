@@ -77,6 +77,7 @@ echo '<div class="col-xs-4">';
                     echo '<div class="form-group">';
                         echo '<input type="password" class="form-control" id="loginBox2" name="msmLogin_pwd" required>';
                     echo '</div>';
+                    echo '<div class="checkbox"><label><input type="checkbox" name="msmLogin_remember" value="1"> Recordarme</label></div>';
                     echo '<button type="submit" name="msmLogin_submit" value="submit" class="btn btn-primary">'.lang('login_txt_3').'</button>';
                 echo '</form>';
             echo '</div>';
