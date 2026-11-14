@@ -21,7 +21,6 @@ class Email {
 	private $_smtpPort;
 	private $_smtpUser;
 	private $_smtpPass;
-	private $_smtpSecure = '';
 	
 	private $_template;
 	private $_message;
@@ -49,25 +48,6 @@ class Email {
 		$this->_smtpPort = $configs['smtp_port'];
 		$this->_smtpUser = $configs['smtp_user'];
 		$this->_smtpPass = $configs['smtp_pass'];
-				# SMTP configurado desde el AdminCP (smtp_settings.json): tiene prioridad sobre email.xml
-		$smtpFile = __PATH_CONFIGS__ . 'smtp_settings.json';
-		if(file_exists($smtpFile)) {
-			$smtpCfg = json_decode((string)@file_get_contents($smtpFile), true);
-			if(is_array($smtpCfg)) {
-				if(!empty($smtpCfg['smtp_user']) && filter_var($smtpCfg['smtp_user'], FILTER_VALIDATE_EMAIL)) $this->_from = $smtpCfg['smtp_user'];
-				if(!empty($smtpCfg['smtp_active']) && !empty($smtpCfg['smtp_host'])) {
-					$this->_smtp = true;
-					$this->_smtpHost = $smtpCfg['smtp_host'];
-					$this->_smtpPort = !empty($smtpCfg['smtp_port']) ? (int)$smtpCfg['smtp_port'] : 587;
-					$this->_smtpUser = isset($smtpCfg['smtp_user']) ? $smtpCfg['smtp_user'] : '';
-					$this->_smtpPass = isset($smtpCfg['smtp_pass']) ? $smtpCfg['smtp_pass'] : '';
-					$this->_smtpSecure = (isset($smtpCfg['smtp_crypto']) && in_array($smtpCfg['smtp_crypto'], array('tls','ssl'), true)) ? $smtpCfg['smtp_crypto'] : 'tls';
-				}
-			}
-		}
-		$msmServerName = config('server_name', true);
-		if(!empty($msmServerName)) $this->_name = $msmServerName;
-		
 		
 		# check if templates exist
 		if(!is_array($configs['email_templates']['template'])) throw new Exception();
@@ -147,17 +127,10 @@ class Email {
 		if($this->_smtp) {
 			$this->mail->IsSMTP();
 			$this->mail->SMTPAuth = true;
-			$smtpHost4 = gethostbyname($this->_smtpHost);
-			if($smtpHost4 !== $this->_smtpHost) {
-				$this->mail->Host = $smtpHost4;
-				$this->mail->SMTPOptions = array('ssl' => array('peer_name' => $this->_smtpHost));
-			} else {
-				$this->mail->Host = $this->_smtpHost;
-			}
+			$this->mail->Host = $this->_smtpHost;
 			$this->mail->Port = $this->_smtpPort;
 			$this->mail->Username = $this->_smtpUser;
 			$this->mail->Password = $this->_smtpPass;
-			if($this->_smtpSecure) $this->mail->SMTPSecure = $this->_smtpSecure;
 		}
 		
 		$this->mail->SetFrom($this->_from, $this->_name);
