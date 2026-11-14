@@ -7,12 +7,7 @@
 if(!defined('access') or !access) die();
 
 // --- 1. CONFIGURACIÓN Y VERIFICACIÓN ---
-$configPath = __PATH_CONFIGS__ . 'muservermaker.json';
-if (!file_exists($configPath)) {
-    $configPath = $_SERVER['DOCUMENT_ROOT'] . '/includes/config/muservermaker.json';
-}
-
-$configData = json_decode(file_get_contents($configPath), true);
+$configData = muservermakerConfigs();
 $is_profile_enabled = (isset($configData['player_profiles']) && $configData['player_profiles'] == true);
 
 if (!$is_profile_enabled) {
@@ -75,7 +70,7 @@ try {
     WHERE c.Name = ?", array($charName));
 
     if(!$charData) {
-        echo "<div class='text-white text-center p-5'>EL PERSONAJE [".$charName."] NO EXISTE.</div>";
+        echo "<div class='text-white text-center p-5'>EL PERSONAJE [".htmlspecialchars($charName, ENT_QUOTES, 'UTF-8')."] NO EXISTE.</div>";
         return;
     }
 
@@ -129,7 +124,7 @@ try {
 }
 
 // --- RENDERIZADO ---
-echo '<link rel="stylesheet" href="' . __BASE_URL__ . 'templates/misc/css/player.css">';
+echo '<link rel="stylesheet" href="' . __BASE_URL__ . 'templates/misc/css/player.css?v=' . (int)@filemtime(__DIR__ . '/../../templates/misc/css/player.css') . '">';
 echo '<div class="container-fluid py-5 profile-wrapper">';
     echo '<div class="row g-4 d-flex align-items-stretch">';
         
@@ -275,7 +270,7 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 });
 </script>';
-echo '<link rel="stylesheet" href="' . __BASE_URL__ . 'templates/misc/css/inventory_viewer.css">';
+echo '<link rel="stylesheet" href="' . __BASE_URL__ . 'templates/misc/css/inventory_viewer.css?v=' . (int)@filemtime(__DIR__ . '/../../templates/misc/css/inventory_viewer.css') . '">';
 echo '<div id="mu-tooltip"></div>';
-echo '<script src="' . __BASE_URL__ . 'templates/misc/js/inventory_tooltip.js"></script>';
+echo '<script src="' . __BASE_URL__ . 'templates/misc/js/inventory_tooltip.js?v=' . (int)@filemtime(__DIR__ . '/../../templates/misc/js/inventory_tooltip.js') . '"></script>';
 ?>

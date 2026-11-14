@@ -1020,7 +1020,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         // Manejo Modal Principal
-        function openMarketModal() { document.getElementById('wsMarketModal').style.display = 'flex'; }
+        function openMarketModal() { var m = document.getElementById('wsMarketModal'); m.style.display = 'flex'; if (m.dataset.loaded) return; m.dataset.loaded = '1'; var b = m.querySelector('.cat-btn[onclick*="wsLoadCat(-1,"]') || m.querySelector('.cat-btn'); if (b) b.click(); }
         function closeMarketModal() { document.getElementById('wsMarketModal').style.display = 'none'; }
 
         // Alertas Dinámicas (reutiliza el HTML existente en tu index)

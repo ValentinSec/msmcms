@@ -248,7 +248,7 @@ $lang['login_txt_1'] = '用户名：';
 $lang['login_txt_2'] = '密码：';
 $lang['login_txt_3'] = '登录';
 $lang['login_txt_4'] = '忘记密码了？';
-$lang['login_txt_5'] = '您在％s次登录尝试中使用了%s次。 使用完所有%s次数后，您将无法登录15分钟。';
+$lang['login_txt_5'] = '您在%s次登录尝试中使用了%s次。 使用完所有%s次数后，您将无法登录15分钟。';
 
 # account
 $lang['myaccount_txt_1'] = '账户状态：';

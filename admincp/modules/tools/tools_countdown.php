@@ -151,8 +151,8 @@ echo '<div class="container-fluid">';
 
             // Columna Derecha: Preview
             echo '<div class="col-md-7">';
-                echo '<div class="settings-section" style="min-height: 500px; display: flex; align-items: center; justify-content: center; background: #000; position: relative; overflow: hidden;">';
-                    echo '<h3 class="settings-title" style="position: absolute; top: 20px; left: 25px; border:none; z-index: 10;">Previsualización</h3>';
+                echo '<div class="settings-section" style="min-height: 500px; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #000; position: relative; overflow: hidden;">';
+                    echo '<h3 class="settings-title" style="position: relative; align-self: flex-start; border:none; z-index: 10; margin: 0 0 20px 0;">Previsualización</h3>';
                     
                     echo '<div class="preview-bg"></div>';
 

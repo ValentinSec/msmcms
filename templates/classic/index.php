@@ -624,7 +624,7 @@ if(isset($_POST['market_ajax']) && $_POST['market_ajax'] == 'true') {
                 $c = (int)$classCode;
                 $img = 'avatar.jpg';
                 if ($c < 16) $img = 'dw.jpg'; elseif ($c < 32) $img = 'dk.jpg'; elseif ($c < 48) $img = 'elf.jpg';
-                elseif ($c < 64) $img = 'mg.jpg'; elseif ($c < 80) $img = 'dl.jpg'; elseif ($c < 96) $img = 'su.jpg';
+                elseif ($c < 64) $img = 'mg.jpg'; elseif ($c < 80) $img = 'dl.jpg'; elseif ($c < 96) $img = 'sum.jpg';
                 elseif ($c < 112) $img = 'rf.jpg';
                 
                 // FIX: Usamos la carpeta del directorio RAÍZ como pediste
@@ -887,7 +887,7 @@ if(isset($_POST['market_ajax']) && $_POST['market_ajax'] == 'true') {
         function idx_show_tt(el) { var tt = document.getElementById('global-tt'); tt.innerHTML = el.getAttribute('data-tooltip'); tt.style.display = 'block'; }
         function idx_move_tt(e) { var tt = document.getElementById('global-tt'); tt.style.left = (e.clientX + 15) + 'px'; tt.style.top = (e.clientY + 15) + 'px'; }
         function idx_hide_tt() { document.getElementById('global-tt').style.display = 'none'; }
-        function openMarketModal() { document.getElementById('wsMarketModal').style.display = 'flex'; }
+        function openMarketModal() { var m = document.getElementById('wsMarketModal'); m.style.display = 'flex'; if (m.dataset.loaded) return; m.dataset.loaded = '1'; var b = m.querySelector('.cat-btn[onclick*="wsLoadCat(-1,"]') || m.querySelector('.cat-btn'); if (b) b.click(); }
         function closeMarketModal() { document.getElementById('wsMarketModal').style.display = 'none'; }
         function openDirectBuy(id, price) { selectedBuyId = id; document.getElementById('buyPriceLabel').innerText = price; document.getElementById('buyConfirmModal').style.display = 'flex'; }
         function bm_buy_loader(show) {
@@ -921,7 +921,7 @@ if(isset($_POST['market_ajax']) && $_POST['market_ajax'] == 'true') {
             document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active')); if(btn) btn.classList.add('active');
             document.getElementById('wsLoader').style.display = 'flex';
             var formData = new FormData(); formData.append('market_ajax', 'true'); formData.append('action', 'load_category'); formData.append('category', catId);
-            fetch('<?php echo $_SERVER['REQUEST_URI']; ?>', { method:'POST', body:formData }).then(r => r.json()).then(data => {
+            fetch('<?php echo __BASE_URL__; ?>index.php', { method:'POST', body:formData }).then(r => r.json()).then(data => {
                 document.getElementById('wsLoader').style.display = 'none';
                 var grid = document.getElementById('wsItemGrid'); grid.innerHTML = '';
                 if(data.data.length == 0) { grid.innerHTML = '<div style="grid-column:1/-1; text-align:center; padding:50px; color:#666;">No hay items en esta categoría.</div>'; return; }

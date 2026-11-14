@@ -1022,7 +1022,7 @@ $seoData = is_array($muservermakerParams) ? $muservermakerParams : [];
             }
 
             // Funciones del Modal General Mercado
-            function openMarketModal() { document.getElementById('wsMarketModal').style.display = 'flex'; }
+            function openMarketModal() { var m = document.getElementById('wsMarketModal'); m.style.display = 'flex'; if (m.dataset.loaded) return; m.dataset.loaded = '1'; var b = m.querySelector('.cat-btn[onclick*="wsLoadCat(-1,"]') || m.querySelector('.cat-btn'); if (b) b.click(); }
             function closeMarketModal() { document.getElementById('wsMarketModal').style.display = 'none'; }
 
             function show_modal_alert(title, msg) {

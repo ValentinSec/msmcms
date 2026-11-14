@@ -641,7 +641,7 @@ $csOwnerName = (is_array($csOwner) && !empty($csOwner['OWNER_GUILD'])) ? $csOwne
     }
 
     // --- MODAL WORKSPACE ---
-    function openMarketModal() { document.getElementById('wsMarketModal').style.display = 'flex'; }
+    function openMarketModal() { var m = document.getElementById('wsMarketModal'); m.style.display = 'flex'; if (m.dataset.loaded) return; m.dataset.loaded = '1'; var b = m.querySelector('.cat-btn[onclick*="wsLoadCat(-1,"]') || m.querySelector('.cat-btn'); if (b) b.click(); }
     function closeMarketModal() { document.getElementById('wsMarketModal').style.display = 'none'; }
 
     // --- ALERT SYSTEM ---

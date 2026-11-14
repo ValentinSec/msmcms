@@ -452,10 +452,10 @@ $lang['sidebar_srvinfo_txt_9'] = 'Drop';
 # Castillo de sitio
 $lang['castlesiege_txt_1'] = 'Batalla Castle Siege';
 $lang['castlesiege_txt_2'] = 'Dueño del Castillo';
-$lang['castlesiege_txt_3'] = 'Trial Money:';
-$lang['castlesiege_txt_4'] = 'Tax Rate Goblin:';
-$lang['castlesiege_txt_5'] = 'Tax Rate NPC:';
-$lang['castlesiege_txt_6'] = 'Tax Rate Trial:';
+$lang['castlesiege_txt_3'] = 'Entrada a Land of Trials:';
+$lang['castlesiege_txt_4'] = 'Impuesto Goblin (Chaos Machine):';
+$lang['castlesiege_txt_5'] = 'Impuesto de Tiendas (NPC):';
+$lang['castlesiege_txt_6'] = 'Impuesto Land of Trials:';
 $lang['castlesiege_txt_7'] = 'Información del Castillo';
 $lang['castlesiege_txt_8'] = 'Zen';
 $lang['castlesiege_txt_9'] = 'Etapa Actual:';

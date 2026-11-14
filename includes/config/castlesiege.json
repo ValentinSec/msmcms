@@ -11,7 +11,7 @@
     "show_battle_duration": "1",
     "show_registered_guilds": "1",
     "show_schedule": "1",
-    "schedule_date_format": "l, F jS g:i A",
+    "schedule_date_format": "d/m/Y H:i",
 	"show_widget": "1",
     "stages": [
         {

@@ -24,3 +24,4 @@ includes/cache/cron.lock
 admincp/modules/plugins/config_payments.json
 
 admincp/img/avatars/
+includes/cache/visits.json
